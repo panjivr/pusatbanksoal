@@ -24,3 +24,18 @@ python3 -m http.server 8000
 ```
 
 Tidak ada dependensi. Semua interaksi (ujian CAT, simulasi nilai, chart) berjalan dengan JavaScript bawaan browser.
+
+## Deploy (GitHub Pages + domain pusatbanksoal.id)
+
+Kode & workflow sudah siap. Langkah sekali-jalan oleh pemilik repo:
+
+1. **Aktifkan GitHub Pages:** Settings → Pages → Build and deployment → Source → pilih **GitHub Actions**.
+   (Jika deploy gagal `Resource not accessible by integration`, cek juga Settings → Actions → General → Workflow permissions → **Read and write permissions**.)
+2. **Jalankan ulang workflow:** tab Actions → "Deploy to GitHub Pages" → Run workflow (atau push commit baru).
+3. **Set DNS di registrar (DomaiNesia → DNS Management):**
+   - A `@` → `185.199.108.153`, `185.199.109.153`, `185.199.110.153`, `185.199.111.153`
+   - AAAA `@` → `2606:50c0:8000::153`, `2606:50c0:8001::153`, `2606:50c0:8002::153`, `2606:50c0:8003::153`
+   - CNAME `www` → `panjivr.github.io`
+4. Di Settings → Pages, isi Custom domain = `pusatbanksoal.id` (file `CNAME` sudah menyetelnya) lalu centang **Enforce HTTPS** setelah sertifikat terbit.
+
+URL sementara sebelum domain aktif: `https://panjivr.github.io/pusatbanksoal/`
