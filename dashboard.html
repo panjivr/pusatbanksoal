@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Dashboard Belajar & Statistik Nilai | PusatBankSoal.id</title>
+<meta name="description" content="Pantau perkembangan belajarmu: grafik progres, radar kemampuan, streak, ranking nasional, dan analisis kelemahan otomatis.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<nav class="nav"><div class="nav-in">
+<a class="brand" href="index.html"><span class="logo">P</span>Pusat<b>BankSoal</b></a>
+<div class="nav-links" id="navLinks">
+<a href="index.html">Beranda</a><a href="tryout.html">Tryout</a><a href="dashboard.html" class="active">Dashboard</a><a href="analisis.html">AI Analisis</a><a href="index.html#harga">Harga</a>
+</div>
+<div class="nav-right"><a href="dashboard.html" class="hide-sm" style="font-weight:600">Masuk</a><a href="tryout.html" class="btn btn-primary btn-sm">Daftar Gratis</a>
+<button class="nav-toggle" onclick="document.getElementById('navLinks').classList.toggle('open')">☰</button></div>
+</div></nav>
+
+<section class="section-sm"><div class="wrap">
+
+<div class="flex between items-center wrap-flex gap">
+<div class="flex items-center gap">
+<span class="avatar" style="width:52px;height:52px;font-size:18px">BS</span>
+<div>
+<h2>Halo, Budi Santoso 👋</h2>
+<p class="muted mt" style="margin-top:6px">Target: CPNS Kemenkeu 2026 · 45 hari lagi</p>
+</div>
+</div>
+<a href="tryout.html" class="btn btn-primary btn-lg">Lanjut Belajar</a>
+</div>
+
+<div class="grid g4 mt-lg">
+<div class="card">
+<div class="muted stat-label">Skor Rata-rata</div>
+<div class="stat-num num mt">412</div>
+<span class="badge badge-up mt">▲ +18 poin</span>
+</div>
+<div class="card">
+<div class="muted stat-label">Tryout Selesai</div>
+<div class="stat-num num mt">87</div>
+<span class="badge badge-up mt">▲ +5 minggu ini</span>
+</div>
+<div class="card">
+<div class="muted stat-label">Ranking Nasional</div>
+<div class="stat-num num mt">#1.204</div>
+<span class="badge badge-up mt">▲ naik 320</span>
+</div>
+<div class="card">
+<div class="muted stat-label">Streak Belajar</div>
+<div class="stat-num num mt">23 hari 🔥</div>
+<span class="badge badge-y mt">Jangan putus!</span>
+</div>
+</div>
+
+<div class="grid g2 mt-lg">
+<div class="card">
+<h3>Grafik Perkembangan Skor</h3>
+<p class="muted mt" style="font-size:13px">Rata-rata skor tryout 10 bulan terakhir</p>
+<svg viewBox="0 0 480 220" width="100%" style="margin-top:8px;height:auto" role="img" aria-label="Grafik perkembangan skor naik dari 298 menjadi 412">
+<line x1="30" y1="10" x2="470" y2="10" stroke="var(--hair-dark)" stroke-width="1"/>
+<line x1="30" y1="52.5" x2="470" y2="52.5" stroke="var(--hair-dark)" stroke-width="1"/>
+<line x1="30" y1="95" x2="470" y2="95" stroke="var(--hair-dark)" stroke-width="1"/>
+<line x1="30" y1="137.5" x2="470" y2="137.5" stroke="var(--hair-dark)" stroke-width="1"/>
+<line x1="30" y1="180" x2="470" y2="180" stroke="var(--hair-dark)" stroke-width="1"/>
+<text x="24" y="14" text-anchor="end" font-size="10" fill="var(--muted)">450</text>
+<text x="24" y="99" text-anchor="end" font-size="10" fill="var(--muted)">350</text>
+<text x="24" y="184" text-anchor="end" font-size="10" fill="var(--muted)">250</text>
+<path d="M30,139.2 L78.9,124.8 L127.8,112 L176.7,118.8 L225.6,95 L274.4,82.3 L323.3,88.2 L372.2,69.5 L421.1,54.2 L470,42.3 L470,180 L30,180 Z" fill="var(--primary)" opacity="0.12"/>
+<path d="M30,139.2 L78.9,124.8 L127.8,112 L176.7,118.8 L225.6,95 L274.4,82.3 L323.3,88.2 L372.2,69.5 L421.1,54.2 L470,42.3" fill="none" stroke="var(--primary)" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
+<circle cx="30" cy="139.2" r="3.5" fill="var(--primary)"/>
+<circle cx="78.9" cy="124.8" r="3.5" fill="var(--primary)"/>
+<circle cx="127.8" cy="112" r="3.5" fill="var(--primary)"/>
+<circle cx="176.7" cy="118.8" r="3.5" fill="var(--primary)"/>
+<circle cx="225.6" cy="95" r="3.5" fill="var(--primary)"/>
+<circle cx="274.4" cy="82.3" r="3.5" fill="var(--primary)"/>
+<circle cx="323.3" cy="88.2" r="3.5" fill="var(--primary)"/>
+<circle cx="372.2" cy="69.5" r="3.5" fill="var(--primary)"/>
+<circle cx="421.1" cy="54.2" r="3.5" fill="var(--primary)"/>
+<circle cx="470" cy="42.3" r="4.5" fill="var(--primary)" stroke="var(--ink)" stroke-width="1.5"/>
+<text x="30" y="200" text-anchor="middle" font-size="10" fill="var(--muted)">Okt</text>
+<text x="78.9" y="200" text-anchor="middle" font-size="10" fill="var(--muted)">Nov</text>
+<text x="127.8" y="200" text-anchor="middle" font-size="10" fill="var(--muted)">Des</text>
+<text x="176.7" y="200" text-anchor="middle" font-size="10" fill="var(--muted)">Jan</text>
+<text x="225.6" y="200" text-anchor="middle" font-size="10" fill="var(--muted)">Feb</text>
+<text x="274.4" y="200" text-anchor="middle" font-size="10" fill="var(--muted)">Mar</text>
+<text x="323.3" y="200" text-anchor="middle" font-size="10" fill="var(--muted)">Apr</text>
+<text x="372.2" y="200" text-anchor="middle" font-size="10" fill="var(--muted)">Mei</text>
+<text x="421.1" y="200" text-anchor="middle" font-size="10" fill="var(--muted)">Jun</text>
+<text x="470" y="200" text-anchor="end" font-size="10" fill="var(--primary)" font-weight="700">Jul</text>
+</svg>
+</div>
+
+<div class="card">
+<h3>Radar Kemampuan</h3>
+<p class="muted mt" style="font-size:13px">Perbandingan kekuatan per subtes</p>
+<svg viewBox="0 0 300 300" width="100%" style="margin-top:8px;height:auto" role="img" aria-label="Radar kemampuan lima subtes: TWK, TIU, TKP, Literasi, Penalaran">
+<polygon points="150,113.33 184.87,138.67 171.56,179.67 128.44,179.67 115.13,138.67" fill="none" stroke="var(--hair-dark)" stroke-width="1"/>
+<polygon points="150,76.67 219.74,127.34 193.11,209.32 106.89,209.32 80.26,127.34" fill="none" stroke="var(--hair-dark)" stroke-width="1"/>
+<polygon points="150,40 254.62,116.01 214.66,238.99 85.34,238.99 45.38,116.01" fill="none" stroke="var(--hair-dark)" stroke-width="1"/>
+<line x1="150" y1="150" x2="150" y2="40" stroke="var(--hair-dark)" stroke-width="1"/>
+<line x1="150" y1="150" x2="254.62" y2="116.01" stroke="var(--hair-dark)" stroke-width="1"/>
+<line x1="150" y1="150" x2="214.66" y2="238.99" stroke="var(--hair-dark)" stroke-width="1"/>
+<line x1="150" y1="150" x2="85.34" y2="238.99" stroke="var(--hair-dark)" stroke-width="1"/>
+<line x1="150" y1="150" x2="45.38" y2="116.01" stroke="var(--hair-dark)" stroke-width="1"/>
+<polygon points="150,59.8 218.0,127.91 208.19,230.09 114.44,198.95 76.77,126.21" fill="var(--primary)" fill-opacity="0.18" stroke="var(--primary)" stroke-width="2" stroke-linejoin="round"/>
+<circle cx="150" cy="59.8" r="3" fill="var(--primary)"/>
+<circle cx="218.0" cy="127.91" r="3" fill="var(--primary)"/>
+<circle cx="208.19" cy="230.09" r="3" fill="var(--primary)"/>
+<circle cx="114.44" cy="198.95" r="3" fill="var(--primary)"/>
+<circle cx="76.77" cy="126.21" r="3" fill="var(--primary)"/>
+<text x="150" y="18" text-anchor="middle" font-size="11" fill="var(--muted)">TWK</text>
+<text x="264" y="113" text-anchor="start" font-size="11" fill="var(--muted)">TIU</text>
+<text x="223" y="257" text-anchor="middle" font-size="11" fill="var(--muted)">TKP</text>
+<text x="77" y="257" text-anchor="middle" font-size="11" fill="var(--muted)">Literasi</text>
+<text x="2" y="113" text-anchor="start" font-size="11" fill="var(--muted)">Penalaran</text>
+</svg>
+</div>
+</div>
+
+<div class="grid g2 mt-lg">
+<div class="card">
+<h3>Analisis Kelemahan (AI)</h3>
+<div class="mt-lg">
+<div class="flex between"><span>Penalaran Matematika</span><span class="num down">42%</span></div>
+<div class="bar down mt"><span style="width:42%"></span></div>
+</div>
+<div class="mt-lg">
+<div class="flex between"><span>Analitis &amp; Logika</span><span class="num">55%</span></div>
+<div class="bar mt"><span style="width:55%"></span></div>
+</div>
+<div class="mt-lg">
+<div class="flex between"><span>Tes Wawasan Kebangsaan</span><span class="num">78%</span></div>
+<div class="bar mt"><span style="width:78%"></span></div>
+</div>
+<div class="mt-lg">
+<div class="flex between"><span>Tes Karakteristik Pribadi</span><span class="num up">91%</span></div>
+<div class="bar up mt"><span style="width:91%"></span></div>
+</div>
+<p class="muted mt-lg" style="font-size:13px">🤖 AI merekomendasikan fokus 40% waktu belajarmu minggu ini pada <b style="color:var(--body)">Penalaran Matematika</b> — topik ini paling sering menyebabkan skor turun pada 5 tryout terakhir.</p>
+</div>
+
+<div class="card">
+<h3>Misi Harian</h3>
+<div class="mt-lg" style="display:flex;flex-direction:column;gap:14px">
+<div class="flex between items-center"><span>✅ Kerjakan 1 tryout penuh</span><span class="badge badge-y">+50 XP</span></div>
+<div class="flex between items-center"><span>✅ Selesaikan 20 soal TIU</span><span class="badge badge-y">+20 XP</span></div>
+<div class="flex between items-center"><span class="muted">⬜ Tonton 1 video pembahasan</span><span class="badge">+15 XP</span></div>
+<div class="flex between items-center"><span class="muted">⬜ Pertahankan streak hari ini</span><span class="badge">+10 XP</span></div>
+</div>
+<div class="mt-lg">
+<div class="flex between"><span class="muted" style="font-size:13px">Level 12 → Level 13</span><span class="num" style="font-size:13px">640 / 800 XP</span></div>
+<div class="bar mt"><span style="width:80%"></span></div>
+</div>
+</div>
+</div>
+
+<div class="card mt-lg">
+<div class="flex between items-center wrap-flex">
+<h3>Papan Peringkat Nasional</h3>
+<span class="muted" style="font-size:13px">Kelas CPNS Kemenkeu 2026 · Minggu ini</span>
+</div>
+<div class="scroll-x mt-lg">
+<table class="tbl">
+<thead><tr><th>#</th><th>Nama</th><th>Kota</th><th>Skor</th><th>Δ</th></tr></thead>
+<tbody>
+<tr><td><span class="rank g1">1</span></td><td>Nadia Rahmawati</td><td>Surabaya</td><td class="num">1.024</td><td class="num up">+12</td></tr>
+<tr><td><span class="rank g2">2</span></td><td>Bagas Prasetyo</td><td>Bandung</td><td class="num">998</td><td class="num up">+5</td></tr>
+<tr><td><span class="rank g3">3</span></td><td>Cindy Amelia</td><td>Medan</td><td class="num">987</td><td class="num up">+8</td></tr>
+<tr style="background:var(--elevated)"><td><span class="rank">4</span></td><td>Budi Santoso <span class="badge badge-y" style="margin-left:6px">Kamu</span></td><td>Jakarta</td><td class="num">965</td><td class="num up">+18</td></tr>
+<tr><td><span class="rank">5</span></td><td>Fajar Nugroho</td><td>Yogyakarta</td><td class="num">958</td><td class="num down">−3</td></tr>
+<tr><td><span class="rank">6</span></td><td>Salsa Aulia</td><td>Makassar</td><td class="num">944</td><td class="num up">+2</td></tr>
+<tr><td><span class="rank">7</span></td><td>Rizky Ramadhan</td><td>Semarang</td><td class="num">931</td><td class="num down">−1</td></tr>
+</tbody>
+</table>
+</div>
+</div>
+
+<div class="card mt-lg">
+<div class="flex between items-center wrap-flex">
+<h3>Heatmap Konsistensi Belajar</h3>
+<span class="muted" style="font-size:13px">140 hari terakhir</span>
+</div>
+<div id="heatmap" class="mt-lg" style="display:grid;grid-template-columns:repeat(20,13px);grid-auto-rows:13px;gap:3px"></div>
+<div class="flex items-center gap mt" style="font-size:12px">
+<span class="muted">Kurang</span>
+<span style="width:13px;height:13px;border-radius:3px;background:#2b3139;display:inline-block"></span>
+<span style="width:13px;height:13px;border-radius:3px;background:#5f5a38;display:inline-block"></span>
+<span style="width:13px;height:13px;border-radius:3px;background:#948337;display:inline-block"></span>
+<span style="width:13px;height:13px;border-radius:3px;background:#c8ac36;display:inline-block"></span>
+<span style="width:13px;height:13px;border-radius:3px;background:#fcd535;display:inline-block"></span>
+<span class="muted">Lebih</span>
+</div>
+</div>
+
+</div></section>
+
+<script>
+(function(){
+  var colors=['#2b3139','#5f5a38','#948337','#c8ac36','#fcd535'];
+  var box=document.getElementById('heatmap');
+  var html='';
+  for(var i=0;i<140;i++){
+    var lvl=Math.floor(Math.random()*5);
+    html+='<span style="width:13px;height:13px;border-radius:3px;background:'+colors[lvl]+'"></span>';
+  }
+  box.innerHTML=html;
+})();
+</script>
+
+<footer class="footer"><div class="wrap"><div class="cols">
+<div><a class="brand" href="index.html" style="color:var(--ink)"><span class="logo">P</span>Pusat<b>BankSoal</b></a><p style="color:#5b6672;font-size:13px;margin-top:14px;max-width:34ch">AI Education Intelligence Platform. Tryout, bank soal, analisis nilai & rekomendasi kampus #1 di Indonesia.</p></div>
+<div><h5>Produk</h5><a href="tryout.html">Tryout CPNS</a><a href="tryout.html">Tryout SNBT</a><a href="tryout.html">Bank Soal</a><a href="analisis.html">AI Analisis Nilai</a><a href="analisis.html">Rekomendasi Kampus</a></div>
+<div><h5>Kategori</h5><a href="tryout.html">CPNS & PPPK</a><a href="tryout.html">SNBT/UTBK</a><a href="tryout.html">Kedinasan</a><a href="tryout.html">BUMN</a><a href="tryout.html">TNI/POLRI</a></div>
+<div><h5>Perusahaan</h5><a href="#">Tentang Kami</a><a href="#">Blog</a><a href="#">Karier</a><a href="#">Kontak</a><a href="#">Afiliasi</a></div>
+<div><h5>Bantuan</h5><a href="#">Pusat Bantuan</a><a href="#">Syarat & Ketentuan</a><a href="#">Kebijakan Privasi</a><a href="#">FAQ</a></div>
+</div><div class="bottom"><span>© 2026 PusatBankSoal.id — Seluruh hak cipta dilindungi.</span><span>Dibuat untuk pejuang ujian Indonesia 🇮🇩</span></div></div></footer>
+</body>
+</html>

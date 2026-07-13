@@ -1,0 +1,564 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Tryout & Bank Soal Online — Simulasi CAT | PusatBankSoal.id</title>
+<meta name="description" content="Ribuan tryout & bank soal CPNS, SNBT, PPPK, Kedinasan dengan simulasi CAT real, timer, dan pembahasan lengkap. Latihan gratis sekarang.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<nav class="nav"><div class="nav-in">
+<a class="brand" href="index.html"><span class="logo">P</span>Pusat<b>BankSoal</b></a>
+<div class="nav-links" id="navLinks">
+<a href="index.html">Beranda</a><a href="tryout.html" class="active">Tryout</a><a href="dashboard.html">Dashboard</a><a href="analisis.html">AI Analisis</a><a href="index.html#harga">Harga</a>
+</div>
+<div class="nav-right"><a href="dashboard.html" class="hide-sm" style="font-weight:600">Masuk</a><a href="tryout.html" class="btn btn-primary btn-sm">Daftar Gratis</a>
+<button class="nav-toggle" onclick="document.getElementById('navLinks').classList.toggle('open')">☰</button></div>
+</div></nav>
+
+<main>
+
+<!-- SECTION A -->
+<section class="section-sm">
+  <div class="wrap">
+    <div class="eyebrow">Bank Soal & Tryout</div>
+    <h1 class="mt">Latihan Tryout & Bank Soal</h1>
+    <p class="lead mt">Ribuan soal CPNS, PPPK, SNBT, dan Kedinasan dengan simulasi Computer Assisted Test (CAT) yang menyerupai sistem resmi BKN — lengkap dengan timer, navigator soal, dan pembahasan.</p>
+
+    <div class="pill-tab mt-lg wrap-flex">
+      <button class="active">Semua</button>
+      <button>CPNS</button>
+      <button>PPPK</button>
+      <button>SNBT</button>
+      <button>Kedinasan</button>
+      <button>BUMN</button>
+    </div>
+
+    <div class="grid g3 mt-lg">
+
+      <div class="card hover-lift">
+        <div class="flex between items-center">
+          <span class="badge">CPNS</span>
+          <span class="badge">Gratis</span>
+        </div>
+        <h4 class="mt">Tryout CPNS SKD Paket 12</h4>
+        <p class="muted mt" style="font-size:13px">100 soal · 90 menit · 45.230 peserta</p>
+        <div class="flex between items-center mt">
+          <span class="num" style="font-size:13px">⭐ 4.8/5</span>
+          <span class="muted" style="font-size:12px">Rating peserta</span>
+        </div>
+        <div class="bar mt"><span style="width:78%"></span></div>
+        <button class="btn btn-primary btn-sm mt-lg" style="width:100%" onclick="startExam('CPNS SKD Paket 12')">Mulai</button>
+      </div>
+
+      <div class="card hover-lift">
+        <div class="flex between items-center">
+          <span class="badge">SNBT</span>
+          <span class="badge badge-y">Premium</span>
+        </div>
+        <h4 class="mt">Simulasi UTBK SNBT — TPS</h4>
+        <p class="muted mt" style="font-size:13px">80 soal · 105 menit · 32.110 peserta</p>
+        <div class="flex between items-center mt">
+          <span class="num" style="font-size:13px">⭐ 4.9/5</span>
+          <span class="muted" style="font-size:12px">Rating peserta</span>
+        </div>
+        <div class="bar up mt"><span style="width:65%"></span></div>
+        <button class="btn btn-primary btn-sm mt-lg" style="width:100%" onclick="startExam('UTBK SNBT - TPS')">Mulai</button>
+      </div>
+
+      <div class="card hover-lift">
+        <div class="flex between items-center">
+          <span class="badge">PPPK</span>
+          <span class="badge">Gratis</span>
+        </div>
+        <h4 class="mt">Tryout PPPK Guru — Kompetensi Teknis</h4>
+        <p class="muted mt" style="font-size:13px">100 soal · 120 menit · 18.940 peserta</p>
+        <div class="flex between items-center mt">
+          <span class="num" style="font-size:13px">⭐ 4.7/5</span>
+          <span class="muted" style="font-size:12px">Rating peserta</span>
+        </div>
+        <div class="bar mt"><span style="width:71%"></span></div>
+        <button class="btn btn-primary btn-sm mt-lg" style="width:100%" onclick="startExam('PPPK Guru - Kompetensi Teknis')">Mulai</button>
+      </div>
+
+      <div class="card hover-lift">
+        <div class="flex between items-center">
+          <span class="badge">Kedinasan</span>
+          <span class="badge badge-y">Premium</span>
+        </div>
+        <h4 class="mt">Tryout Kedinasan STAN/IPDN Paket 5</h4>
+        <p class="muted mt" style="font-size:13px">120 soal · 105 menit · 9.870 peserta</p>
+        <div class="flex between items-center mt">
+          <span class="num" style="font-size:13px">⭐ 4.8/5</span>
+          <span class="muted" style="font-size:12px">Rating peserta</span>
+        </div>
+        <div class="bar mt"><span style="width:59%"></span></div>
+        <button class="btn btn-primary btn-sm mt-lg" style="width:100%" onclick="startExam('Kedinasan STAN/IPDN Paket 5')">Mulai</button>
+      </div>
+
+      <div class="card hover-lift">
+        <div class="flex between items-center">
+          <span class="badge">BUMN</span>
+          <span class="badge">Gratis</span>
+        </div>
+        <h4 class="mt">Tryout BUMN — TKD & AKHLAK</h4>
+        <p class="muted mt" style="font-size:13px">90 soal · 75 menit · 21.450 peserta</p>
+        <div class="flex between items-center mt">
+          <span class="num" style="font-size:13px">⭐ 4.6/5</span>
+          <span class="muted" style="font-size:12px">Rating peserta</span>
+        </div>
+        <div class="bar mt"><span style="width:66%"></span></div>
+        <button class="btn btn-primary btn-sm mt-lg" style="width:100%" onclick="startExam('BUMN - TKD & AKHLAK')">Mulai</button>
+      </div>
+
+      <div class="card hover-lift">
+        <div class="flex between items-center">
+          <span class="badge">CPNS</span>
+          <span class="badge badge-y">Premium</span>
+        </div>
+        <h4 class="mt">Tryout CPNS SKD — TWK/TIU/TKP Full Set</h4>
+        <p class="muted mt" style="font-size:13px">110 soal · 100 menit · 60.302 peserta</p>
+        <div class="flex between items-center mt">
+          <span class="num" style="font-size:13px">⭐ 4.9/5</span>
+          <span class="muted" style="font-size:12px">Rating peserta</span>
+        </div>
+        <div class="bar mt"><span style="width:83%"></span></div>
+        <button class="btn btn-primary btn-sm mt-lg" style="width:100%" onclick="startExam('CPNS SKD Full Set')">Mulai</button>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- SECTION B — CAT SIMULATOR -->
+<section class="section-sm">
+  <div class="wrap">
+    <div class="card" style="background:linear-gradient(135deg,var(--card),var(--elevated))">
+      <div class="grid g2 items-center">
+        <div>
+          <div class="eyebrow">Simulasi CAT</div>
+          <h2 class="mt">Rasakan Ujian Sesungguhnya</h2>
+          <p class="lead mt">Sistem simulasi kami mereplikasi tampilan, timer, dan alur pengerjaan Computer Assisted Test resmi BKN — lengkap dengan navigator soal dan pembahasan otomatis setelah selesai.</p>
+          <button class="btn btn-primary btn-lg mt-lg" onclick="startExam('Demo Gratis')">Coba Simulasi CAT</button>
+        </div>
+        <div class="grid g2 gap">
+          <div class="card-flat center"><div class="stat-num">15:00</div><div class="stat-label">Durasi Demo</div></div>
+          <div class="card-flat center"><div class="stat-num">8</div><div class="stat-label">Soal Demo</div></div>
+          <div class="card-flat center"><div class="stat-num">100%</div><div class="stat-label">Otomatis Dikoreksi</div></div>
+          <div class="card-flat center"><div class="stat-num">1x</div><div class="stat-label">Klik untuk Mulai</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EXAM OVERLAY -->
+<div id="exam" class="hide">
+  <div class="wrap" style="padding-top:24px;padding-bottom:48px">
+
+    <div class="card-flat flex between items-center gap wrap-flex">
+      <div>
+        <div class="eyebrow">Mode Ujian Aktif</div>
+        <h3 id="examTitle">Simulasi CAT — Tryout CPNS SKD</h3>
+        <p class="muted" style="font-size:12px;margin-top:4px">Jangan tutup atau tinggalkan halaman ini selama ujian berlangsung.</p>
+      </div>
+      <div class="flex items-center gap-lg">
+        <div class="center">
+          <div class="stat-num num" id="examTimer">15:00</div>
+          <div class="stat-label">Sisa Waktu</div>
+        </div>
+        <button class="btn btn-ghost btn-sm" id="btnExit">Keluar</button>
+      </div>
+    </div>
+
+    <div id="cheatWarning" class="hide badge badge-down mt" style="padding:10px 16px;display:block"></div>
+
+    <div class="grid g2 mt-lg" id="examBody">
+      <div class="card" id="questionPanel">
+        <p class="muted num" id="qProgress" style="font-size:13px">Soal 1 dari 8</p>
+        <h3 class="mt" id="qText">—</h3>
+        <div id="qOptions"></div>
+        <div class="flex between mt-lg">
+          <button class="btn btn-secondary" id="btnPrev">Sebelumnya</button>
+          <button class="btn btn-primary" id="btnNext">Selanjutnya</button>
+        </div>
+      </div>
+      <div class="card" id="navigatorPanel">
+        <h4>Navigasi Soal</h4>
+        <div id="navGrid" style="display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-top:14px"></div>
+        <div class="mt-lg" style="display:flex;flex-direction:column;gap:8px">
+          <div class="flex items-center gap"><span style="width:14px;height:14px;border-radius:4px;background:var(--primary);display:inline-block"></span><span class="muted" style="font-size:12px">Terjawab</span></div>
+          <div class="flex items-center gap"><span style="width:14px;height:14px;border-radius:4px;border:1px solid var(--hair-dark);display:inline-block"></span><span class="muted" style="font-size:12px">Belum dijawab</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div id="resultPanel" class="hide mt-lg">
+      <div class="card center">
+        <div class="eyebrow">Hasil Simulasi</div>
+        <div class="stat-num" id="resScore" style="font-size:clamp(36px,6vw,56px)">0/8</div>
+        <div class="stat-label">Skor Anda</div>
+        <h2 class="mt" id="resPercent">0%</h2>
+      </div>
+      <div class="grid g3 mt-lg">
+        <div class="card center"><div class="stat-num" id="resCorrect">0</div><div class="stat-label">Jawaban Benar</div></div>
+        <div class="card center"><div class="stat-num" id="resWrong">0</div><div class="stat-label">Jawaban Salah</div></div>
+        <div class="card center"><div class="stat-num num" id="resTime">00:00</div><div class="stat-label">Waktu Digunakan</div></div>
+      </div>
+      <div class="flex gap mt-lg" style="justify-content:center">
+        <button class="btn btn-secondary" id="btnRestart">Ulangi</button>
+        <button class="btn btn-primary" id="btnBackList">Kembali ke Tryout</button>
+      </div>
+      <h3 class="mt-xl">Pembahasan Lengkap</h3>
+      <div id="reviewList" class="mt" style="display:flex;flex-direction:column;gap:16px"></div>
+    </div>
+
+  </div>
+</div>
+
+<!-- SECTION C -->
+<section class="section-sm">
+  <div class="wrap">
+    <h2 class="center">Kenapa Simulasi CAT Kami Paling Realistis</h2>
+    <div class="grid g3 mt-lg">
+      <div class="card hover-lift">
+        <div class="ico">⏱</div>
+        <h4 class="mt">Timer & Sistem Persis CAT BKN</h4>
+        <p class="muted mt">Tampilan, alur soal, dan hitung mundur waktu direplikasi seakurat mungkin dari sistem ujian resmi instansi pemerintah.</p>
+      </div>
+      <div class="card hover-lift">
+        <div class="ico">🎬</div>
+        <h4 class="mt">Pembahasan Video & Teks</h4>
+        <p class="muted mt">Setiap soal dilengkapi pembahasan tertulis yang jelas, sehingga Anda paham konsep di balik setiap jawaban.</p>
+      </div>
+      <div class="card hover-lift">
+        <div class="ico">📊</div>
+        <h4 class="mt">Analisis Otomatis per Subtes</h4>
+        <p class="muted mt">Skor langsung dipecah per subtes (TWK, TIU, TKP) agar Anda tahu persis materi mana yang perlu diperkuat.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer class="footer"><div class="wrap"><div class="cols">
+<div><a class="brand" href="index.html" style="color:var(--ink)"><span class="logo">P</span>Pusat<b>BankSoal</b></a><p style="color:#5b6672;font-size:13px;margin-top:14px;max-width:34ch">AI Education Intelligence Platform. Tryout, bank soal, analisis nilai & rekomendasi kampus #1 di Indonesia.</p></div>
+<div><h5>Produk</h5><a href="tryout.html">Tryout CPNS</a><a href="tryout.html">Tryout SNBT</a><a href="tryout.html">Bank Soal</a><a href="analisis.html">AI Analisis Nilai</a><a href="analisis.html">Rekomendasi Kampus</a></div>
+<div><h5>Kategori</h5><a href="tryout.html">CPNS & PPPK</a><a href="tryout.html">SNBT/UTBK</a><a href="tryout.html">Kedinasan</a><a href="tryout.html">BUMN</a><a href="tryout.html">TNI/POLRI</a></div>
+<div><h5>Perusahaan</h5><a href="#">Tentang Kami</a><a href="#">Blog</a><a href="#">Karier</a><a href="#">Kontak</a><a href="#">Afiliasi</a></div>
+<div><h5>Bantuan</h5><a href="#">Pusat Bantuan</a><a href="#">Syarat & Ketentuan</a><a href="#">Kebijakan Privasi</a><a href="#">FAQ</a></div>
+</div><div class="bottom"><span>© 2026 PusatBankSoal.id — Seluruh hak cipta dilindungi.</span><span>Dibuat untuk pejuang ujian Indonesia 🇮🇩</span></div></div></footer>
+
+<script>
+(function(){
+  "use strict";
+
+  var questions = [
+    {
+      q: "Lambang sila keempat Pancasila, yaitu 'Kerakyatan yang Dipimpin oleh Hikmat Kebijaksanaan dalam Permusyawaratan/Perwakilan', digambarkan dengan simbol...",
+      opts: ["Kepala Banteng", "Pohon Beringin", "Rantai Emas", "Bintang"],
+      a: 0,
+      pembahasan: "Sila keempat Pancasila dilambangkan dengan Kepala Banteng yang bermakna kekuatan rakyat dalam bermusyawarah untuk mencapai mufakat."
+    },
+    {
+      q: "Pasal 27 ayat (1) UUD 1945 pada dasarnya mengatur tentang...",
+      opts: [
+        "Persamaan kedudukan warga negara dalam hukum dan pemerintahan",
+        "Hak asasi manusia di bidang perekonomian",
+        "Kebebasan berserikat dan berkumpul",
+        "Hak setiap warga negara mendapatkan pendidikan"
+      ],
+      a: 0,
+      pembahasan: "Pasal 27 ayat (1) UUD 1945 menyatakan bahwa segala warga negara bersamaan kedudukannya di dalam hukum dan pemerintahan serta wajib menjunjung hukum dan pemerintahan itu dengan tidak ada kecualinya."
+    },
+    {
+      q: "Perumusan dasar negara Indonesia pertama kali dibahas secara resmi dalam sidang...",
+      opts: ["BPUPKI", "PPKI", "KNIP", "Volksraad"],
+      a: 0,
+      pembahasan: "Rancangan dasar negara dibahas pertama kali dalam sidang BPUPKI (Badan Penyelidik Usaha-Usaha Persiapan Kemerdekaan Indonesia) yang berlangsung pada 29 Mei - 1 Juni 1945."
+    },
+    {
+      q: "Premis 1: Semua siswa yang rajin belajar pasti lulus ujian. Premis 2: Sebagian siswa SMA X tidak lulus ujian. Simpulan yang tepat adalah...",
+      opts: [
+        "Semua siswa SMA X tidak rajin belajar",
+        "Sebagian siswa SMA X tidak rajin belajar",
+        "Semua siswa SMA X rajin belajar",
+        "Sebagian siswa SMA X lulus ujian karena rajin"
+      ],
+      a: 1,
+      pembahasan: "Karena semua siswa yang rajin pasti lulus, maka siswa yang tidak lulus pasti tidak rajin. Premis 2 menyatakan sebagian siswa SMA X tidak lulus, sehingga simpulan yang sah adalah sebagian siswa SMA X tidak rajin belajar."
+    },
+    {
+      q: "PADI : BERAS = ... : ...",
+      opts: ["Kelapa : Santan", "Sapi : Susu", "Ayam : Telur", "Tebu : Gula"],
+      a: 3,
+      pembahasan: "Padi diolah melalui proses untuk menghasilkan beras. Hubungan yang sama (bahan mentah diolah menjadi produk akhir) terdapat pada Tebu yang diolah menjadi Gula."
+    },
+    {
+      q: "Perhatikan deret bilangan berikut: 2, 5, 10, 17, 26, ... Bilangan selanjutnya adalah...",
+      opts: ["35", "36", "37", "39"],
+      a: 2,
+      pembahasan: "Pola selisih antar suku adalah +3, +5, +7, +9, +11 (selisih ganjil naik 2). Maka suku berikutnya adalah 26 + 11 = 37."
+    },
+    {
+      q: "Seorang pedagang membeli sebuah barang seharga Rp800.000, kemudian menjualnya dengan keuntungan 15%. Harga jual barang tersebut adalah...",
+      opts: ["Rp900.000", "Rp910.000", "Rp920.000", "Rp930.000"],
+      a: 2,
+      pembahasan: "Keuntungan = 15% x Rp800.000 = Rp120.000. Harga jual = Rp800.000 + Rp120.000 = Rp920.000."
+    },
+    {
+      q: "Empat Pilar Kebangsaan Indonesia terdiri dari Pancasila, UUD 1945, NKRI, dan...",
+      opts: ["Bhinneka Tunggal Ika", "Gotong Royong", "Sumpah Pemuda", "Wawasan Nusantara"],
+      a: 0,
+      pembahasan: "Empat Pilar Kebangsaan yang disosialisasikan MPR RI terdiri dari Pancasila, UUD Negara RI Tahun 1945, Negara Kesatuan Republik Indonesia (NKRI), dan Bhinneka Tunggal Ika."
+    }
+  ];
+
+  var TOTAL_TIME = 15 * 60;
+  var current = 0;
+  var answers = [];
+  var timeLeft = TOTAL_TIME;
+  var timerId = null;
+  var tabSwitches = 0;
+  var submitted = false;
+
+  var examEl = document.getElementById('exam');
+  var examTitle = document.getElementById('examTitle');
+  var timerEl = document.getElementById('examTimer');
+  var qProgress = document.getElementById('qProgress');
+  var qText = document.getElementById('qText');
+  var qOptions = document.getElementById('qOptions');
+  var navGrid = document.getElementById('navGrid');
+  var btnPrev = document.getElementById('btnPrev');
+  var btnNext = document.getElementById('btnNext');
+  var examBody = document.getElementById('examBody');
+  var resultPanel = document.getElementById('resultPanel');
+  var cheatWarning = document.getElementById('cheatWarning');
+
+  function pad(n){ return (n < 10 ? '0' : '') + n; }
+
+  function updateTimerDisplay(){
+    var m = Math.floor(timeLeft / 60);
+    var s = timeLeft % 60;
+    timerEl.textContent = pad(m) + ':' + pad(s);
+  }
+
+  function tick(){
+    timeLeft--;
+    if (timeLeft <= 0) {
+      timeLeft = 0;
+      updateTimerDisplay();
+      finishExam();
+      return;
+    }
+    updateTimerDisplay();
+  }
+
+  function renderQuestion(){
+    var q = questions[current];
+    qProgress.textContent = 'Soal ' + (current + 1) + ' dari ' + questions.length;
+    qText.textContent = q.q;
+    qOptions.innerHTML = '';
+    q.opts.forEach(function(opt, i){
+      var row = document.createElement('div');
+      var selected = answers[current] === i;
+      row.className = 'card-flat hover-lift mt';
+      row.style.cursor = 'pointer';
+      row.style.border = '1px solid ' + (selected ? 'var(--primary)' : 'var(--hair-dark)');
+      row.style.background = selected ? 'rgba(252,213,53,.10)' : 'var(--card)';
+      row.innerHTML = '<span style="font-weight:700;margin-right:10px;color:var(--primary)">' +
+        String.fromCharCode(65 + i) + '.</span><span>' + opt + '</span>';
+      row.addEventListener('click', function(){
+        answers[current] = i;
+        renderQuestion();
+        renderNav();
+      });
+      qOptions.appendChild(row);
+    });
+    btnPrev.disabled = current === 0;
+    btnNext.textContent = (current === questions.length - 1) ? 'Selesai & Lihat Hasil' : 'Selanjutnya';
+  }
+
+  function renderNav(){
+    navGrid.innerHTML = '';
+    questions.forEach(function(q, i){
+      var b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'btn btn-sm';
+      b.textContent = String(i + 1);
+      var answered = answers[i] !== null && answers[i] !== undefined;
+      if (answered) {
+        b.style.background = 'var(--primary)';
+        b.style.color = 'var(--on-primary)';
+      } else {
+        b.style.background = 'var(--card)';
+        b.style.color = 'var(--body)';
+        b.style.border = '1px solid var(--hair-dark)';
+      }
+      if (i === current) {
+        b.style.outline = '2px solid var(--primary)';
+        b.style.outlineOffset = '2px';
+      }
+      b.addEventListener('click', function(){
+        current = i;
+        renderQuestion();
+        renderNav();
+      });
+      navGrid.appendChild(b);
+    });
+  }
+
+  function goPrev(){
+    if (current > 0) {
+      current--;
+      renderQuestion();
+      renderNav();
+    }
+  }
+
+  function goNext(){
+    if (current < questions.length - 1) {
+      current++;
+      renderQuestion();
+      renderNav();
+    } else {
+      finishExam();
+    }
+  }
+
+  btnPrev.addEventListener('click', goPrev);
+  btnNext.addEventListener('click', goNext);
+
+  document.getElementById('btnExit').addEventListener('click', function(){
+    if (window.confirm('Yakin ingin keluar dari simulasi ujian? Progres pengerjaan akan hilang.')) {
+      closeExam();
+    }
+  });
+
+  function closeExam(){
+    if (timerId) { clearInterval(timerId); timerId = null; }
+    examEl.classList.add('hide');
+    document.body.style.overflow = '';
+  }
+
+  function finishExam(){
+    if (submitted) return;
+    submitted = true;
+    if (timerId) { clearInterval(timerId); timerId = null; }
+
+    var elapsed = TOTAL_TIME - timeLeft;
+    var correct = 0;
+    questions.forEach(function(q, i){
+      if (answers[i] === q.a) correct++;
+    });
+    var total = questions.length;
+    var wrong = total - correct;
+    var pct = Math.round((correct / total) * 100);
+
+    document.getElementById('resScore').textContent = correct + '/' + total;
+    document.getElementById('resPercent').textContent = pct + '%';
+    document.getElementById('resCorrect').textContent = String(correct);
+    document.getElementById('resWrong').textContent = String(wrong);
+    document.getElementById('resTime').textContent = pad(Math.floor(elapsed / 60)) + ':' + pad(elapsed % 60);
+
+    var reviewList = document.getElementById('reviewList');
+    reviewList.innerHTML = '';
+    questions.forEach(function(q, i){
+      var userAns = answers[i];
+      var hasAnswer = userAns !== null && userAns !== undefined;
+      var isCorrect = hasAnswer && userAns === q.a;
+
+      var card = document.createElement('div');
+      card.className = 'card';
+
+      var head = document.createElement('div');
+      head.className = 'flex between items-center wrap-flex gap';
+      head.innerHTML = '<h4>Soal ' + (i + 1) + '</h4>' +
+        '<span class="badge ' + (isCorrect ? 'badge-up' : 'badge-down') + '">' + (isCorrect ? 'Benar' : 'Salah') + '</span>';
+      card.appendChild(head);
+
+      var qp = document.createElement('p');
+      qp.className = 'mt';
+      qp.textContent = q.q;
+      card.appendChild(qp);
+
+      var userP = document.createElement('p');
+      userP.className = 'mt ' + (isCorrect ? 'up' : 'down');
+      userP.style.fontWeight = '600';
+      userP.textContent = 'Jawaban Anda: ' + (hasAnswer ? (String.fromCharCode(65 + userAns) + '. ' + q.opts[userAns]) : 'Tidak dijawab');
+      card.appendChild(userP);
+
+      if (!isCorrect) {
+        var correctP = document.createElement('p');
+        correctP.className = 'up';
+        correctP.style.fontWeight = '600';
+        correctP.textContent = 'Jawaban Benar: ' + String.fromCharCode(65 + q.a) + '. ' + q.opts[q.a];
+        card.appendChild(correctP);
+      }
+
+      var pemb = document.createElement('p');
+      pemb.className = 'muted mt';
+      pemb.textContent = 'Pembahasan: ' + q.pembahasan;
+      card.appendChild(pemb);
+
+      reviewList.appendChild(card);
+    });
+
+    examBody.classList.add('hide');
+    cheatWarning.classList.add('hide');
+    resultPanel.classList.remove('hide');
+  }
+
+  document.getElementById('btnRestart').addEventListener('click', function(){
+    var name = examTitle.textContent.replace('Simulasi CAT — ', '');
+    startExam(name);
+  });
+  document.getElementById('btnBackList').addEventListener('click', closeExam);
+
+  document.addEventListener('visibilitychange', function(){
+    if (document.hidden && !examEl.classList.contains('hide') && !submitted) {
+      tabSwitches++;
+      cheatWarning.textContent = 'Peringatan: perpindahan tab terdeteksi (' + tabSwitches + ')';
+      cheatWarning.classList.remove('hide');
+    }
+  });
+
+  function startExam(name){
+    current = 0;
+    answers = new Array(questions.length).fill(null);
+    timeLeft = TOTAL_TIME;
+    tabSwitches = 0;
+    submitted = false;
+
+    examTitle.textContent = 'Simulasi CAT — ' + (name || 'Tryout CPNS SKD');
+
+    examEl.classList.remove('hide');
+    examEl.style.position = 'fixed';
+    examEl.style.inset = '0';
+    examEl.style.background = 'var(--canvas)';
+    examEl.style.zIndex = '200';
+    examEl.style.overflow = 'auto';
+    document.body.style.overflow = 'hidden';
+
+    examBody.classList.remove('hide');
+    resultPanel.classList.add('hide');
+    cheatWarning.classList.add('hide');
+
+    updateTimerDisplay();
+    renderNav();
+    renderQuestion();
+
+    if (timerId) clearInterval(timerId);
+    timerId = setInterval(tick, 1000);
+  }
+
+  window.startExam = startExam;
+})();
+</script>
+</body>
+</html>
