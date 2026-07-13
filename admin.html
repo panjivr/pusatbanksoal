@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Admin Panel | PusatBankSoal.id</title>
+<meta name="description" content="Panel admin PusatBankSoal.id — manajemen soal, pengguna, pembayaran, dan analitik.">
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+
+<div style="display:flex;min-height:100vh">
+
+  <aside style="width:240px;flex:none;background:var(--card);border-right:1px solid var(--hair-dark);padding:24px 16px;position:sticky;top:0;height:100vh;overflow:auto">
+    <a class="brand" href="index.html"><span class="logo">P</span>Pusat<b>BankSoal</b></a>
+    <div class="badge badge-y" style="margin-top:12px">Admin Panel</div>
+
+    <nav style="margin-top:28px;display:flex;flex-direction:column;gap:2px">
+      <button class="admin-nav" data-view="dashboard" style="width:100%;text-align:left;background:var(--elevated);border:none;color:var(--primary);padding:10px 12px;border-radius:8px;cursor:pointer;font-size:14px">📊 Dashboard</button>
+      <button class="admin-nav" data-view="soal" style="width:100%;text-align:left;background:transparent;border:none;color:var(--muted);padding:10px 12px;border-radius:8px;cursor:pointer;font-size:14px">📝 Manajemen Soal</button>
+      <button class="admin-nav" data-view="review" style="width:100%;text-align:left;background:transparent;border:none;color:var(--muted);padding:10px 12px;border-radius:8px;cursor:pointer;font-size:14px">🤖 Review Soal (AI)</button>
+      <button class="admin-nav" data-view="pengguna" style="width:100%;text-align:left;background:transparent;border:none;color:var(--muted);padding:10px 12px;border-radius:8px;cursor:pointer;font-size:14px">👥 Pengguna</button>
+      <button class="admin-nav" data-view="pembayaran" style="width:100%;text-align:left;background:transparent;border:none;color:var(--muted);padding:10px 12px;border-radius:8px;cursor:pointer;font-size:14px">💳 Pembayaran & Revenue</button>
+      <button class="admin-nav" data-view="promo" style="width:100%;text-align:left;background:transparent;border:none;color:var(--muted);padding:10px 12px;border-radius:8px;cursor:pointer;font-size:14px">🎟️ Promo & Voucher</button>
+      <button class="admin-nav" data-view="konten" style="width:100%;text-align:left;background:transparent;border:none;color:var(--muted);padding:10px 12px;border-radius:8px;cursor:pointer;font-size:14px">🔍 Konten & SEO</button>
+      <button class="admin-nav" data-view="analitik" style="width:100%;text-align:left;background:transparent;border:none;color:var(--muted);padding:10px 12px;border-radius:8px;cursor:pointer;font-size:14px">📈 Analitik</button>
+      <button class="admin-nav" data-view="cs" style="width:100%;text-align:left;background:transparent;border:none;color:var(--muted);padding:10px 12px;border-radius:8px;cursor:pointer;font-size:14px">💬 Customer Service</button>
+      <button class="admin-nav" data-view="audit" style="width:100%;text-align:left;background:transparent;border:none;color:var(--muted);padding:10px 12px;border-radius:8px;cursor:pointer;font-size:14px">🗂️ Audit Log</button>
+    </nav>
+  </aside>
+
+  <main style="flex:1;padding:28px;min-width:0">
+
+    <div class="flex between items-center mb-lg" style="flex-wrap:wrap;gap:12px">
+      <h2 id="pageTitle" style="font-size:24px">Dashboard</h2>
+      <div class="flex items-center gap">
+        <input type="text" placeholder="Cari pengguna, soal, invoice..." style="background:var(--elevated);border:1px solid var(--hair-dark);color:var(--body);padding:9px 14px;border-radius:8px;font-size:13px;font-family:var(--font);width:240px;max-width:40vw">
+        <div class="avatar">AD</div>
+      </div>
+    </div>
+
+    <!-- DASHBOARD -->
+    <section class="admin-view" data-view="dashboard">
+
+      <div class="grid g4">
+        <div class="card">
+          <div class="stat-label">Total Pengguna</div>
+          <div class="stat-num num">2.084.320</div>
+          <span class="badge badge-up">+3.2%</span>
+        </div>
+        <div class="card">
+          <div class="stat-label">Pengguna Aktif Harian</div>
+          <div class="stat-num num">184.502</div>
+          <span class="badge badge-up">+1.8%</span>
+        </div>
+        <div class="card">
+          <div class="stat-label">Revenue Bulan Ini</div>
+          <div class="stat-num num">Rp 1,84 M</div>
+          <span class="badge badge-up">+6.4%</span>
+        </div>
+        <div class="card">
+          <div class="stat-label">Soal Terverifikasi</div>
+          <div class="stat-num num">512.480</div>
+          <span class="badge badge-up">+942 hari ini</span>
+        </div>
+      </div>
+
+      <div class="grid g2 mt-lg">
+        <div class="card">
+          <h4 class="mb">Pertumbuhan Pengguna</h4>
+          <svg viewBox="0 0 480 200" width="100%" style="height:auto" preserveAspectRatio="none">
+            <line x1="0" y1="10" x2="480" y2="10" stroke="var(--hair-dark)" stroke-width="1"/>
+            <line x1="0" y1="55" x2="480" y2="55" stroke="var(--hair-dark)" stroke-width="1"/>
+            <line x1="0" y1="100" x2="480" y2="100" stroke="var(--hair-dark)" stroke-width="1"/>
+            <line x1="0" y1="145" x2="480" y2="145" stroke="var(--hair-dark)" stroke-width="1"/>
+            <line x1="0" y1="190" x2="480" y2="190" stroke="var(--hair-dark)" stroke-width="1"/>
+            <polygon points="0,190 40,175 80,178 120,160 160,150 200,140 240,120 280,110 320,95 360,80 400,60 440,45 480,30 480,200 0,200" fill="var(--primary)" opacity="0.12"/>
+            <polyline points="0,190 40,175 80,178 120,160 160,150 200,140 240,120 280,110 320,95 360,80 400,60 440,45 480,30" fill="none" stroke="var(--primary)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <div class="flex between muted" style="font-size:12px;margin-top:6px">
+            <span>Jan</span><span>Mar</span><span>Mei</span><span>Jul</span><span>Sep</span><span>Nov</span><span>Jan</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <h4 class="mb">Distribusi Kategori Ujian</h4>
+          <div style="display:flex;flex-direction:column;gap:14px;margin-top:8px">
+            <div>
+              <div class="flex between" style="font-size:13px;margin-bottom:6px"><span>CPNS</span><span class="num muted">38%</span></div>
+              <div class="bar"><span style="width:38%"></span></div>
+            </div>
+            <div>
+              <div class="flex between" style="font-size:13px;margin-bottom:6px"><span>SNBT</span><span class="num muted">27%</span></div>
+              <div class="bar"><span style="width:27%"></span></div>
+            </div>
+            <div>
+              <div class="flex between" style="font-size:13px;margin-bottom:6px"><span>PPPK</span><span class="num muted">15%</span></div>
+              <div class="bar"><span style="width:15%"></span></div>
+            </div>
+            <div>
+              <div class="flex between" style="font-size:13px;margin-bottom:6px"><span>Kedinasan</span><span class="num muted">12%</span></div>
+              <div class="bar"><span style="width:12%"></span></div>
+            </div>
+            <div>
+              <div class="flex between" style="font-size:13px;margin-bottom:6px"><span>BUMN</span><span class="num muted">8%</span></div>
+              <div class="bar"><span style="width:8%"></span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card mt-lg">
+        <h4 class="mb">Aktivitas Terbaru</h4>
+        <div class="scroll-x">
+          <table class="tbl">
+            <thead><tr><th>Waktu</th><th>Pengguna</th><th>Aksi</th><th>Status</th></tr></thead>
+            <tbody>
+              <tr><td class="num">13/07 09:42</td><td>Rian Aditya</td><td>Menyelesaikan Tryout CPNS #12</td><td><span class="badge badge-up">Selesai</span></td></tr>
+              <tr><td class="num">13/07 09:35</td><td>Siti Nurhaliza</td><td>Upgrade ke paket Premium</td><td><span class="badge badge-up">Berhasil</span></td></tr>
+              <tr><td class="num">13/07 09:20</td><td>Admin Bagas</td><td>Mengunggah 40 soal SNBT baru</td><td><span class="badge">Terbit</span></td></tr>
+              <tr><td class="num">13/07 09:12</td><td>Fajar Nugroho</td><td>Mengajukan refund transaksi</td><td><span class="badge badge-down">Ditinjau</span></td></tr>
+              <tr><td class="num">13/07 08:58</td><td>Dewi Lestari</td><td>Registrasi akun baru</td><td><span class="badge badge-up">Aktif</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- MANAJEMEN SOAL -->
+    <section class="admin-view hide" data-view="soal">
+      <div class="flex between items-center mb-lg" style="flex-wrap:wrap;gap:12px">
+        <button class="btn btn-primary btn-sm">+ Tambah Soal</button>
+        <div class="pill-tab">
+          <button class="active">Semua</button>
+          <button>CPNS</button>
+          <button>SNBT</button>
+          <button>PPPK</button>
+          <button>BUMN</button>
+        </div>
+      </div>
+      <div class="card">
+        <div class="scroll-x">
+          <table class="tbl">
+            <thead><tr><th>ID</th><th>Soal</th><th>Kategori</th><th>Tingkat</th><th>Status</th><th>Aksi</th></tr></thead>
+            <tbody>
+              <tr><td class="num">SL-88213</td><td>Jika 3x + 5 = 20, maka nilai x adalah...</td><td>SNBT</td><td>Menengah</td><td><span class="badge badge-up">Terbit</span></td><td><a href="#" class="accent">Edit</a> · <a href="#" class="down">Hapus</a></td></tr>
+              <tr><td class="num">SL-88214</td><td>Pancasila sebagai dasar negara ditetapkan pada...</td><td>CPNS</td><td>Dasar</td><td><span class="badge badge-up">Terbit</span></td><td><a href="#" class="accent">Edit</a> · <a href="#" class="down">Hapus</a></td></tr>
+              <tr><td class="num">SL-88215</td><td>Sinonim dari kata "gigih" adalah...</td><td>PPPK</td><td>Dasar</td><td><span class="badge">Draft</span></td><td><a href="#" class="accent">Edit</a> · <a href="#" class="down">Hapus</a></td></tr>
+              <tr><td class="num">SL-88216</td><td>Hitung luas permukaan tabung dengan r=7, t=10...</td><td>Kedinasan</td><td>Lanjut</td><td><span class="badge badge-y">Review</span></td><td><a href="#" class="accent">Edit</a> · <a href="#" class="down">Hapus</a></td></tr>
+              <tr><td class="num">SL-88217</td><td>Manakah pernyataan yang paling logis di bawah ini...</td><td>SNBT</td><td>Menengah</td><td><span class="badge badge-up">Terbit</span></td><td><a href="#" class="accent">Edit</a> · <a href="#" class="down">Hapus</a></td></tr>
+              <tr><td class="num">SL-88218</td><td>Rasio keuangan BUMN yang menunjukkan likuiditas adalah...</td><td>BUMN</td><td>Lanjut</td><td><span class="badge">Draft</span></td><td><a href="#" class="accent">Edit</a> · <a href="#" class="down">Hapus</a></td></tr>
+              <tr><td class="num">SL-88219</td><td>UUD 1945 telah diamandemen sebanyak...</td><td>CPNS</td><td>Dasar</td><td><span class="badge badge-y">Review</span></td><td><a href="#" class="accent">Edit</a> · <a href="#" class="down">Hapus</a></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- REVIEW SOAL AI -->
+    <section class="admin-view hide" data-view="review">
+      <p class="muted mb-lg" style="max-width:70ch">Sistem AI Auto-Review memeriksa setiap soal baru untuk kualitas bahasa, potensi ambiguitas, dan duplikasi sebelum diteruskan ke tim editorial untuk verifikasi akhir.</p>
+
+      <div class="card">
+        <div style="display:flex;flex-direction:column;gap:20px">
+
+          <div style="border-bottom:1px solid var(--hair-dark);padding-bottom:20px">
+            <div class="flex between items-center mb-" style="flex-wrap:wrap;gap:8px">
+              <strong style="max-width:60ch">"Berikut adalah fungsi utama dari lembaga legislatif, kecuali..."</strong>
+              <span class="num accent" style="font-weight:700">92/100</span>
+            </div>
+            <div class="bar mt" style="max-width:280px"><span style="width:92%"></span></div>
+            <div class="flex gap mt" style="flex-wrap:wrap;font-size:12px">
+              <span class="badge badge-up">Ambiguitas rendah</span>
+              <span class="badge badge-up">Duplikat: tidak</span>
+              <span class="badge">Tata bahasa baik</span>
+            </div>
+            <div class="flex gap mt">
+              <button class="btn btn-up btn-sm">Approve</button>
+              <button class="btn btn-down btn-sm">Tolak</button>
+            </div>
+          </div>
+
+          <div style="border-bottom:1px solid var(--hair-dark);padding-bottom:20px">
+            <div class="flex between items-center" style="flex-wrap:wrap;gap:8px">
+              <strong style="max-width:60ch">"Sebuah kubus memiliki volume 216 cm³, maka panjang rusuknya adalah..."</strong>
+              <span class="num accent" style="font-weight:700">88/100</span>
+            </div>
+            <div class="bar mt" style="max-width:280px"><span style="width:88%"></span></div>
+            <div class="flex gap mt" style="flex-wrap:wrap;font-size:12px">
+              <span class="badge badge-up">Ambiguitas rendah</span>
+              <span class="badge badge-up">Duplikat: tidak</span>
+              <span class="badge badge-y">Perlu cek kunci jawaban</span>
+            </div>
+            <div class="flex gap mt">
+              <button class="btn btn-up btn-sm">Approve</button>
+              <button class="btn btn-down btn-sm">Tolak</button>
+            </div>
+          </div>
+
+          <div style="border-bottom:1px solid var(--hair-dark);padding-bottom:20px">
+            <div class="flex between items-center" style="flex-wrap:wrap;gap:8px">
+              <strong style="max-width:60ch">"Antonim dari kata 'sumbang' adalah..."</strong>
+              <span class="num down" style="font-weight:700">54/100</span>
+            </div>
+            <div class="bar down mt" style="max-width:280px"><span style="width:54%"></span></div>
+            <div class="flex gap mt" style="flex-wrap:wrap;font-size:12px">
+              <span class="badge badge-down">Ambiguitas tinggi</span>
+              <span class="badge badge-down">Duplikat: mirip SL-77102</span>
+              <span class="badge">Tata bahasa cukup</span>
+            </div>
+            <div class="flex gap mt">
+              <button class="btn btn-up btn-sm">Approve</button>
+              <button class="btn btn-down btn-sm">Tolak</button>
+            </div>
+          </div>
+
+          <div>
+            <div class="flex between items-center" style="flex-wrap:wrap;gap:8px">
+              <strong style="max-width:60ch">"Berapakah hasil dari integral ∫(2x+3)dx?"</strong>
+              <span class="num accent" style="font-weight:700">95/100</span>
+            </div>
+            <div class="bar mt" style="max-width:280px"><span style="width:95%"></span></div>
+            <div class="flex gap mt" style="flex-wrap:wrap;font-size:12px">
+              <span class="badge badge-up">Ambiguitas rendah</span>
+              <span class="badge badge-up">Duplikat: tidak</span>
+              <span class="badge badge-up">Tata bahasa sangat baik</span>
+            </div>
+            <div class="flex gap mt">
+              <button class="btn btn-up btn-sm">Approve</button>
+              <button class="btn btn-down btn-sm">Tolak</button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- PENGGUNA -->
+    <section class="admin-view hide" data-view="pengguna">
+      <div class="card">
+        <div class="scroll-x">
+          <table class="tbl">
+            <thead><tr><th>Nama</th><th>Email</th><th>Paket</th><th>Bergabung</th><th>Status</th><th>Aksi</th></tr></thead>
+            <tbody>
+              <tr><td>Rian Aditya</td><td class="muted">rian.aditya@gmail.com</td><td><span class="badge badge-y">Premium</span></td><td class="num">02/03/2025</td><td><span class="badge badge-up">Aktif</span></td><td><a href="#" class="accent">Detail</a></td></tr>
+              <tr><td>Siti Nurhaliza</td><td class="muted">siti.n@gmail.com</td><td><span class="badge badge-up">Plus</span></td><td class="num">14/11/2024</td><td><span class="badge badge-up">Aktif</span></td><td><a href="#" class="accent">Detail</a></td></tr>
+              <tr><td>Fajar Nugroho</td><td class="muted">fajar.nugroho@yahoo.com</td><td><span class="badge">Free</span></td><td class="num">30/06/2025</td><td><span class="badge badge-up">Aktif</span></td><td><a href="#" class="accent">Detail</a></td></tr>
+              <tr><td>Dewi Lestari</td><td class="muted">dewi.lestari@gmail.com</td><td><span class="badge">Free</span></td><td class="num">13/07/2026</td><td><span class="badge badge-up">Aktif</span></td><td><a href="#" class="accent">Detail</a></td></tr>
+              <tr><td>Bagas Prakoso</td><td class="muted">bagas.p@gmail.com</td><td><span class="badge badge-y">Premium</span></td><td class="num">21/01/2025</td><td><span class="badge badge-down">Nonaktif</span></td><td><a href="#" class="accent">Detail</a></td></tr>
+              <tr><td>Intan Permata</td><td class="muted">intan.permata@gmail.com</td><td><span class="badge badge-up">Plus</span></td><td class="num">09/09/2024</td><td><span class="badge badge-up">Aktif</span></td><td><a href="#" class="accent">Detail</a></td></tr>
+              <tr><td>Yusuf Maulana</td><td class="muted">yusuf.maulana@outlook.com</td><td><span class="badge">Free</span></td><td class="num">05/05/2025</td><td><span class="badge badge-up">Aktif</span></td><td><a href="#" class="accent">Detail</a></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- PEMBAYARAN & REVENUE -->
+    <section class="admin-view hide" data-view="pembayaran">
+      <div class="grid g3 mb-lg">
+        <div class="card"><div class="stat-label">MRR</div><div class="stat-num num">Rp 612 Jt</div><span class="badge badge-up">+4.1%</span></div>
+        <div class="card"><div class="stat-label">Transaksi Bulan Ini</div><div class="stat-num num">28.940</div><span class="badge badge-up">+2.6%</span></div>
+        <div class="card"><div class="stat-label">Refund</div><div class="stat-num num">142</div><span class="badge badge-down">0.49%</span></div>
+      </div>
+      <div class="card">
+        <div class="scroll-x">
+          <table class="tbl">
+            <thead><tr><th>Invoice</th><th>Pengguna</th><th>Paket</th><th>Jumlah</th><th>Metode</th><th>Status</th></tr></thead>
+            <tbody>
+              <tr><td class="num">INV-100234</td><td>Rian Aditya</td><td>Premium 1 Tahun</td><td class="num">Rp 299.000</td><td>QRIS</td><td><span class="badge badge-up">Sukses</span></td></tr>
+              <tr><td class="num">INV-100235</td><td>Siti Nurhaliza</td><td>Plus Bulanan</td><td class="num">Rp 49.000</td><td>Virtual Account BCA</td><td><span class="badge badge-up">Sukses</span></td></tr>
+              <tr><td class="num">INV-100236</td><td>Fajar Nugroho</td><td>Premium Bulanan</td><td class="num">Rp 39.000</td><td>GoPay</td><td><span class="badge badge-y">Pending</span></td></tr>
+              <tr><td class="num">INV-100237</td><td>Bagas Prakoso</td><td>Plus 1 Tahun</td><td class="num">Rp 349.000</td><td>Kartu Kredit</td><td><span class="badge badge-down">Refund</span></td></tr>
+              <tr><td class="num">INV-100238</td><td>Intan Permata</td><td>Premium Bulanan</td><td class="num">Rp 39.000</td><td>OVO</td><td><span class="badge badge-up">Sukses</span></td></tr>
+              <tr><td class="num">INV-100239</td><td>Yusuf Maulana</td><td>Plus Bulanan</td><td class="num">Rp 49.000</td><td>QRIS</td><td><span class="badge badge-up">Sukses</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- PROMO & VOUCHER -->
+    <section class="admin-view hide" data-view="promo">
+      <div class="flex between items-center mb-lg" style="flex-wrap:wrap;gap:12px">
+        <h4>Daftar Voucher</h4>
+        <button class="btn btn-primary btn-sm">+ Buat Voucher</button>
+      </div>
+      <div class="card">
+        <div class="scroll-x">
+          <table class="tbl">
+            <thead><tr><th>Kode</th><th>Diskon</th><th>Kuota</th><th>Terpakai</th><th>Berlaku s/d</th><th>Status</th></tr></thead>
+            <tbody>
+              <tr><td class="num">CPNS2026</td><td>25%</td><td class="num">5.000</td><td class="num">3.214</td><td class="num">31/08/2026</td><td><span class="badge badge-up">Aktif</span></td></tr>
+              <tr><td class="num">SNBTHEMAT</td><td>Rp 20.000</td><td class="num">10.000</td><td class="num">8.902</td><td class="num">15/07/2026</td><td><span class="badge badge-up">Aktif</span></td></tr>
+              <tr><td class="num">PPPKBARU</td><td>30%</td><td class="num">2.000</td><td class="num">2.000</td><td class="num">01/06/2026</td><td><span class="badge">Habis</span></td></tr>
+              <tr><td class="num">BUMNSPESIAL</td><td>15%</td><td class="num">3.000</td><td class="num">540</td><td class="num">31/12/2026</td><td><span class="badge badge-up">Aktif</span></td></tr>
+              <tr><td class="num">FLASHSALE07</td><td>40%</td><td class="num">1.500</td><td class="num">1.500</td><td class="num">10/07/2026</td><td><span class="badge badge-down">Kedaluwarsa</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- KONTEN & SEO -->
+    <section class="admin-view hide" data-view="konten">
+      <div class="card mb-lg">
+        <div class="scroll-x">
+          <table class="tbl">
+            <thead><tr><th>Halaman</th><th>Meta Title</th><th>Status Indeks</th></tr></thead>
+            <tbody>
+              <tr><td>/</td><td>PusatBankSoal.id — Bank Soal CPNS, SNBT, PPPK Terlengkap</td><td><span class="badge badge-up">Terindeks</span></td></tr>
+              <tr><td>/tryout/cpns</td><td>Tryout CPNS Online Gratis & Premium | PusatBankSoal.id</td><td><span class="badge badge-up">Terindeks</span></td></tr>
+              <tr><td>/tryout/snbt</td><td>Latihan Soal SNBT 2026 Lengkap dengan Pembahasan</td><td><span class="badge badge-up">Terindeks</span></td></tr>
+              <tr><td>/harga</td><td>Harga Paket Premium & Plus | PusatBankSoal.id</td><td><span class="badge badge-y">Diproses</span></td></tr>
+              <tr><td>/blog/tips-cpns</td><td>10 Tips Lolos Seleksi CPNS 2026</td><td><span class="badge badge-up">Terindeks</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="card">
+        <h4 class="mb">Status Teknis SEO</h4>
+        <div class="flex gap-lg wrap-flex" style="font-size:14px">
+          <div>Sitemap.xml <span class="badge badge-up" style="margin-left:6px">Valid — 1.284 URL</span></div>
+          <div>Robots.txt <span class="badge badge-up" style="margin-left:6px">Aktif</span></div>
+          <div>Terakhir di-crawl <span class="muted" style="margin-left:6px">2 jam lalu</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ANALITIK -->
+    <section class="admin-view hide" data-view="analitik">
+      <div class="grid g4 mb-lg">
+        <div class="card"><div class="stat-label">Sesi Bulan Ini</div><div class="stat-num num">3,2 Jt</div></div>
+        <div class="card"><div class="stat-label">Bounce Rate</div><div class="stat-num num">38%</div></div>
+        <div class="card"><div class="stat-label">Rata-rata Durasi</div><div class="stat-num num">6m 42d</div></div>
+        <div class="card"><div class="stat-label">Konversi Free → Premium</div><div class="stat-num num">4,7%</div></div>
+      </div>
+      <div class="card">
+        <h4 class="mb">Sumber Trafik</h4>
+        <svg viewBox="0 0 480 160" width="100%" style="height:auto">
+          <rect x="20" y="30" width="60" height="110" fill="var(--primary)"/>
+          <rect x="120" y="60" width="60" height="80" fill="var(--turq)"/>
+          <rect x="220" y="80" width="60" height="60" fill="var(--info)"/>
+          <rect x="320" y="100" width="60" height="40" fill="var(--muted)"/>
+          <rect x="420" y="115" width="40" height="25" fill="var(--up)"/>
+          <text x="50" y="155" fill="var(--muted)" font-size="11" text-anchor="middle">Organik</text>
+          <text x="150" y="155" fill="var(--muted)" font-size="11" text-anchor="middle">Sosial</text>
+          <text x="250" y="155" fill="var(--muted)" font-size="11" text-anchor="middle">Iklan</text>
+          <text x="350" y="155" fill="var(--muted)" font-size="11" text-anchor="middle">Rujukan</text>
+          <text x="440" y="155" fill="var(--muted)" font-size="11" text-anchor="middle">Lainnya</text>
+        </svg>
+        <p class="muted mt" style="font-size:13px">Trafik organik masih mendominasi (58%), diikuti sosial media (22%) dan kampanye iklan berbayar (12%).</p>
+      </div>
+    </section>
+
+    <!-- CUSTOMER SERVICE -->
+    <section class="admin-view hide" data-view="cs">
+      <div class="card">
+        <div style="display:flex;flex-direction:column;gap:18px">
+
+          <div class="flex between items-center" style="border-bottom:1px solid var(--hair-dark);padding-bottom:18px;flex-wrap:wrap;gap:8px">
+            <div>
+              <strong>Tidak bisa akses tryout premium setelah pembayaran</strong>
+              <div class="muted" style="font-size:13px;margin-top:4px">Fajar Nugroho · #TCK-5521</div>
+            </div>
+            <div class="flex gap items-center">
+              <span class="badge badge-down">Prioritas Tinggi</span>
+              <span class="badge badge-y">Terbuka</span>
+              <button class="btn btn-primary btn-sm">Balas</button>
+            </div>
+          </div>
+
+          <div class="flex between items-center" style="border-bottom:1px solid var(--hair-dark);padding-bottom:18px;flex-wrap:wrap;gap:8px">
+            <div>
+              <strong>Kunci jawaban soal SL-88213 tampak salah</strong>
+              <div class="muted" style="font-size:13px;margin-top:4px">Intan Permata · #TCK-5522</div>
+            </div>
+            <div class="flex gap items-center">
+              <span class="badge badge-y">Prioritas Sedang</span>
+              <span class="badge badge-y">Terbuka</span>
+              <button class="btn btn-primary btn-sm">Balas</button>
+            </div>
+          </div>
+
+          <div class="flex between items-center" style="border-bottom:1px solid var(--hair-dark);padding-bottom:18px;flex-wrap:wrap;gap:8px">
+            <div>
+              <strong>Pengajuan refund paket Plus</strong>
+              <div class="muted" style="font-size:13px;margin-top:4px">Bagas Prakoso · #TCK-5518</div>
+            </div>
+            <div class="flex gap items-center">
+              <span class="badge badge-down">Prioritas Tinggi</span>
+              <span class="badge badge-up">Diproses</span>
+              <button class="btn btn-primary btn-sm">Balas</button>
+            </div>
+          </div>
+
+          <div class="flex between items-center" style="flex-wrap:wrap;gap:8px">
+            <div>
+              <strong>Pertanyaan cara ganti nomor HP terdaftar</strong>
+              <div class="muted" style="font-size:13px;margin-top:4px">Yusuf Maulana · #TCK-5510</div>
+            </div>
+            <div class="flex gap items-center">
+              <span class="badge">Prioritas Rendah</span>
+              <span class="badge badge-up">Selesai</span>
+              <button class="btn btn-primary btn-sm">Balas</button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- AUDIT LOG -->
+    <section class="admin-view hide" data-view="audit">
+      <div class="card">
+        <div class="scroll-x">
+          <table class="tbl">
+            <thead><tr><th>Waktu</th><th>Admin</th><th>Aksi</th><th>IP</th><th>Objek</th></tr></thead>
+            <tbody>
+              <tr><td class="num">13/07/2026 09:20</td><td>Bagas (Editor)</td><td>Menerbitkan soal</td><td class="num">103.47.132.10</td><td class="num">SL-88213</td></tr>
+              <tr><td class="num">13/07/2026 08:55</td><td>Admin Utama</td><td>Membuat voucher baru</td><td class="num">36.72.10.44</td><td class="num">FLASHSALE07</td></tr>
+              <tr><td class="num">12/07/2026 21:10</td><td>Rina (Support)</td><td>Menyetujui refund</td><td class="num">114.5.88.201</td><td class="num">INV-100237</td></tr>
+              <tr><td class="num">12/07/2026 18:42</td><td>Admin Utama</td><td>Menonaktifkan akun pengguna</td><td class="num">36.72.10.44</td><td class="num">Bagas Prakoso</td></tr>
+              <tr><td class="num">12/07/2026 15:03</td><td>Bagas (Editor)</td><td>Menolak soal hasil AI-review</td><td class="num">103.47.132.10</td><td class="num">SL-77980</td></tr>
+              <tr><td class="num">12/07/2026 10:30</td><td>Admin Utama</td><td>Memperbarui meta title halaman</td><td class="num">36.72.10.44</td><td class="num">/harga</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<script>
+(function(){
+  var navButtons = document.querySelectorAll('.admin-nav');
+  var views = document.querySelectorAll('.admin-view');
+  var pageTitle = document.getElementById('pageTitle');
+
+  var titles = {
+    dashboard: 'Dashboard',
+    soal: 'Manajemen Soal',
+    review: 'Review Soal (AI)',
+    pengguna: 'Pengguna',
+    pembayaran: 'Pembayaran & Revenue',
+    promo: 'Promo & Voucher',
+    konten: 'Konten & SEO',
+    analitik: 'Analitik',
+    cs: 'Customer Service',
+    audit: 'Audit Log'
+  };
+
+  function setActiveButton(activeBtn){
+    navButtons.forEach(function(btn){
+      if(btn === activeBtn){
+        btn.style.background = 'var(--elevated)';
+        btn.style.color = 'var(--primary)';
+      } else {
+        btn.style.background = 'transparent';
+        btn.style.color = 'var(--muted)';
+      }
+    });
+  }
+
+  function showView(name){
+    views.forEach(function(sec){
+      if(sec.dataset.view === name){
+        sec.classList.remove('hide');
+      } else {
+        sec.classList.add('hide');
+      }
+    });
+    if(pageTitle && titles[name]){
+      pageTitle.textContent = titles[name];
+    }
+  }
+
+  navButtons.forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var view = btn.dataset.view;
+      if(!view) return;
+      showView(view);
+      setActiveButton(btn);
+    });
+  });
+
+  // init
+  showView('dashboard');
+  if(navButtons.length){ setActiveButton(navButtons[0]); }
+})();
+</script>
+
+</body>
+</html>

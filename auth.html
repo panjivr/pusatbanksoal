@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Masuk / Daftar Akun | PusatBankSoal.id</title>
+<meta name="description" content="Masuk atau daftar gratis di PusatBankSoal.id untuk mulai tryout, akses bank soal, dan analisis nilai berbasis AI.">
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<nav class="nav"><div class="nav-in">
+<a class="brand" href="index.html"><span class="logo">P</span>Pusat<b>BankSoal</b></a>
+<div class="nav-links" id="navLinks">
+<a href="index.html">Beranda</a><a href="tryout.html">Tryout</a><a href="dashboard.html">Dashboard</a><a href="analisis.html">AI Analisis</a><a href="index.html#harga">Harga</a>
+</div>
+<div class="nav-right"><a href="auth.html" class="hide-sm" style="font-weight:600">Masuk</a><a href="auth.html" class="btn btn-primary btn-sm">Daftar Gratis</a>
+<button class="nav-toggle" onclick="document.getElementById('navLinks').classList.toggle('open')">☰</button></div>
+</div></nav>
+
+<section class="section-sm">
+<div class="wrap" style="max-width:980px">
+<div class="grid g2">
+
+<div style="align-self:center">
+<span class="eyebrow">PusatBankSoal.id</span>
+<h2 class="mt">Bergabung dengan 2 juta+ pejuang ujian</h2>
+<p class="lead mt">Tryout CAT paling mirip aslinya, bank soal lengkap, dan AI analisis nilai untuk bantu kamu lolos CPNS, PPPK, SNBT, hingga BUMN.</p>
+<ul style="list-style:none" class="mt-lg">
+<li class="muted mb" style="display:flex;gap:10px;align-items:flex-start"><span class="accent">✓</span> Akses 500.000+ bank soal</li>
+<li class="muted mb" style="display:flex;gap:10px;align-items:flex-start"><span class="accent">✓</span> Simulasi CAT persis aslinya</li>
+<li class="muted mb" style="display:flex;gap:10px;align-items:flex-start"><span class="accent">✓</span> AI analisis nilai & rekomendasi kampus</li>
+<li class="muted" style="display:flex;gap:10px;align-items:flex-start"><span class="accent">✓</span> Leaderboard nasional</li>
+</ul>
+<div class="flex gap mt-lg">
+<div><div class="stat-num">2 Jt+</div><div class="stat-label">Pengguna aktif</div></div>
+<div><div class="stat-num">500rb+</div><div class="stat-label">Soal tersedia</div></div>
+<div><div class="stat-num">4.9<span style="font-size:16px">/5</span></div><div class="stat-label">Rating pengguna</div></div>
+</div>
+</div>
+
+<div>
+<div class="card" style="max-width:420px;margin:0 auto">
+<div class="pill-tab" style="width:100%;display:grid;grid-template-columns:1fr 1fr">
+<button id="tabLogin" class="active" type="button">Masuk</button>
+<button id="tabRegister" type="button">Daftar</button>
+</div>
+
+<form id="formLogin" class="mt-lg" novalidate>
+<div id="loginMsg" style="display:none;font-size:13px;margin-bottom:14px"></div>
+<div style="margin-bottom:16px">
+<label style="color:var(--muted);font-size:13px;margin-bottom:6px;display:block">Email</label>
+<input type="email" id="loginEmail" placeholder="nama@email.com" style="width:100%;background:var(--elevated);border:1px solid var(--hair-dark);color:var(--body);border-radius:8px;padding:12px 14px;font-size:14px;font-family:inherit">
+</div>
+<div style="margin-bottom:16px">
+<label style="color:var(--muted);font-size:13px;margin-bottom:6px;display:block">Password</label>
+<input type="password" id="loginPassword" placeholder="Minimal 6 karakter" style="width:100%;background:var(--elevated);border:1px solid var(--hair-dark);color:var(--body);border-radius:8px;padding:12px 14px;font-size:14px;font-family:inherit">
+</div>
+<div class="flex between items-center mb">
+<a href="#" style="font-size:13px;color:var(--muted)">Lupa password?</a>
+</div>
+<button type="submit" class="btn btn-primary btn-lg" style="width:100%">Masuk</button>
+</form>
+
+<div class="divider mt-lg mb-lg" style="height:1px;background:var(--hair-dark)"></div>
+
+<div id="loginSocial">
+<button type="button" class="btn btn-secondary" style="width:100%;margin-bottom:10px">Lanjut dengan Google</button>
+<button type="button" class="btn btn-secondary" style="width:100%">Lanjut dengan WhatsApp</button>
+</div>
+
+<p class="muted mt-lg center" style="font-size:13px">Belum punya akun? <a href="#" id="goRegister" class="accent" style="font-weight:600">Daftar gratis di sini</a></p>
+
+<form id="formRegister" class="mt-lg hide" novalidate>
+<div id="registerMsg" style="display:none;font-size:13px;margin-bottom:14px"></div>
+<div style="margin-bottom:16px">
+<label style="color:var(--muted);font-size:13px;margin-bottom:6px;display:block">Nama Lengkap</label>
+<input type="text" id="regName" placeholder="Nama sesuai identitas" style="width:100%;background:var(--elevated);border:1px solid var(--hair-dark);color:var(--body);border-radius:8px;padding:12px 14px;font-size:14px;font-family:inherit">
+</div>
+<div style="margin-bottom:16px">
+<label style="color:var(--muted);font-size:13px;margin-bottom:6px;display:block">Email</label>
+<input type="email" id="regEmail" placeholder="nama@email.com" style="width:100%;background:var(--elevated);border:1px solid var(--hair-dark);color:var(--body);border-radius:8px;padding:12px 14px;font-size:14px;font-family:inherit">
+</div>
+<div style="margin-bottom:16px">
+<label style="color:var(--muted);font-size:13px;margin-bottom:6px;display:block">Nomor WhatsApp</label>
+<input type="tel" id="regPhone" placeholder="08xxxxxxxxxx" style="width:100%;background:var(--elevated);border:1px solid var(--hair-dark);color:var(--body);border-radius:8px;padding:12px 14px;font-size:14px;font-family:inherit">
+</div>
+<div style="margin-bottom:16px">
+<label style="color:var(--muted);font-size:13px;margin-bottom:6px;display:block">Password</label>
+<input type="password" id="regPassword" placeholder="Minimal 6 karakter" style="width:100%;background:var(--elevated);border:1px solid var(--hair-dark);color:var(--body);border-radius:8px;padding:12px 14px;font-size:14px;font-family:inherit">
+</div>
+<div style="margin-bottom:16px">
+<label style="color:var(--muted);font-size:13px;margin-bottom:6px;display:block">Target Ujian</label>
+<select id="regTarget" style="width:100%;background:var(--elevated);border:1px solid var(--hair-dark);color:var(--body);border-radius:8px;padding:12px 14px;font-size:14px;font-family:inherit">
+<option value="">Pilih target ujian</option>
+<option value="cpns">CPNS</option>
+<option value="pppk">PPPK</option>
+<option value="snbt">SNBT/UTBK</option>
+<option value="kedinasan">Kedinasan</option>
+<option value="bumn">BUMN</option>
+<option value="tni-polri">TNI/POLRI</option>
+</select>
+</div>
+<div class="flex items-center gap mb" style="align-items:flex-start">
+<input type="checkbox" id="regAgree" style="margin-top:3px">
+<label for="regAgree" class="muted" style="font-size:13px">Saya setuju Syarat & Ketentuan</label>
+</div>
+<button type="submit" class="btn btn-primary btn-lg" style="width:100%">Daftar Gratis</button>
+</form>
+
+<div id="registerExtra" class="hide">
+<div class="divider mt-lg mb-lg" style="height:1px;background:var(--hair-dark)"></div>
+<button type="button" class="btn btn-secondary" style="width:100%;margin-bottom:10px">Lanjut dengan Google</button>
+<button type="button" class="btn btn-secondary" style="width:100%">Lanjut dengan WhatsApp</button>
+<p class="muted mt-lg center" style="font-size:13px">Sudah punya akun? <a href="#" id="goLogin" class="accent" style="font-weight:600">Masuk di sini</a></p>
+</div>
+
+</div>
+</div>
+
+</div>
+</div>
+</section>
+
+<footer class="footer"><div class="wrap"><div class="cols">
+<div><a class="brand" href="index.html" style="color:var(--ink)"><span class="logo">P</span>Pusat<b>BankSoal</b></a><p style="color:#5b6672;font-size:13px;margin-top:14px;max-width:34ch">AI Education Intelligence Platform. Tryout, bank soal, analisis nilai & rekomendasi kampus #1 di Indonesia.</p></div>
+<div><h5>Produk</h5><a href="tryout.html">Tryout CPNS</a><a href="tryout.html">Tryout SNBT</a><a href="pembahasan.html">Bank Soal & Pembahasan</a><a href="analisis.html">AI Analisis Nilai</a><a href="analisis.html">Rekomendasi Kampus</a></div>
+<div><h5>Kategori</h5><a href="tryout.html">CPNS & PPPK</a><a href="tryout.html">SNBT/UTBK</a><a href="tryout.html">Kedinasan</a><a href="tryout.html">BUMN</a><a href="tryout.html">TNI/POLRI</a></div>
+<div><h5>Perusahaan</h5><a href="#">Tentang Kami</a><a href="#">Blog</a><a href="#">Karier</a><a href="#">Kontak</a><a href="#">Afiliasi</a></div>
+<div><h5>Bantuan</h5><a href="#">Pusat Bantuan</a><a href="#">Syarat & Ketentuan</a><a href="#">Kebijakan Privasi</a><a href="admin.html">Admin</a></div>
+</div><div class="bottom"><span>© 2026 PusatBankSoal.id — Seluruh hak cipta dilindungi.</span><span>Dibuat untuk pejuang ujian Indonesia 🇮🇩</span></div></div></footer>
+
+<script>
+(function(){
+  var tabLogin = document.getElementById('tabLogin');
+  var tabRegister = document.getElementById('tabRegister');
+  var formLogin = document.getElementById('formLogin');
+  var formRegister = document.getElementById('formRegister');
+  var loginSocial = document.getElementById('loginSocial');
+  var registerExtra = document.getElementById('registerExtra');
+
+  function showLogin(){
+    if(!formLogin || !formRegister || !tabLogin || !tabRegister) return;
+    formLogin.classList.remove('hide');
+    if(loginSocial) loginSocial.classList.remove('hide');
+    formRegister.classList.add('hide');
+    if(registerExtra) registerExtra.classList.add('hide');
+    tabLogin.classList.add('active');
+    tabRegister.classList.remove('active');
+  }
+
+  function showRegister(){
+    if(!formLogin || !formRegister || !tabLogin || !tabRegister) return;
+    formRegister.classList.remove('hide');
+    if(registerExtra) registerExtra.classList.remove('hide');
+    formLogin.classList.add('hide');
+    if(loginSocial) loginSocial.classList.add('hide');
+    tabRegister.classList.add('active');
+    tabLogin.classList.remove('active');
+  }
+
+  if(tabLogin) tabLogin.addEventListener('click', showLogin);
+  if(tabRegister) tabRegister.addEventListener('click', showRegister);
+
+  var goRegister = document.getElementById('goRegister');
+  var goLogin = document.getElementById('goLogin');
+  if(goRegister) goRegister.addEventListener('click', function(e){ e.preventDefault(); showRegister(); });
+  if(goLogin) goLogin.addEventListener('click', function(e){ e.preventDefault(); showLogin(); });
+
+  if(window.location.hash === '#daftar'){ showRegister(); }
+
+  var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+  function setMsg(el, text, ok){
+    if(!el) return;
+    el.style.display = 'block';
+    el.style.color = ok ? 'var(--up)' : 'var(--down)';
+    el.textContent = text;
+  }
+
+  if(formLogin){
+    formLogin.addEventListener('submit', function(e){
+      e.preventDefault();
+      var msg = document.getElementById('loginMsg');
+      var email = document.getElementById('loginEmail');
+      var password = document.getElementById('loginPassword');
+      var emailVal = email ? email.value.trim() : '';
+      var passVal = password ? password.value : '';
+
+      if(!emailVal || !passVal){
+        setMsg(msg, 'Email dan password wajib diisi.', false);
+        return;
+      }
+      if(!emailRegex.test(emailVal)){
+        setMsg(msg, 'Format email tidak valid.', false);
+        return;
+      }
+      if(passVal.length < 6){
+        setMsg(msg, 'Password minimal 6 karakter.', false);
+        return;
+      }
+      setMsg(msg, 'Berhasil! Mengarahkan ke dashboard...', true);
+      setTimeout(function(){ window.location = 'dashboard.html'; }, 800);
+    });
+  }
+
+  if(formRegister){
+    formRegister.addEventListener('submit', function(e){
+      e.preventDefault();
+      var msg = document.getElementById('registerMsg');
+      var name = document.getElementById('regName');
+      var email = document.getElementById('regEmail');
+      var phone = document.getElementById('regPhone');
+      var password = document.getElementById('regPassword');
+      var target = document.getElementById('regTarget');
+      var agree = document.getElementById('regAgree');
+
+      var nameVal = name ? name.value.trim() : '';
+      var emailVal = email ? email.value.trim() : '';
+      var phoneVal = phone ? phone.value.trim() : '';
+      var passVal = password ? password.value : '';
+      var targetVal = target ? target.value : '';
+      var agreeVal = agree ? agree.checked : false;
+
+      if(!nameVal || !emailVal || !phoneVal || !passVal || !targetVal){
+        setMsg(msg, 'Semua kolom wajib diisi.', false);
+        return;
+      }
+      if(!emailRegex.test(emailVal)){
+        setMsg(msg, 'Format email tidak valid.', false);
+        return;
+      }
+      if(passVal.length < 6){
+        setMsg(msg, 'Password minimal 6 karakter.', false);
+        return;
+      }
+      if(!agreeVal){
+        setMsg(msg, 'Kamu harus menyetujui Syarat & Ketentuan.', false);
+        return;
+      }
+      setMsg(msg, 'Berhasil! Mengarahkan ke dashboard...', true);
+      setTimeout(function(){ window.location = 'dashboard.html'; }, 800);
+    });
+  }
+})();
+</script>
+</body>
+</html>
