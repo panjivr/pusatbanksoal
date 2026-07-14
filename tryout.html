@@ -182,7 +182,7 @@
       <div class="card" id="questionPanel">
         <p class="muted num" id="qProgress" style="font-size:13px">Soal 1 dari 8</p>
         <h3 class="mt" id="qText">—</h3>
-        <div id="qOptions"></div>
+        <div id="qOptions" role="radiogroup" aria-label="Pilihan jawaban"></div>
         <div class="flex between mt-lg">
           <button class="btn btn-secondary" id="btnPrev">Sebelumnya</button>
           <button class="btn btn-primary" id="btnNext">Selanjutnya</button>
@@ -372,12 +372,23 @@
       row.style.cursor = 'pointer';
       row.style.border = '1px solid ' + (selected ? 'var(--primary)' : 'var(--hair-dark)');
       row.style.background = selected ? 'rgba(252,213,53,.10)' : 'var(--card)';
+      row.setAttribute('tabindex', '0');
+      row.setAttribute('role', 'radio');
+      row.setAttribute('aria-checked', selected ? 'true' : 'false');
+      row.setAttribute('aria-label', 'Pilihan ' + String.fromCharCode(65 + i) + ': ' + opt);
       row.innerHTML = '<span style="font-weight:700;margin-right:10px;color:var(--primary)">' +
         String.fromCharCode(65 + i) + '.</span><span>' + opt + '</span>';
-      row.addEventListener('click', function(){
+      function selectOption(){
         answers[current] = i;
         renderQuestion();
         renderNav();
+      }
+      row.addEventListener('click', selectOption);
+      row.addEventListener('keydown', function(e){
+        if (e.key === 'Enter' || e.key === ' ' || e.key === 'Spacebar') {
+          e.preventDefault();
+          selectOption();
+        }
       });
       qOptions.appendChild(row);
     });
