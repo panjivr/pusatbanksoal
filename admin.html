@@ -12,9 +12,9 @@
 </head>
 <body>
 
-<div style="display:flex;min-height:100vh">
+<div class="admin-shell" style="display:flex;min-height:100vh">
 
-  <aside style="width:240px;flex:none;background:var(--card);border-right:1px solid var(--hair-dark);padding:24px 16px;position:sticky;top:0;height:100vh;overflow:auto">
+  <aside class="admin-sidebar" style="width:240px;flex:none;background:var(--card);border-right:1px solid var(--hair-dark);padding:24px 16px;position:sticky;top:0;height:100vh;overflow:auto">
     <a class="brand" href="index.html"><span class="logo">P</span>Pusat<b>BankSoal</b></a>
     <div class="badge badge-y" style="margin-top:12px">Admin Panel</div>
 
@@ -32,12 +32,12 @@
     </nav>
   </aside>
 
-  <main style="flex:1;padding:28px;min-width:0">
+  <main class="admin-main" style="flex:1;padding:28px;min-width:0">
 
     <div class="flex between items-center mb-lg" style="flex-wrap:wrap;gap:12px">
       <h2 id="pageTitle" style="font-size:24px">Dashboard</h2>
       <div class="flex items-center gap">
-        <input type="text" placeholder="Cari pengguna, soal, invoice..." style="background:var(--elevated);border:1px solid var(--hair-dark);color:var(--body);padding:9px 14px;border-radius:8px;font-size:13px;font-family:var(--font);width:240px;max-width:40vw">
+        <input type="text" placeholder="Cari pengguna, soal, invoice..." aria-label="Cari pengguna, soal, invoice" style="background:var(--elevated);border:1px solid var(--hair-dark);color:var(--body);padding:9px 14px;border-radius:8px;font-size:13px;font-family:var(--font);width:240px;max-width:40vw">
         <div class="avatar">AD</div>
       </div>
     </div>
@@ -71,7 +71,7 @@
       <div class="grid g2 mt-lg">
         <div class="card">
           <h4 class="mb">Pertumbuhan Pengguna</h4>
-          <svg viewBox="0 0 480 200" width="100%" style="height:auto" preserveAspectRatio="none">
+          <svg viewBox="0 0 480 200" width="100%" style="height:auto" preserveAspectRatio="none" role="img" aria-label="Grafik pertumbuhan pengguna meningkat dari Januari hingga Januari tahun berikutnya">
             <line x1="0" y1="10" x2="480" y2="10" stroke="var(--hair-dark)" stroke-width="1"/>
             <line x1="0" y1="55" x2="480" y2="55" stroke="var(--hair-dark)" stroke-width="1"/>
             <line x1="0" y1="100" x2="480" y2="100" stroke="var(--hair-dark)" stroke-width="1"/>
@@ -133,7 +133,7 @@
     <section class="admin-view hide" data-view="soal">
       <div class="flex between items-center mb-lg" style="flex-wrap:wrap;gap:12px">
         <button class="btn btn-primary btn-sm">+ Tambah Soal</button>
-        <div class="pill-tab">
+        <div class="pill-tab wrap-flex">
           <button class="active">Semua</button>
           <button>CPNS</button>
           <button>SNBT</button>
@@ -340,7 +340,7 @@
       </div>
       <div class="card">
         <h4 class="mb">Sumber Trafik</h4>
-        <svg viewBox="0 0 480 160" width="100%" style="height:auto">
+        <svg viewBox="0 0 480 160" width="100%" style="height:auto" role="img" aria-label="Grafik sumber trafik: Organik 58%, Sosial 22%, Iklan 12%, Rujukan, dan Lainnya">
           <rect x="20" y="30" width="60" height="110" fill="var(--primary)"/>
           <rect x="120" y="60" width="60" height="80" fill="var(--turq)"/>
           <rect x="220" y="80" width="60" height="60" fill="var(--info)"/>

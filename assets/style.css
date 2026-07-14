@@ -160,3 +160,12 @@ h4{font-size:16px;font-weight:600;letter-spacing:0}
 .divider{height:1px;background:var(--hair-dark);border:none;margin:var(--s-sec) 0}
 .hide{display:none}
 .text-up{color:var(--up)} .text-down{color:var(--down)}
+
+/* Admin panel responsive (prevents fixed-width sidebar from causing
+   horizontal page overflow on narrow viewports) */
+@media(max-width:780px){
+  .admin-shell{flex-direction:column}
+  .admin-sidebar{width:100%!important;height:auto!important;position:relative!important;
+    top:auto!important;border-right:none;border-bottom:1px solid var(--hair-dark)}
+  .admin-main{padding:16px!important}
+}
