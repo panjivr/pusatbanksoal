@@ -16,7 +16,7 @@
 <a href="index.html">Beranda</a><a href="tryout.html">Tryout</a><a href="dashboard.html" class="active">Dashboard</a><a href="analisis.html">AI Analisis</a><a href="index.html#harga">Harga</a>
 </div>
 <div class="nav-right"><a href="auth.html" class="hide-sm" style="font-weight:600">Masuk</a><a href="auth.html" class="btn btn-primary btn-sm">Daftar Gratis</a>
-<button class="nav-toggle" onclick="document.getElementById('navLinks').classList.toggle('open')">☰</button></div>
+<button class="nav-toggle" data-nav-toggle aria-label="Buka menu" aria-expanded="false"><svg class="i"><use href="#i-menu"></use></svg></button></div>
 </div></nav>
 
 <section class="section-sm"><div class="wrap">
@@ -33,30 +33,30 @@
 </div>
 
 <div class="grid g4 mt-lg">
-<div class="card">
-<div class="muted stat-label">Skor Rata-rata</div>
-<div class="stat-num num mt">412</div>
+<div class="card reveal d1 lift">
+<div class="muted stat-label"><svg class="i"><use href="#i-trend"></use></svg> Skor Rata-rata</div>
+<div class="stat-num num mt" data-count="412">412</div>
 <span class="badge badge-up mt">▲ +18 poin</span>
 </div>
-<div class="card">
-<div class="muted stat-label">Tryout Selesai</div>
-<div class="stat-num num mt">87</div>
+<div class="card reveal d2 lift">
+<div class="muted stat-label"><svg class="i"><use href="#i-check"></use></svg> Tryout Selesai</div>
+<div class="stat-num num mt" data-count="87">87</div>
 <span class="badge badge-up mt">▲ +5 minggu ini</span>
 </div>
-<div class="card">
-<div class="muted stat-label">Ranking Nasional</div>
-<div class="stat-num num mt">#1.204</div>
+<div class="card reveal d3 lift">
+<div class="muted stat-label"><svg class="i"><use href="#i-trophy"></use></svg> Ranking Nasional</div>
+<div class="stat-num num mt" data-prefix="#" data-count="1204">#1.204</div>
 <span class="badge badge-up mt">▲ naik 320</span>
 </div>
-<div class="card">
-<div class="muted stat-label">Streak Belajar</div>
-<div class="stat-num num mt">23 hari 🔥</div>
+<div class="card reveal d4 lift">
+<div class="muted stat-label"><svg class="i"><use href="#i-fire"></use></svg> Streak Belajar</div>
+<div class="stat-num num mt"><span data-count="23" data-suffix=" hari">23 hari</span> <svg class="i i-fill" style="color:var(--down)"><use href="#i-fire"></use></svg></div>
 <span class="badge badge-y mt">Jangan putus!</span>
 </div>
 </div>
 
 <div class="grid g2 mt-lg">
-<div class="card">
+<div class="card reveal d1">
 <h3>Grafik Perkembangan Skor</h3>
 <p class="muted mt" style="font-size:13px">Rata-rata skor tryout 10 bulan terakhir</p>
 <svg viewBox="0 0 480 220" width="100%" style="margin-top:8px;height:auto" role="img" aria-label="Grafik perkembangan skor naik dari 298 menjadi 412">
@@ -93,7 +93,7 @@
 </svg>
 </div>
 
-<div class="card">
+<div class="card reveal d2">
 <h3>Radar Kemampuan</h3>
 <p class="muted mt" style="font-size:13px">Perbandingan kekuatan per subtes</p>
 <svg viewBox="0 0 300 300" width="100%" style="margin-top:8px;height:auto" role="img" aria-label="Radar kemampuan lima subtes: TWK, TIU, TKP, Literasi, Penalaran">
@@ -121,8 +121,8 @@
 </div>
 
 <div class="grid g2 mt-lg">
-<div class="card">
-<h3>Analisis Kelemahan (AI)</h3>
+<div class="card reveal d1">
+<h3><svg class="i" style="color:var(--primary)"><use href="#i-target"></use></svg> Analisis Kelemahan (AI)</h3>
 <div class="mt-lg">
 <div class="flex between"><span>Penalaran Matematika</span><span class="num down">42%</span></div>
 <div class="bar down mt"><span style="width:42%"></span></div>
@@ -139,16 +139,16 @@
 <div class="flex between"><span>Tes Karakteristik Pribadi</span><span class="num up">91%</span></div>
 <div class="bar up mt"><span style="width:91%"></span></div>
 </div>
-<p class="muted mt-lg" style="font-size:13px">🤖 AI merekomendasikan fokus 40% waktu belajarmu minggu ini pada <b style="color:var(--body)">Penalaran Matematika</b> — topik ini paling sering menyebabkan skor turun pada 5 tryout terakhir.</p>
+<p class="muted mt-lg" style="font-size:13px"><svg class="i" style="color:var(--primary)"><use href="#i-sparkles"></use></svg> AI merekomendasikan fokus 40% waktu belajarmu minggu ini pada <b style="color:var(--body)">Penalaran Matematika</b> — topik ini paling sering menyebabkan skor turun pada 5 tryout terakhir.</p>
 </div>
 
-<div class="card">
-<h3>Misi Harian</h3>
+<div class="card reveal d2">
+<h3><svg class="i" style="color:var(--primary)"><use href="#i-check"></use></svg> Misi Harian</h3>
 <div class="mt-lg" style="display:flex;flex-direction:column;gap:14px">
-<div class="flex between items-center"><span>✅ Kerjakan 1 tryout penuh</span><span class="badge badge-y">+50 XP</span></div>
-<div class="flex between items-center"><span>✅ Selesaikan 20 soal TIU</span><span class="badge badge-y">+20 XP</span></div>
-<div class="flex between items-center"><span class="muted">⬜ Tonton 1 video pembahasan</span><span class="badge">+15 XP</span></div>
-<div class="flex between items-center"><span class="muted">⬜ Pertahankan streak hari ini</span><span class="badge">+10 XP</span></div>
+<div class="flex between items-center"><span><svg class="i" style="color:var(--up)"><use href="#i-check"></use></svg> Kerjakan 1 tryout penuh</span><span class="badge badge-y">+50 XP</span></div>
+<div class="flex between items-center"><span><svg class="i" style="color:var(--up)"><use href="#i-check"></use></svg> Selesaikan 20 soal TIU</span><span class="badge badge-y">+20 XP</span></div>
+<div class="flex between items-center"><span class="muted"><svg class="i"><use href="#i-play"></use></svg> Tonton 1 video pembahasan</span><span class="badge">+15 XP</span></div>
+<div class="flex between items-center"><span class="muted"><svg class="i"><use href="#i-check"></use></svg> Pertahankan streak hari ini</span><span class="badge">+10 XP</span></div>
 </div>
 <div class="mt-lg">
 <div class="flex between"><span class="muted" style="font-size:13px">Level 12 → Level 13</span><span class="num" style="font-size:13px">640 / 800 XP</span></div>
@@ -157,9 +157,9 @@
 </div>
 </div>
 
-<div class="card mt-lg">
+<div class="card mt-lg reveal">
 <div class="flex between items-center wrap-flex">
-<h3>Papan Peringkat Nasional</h3>
+<h3><svg class="i" style="color:var(--primary)"><use href="#i-trophy"></use></svg> Papan Peringkat Nasional</h3>
 <span class="muted" style="font-size:13px">Kelas CPNS Kemenkeu 2026 · Minggu ini</span>
 </div>
 <div class="scroll-x mt-lg">
@@ -178,9 +178,9 @@
 </div>
 </div>
 
-<div class="card mt-lg">
+<div class="card mt-lg reveal">
 <div class="flex between items-center wrap-flex">
-<h3>Heatmap Konsistensi Belajar</h3>
+<h3><svg class="i" style="color:var(--primary)"><use href="#i-calendar"></use></svg> Heatmap Konsistensi Belajar</h3>
 <span class="muted" style="font-size:13px">140 hari terakhir</span>
 </div>
 <div id="heatmap" class="mt-lg" role="img" aria-label="Heatmap konsistensi belajar 140 hari terakhir, warna lebih terang menandakan aktivitas belajar lebih banyak" style="display:grid;grid-template-columns:repeat(20,13px);grid-auto-rows:13px;gap:3px"></div>
@@ -216,6 +216,7 @@
 <div><h5>Kategori</h5><a href="tryout.html">CPNS & PPPK</a><a href="tryout.html">SNBT/UTBK</a><a href="tryout.html">Kedinasan</a><a href="tryout.html">BUMN</a><a href="tryout.html">TNI/POLRI</a></div>
 <div><h5>Perusahaan</h5><a href="#">Tentang Kami</a><a href="#">Blog</a><a href="#">Karier</a><a href="#">Kontak</a><a href="#">Afiliasi</a></div>
 <div><h5>Bantuan</h5><a href="#">Pusat Bantuan</a><a href="#">Syarat & Ketentuan</a><a href="#">Kebijakan Privasi</a><a href="admin.html">Admin</a></div>
-</div><div class="bottom"><span>© 2026 PusatBankSoal.id — Seluruh hak cipta dilindungi.</span><span>Dibuat untuk pejuang ujian Indonesia 🇮🇩</span></div></div></footer>
+</div><div class="bottom"><span>© <span data-year>2026</span> PusatBankSoal.id — Seluruh hak cipta dilindungi.</span><span>Dibuat untuk pejuang ujian Indonesia 🇮🇩</span></div></div></footer>
+<script src="assets/app.js" defer></script>
 </body>
 </html>

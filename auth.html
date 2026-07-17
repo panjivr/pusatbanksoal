@@ -17,32 +17,32 @@
 <a href="index.html">Beranda</a><a href="tryout.html">Tryout</a><a href="dashboard.html">Dashboard</a><a href="analisis.html">AI Analisis</a><a href="index.html#harga">Harga</a>
 </div>
 <div class="nav-right"><a href="auth.html" class="hide-sm" style="font-weight:600">Masuk</a><a href="auth.html" class="btn btn-primary btn-sm">Daftar Gratis</a>
-<button class="nav-toggle" onclick="document.getElementById('navLinks').classList.toggle('open')">☰</button></div>
+<button class="nav-toggle" data-nav-toggle aria-label="Buka menu" aria-expanded="false"><svg class="i"><use href="#i-menu"></use></svg></button></div>
 </div></nav>
 
 <section class="section-sm">
 <div class="wrap" style="max-width:980px">
 <div class="grid g2">
 
-<div style="align-self:center">
+<div style="align-self:center" class="reveal">
 <span class="eyebrow">PusatBankSoal.id</span>
 <h1 class="mt">Bergabung dengan 2 juta+ pejuang ujian</h1>
 <p class="lead mt">Tryout CAT paling mirip aslinya, bank soal lengkap, dan AI analisis nilai untuk bantu kamu lolos CPNS, PPPK, SNBT, hingga BUMN.</p>
 <ul style="list-style:none" class="mt-lg">
-<li class="muted mb" style="display:flex;gap:10px;align-items:flex-start"><span class="accent">✓</span> Akses 500.000+ bank soal</li>
-<li class="muted mb" style="display:flex;gap:10px;align-items:flex-start"><span class="accent">✓</span> Simulasi CAT persis aslinya</li>
-<li class="muted mb" style="display:flex;gap:10px;align-items:flex-start"><span class="accent">✓</span> AI analisis nilai & rekomendasi kampus</li>
-<li class="muted" style="display:flex;gap:10px;align-items:flex-start"><span class="accent">✓</span> Leaderboard nasional</li>
+<li class="muted mb" style="display:flex;gap:10px;align-items:flex-start"><svg class="i" style="color:var(--up)"><use href="#i-check"></use></svg> Akses 500.000+ bank soal</li>
+<li class="muted mb" style="display:flex;gap:10px;align-items:flex-start"><svg class="i" style="color:var(--up)"><use href="#i-check"></use></svg> Simulasi CAT persis aslinya</li>
+<li class="muted mb" style="display:flex;gap:10px;align-items:flex-start"><svg class="i" style="color:var(--up)"><use href="#i-check"></use></svg> AI analisis nilai & rekomendasi kampus</li>
+<li class="muted" style="display:flex;gap:10px;align-items:flex-start"><svg class="i" style="color:var(--up)"><use href="#i-check"></use></svg> Leaderboard nasional</li>
 </ul>
-<div class="flex gap mt-lg">
+<div class="flex gap mt-lg wrap-flex">
 <div><div class="stat-num">2 Jt+</div><div class="stat-label">Pengguna aktif</div></div>
 <div><div class="stat-num">500rb+</div><div class="stat-label">Soal tersedia</div></div>
 <div><div class="stat-num">4.9<span style="font-size:16px">/5</span></div><div class="stat-label">Rating pengguna</div></div>
 </div>
 </div>
 
-<div>
-<div class="card" style="max-width:420px;margin:0 auto">
+<div class="reveal d2">
+<div class="card lift" style="max-width:420px;margin:0 auto">
 <div class="pill-tab" style="width:100%;display:grid;grid-template-columns:1fr 1fr">
 <button id="tabLogin" class="active" type="button">Masuk</button>
 <button id="tabRegister" type="button">Daftar</button>
@@ -67,8 +67,8 @@
 <div class="divider mt-lg mb-lg" style="height:1px;background:var(--hair-dark)"></div>
 
 <div id="loginSocial">
-<button type="button" class="btn btn-secondary" style="width:100%;margin-bottom:10px">Lanjut dengan Google</button>
-<button type="button" class="btn btn-secondary" style="width:100%">Lanjut dengan WhatsApp</button>
+<button type="button" class="btn btn-secondary" style="width:100%;margin-bottom:10px"><svg class="i"><use href="#i-globe"></use></svg> Lanjut dengan Google</button>
+<button type="button" class="btn btn-secondary" style="width:100%"><svg class="i"><use href="#i-chat"></use></svg> Lanjut dengan WhatsApp</button>
 </div>
 
 <p class="muted mt-lg center" style="font-size:13px">Belum punya akun? <a href="#" id="goRegister" class="accent" style="font-weight:600">Daftar gratis di sini</a></p>
@@ -112,8 +112,8 @@
 
 <div id="registerExtra" class="hide">
 <div class="divider mt-lg mb-lg" style="height:1px;background:var(--hair-dark)"></div>
-<button type="button" class="btn btn-secondary" style="width:100%;margin-bottom:10px">Lanjut dengan Google</button>
-<button type="button" class="btn btn-secondary" style="width:100%">Lanjut dengan WhatsApp</button>
+<button type="button" class="btn btn-secondary" style="width:100%;margin-bottom:10px"><svg class="i"><use href="#i-globe"></use></svg> Lanjut dengan Google</button>
+<button type="button" class="btn btn-secondary" style="width:100%"><svg class="i"><use href="#i-chat"></use></svg> Lanjut dengan WhatsApp</button>
 <p class="muted mt-lg center" style="font-size:13px">Sudah punya akun? <a href="#" id="goLogin" class="accent" style="font-weight:600">Masuk di sini</a></p>
 </div>
 
@@ -130,7 +130,7 @@
 <div><h5>Kategori</h5><a href="tryout.html">CPNS & PPPK</a><a href="tryout.html">SNBT/UTBK</a><a href="tryout.html">Kedinasan</a><a href="tryout.html">BUMN</a><a href="tryout.html">TNI/POLRI</a></div>
 <div><h5>Perusahaan</h5><a href="#">Tentang Kami</a><a href="#">Blog</a><a href="#">Karier</a><a href="#">Kontak</a><a href="#">Afiliasi</a></div>
 <div><h5>Bantuan</h5><a href="#">Pusat Bantuan</a><a href="#">Syarat & Ketentuan</a><a href="#">Kebijakan Privasi</a><a href="admin.html">Admin</a></div>
-</div><div class="bottom"><span>© 2026 PusatBankSoal.id — Seluruh hak cipta dilindungi.</span><span>Dibuat untuk pejuang ujian Indonesia 🇮🇩</span></div></div></footer>
+</div><div class="bottom"><span>© <span data-year>2026</span> PusatBankSoal.id — Seluruh hak cipta dilindungi.</span><span>Dibuat untuk pejuang ujian Indonesia 🇮🇩</span></div></div></footer>
 
 <script>
 (function(){
@@ -246,5 +246,6 @@
   }
 })();
 </script>
+<script src="assets/app.js" defer></script>
 </body>
 </html>

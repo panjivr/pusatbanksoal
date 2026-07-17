@@ -169,3 +169,89 @@ h4{font-size:16px;font-weight:600;letter-spacing:0}
     top:auto!important;border-right:none;border-bottom:1px solid var(--hair-dark)}
   .admin-main{padding:16px!important}
 }
+
+/* ============================================================
+   UI/UX Pro Max upgrade layer — motion, icons, focus, depth
+   (guided by ui-ux-pro-max skill: motion 150–300ms, SVG icons,
+    focus states, prefers-reduced-motion, cursor-pointer)
+   ============================================================ */
+
+/* SVG icons (Lucide-style, stroke=currentColor) */
+.i{width:1.15em;height:1.15em;display:inline-block;vertical-align:-.17em;
+  stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.i-fill{fill:currentColor;stroke:none}
+.ico .i,.ico svg{width:22px;height:22px}
+.i-lg{width:1.6em;height:1.6em}
+
+/* Cursor + interaction affordance */
+button,summary,.pill-tab button,[role="radio"],[role="button"],.admin-nav,label[for],
+.chip,.faq summary,a.btn,.nav-toggle{cursor:pointer}
+
+/* Smooth micro-interactions (150–300ms) */
+.btn{transition:background .18s ease,transform .12s ease,box-shadow .18s ease}
+.btn:active{transform:scale(.97)}
+.btn-primary:hover{box-shadow:0 6px 20px -6px rgba(252,213,53,.5)}
+.card{transition:transform .22s cubic-bezier(.16,1,.3,1),border-color .22s ease,box-shadow .22s ease}
+.chip{transition:color .18s ease,border-color .18s ease,background .18s ease,transform .12s ease}
+.chip:hover{transform:translateY(-2px)}
+.nav-links a{transition:color .18s ease}
+.tbl tr td{transition:background .15s ease}
+
+/* Card hover lift (single-class, easier to apply) */
+.lift{transition:transform .22s cubic-bezier(.16,1,.3,1),border-color .22s ease,box-shadow .22s ease}
+.lift:hover{transform:translateY(-4px);border-color:rgba(252,213,53,.35);
+  box-shadow:0 14px 40px -18px rgba(0,0,0,.7)}
+
+/* Visible focus states for keyboard nav */
+:focus-visible{outline:2px solid var(--info);outline-offset:2px;border-radius:4px}
+.btn-primary:focus-visible{outline-color:var(--primary)}
+
+/* Reveal-on-scroll */
+.reveal{opacity:0;transform:translateY(18px);
+  transition:opacity .6s cubic-bezier(.16,1,.3,1),transform .6s cubic-bezier(.16,1,.3,1)}
+.reveal.in{opacity:1;transform:none}
+.reveal.d1{transition-delay:.06s}.reveal.d2{transition-delay:.12s}
+.reveal.d3{transition-delay:.18s}.reveal.d4{transition-delay:.24s}
+.reveal.d5{transition-delay:.30s}
+
+/* Ambient glow behind hero — single, restrained, on-brand */
+.hero{position:relative}
+.hero::before{content:"";position:absolute;inset:-10% 30% auto -10%;height:420px;pointer-events:none;
+  background:radial-gradient(600px 300px at 20% 0%,rgba(252,213,53,.16),transparent 70%);
+  filter:blur(8px);z-index:0}
+.hero>*{position:relative;z-index:1}
+
+/* Gradient accent text (on-brand yellow) — use sparingly on hero */
+.grad{background:linear-gradient(100deg,#fcd535 0%,#f8b500 55%,#ffe27a 100%);
+  -webkit-background-clip:text;background-clip:text;color:transparent}
+
+/* Glass surface (frosted) for elevated marketing bands */
+.glass{background:rgba(30,35,41,.6);backdrop-filter:blur(14px);
+  border:1px solid rgba(255,255,255,.06)}
+
+/* Section divider glow line */
+.rule-glow{height:1px;border:0;background:linear-gradient(90deg,transparent,var(--hair-dark) 20%,rgba(252,213,53,.35) 50%,var(--hair-dark) 80%,transparent)}
+
+/* Marquee (looping category strip) */
+.marquee{overflow:hidden;-webkit-mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent);
+  mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent)}
+.marquee-track{display:inline-flex;gap:12px;white-space:nowrap;animation:pbs-marq 28s linear infinite;will-change:transform}
+.marquee:hover .marquee-track{animation-play-state:paused}
+@keyframes pbs-marq{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+/* Pulse dot for "live"/urgency accents */
+.dot-live{width:8px;height:8px;border-radius:50%;background:var(--up);display:inline-block;
+  box-shadow:0 0 0 0 rgba(14,203,129,.6);animation:pbs-pulse 1.8s infinite}
+@keyframes pbs-pulse{0%{box-shadow:0 0 0 0 rgba(14,203,129,.55)}70%{box-shadow:0 0 0 8px rgba(14,203,129,0)}100%{box-shadow:0 0 0 0 rgba(14,203,129,0)}}
+
+/* Wider breakpoint container per skill (1440px surfaces) */
+@media(min-width:1441px){.wrap{max-width:1360px}}
+
+/* Respect reduced motion — disable all non-essential animation */
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;
+    transition-duration:.001ms!important;scroll-behavior:auto!important}
+  .reveal{opacity:1!important;transform:none!important}
+  .marquee-track{animation:none!important}
+  .dot-live{animation:none!important}
+}

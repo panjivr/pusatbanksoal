@@ -16,7 +16,7 @@
 <a href="index.html">Beranda</a><a href="tryout.html" class="active">Tryout</a><a href="dashboard.html">Dashboard</a><a href="analisis.html">AI Analisis</a><a href="index.html#harga">Harga</a>
 </div>
 <div class="nav-right"><a href="auth.html" class="hide-sm" style="font-weight:600">Masuk</a><a href="auth.html" class="btn btn-primary btn-sm">Daftar Gratis</a>
-<button class="nav-toggle" onclick="document.getElementById('navLinks').classList.toggle('open')">☰</button></div>
+<button class="nav-toggle" data-nav-toggle aria-label="Buka menu" aria-expanded="false"><svg class="i"><use href="#i-menu"></use></svg></button></div>
 </div></nav>
 
 <main>
@@ -39,90 +39,114 @@
 
     <div class="grid g3 mt-lg">
 
-      <div class="card hover-lift">
+      <div class="card lift reveal d1">
         <div class="flex between items-center">
           <span class="badge">CPNS</span>
           <span class="badge">Gratis</span>
         </div>
         <h4 class="mt">Tryout CPNS SKD Paket 12</h4>
-        <p class="muted mt" style="font-size:13px">100 soal · 90 menit · 45.230 peserta</p>
+        <p class="muted mt flex items-center gap wrap-flex" style="font-size:13px">
+          <span class="flex items-center" style="gap:4px"><svg class="i"><use href="#i-list"></use></svg>100 soal</span>
+          <span class="flex items-center" style="gap:4px"><svg class="i"><use href="#i-clock"></use></svg>90 menit</span>
+          <span class="flex items-center" style="gap:4px"><svg class="i"><use href="#i-users"></use></svg><span data-count="45230" data-suffix=" peserta">45.230 peserta</span></span>
+        </p>
         <div class="flex between items-center mt">
-          <span class="num" style="font-size:13px">⭐ 4.8/5</span>
+          <span class="num flex items-center" style="font-size:13px;gap:4px"><svg class="i i-fill"><use href="#i-star"></use></svg>4.8/5</span>
           <span class="muted" style="font-size:12px">Rating peserta</span>
         </div>
         <div class="bar mt"><span style="width:78%"></span></div>
         <button class="btn btn-primary btn-sm mt-lg" style="width:100%" onclick="startExam('CPNS SKD Paket 12')">Mulai</button>
       </div>
 
-      <div class="card hover-lift">
+      <div class="card lift reveal d2">
         <div class="flex between items-center">
           <span class="badge">SNBT</span>
           <span class="badge badge-y">Premium</span>
         </div>
         <h4 class="mt">Simulasi UTBK SNBT — TPS</h4>
-        <p class="muted mt" style="font-size:13px">80 soal · 105 menit · 32.110 peserta</p>
+        <p class="muted mt flex items-center gap wrap-flex" style="font-size:13px">
+          <span class="flex items-center" style="gap:4px"><svg class="i"><use href="#i-list"></use></svg>80 soal</span>
+          <span class="flex items-center" style="gap:4px"><svg class="i"><use href="#i-clock"></use></svg>105 menit</span>
+          <span class="flex items-center" style="gap:4px"><svg class="i"><use href="#i-users"></use></svg><span data-count="32110" data-suffix=" peserta">32.110 peserta</span></span>
+        </p>
         <div class="flex between items-center mt">
-          <span class="num" style="font-size:13px">⭐ 4.9/5</span>
+          <span class="num flex items-center" style="font-size:13px;gap:4px"><svg class="i i-fill"><use href="#i-star"></use></svg>4.9/5</span>
           <span class="muted" style="font-size:12px">Rating peserta</span>
         </div>
         <div class="bar up mt"><span style="width:65%"></span></div>
         <button class="btn btn-primary btn-sm mt-lg" style="width:100%" onclick="startExam('UTBK SNBT - TPS')">Mulai</button>
       </div>
 
-      <div class="card hover-lift">
+      <div class="card lift reveal d3">
         <div class="flex between items-center">
           <span class="badge">PPPK</span>
           <span class="badge">Gratis</span>
         </div>
         <h4 class="mt">Tryout PPPK Guru — Kompetensi Teknis</h4>
-        <p class="muted mt" style="font-size:13px">100 soal · 120 menit · 18.940 peserta</p>
+        <p class="muted mt flex items-center gap wrap-flex" style="font-size:13px">
+          <span class="flex items-center" style="gap:4px"><svg class="i"><use href="#i-list"></use></svg>100 soal</span>
+          <span class="flex items-center" style="gap:4px"><svg class="i"><use href="#i-clock"></use></svg>120 menit</span>
+          <span class="flex items-center" style="gap:4px"><svg class="i"><use href="#i-users"></use></svg><span data-count="18940" data-suffix=" peserta">18.940 peserta</span></span>
+        </p>
         <div class="flex between items-center mt">
-          <span class="num" style="font-size:13px">⭐ 4.7/5</span>
+          <span class="num flex items-center" style="font-size:13px;gap:4px"><svg class="i i-fill"><use href="#i-star"></use></svg>4.7/5</span>
           <span class="muted" style="font-size:12px">Rating peserta</span>
         </div>
         <div class="bar mt"><span style="width:71%"></span></div>
         <button class="btn btn-primary btn-sm mt-lg" style="width:100%" onclick="startExam('PPPK Guru - Kompetensi Teknis')">Mulai</button>
       </div>
 
-      <div class="card hover-lift">
+      <div class="card lift reveal d4">
         <div class="flex between items-center">
           <span class="badge">Kedinasan</span>
           <span class="badge badge-y">Premium</span>
         </div>
         <h4 class="mt">Tryout Kedinasan STAN/IPDN Paket 5</h4>
-        <p class="muted mt" style="font-size:13px">120 soal · 105 menit · 9.870 peserta</p>
+        <p class="muted mt flex items-center gap wrap-flex" style="font-size:13px">
+          <span class="flex items-center" style="gap:4px"><svg class="i"><use href="#i-list"></use></svg>120 soal</span>
+          <span class="flex items-center" style="gap:4px"><svg class="i"><use href="#i-clock"></use></svg>105 menit</span>
+          <span class="flex items-center" style="gap:4px"><svg class="i"><use href="#i-users"></use></svg><span data-count="9870" data-suffix=" peserta">9.870 peserta</span></span>
+        </p>
         <div class="flex between items-center mt">
-          <span class="num" style="font-size:13px">⭐ 4.8/5</span>
+          <span class="num flex items-center" style="font-size:13px;gap:4px"><svg class="i i-fill"><use href="#i-star"></use></svg>4.8/5</span>
           <span class="muted" style="font-size:12px">Rating peserta</span>
         </div>
         <div class="bar mt"><span style="width:59%"></span></div>
         <button class="btn btn-primary btn-sm mt-lg" style="width:100%" onclick="startExam('Kedinasan STAN/IPDN Paket 5')">Mulai</button>
       </div>
 
-      <div class="card hover-lift">
+      <div class="card lift reveal d5">
         <div class="flex between items-center">
           <span class="badge">BUMN</span>
           <span class="badge">Gratis</span>
         </div>
         <h4 class="mt">Tryout BUMN — TKD & AKHLAK</h4>
-        <p class="muted mt" style="font-size:13px">90 soal · 75 menit · 21.450 peserta</p>
+        <p class="muted mt flex items-center gap wrap-flex" style="font-size:13px">
+          <span class="flex items-center" style="gap:4px"><svg class="i"><use href="#i-list"></use></svg>90 soal</span>
+          <span class="flex items-center" style="gap:4px"><svg class="i"><use href="#i-clock"></use></svg>75 menit</span>
+          <span class="flex items-center" style="gap:4px"><svg class="i"><use href="#i-users"></use></svg><span data-count="21450" data-suffix=" peserta">21.450 peserta</span></span>
+        </p>
         <div class="flex between items-center mt">
-          <span class="num" style="font-size:13px">⭐ 4.6/5</span>
+          <span class="num flex items-center" style="font-size:13px;gap:4px"><svg class="i i-fill"><use href="#i-star"></use></svg>4.6/5</span>
           <span class="muted" style="font-size:12px">Rating peserta</span>
         </div>
         <div class="bar mt"><span style="width:66%"></span></div>
         <button class="btn btn-primary btn-sm mt-lg" style="width:100%" onclick="startExam('BUMN - TKD & AKHLAK')">Mulai</button>
       </div>
 
-      <div class="card hover-lift">
+      <div class="card lift reveal d1">
         <div class="flex between items-center">
           <span class="badge">CPNS</span>
           <span class="badge badge-y">Premium</span>
         </div>
         <h4 class="mt">Tryout CPNS SKD — TWK/TIU/TKP Full Set</h4>
-        <p class="muted mt" style="font-size:13px">110 soal · 100 menit · 60.302 peserta</p>
+        <p class="muted mt flex items-center gap wrap-flex" style="font-size:13px">
+          <span class="flex items-center" style="gap:4px"><svg class="i"><use href="#i-list"></use></svg>110 soal</span>
+          <span class="flex items-center" style="gap:4px"><svg class="i"><use href="#i-clock"></use></svg>100 menit</span>
+          <span class="flex items-center" style="gap:4px"><svg class="i"><use href="#i-users"></use></svg><span data-count="60302" data-suffix=" peserta">60.302 peserta</span></span>
+        </p>
         <div class="flex between items-center mt">
-          <span class="num" style="font-size:13px">⭐ 4.9/5</span>
+          <span class="num flex items-center" style="font-size:13px;gap:4px"><svg class="i i-fill"><use href="#i-star"></use></svg>4.9/5</span>
           <span class="muted" style="font-size:12px">Rating peserta</span>
         </div>
         <div class="bar mt"><span style="width:83%"></span></div>
@@ -170,9 +194,9 @@
       <div class="flex items-center gap-lg">
         <div class="center">
           <div class="stat-num num" id="examTimer">15:00</div>
-          <div class="stat-label">Sisa Waktu</div>
+          <div class="stat-label flex items-center" style="gap:4px;justify-content:center"><svg class="i"><use href="#i-clock"></use></svg>Sisa Waktu</div>
         </div>
-        <button class="btn btn-ghost btn-sm" id="btnExit">Keluar</button>
+        <button class="btn btn-ghost btn-sm" id="btnExit"><svg class="i"><use href="#i-close"></use></svg> Keluar</button>
       </div>
     </div>
 
@@ -184,7 +208,7 @@
         <h3 class="mt" id="qText">—</h3>
         <div id="qOptions" role="radiogroup" aria-label="Pilihan jawaban"></div>
         <div class="flex between mt-lg">
-          <button class="btn btn-secondary" id="btnPrev">Sebelumnya</button>
+          <button class="btn btn-secondary" id="btnPrev"><span style="transform:scaleX(-1);display:inline-flex"><svg class="i"><use href="#i-chevron-right"></use></svg></span> Sebelumnya</button>
           <button class="btn btn-primary" id="btnNext">Selanjutnya</button>
         </div>
       </div>
@@ -200,7 +224,7 @@
 
     <div id="resultPanel" class="hide mt-lg">
       <div class="card center">
-        <div class="eyebrow">Hasil Simulasi</div>
+        <div class="eyebrow"><svg class="i"><use href="#i-trophy"></use></svg> Hasil Simulasi</div>
         <div class="stat-num" id="resScore" style="font-size:clamp(36px,6vw,56px)">0/8</div>
         <div class="stat-label">Skor Anda</div>
         <h2 class="mt" id="resPercent">0%</h2>
@@ -226,18 +250,18 @@
   <div class="wrap">
     <h2 class="center">Kenapa Simulasi CAT Kami Paling Realistis</h2>
     <div class="grid g3 mt-lg">
-      <div class="card hover-lift">
-        <div class="ico">⏱</div>
+      <div class="card lift reveal d1">
+        <div class="ico"><svg class="i"><use href="#i-clock"></use></svg></div>
         <h4 class="mt">Timer & Sistem Persis CAT BKN</h4>
         <p class="muted mt">Tampilan, alur soal, dan hitung mundur waktu direplikasi seakurat mungkin dari sistem ujian resmi instansi pemerintah.</p>
       </div>
-      <div class="card hover-lift">
-        <div class="ico">🎬</div>
+      <div class="card lift reveal d2">
+        <div class="ico"><svg class="i"><use href="#i-play"></use></svg></div>
         <h4 class="mt">Pembahasan Video & Teks</h4>
         <p class="muted mt">Setiap soal dilengkapi pembahasan tertulis yang jelas, sehingga Anda paham konsep di balik setiap jawaban.</p>
       </div>
-      <div class="card hover-lift">
-        <div class="ico">📊</div>
+      <div class="card lift reveal d3">
+        <div class="ico"><svg class="i"><use href="#i-chart"></use></svg></div>
         <h4 class="mt">Analisis Otomatis per Subtes</h4>
         <p class="muted mt">Skor langsung dipecah per subtes (TWK, TIU, TKP) agar Anda tahu persis materi mana yang perlu diperkuat.</p>
       </div>
@@ -253,7 +277,7 @@
 <div><h5>Kategori</h5><a href="tryout.html">CPNS & PPPK</a><a href="tryout.html">SNBT/UTBK</a><a href="tryout.html">Kedinasan</a><a href="tryout.html">BUMN</a><a href="tryout.html">TNI/POLRI</a></div>
 <div><h5>Perusahaan</h5><a href="#">Tentang Kami</a><a href="#">Blog</a><a href="#">Karier</a><a href="#">Kontak</a><a href="#">Afiliasi</a></div>
 <div><h5>Bantuan</h5><a href="#">Pusat Bantuan</a><a href="#">Syarat & Ketentuan</a><a href="#">Kebijakan Privasi</a><a href="admin.html">Admin</a></div>
-</div><div class="bottom"><span>© 2026 PusatBankSoal.id — Seluruh hak cipta dilindungi.</span><span>Dibuat untuk pejuang ujian Indonesia 🇮🇩</span></div></div></footer>
+</div><div class="bottom"><span>© <span data-year>2026</span> PusatBankSoal.id — Seluruh hak cipta dilindungi.</span><span>Dibuat untuk pejuang ujian Indonesia 🇮🇩</span></div></div></footer>
 
 <script>
 (function(){
@@ -393,7 +417,8 @@
       qOptions.appendChild(row);
     });
     btnPrev.disabled = current === 0;
-    btnNext.textContent = (current === questions.length - 1) ? 'Selesai & Lihat Hasil' : 'Selanjutnya';
+    btnNext.innerHTML = (current === questions.length - 1 ? 'Selesai & Lihat Hasil' : 'Selanjutnya') +
+      ' <svg class="i"><use href="#i-chevron-right"></use></svg>';
   }
 
   function renderNav(){
@@ -535,7 +560,7 @@
   document.addEventListener('visibilitychange', function(){
     if (document.hidden && !examEl.classList.contains('hide') && !submitted) {
       tabSwitches++;
-      cheatWarning.textContent = 'Peringatan: perpindahan tab terdeteksi (' + tabSwitches + ')';
+      cheatWarning.innerHTML = '<svg class="i"><use href="#i-shield"></use></svg> Peringatan: perpindahan tab terdeteksi (' + tabSwitches + ')';
       cheatWarning.classList.remove('hide');
     }
   });
@@ -572,5 +597,6 @@
   window.startExam = startExam;
 })();
 </script>
+<script src="assets/app.js" defer></script>
 </body>
 </html>
