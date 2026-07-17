@@ -26,7 +26,7 @@
   <div class="wrap">
     <div class="eyebrow">Bank Soal & Tryout</div>
     <h1 class="mt">Latihan Tryout & Bank Soal</h1>
-    <p class="lead mt">Ribuan soal CPNS, PPPK, SNBT, dan Kedinasan dengan simulasi Computer Assisted Test (CAT) yang menyerupai sistem resmi BKN — lengkap dengan timer, navigator soal, dan pembahasan.</p>
+    <p class="lead mt">Ribuan soal CPNS, PPPK, SNBT, Kedinasan, BUMN, TOEFL, hingga IELTS dengan simulasi Computer Assisted Test (CAT) yang menyerupai sistem resmi BKN — lengkap dengan timer, navigator soal, dan pembahasan.</p>
 
     <div class="pill-tab mt-lg wrap-flex">
       <button class="active">Semua</button>
@@ -35,6 +35,8 @@
       <button>SNBT</button>
       <button>Kedinasan</button>
       <button>BUMN</button>
+      <button>TOEFL</button>
+      <button>IELTS</button>
     </div>
 
     <div class="grid g3 mt-lg">
@@ -151,6 +153,44 @@
         </div>
         <div class="bar mt"><span style="width:83%"></span></div>
         <button class="btn btn-primary btn-sm mt-lg" style="width:100%" onclick="startExam('cpns','CPNS SKD — Full Set',110,110)">Mulai</button>
+      </div>
+
+      <div class="card lift reveal d2">
+        <div class="flex between items-center">
+          <span class="badge">TOEFL</span>
+          <span class="badge badge-y">Premium</span>
+        </div>
+        <h4 class="mt">TOEFL ITP — Structure & Reading</h4>
+        <p class="muted mt flex items-center gap wrap-flex" style="font-size:13px">
+          <span class="flex items-center" style="gap:4px"><svg class="i"><use href="#i-list"></use></svg>100 soal</span>
+          <span class="flex items-center" style="gap:4px"><svg class="i"><use href="#i-clock"></use></svg>100 menit</span>
+          <span class="flex items-center" style="gap:4px"><svg class="i"><use href="#i-users"></use></svg><span data-count="14820" data-suffix=" peserta">14.820 peserta</span></span>
+        </p>
+        <div class="flex between items-center mt">
+          <span class="num flex items-center" style="font-size:13px;gap:4px"><svg class="i i-fill"><use href="#i-star"></use></svg>4.8/5</span>
+          <span class="muted" style="font-size:12px">Rating peserta</span>
+        </div>
+        <div class="bar mt"><span style="width:74%"></span></div>
+        <button class="btn btn-primary btn-sm mt-lg" style="width:100%" onclick="startExam('toefl','TOEFL ITP — Structure & Reading',100,100)">Mulai</button>
+      </div>
+
+      <div class="card lift reveal d3">
+        <div class="flex between items-center">
+          <span class="badge">IELTS</span>
+          <span class="badge badge-y">Premium</span>
+        </div>
+        <h4 class="mt">IELTS Academic — Reading & Language</h4>
+        <p class="muted mt flex items-center gap wrap-flex" style="font-size:13px">
+          <span class="flex items-center" style="gap:4px"><svg class="i"><use href="#i-list"></use></svg>100 soal</span>
+          <span class="flex items-center" style="gap:4px"><svg class="i"><use href="#i-clock"></use></svg>100 menit</span>
+          <span class="flex items-center" style="gap:4px"><svg class="i"><use href="#i-users"></use></svg><span data-count="9310" data-suffix=" peserta">9.310 peserta</span></span>
+        </p>
+        <div class="flex between items-center mt">
+          <span class="num flex items-center" style="font-size:13px;gap:4px"><svg class="i i-fill"><use href="#i-star"></use></svg>4.9/5</span>
+          <span class="muted" style="font-size:12px">Rating peserta</span>
+        </div>
+        <div class="bar up mt"><span style="width:68%"></span></div>
+        <button class="btn btn-primary btn-sm mt-lg" style="width:100%" onclick="startExam('ielts','IELTS Academic — Reading & Language',100,100)">Mulai</button>
       </div>
 
     </div>
@@ -293,6 +333,10 @@
 <script src="assets/bank/kedinasan-tkp.js"></script>
 <script src="assets/bank/snbt-topup.js"></script>
 <script src="assets/bank/bumn-topup.js"></script>
+<script src="assets/bank/toefl-structure.js"></script>
+<script src="assets/bank/toefl-reading.js"></script>
+<script src="assets/bank/ielts-reading.js"></script>
+<script src="assets/bank/ielts-langvocab.js"></script>
 <script>
 (function(){
   "use strict";
