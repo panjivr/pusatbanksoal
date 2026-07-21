@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Verifikasi Sertifikat | PusatBankSoal.id</title>
+<meta name="description" content="Verifikasi keaslian sertifikat hasil tryout PusatBankSoal.id menggunakan ID atau tautan verifikasi.">
+<link rel="canonical" href="https://pusatbanksoal.id/verifikasi.html">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<nav class="nav"><div class="nav-in">
+<a class="brand" href="index.html"><span class="logo">P</span>Pusat<b>BankSoal</b></a>
+<div class="nav-links" id="navLinks">
+<a href="index.html">Beranda</a><a href="tryout.html">Tryout</a><a href="dashboard.html">Dashboard</a><a href="analisis.html">AI Analisis</a><a href="index.html#harga">Harga</a>
+</div>
+<div class="nav-right"><a href="auth.html" class="hide-sm" style="font-weight:600">Masuk</a><a href="auth.html" class="btn btn-primary btn-sm">Daftar Gratis</a>
+<button class="nav-toggle" data-nav-toggle aria-label="Buka menu" aria-expanded="false"><svg class="i"><use href="#i-menu"></use></svg></button></div>
+</div></nav>
+
+<section class="section-sm"><div class="wrap" style="max-width:820px">
+  <div class="eyebrow"><svg class="i"><use href="#i-shield-check"></use></svg> Verifikasi Sertifikat</div>
+  <h1 class="mt">Cek Keaslian Sertifikat</h1>
+  <p class="lead mt">Tempel <strong>tautan verifikasi</strong> atau masukkan <strong>ID sertifikat</strong> (format <span class="num">PBS-YYYY-XXXX-NNN</span>) untuk memastikan sertifikat benar-benar diterbitkan oleh PusatBankSoal.id.</p>
+
+  <div class="card mt-lg">
+    <label for="vInput" class="muted" style="display:block;font-size:13px;margin-bottom:6px">Tautan verifikasi / kode / ID sertifikat</label>
+    <div class="flex gap wrap-flex">
+      <input id="vInput" type="text" placeholder="Tempel tautan atau ID di sini…" aria-label="Kode verifikasi" style="flex:1;min-width:220px;background:var(--elevated);border:1px solid var(--hair-dark);color:var(--body);border-radius:8px;padding:12px 14px;font-size:14px;font-family:inherit">
+      <button class="btn btn-primary" id="vBtn"><svg class="i"><use href="#i-search"></use></svg> Verifikasi</button>
+    </div>
+    <p class="muted mt" style="font-size:12px">Catatan: verifikasi dari <em>tautan/kode</em> berlaku lintas perangkat. Verifikasi dari <em>ID saja</em> hanya cocok bila sertifikat diterbitkan di perangkat ini.</p>
+  </div>
+
+  <div id="vResult" class="mt-lg hide"></div>
+</div></section>
+
+<footer class="footer"><div class="wrap"><div class="cols">
+<div><a class="brand" href="index.html" style="color:var(--ink)"><span class="logo">P</span>Pusat<b>BankSoal</b></a><p style="color:#5b6672;font-size:13px;margin-top:14px;max-width:34ch">AI Education Intelligence Platform. Tryout, bank soal, analisis nilai & rekomendasi kampus #1 di Indonesia.</p></div>
+<div><h5>Produk</h5><a href="tryout.html">Tryout CPNS</a><a href="tryout.html">Tryout SNBT</a><a href="pembahasan.html">Bank Soal & Pembahasan</a><a href="analisis.html">AI Analisis Nilai</a><a href="verifikasi.html">Verifikasi Sertifikat</a></div>
+<div><h5>Kategori</h5><a href="tryout.html">CPNS & PPPK</a><a href="tryout.html">SNBT/UTBK</a><a href="tryout.html">Kedinasan</a><a href="tryout.html">BUMN</a><a href="tryout.html">TOEFL/IELTS</a></div>
+<div><h5>Perusahaan</h5><a href="#">Tentang Kami</a><a href="#">Blog</a><a href="#">Karier</a><a href="#">Kontak</a><a href="#">Afiliasi</a></div>
+<div><h5>Bantuan</h5><a href="#">Pusat Bantuan</a><a href="#">Syarat & Ketentuan</a><a href="#">Kebijakan Privasi</a><a href="admin.html">Admin</a></div>
+</div><div class="bottom"><span>© <span data-year>2026</span> PusatBankSoal.id — Seluruh hak cipta dilindungi.</span><span>Dibuat untuk pejuang ujian Indonesia 🇮🇩</span></div></div></footer>
+
+<script src="assets/cert.js"></script>
+<script src="assets/app.js" defer></script>
+<script>
+(function(){
+  "use strict";
+  function q(id){ return document.getElementById(id); }
+  function param(name){ try { return new URLSearchParams(location.search).get(name); } catch(e){ return null; } }
+
+  function extractPayload(v){
+    v = (v || '').trim();
+    if (!v) return null;
+    var m = v.match(/[?&]d=([^&\s]+)/);
+    if (m) return decodeURIComponent(m[1]);
+    if (/^PBS-\d{4}-\d{4}-\d{3}$/i.test(v)) return { idOnly: v.toUpperCase() };
+    return v; // assume raw payload
+  }
+
+  function fromHistory(id){
+    try {
+      var list = JSON.parse(localStorage.getItem('pbs_history') || '[]');
+      for (var i = 0; i < list.length; i++) if (list[i].id === id) return list[i];
+    } catch(e){}
+    return null;
+  }
+
+  function detailRow(k, v){
+    return '<div class="flex between" style="padding:10px 0;border-bottom:1px solid var(--hair-dark)"><span class="muted" style="font-size:13px">' + k + '</span><span style="font-weight:600;text-align:right">' + v + '</span></div>';
+  }
+
+  function renderValid(data, deviceOnly){
+    var cert = window.PBSCert.make(data);
+    var html =
+      '<div class="card" style="border-color:rgba(14,203,129,.4)">' +
+        '<div class="flex items-center gap"><span class="ico" style="background:rgba(14,203,129,.14);color:var(--up)"><svg class="i i-lg"><use href="#i-shield-check"></use></svg></span>' +
+        '<div><h3 style="color:var(--up)">Sertifikat Terverifikasi</h3>' +
+        '<p class="muted" style="font-size:13px">' + (deviceOnly ? 'Diverifikasi dari riwayat perangkat ini.' : 'Keaslian & keutuhan data terkonfirmasi (checksum valid).') + '</p></div></div>' +
+        '<div class="mt-lg" style="border-radius:12px;overflow:hidden;border:1px solid var(--hair-dark)">' + cert + '</div>' +
+        '<div class="mt-lg">' +
+          detailRow('ID Sertifikat', '<span class="num">' + (data.id || '-') + '</span>') +
+          detailRow('Nama', data.name || '-') +
+          detailRow('Tes', data.testName || '-') +
+          detailRow('Skor', (data.scoreCaption ? data.scoreCaption + ': ' : '') + '<span class="accent">' + data.scoreBig + '</span>') +
+          detailRow('Predikat', (data.predikat || '-') + (data.percentile ? ' · ' + data.percentile : '')) +
+          detailRow('Tanggal Terbit', data.date || '-') +
+        '</div>' +
+      '</div>';
+    var r = q('vResult'); r.innerHTML = html; r.classList.remove('hide');
+    var svg = r.querySelector('svg'); if (svg) { svg.style.width = '100%'; svg.style.height = 'auto'; svg.style.display = 'block'; }
+  }
+
+  function renderInvalid(msg){
+    var r = q('vResult');
+    r.innerHTML =
+      '<div class="card" style="border-color:rgba(246,70,93,.4)">' +
+        '<div class="flex items-center gap"><span class="ico" style="background:rgba(246,70,93,.14);color:var(--down)"><svg class="i i-lg"><use href="#i-close"></use></svg></span>' +
+        '<div><h3 style="color:var(--down)">Tidak Dapat Diverifikasi</h3>' +
+        '<p class="muted" style="font-size:13px">' + (msg || 'Kode atau ID tidak valid.') + '</p></div></div>' +
+      '</div>';
+    r.classList.remove('hide');
+  }
+
+  function verify(v){
+    var p = extractPayload(v);
+    if (!p) { renderInvalid('Masukkan tautan verifikasi atau ID sertifikat terlebih dahulu.'); return; }
+    if (p && p.idOnly) {
+      var h = fromHistory(p.idOnly);
+      if (h) { renderValid({ id:h.id, name:(h.name||'Peserta PusatBankSoal'), testName:h.testName, scoreBig:h.scoreBig, scoreCaption:h.scoreCaption, predikat:h.predikat, percentile:h.percentile, date:h.date, badge:h.badge }, true); }
+      else renderInvalid('ID berformat benar (' + p.idOnly + '), namun datanya tidak ditemukan di perangkat ini. Gunakan tautan/kode verifikasi lengkap untuk mengecek lintas perangkat.');
+      return;
+    }
+    var res = window.PBSCert.decode(p);
+    if (res.valid && res.data) renderValid(res.data, false);
+    else renderInvalid('Kode verifikasi tidak valid atau telah diubah.');
+  }
+
+  q('vBtn').addEventListener('click', function(){ verify(q('vInput').value); });
+  q('vInput').addEventListener('keydown', function(e){ if (e.key === 'Enter') verify(q('vInput').value); });
+
+  var d = param('d'), id = param('id');
+  if (d) { q('vInput').value = d; verify(d); }
+  else if (id) { q('vInput').value = id; verify(id); }
+})();
+</script>
+</body>
+</html>

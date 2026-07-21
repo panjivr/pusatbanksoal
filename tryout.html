@@ -286,6 +286,7 @@
         <div class="flex gap mt-lg wrap-flex" style="justify-content:center">
           <input id="certName" type="text" placeholder="Nama lengkap kamu" aria-label="Nama untuk sertifikat" style="background:var(--elevated);border:1px solid var(--hair-dark);color:var(--body);border-radius:8px;padding:12px 14px;font-size:14px;font-family:inherit;min-width:220px">
           <button class="btn btn-primary" id="btnCert"><svg class="i"><use href="#i-trophy"></use></svg> Terbitkan Sertifikat</button>
+          <button class="btn btn-ghost" id="btnShare"><svg class="i"><use href="#i-shield-check"></use></svg> Salin Link Verifikasi</button>
         </div>
       </div>
       <div class="flex gap mt-lg" style="justify-content:center">
@@ -723,6 +724,20 @@
       id: lastResult.id, date: lastResult.date
     };
     window.PBSCert.show(data);
+  });
+
+  document.getElementById('btnShare').addEventListener('click', function(){
+    if (!lastResult || !window.PBSCert) return;
+    var nm = (document.getElementById('certName').value || '').trim() || 'Peserta PusatBankSoal';
+    var url = window.PBSCert.verifyUrl({
+      id: lastResult.id, name: nm, testName: lastResult.testName, scoreBig: lastResult.scoreBig,
+      scoreCaption: lastResult.scoreCaption, predikat: lastResult.predikat, percentile: lastResult.percentile,
+      date: lastResult.date, badge: lastResult.badge
+    });
+    var btn = this;
+    function done(){ var o = btn.innerHTML; btn.innerHTML = '<svg class="i"><use href="#i-check"></use></svg> Tersalin!'; setTimeout(function(){ btn.innerHTML = o; }, 1800); }
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(url).then(done, function(){ window.prompt('Salin link verifikasi:', url); });
+    else window.prompt('Salin link verifikasi:', url);
   });
   document.getElementById('btnBackList').addEventListener('click', closeExam);
 

@@ -92,8 +92,10 @@
   '<line x1="760" y1="612" x2="930" y2="612" stroke="#2b3139" stroke-width="1"/>' +
   '<text x="930" y="632" text-anchor="end" font-size="11" fill="#707a8a">Certification Officer</text>' +
   '<text x="930" y="648" text-anchor="end" font-size="11" fill="#707a8a">PusatBankSoal.id Authority</text>' +
+  // verify line
+  '<text x="500" y="662" text-anchor="middle" font-size="8.5" letter-spacing="1" fill="#707a8a">Verifikasi keaslian di pusatbanksoal.id/verifikasi.html · ID: ' + esc(idClean) + '</text>' +
   // ribbon
-  '<rect x="360" y="668" width="280" height="22" rx="11" fill="#1e2329" stroke="#3a3a1f"/>' +
+  '<rect x="360" y="672" width="280" height="20" rx="10" fill="#1e2329" stroke="#3a3a1f"/>' +
   '<text x="500" y="683" text-anchor="middle" font-size="10" font-weight="700" letter-spacing="3" fill="#fcd535">SECURE • VERIFIED • TRUSTED</text>' +
 '</svg>';
   }
@@ -176,5 +178,30 @@
     return 'PBS-' + y + '-' + r + '-' + s;
   }
 
-  window.PBSCert = { make: make, show: show, downloadPNG: downloadPNG, genId: genId };
+  // ---------- verification payload (tamper-checked, self-contained) ----------
+  function b64e(str){ return btoa(unescape(encodeURIComponent(str))).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,''); }
+  function b64d(str){ str = str.replace(/-/g,'+').replace(/_/g,'/'); while (str.length % 4) str += '='; return decodeURIComponent(escape(atob(str))); }
+  function sig(o){
+    var str = [o.id, o.name, o.testName, o.scoreBig, o.date].join('|') + '|PBSID-2025-SALT';
+    var h = 5381; for (var i = 0; i < str.length; i++) h = (((h << 5) + h) ^ str.charCodeAt(i)) >>> 0;
+    return h.toString(36);
+  }
+  function encode(o){
+    var p = { i:o.id, n:o.name, t:o.testName, s:o.scoreBig, c:o.scoreCaption, p:o.predikat, r:o.percentile, d:o.date, b:o.badge };
+    p.k = sig(o);
+    return b64e(JSON.stringify(p));
+  }
+  function decode(str){
+    try {
+      var p = JSON.parse(b64d(str));
+      var o = { id:p.i, name:p.n, testName:p.t, scoreBig:p.s, scoreCaption:p.c, predikat:p.p, percentile:p.r, date:p.d, badge:p.b };
+      return { data: o, valid: sig(o) === p.k };
+    } catch (e) { return { data: null, valid: false }; }
+  }
+  function verifyUrl(o){ return 'https://pusatbanksoal.id/verifikasi.html?d=' + encode(o); }
+
+  window.PBSCert = {
+    make: make, show: show, downloadPNG: downloadPNG, genId: genId,
+    encode: encode, decode: decode, verifyUrl: verifyUrl
+  };
 })();
