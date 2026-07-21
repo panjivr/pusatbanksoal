@@ -195,6 +195,15 @@
 </div>
 </div>
 
+<div class="card mt-lg reveal">
+  <div class="flex between items-center wrap-flex gap">
+    <div><h3><svg class="i"><use href="#i-doc"></use></svg> Riwayat Tryout & Sertifikat Saya</h3>
+    <p class="muted mt" style="font-size:13px">Tersimpan otomatis di perangkat ini setiap kamu menyelesaikan tryout.</p></div>
+    <a href="tryout.html" class="btn btn-primary btn-sm"><svg class="i"><use href="#i-arrow-right"></use></svg> Mulai Tryout</a>
+  </div>
+  <div id="histBody" class="mt-lg"></div>
+</div>
+
 </div></section>
 
 <script>
@@ -217,6 +226,43 @@
 <div><h5>Perusahaan</h5><a href="#">Tentang Kami</a><a href="#">Blog</a><a href="#">Karier</a><a href="#">Kontak</a><a href="#">Afiliasi</a></div>
 <div><h5>Bantuan</h5><a href="#">Pusat Bantuan</a><a href="#">Syarat & Ketentuan</a><a href="#">Kebijakan Privasi</a><a href="admin.html">Admin</a></div>
 </div><div class="bottom"><span>© <span data-year>2026</span> PusatBankSoal.id — Seluruh hak cipta dilindungi.</span><span>Dibuat untuk pejuang ujian Indonesia 🇮🇩</span></div></div></footer>
+<script src="assets/cert.js"></script>
+<script>
+(function(){
+  var body = document.getElementById('histBody'); if (!body) return;
+  function esc(s){ return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+  function data(h){ return { id:h.id, name:'Peserta PusatBankSoal', testName:h.testName, scoreBig:h.scoreBig, scoreCaption:h.scoreCaption, predikat:h.predikat, percentile:h.percentile, date:h.date, badge:h.badge }; }
+  var list = []; try { list = JSON.parse(localStorage.getItem('pbs_history') || '[]'); } catch(e){}
+  if (!list.length) {
+    body.innerHTML = '<div class="center" style="padding:20px 0"><p class="muted">Belum ada riwayat. Selesaikan tryout pertamamu untuk melihat skor & menerbitkan sertifikat di sini.</p><a href="tryout.html" class="btn btn-primary mt-lg">Mulai Tryout Sekarang</a></div>';
+    return;
+  }
+  body.innerHTML = list.map(function(h, idx){
+    return '<div class="card-flat mt" style="display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap">' +
+      '<div style="min-width:180px"><div style="font-weight:600">' + esc(h.testName || 'Tryout') + '</div>' +
+      '<div class="muted" style="font-size:12px">' + esc(h.date || '') + ' · <span class="num">' + h.correct + '/' + h.total + '</span> (' + h.pct + '%)</div></div>' +
+      '<div class="flex items-center gap" style="flex-wrap:wrap"><span class="stat-num num" style="font-size:24px">' + esc(String(h.scoreBig)) + '</span>' +
+      '<span class="badge badge-y">' + esc(h.predikat || '') + '</span>' +
+      '<button class="btn btn-primary btn-sm" data-cert="' + idx + '"><svg class="i"><use href="#i-trophy"></use></svg> Sertifikat</button>' +
+      '<button class="btn btn-ghost btn-sm" data-verify="' + idx + '"><svg class="i"><use href="#i-shield-check"></use></svg> Verifikasi</button></div>' +
+      '</div>';
+  }).join('');
+  body.querySelectorAll('[data-cert]').forEach(function(bn){
+    bn.addEventListener('click', function(){
+      var h = list[+bn.getAttribute('data-cert')];
+      var nm = window.prompt('Nama untuk sertifikat:', 'Peserta PusatBankSoal') || 'Peserta PusatBankSoal';
+      var d = data(h); d.name = nm.trim() || d.name;
+      if (window.PBSCert) window.PBSCert.show(d);
+    });
+  });
+  body.querySelectorAll('[data-verify]').forEach(function(bn){
+    bn.addEventListener('click', function(){
+      var h = list[+bn.getAttribute('data-verify')];
+      if (window.PBSCert) location.href = window.PBSCert.verifyUrl(data(h));
+    });
+  });
+})();
+</script>
 <script src="assets/app.js" defer></script>
 </body>
 </html>
