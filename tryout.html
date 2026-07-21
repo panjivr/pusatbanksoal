@@ -265,14 +265,28 @@
     <div id="resultPanel" class="hide mt-lg">
       <div class="card center">
         <div class="eyebrow"><svg class="i"><use href="#i-trophy"></use></svg> Hasil Simulasi</div>
-        <div class="stat-num" id="resScore" style="font-size:clamp(36px,6vw,56px)">0/8</div>
-        <div class="stat-label">Skor Anda</div>
-        <h2 class="mt" id="resPercent">0%</h2>
+        <div class="stat-num" id="resNative" style="font-size:clamp(40px,7vw,64px)">0</div>
+        <div class="stat-label" id="resNativeCap">Skor Anda</div>
+        <h3 class="mt" id="resPredikat" style="color:var(--primary)">—</h3>
+        <p class="muted mt" style="font-size:13px"><span id="resScore">0/0</span> jawaban benar · <span id="resPercent">0%</span></p>
       </div>
       <div class="grid g3 mt-lg">
         <div class="card center"><div class="stat-num" id="resCorrect">0</div><div class="stat-label">Jawaban Benar</div></div>
         <div class="card center"><div class="stat-num" id="resWrong">0</div><div class="stat-label">Jawaban Salah</div></div>
         <div class="card center"><div class="stat-num num" id="resTime">00:00</div><div class="stat-label">Waktu Digunakan</div></div>
+      </div>
+      <div class="card mt-lg">
+        <h4 class="mb">Rincian per Subtes</h4>
+        <div id="resSections"></div>
+      </div>
+      <div class="card center mt-lg" style="background:linear-gradient(180deg,rgba(252,213,53,.08),transparent)">
+        <div class="eyebrow"><svg class="i"><use href="#i-shield-check"></use></svg> Sertifikat Resmi</div>
+        <h3 class="mt">Cetak Sertifikat Hasil Tryout-mu</h3>
+        <p class="muted mt" style="max-width:52ch;margin-left:auto;margin-right:auto">Sertifikat digital ber-ID unik, seal terverifikasi, dan barcode — siap kamu unduh & bagikan.</p>
+        <div class="flex gap mt-lg wrap-flex" style="justify-content:center">
+          <input id="certName" type="text" placeholder="Nama lengkap kamu" aria-label="Nama untuk sertifikat" style="background:var(--elevated);border:1px solid var(--hair-dark);color:var(--body);border-radius:8px;padding:12px 14px;font-size:14px;font-family:inherit;min-width:220px">
+          <button class="btn btn-primary" id="btnCert"><svg class="i"><use href="#i-trophy"></use></svg> Terbitkan Sertifikat</button>
+        </div>
       </div>
       <div class="flex gap mt-lg" style="justify-content:center">
         <button class="btn btn-secondary" id="btnRestart">Ulangi</button>
@@ -343,6 +357,7 @@
 <script src="assets/bank/snbt-topup.js"></script>
 <script src="assets/bank/toefl-more.js"></script>
 <script src="assets/bank/toefl-reading.js"></script>
+<script src="assets/cert.js"></script>
 <script src="assets/bank/toefl-structure.js"></script>
 <script>
 (function(){
@@ -418,6 +433,7 @@
   var tabSwitches = 0;
   var submitted = false;
   var lastExam = { key: 'cpns', name: 'Demo Gratis', count: 10, minutes: 15 };
+  var lastResult = null;
 
   function shuffle(a){ for (var i = a.length - 1; i > 0; i--){ var j = Math.floor(Math.random() * (i + 1)); var t = a[i]; a[i] = a[j]; a[j] = t; } return a; }
   function buildQuestions(key, count){
@@ -574,11 +590,62 @@
     var wrong = total - correct;
     var pct = Math.round((correct / total) * 100);
 
+    // native score scale per test type
+    var key = lastExam.key, nativeBig, nativeCap, predikat;
+    if (key === 'toefl') {
+      nativeBig = Math.round(310 + (pct / 100) * (677 - 310));
+      nativeCap = 'PREDIKSI SKOR TOEFL ITP';
+      predikat = nativeBig >= 627 ? 'Advanced' : nativeBig >= 543 ? 'High-Intermediate' : nativeBig >= 460 ? 'Intermediate' : 'Beginner';
+    } else if (key === 'ielts') {
+      nativeBig = (Math.round((pct / 100) * 9 * 2) / 2).toFixed(1);
+      nativeCap = 'PREDIKSI BAND IELTS';
+      var bn = parseFloat(nativeBig);
+      predikat = bn >= 7 ? 'Good User' : bn >= 6 ? 'Competent User' : bn >= 5 ? 'Modest User' : 'Limited User';
+    } else {
+      nativeBig = pct;
+      nativeCap = 'NILAI AKHIR (SKALA 100)';
+      predikat = pct >= 85 ? 'Sangat Baik' : pct >= 70 ? 'Baik' : pct >= 55 ? 'Cukup' : 'Perlu Latihan Lagi';
+    }
+    var percentile = pct >= 95 ? 'Top 1%' : pct >= 90 ? 'Top 5%' : pct >= 80 ? 'Top 10%' : pct >= 70 ? 'Top 25%' : pct >= 55 ? 'Top 40%' : 'Top 60%';
+
+    document.getElementById('resNative').textContent = String(nativeBig);
+    document.getElementById('resNativeCap').textContent = nativeCap;
+    document.getElementById('resPredikat').textContent = predikat + ' · ' + percentile;
     document.getElementById('resScore').textContent = correct + '/' + total;
     document.getElementById('resPercent').textContent = pct + '%';
     document.getElementById('resCorrect').textContent = String(correct);
     document.getElementById('resWrong').textContent = String(wrong);
     document.getElementById('resTime').textContent = pad(Math.floor(elapsed / 60)) + ':' + pad(elapsed % 60);
+
+    // per-subtes breakdown
+    var subs = {};
+    questions.forEach(function(q, i){
+      var s = q.sub || 'Umum';
+      if (!subs[s]) subs[s] = { c: 0, t: 0 };
+      subs[s].t++;
+      if (answers[i] === q.a) subs[s].c++;
+    });
+    var secEl = document.getElementById('resSections');
+    secEl.innerHTML = '';
+    Object.keys(subs).forEach(function(s){
+      var d = subs[s], p = Math.round((d.c / d.t) * 100);
+      var row = document.createElement('div');
+      row.style.marginBottom = '12px';
+      row.innerHTML =
+        '<div class="flex between" style="font-size:13px"><span>' + s + '</span>' +
+        '<span class="num muted">' + d.c + '/' + d.t + ' (' + p + '%)</span></div>' +
+        '<div class="bar mt"><span style="width:' + p + '%"></span></div>';
+      secEl.appendChild(row);
+    });
+
+    // stash for certificate
+    lastResult = {
+      testName: lastExam.name, badge: key,
+      scoreBig: nativeBig, scoreCaption: nativeCap,
+      predikat: predikat, percentile: percentile,
+      id: (window.PBSCert ? window.PBSCert.genId() : 'PBS-' + Date.now()),
+      date: new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })
+    };
 
     var reviewList = document.getElementById('reviewList');
     reviewList.innerHTML = '';
@@ -630,6 +697,20 @@
 
   document.getElementById('btnRestart').addEventListener('click', function(){
     startExam(lastExam.key, lastExam.name, lastExam.count, lastExam.minutes);
+  });
+
+  document.getElementById('btnCert').addEventListener('click', function(){
+    if (!lastResult || !window.PBSCert) return;
+    var nm = (document.getElementById('certName').value || '').trim();
+    if (!nm) { nm = window.prompt('Masukkan nama lengkap untuk sertifikat:', '') || ''; nm = nm.trim(); }
+    if (!nm) { document.getElementById('certName').focus(); return; }
+    var data = {
+      name: nm, testName: lastResult.testName, badge: lastResult.badge,
+      scoreBig: lastResult.scoreBig, scoreCaption: lastResult.scoreCaption,
+      predikat: lastResult.predikat, percentile: lastResult.percentile,
+      id: lastResult.id, date: lastResult.date
+    };
+    window.PBSCert.show(data);
   });
   document.getElementById('btnBackList').addEventListener('click', closeExam);
 
