@@ -16,11 +16,48 @@
     return out;
   }
 
+  function guilloche(cx, cy){
+    var g = '<g opacity="0.05" stroke="#fcd535" fill="none" stroke-width="0.6">';
+    for (var i = 0; i < 26; i++){
+      var a = (i / 26) * Math.PI;
+      g += '<ellipse cx="' + cx + '" cy="' + cy + '" rx="175" ry="58" transform="rotate(' + (i * 180 / 26) + ' ' + cx + ' ' + cy + ')"/>';
+    }
+    g += '</g>';
+    return g;
+  }
+
+  function qrSvg(text, x, y, size){
+    if (!window.qrcode) return null;
+    try {
+      var qr = window.qrcode(0, 'M');
+      qr.addData(text);
+      qr.make();
+      var n = qr.getModuleCount();
+      var m = size / n;
+      var cells = '';
+      for (var r = 0; r < n; r++){
+        for (var c = 0; c < n; c++){
+          if (qr.isDark(r, c)){
+            cells += '<rect x="' + (x + c * m).toFixed(2) + '" y="' + (y + r * m).toFixed(2) + '" width="' + (m + 0.4).toFixed(2) + '" height="' + (m + 0.4).toFixed(2) + '" fill="#0b0e11"/>';
+          }
+        }
+      }
+      return cells;
+    } catch (e) { return null; }
+  }
+
   function make(o){
     var id = esc(o.id), name = esc(o.name || 'Peserta'), test = esc(o.testName || 'Tryout'),
         date = esc(o.date || ''), big = esc(o.scoreBig), cap = esc(o.scoreCaption || 'SKOR'),
         pred = esc(o.predikat || ''), pct = esc(o.percentile || '');
     var idClean = (String(o.id) || '').replace(/[^A-Za-z0-9]/g,'').toUpperCase();
+
+    var guil = guilloche(500, 322);
+    var qCells = qrSvg(verifyUrl(o), 456, 566, 92);
+    var qrBlock = qCells
+      ? '<rect x="450" y="558" width="104" height="104" rx="8" fill="#ffffff"/>' + qCells
+      : '<rect x="372" y="588" width="256" height="52" rx="4" fill="#ffffff"/>' + barcode(idClean, 384, 596, 36, 232) +
+        '<text x="500" y="637" text-anchor="middle" font-size="10" letter-spacing="2" fill="#0b0e11" font-family="IBM Plex Mono, monospace">' + esc(idClean) + '</text>';
 
     return '' +
 '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 '+W+' '+H+'" font-family="Inter, Arial, Helvetica, sans-serif">' +
@@ -37,6 +74,7 @@
   // canvas
   '<rect width="'+W+'" height="'+H+'" fill="#0b0e11"/>' +
   '<rect x="0" y="0" width="'+W+'" height="'+H+'" fill="url(#glow)"/>' +
+  guil +
   // decorative frames
   '<rect x="18" y="18" width="'+(W-36)+'" height="'+(H-36)+'" fill="none" stroke="#fcd535" stroke-width="2.5"/>' +
   '<rect x="30" y="30" width="'+(W-60)+'" height="'+(H-60)+'" fill="none" stroke="#3a3a1f" stroke-width="1"/>' +
@@ -77,26 +115,24 @@
     '<path d="M 826 468 l 8 9 l 17 -19" fill="none" stroke="#fcd535" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>' +
     '<text x="838" y="500" text-anchor="middle" font-size="9" font-weight="700" letter-spacing="2" fill="#929aa5">OFFICIAL SEAL</text>' +
   '</g>' +
-  // meta + barcode
-  '<line x1="60" y1="560" x2="940" y2="560" stroke="#2b3139" stroke-width="1"/>' +
-  '<text x="70" y="588" font-size="12" fill="#707a8a">CERTIFICATE ID</text>' +
-  '<text x="70" y="608" font-size="15" font-weight="700" fill="#ffffff" font-family="IBM Plex Mono, monospace">' + id + '</text>' +
-  '<text x="70" y="636" font-size="12" fill="#707a8a">TANGGAL TERBIT</text>' +
-  '<text x="70" y="656" font-size="14" font-weight="600" fill="#eaecef">' + date + '</text>' +
-  // barcode area
-  '<rect x="372" y="590" width="256" height="52" rx="4" fill="#ffffff"/>' +
-  barcode(idClean, 384, 598, 36, 232) +
-  '<text x="500" y="637" text-anchor="middle" font-size="10" letter-spacing="2" fill="#0b0e11" font-family="IBM Plex Mono, monospace">' + esc(idClean) + '</text>' +
+  // meta
+  '<line x1="60" y1="556" x2="940" y2="556" stroke="#2b3139" stroke-width="1"/>' +
+  '<text x="70" y="584" font-size="12" fill="#707a8a">CERTIFICATE ID</text>' +
+  '<text x="70" y="604" font-size="15" font-weight="700" fill="#ffffff" font-family="IBM Plex Mono, monospace">' + id + '</text>' +
+  '<text x="70" y="632" font-size="12" fill="#707a8a">TANGGAL TERBIT</text>' +
+  '<text x="70" y="652" font-size="14" font-weight="600" fill="#eaecef">' + date + '</text>' +
+  '<text x="70" y="676" font-size="8.5" letter-spacing=".5" fill="#707a8a">pusatbanksoal.id/verifikasi.html</text>' +
+  // QR (or barcode fallback)
+  qrBlock +
   // signature
-  '<text x="930" y="600" text-anchor="end" font-size="26" fill="#eaecef" font-style="italic" font-family="Georgia, serif">Verified</text>' +
-  '<line x1="760" y1="612" x2="930" y2="612" stroke="#2b3139" stroke-width="1"/>' +
-  '<text x="930" y="632" text-anchor="end" font-size="11" fill="#707a8a">Certification Officer</text>' +
-  '<text x="930" y="648" text-anchor="end" font-size="11" fill="#707a8a">PusatBankSoal.id Authority</text>' +
-  // verify line
-  '<text x="500" y="662" text-anchor="middle" font-size="8.5" letter-spacing="1" fill="#707a8a">Verifikasi keaslian di pusatbanksoal.id/verifikasi.html · ID: ' + esc(idClean) + '</text>' +
+  '<text x="930" y="596" text-anchor="end" font-size="26" fill="#eaecef" font-style="italic" font-family="Georgia, serif">Verified</text>' +
+  '<line x1="760" y1="608" x2="930" y2="608" stroke="#2b3139" stroke-width="1"/>' +
+  '<text x="930" y="628" text-anchor="end" font-size="11" fill="#707a8a">Certification Officer</text>' +
+  '<text x="930" y="644" text-anchor="end" font-size="11" fill="#707a8a">PusatBankSoal.id Authority</text>' +
+  '<text x="930" y="662" text-anchor="end" font-size="8.5" letter-spacing=".5" fill="#707a8a">ID: ' + esc(idClean) + '</text>' +
   // ribbon
-  '<rect x="360" y="672" width="280" height="20" rx="10" fill="#1e2329" stroke="#3a3a1f"/>' +
-  '<text x="500" y="683" text-anchor="middle" font-size="10" font-weight="700" letter-spacing="3" fill="#fcd535">SECURE • VERIFIED • TRUSTED</text>' +
+  '<rect x="368" y="670" width="264" height="19" rx="9.5" fill="#1e2329" stroke="#3a3a1f"/>' +
+  '<text x="500" y="682.5" text-anchor="middle" font-size="9.5" font-weight="700" letter-spacing="2.5" fill="#fcd535">SECURE • VERIFIED • TRUSTED</text>' +
 '</svg>';
   }
 
