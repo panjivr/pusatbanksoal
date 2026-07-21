@@ -37,6 +37,8 @@
       <button>BUMN</button>
       <button>TOEFL</button>
       <button>IELTS</button>
+      <button>TNI/POLRI</button>
+      <button>Sertifikasi</button>
     </div>
 
     <div class="grid g3 mt-lg">
@@ -191,6 +193,43 @@
         </div>
         <div class="bar up mt"><span style="width:68%"></span></div>
         <button class="btn btn-primary btn-sm mt-lg" style="width:100%" onclick="startEnglish('ielts')">Mulai</button>
+      </div>
+      <div class="card lift reveal d4">
+        <div class="flex between items-center">
+          <span class="badge">TNI/POLRI</span>
+          <span class="badge">Gratis</span>
+        </div>
+        <h4 class="mt">Tryout TNI/POLRI — Akademik & Psikotes</h4>
+        <p class="muted mt flex items-center gap wrap-flex" style="font-size:13px">
+          <span class="flex items-center" style="gap:4px"><svg class="i"><use href="#i-list"></use></svg>100 soal</span>
+          <span class="flex items-center" style="gap:4px"><svg class="i"><use href="#i-clock"></use></svg>100 menit</span>
+          <span class="flex items-center" style="gap:4px"><svg class="i"><use href="#i-users"></use></svg><span data-count="12640" data-suffix=" peserta">12.640 peserta</span></span>
+        </p>
+        <div class="flex between items-center mt">
+          <span class="num flex items-center" style="font-size:13px;gap:4px"><svg class="i i-fill"><use href="#i-star"></use></svg>4.7/5</span>
+          <span class="muted" style="font-size:12px">Rating peserta</span>
+        </div>
+        <div class="bar mt"><span style="width:62%"></span></div>
+        <button class="btn btn-primary btn-sm mt-lg" style="width:100%" onclick="startExam('tni','TNI/POLRI — Akademik & Psikotes',100,100)">Mulai</button>
+      </div>
+
+      <div class="card lift reveal d5">
+        <div class="flex between items-center">
+          <span class="badge">Sertifikasi</span>
+          <span class="badge badge-y">Premium</span>
+        </div>
+        <h4 class="mt">Uji Kompetensi — Sertifikasi Profesi</h4>
+        <p class="muted mt flex items-center gap wrap-flex" style="font-size:13px">
+          <span class="flex items-center" style="gap:4px"><svg class="i"><use href="#i-list"></use></svg>100 soal</span>
+          <span class="flex items-center" style="gap:4px"><svg class="i"><use href="#i-clock"></use></svg>90 menit</span>
+          <span class="flex items-center" style="gap:4px"><svg class="i"><use href="#i-users"></use></svg><span data-count="7420" data-suffix=" peserta">7.420 peserta</span></span>
+        </p>
+        <div class="flex between items-center mt">
+          <span class="num flex items-center" style="font-size:13px;gap:4px"><svg class="i i-fill"><use href="#i-star"></use></svg>4.8/5</span>
+          <span class="muted" style="font-size:12px">Rating peserta</span>
+        </div>
+        <div class="bar up mt"><span style="width:70%"></span></div>
+        <button class="btn btn-primary btn-sm mt-lg" style="width:100%" onclick="startExam('sertifikasi','Uji Kompetensi — Sertifikasi Profesi',100,90)">Mulai</button>
       </div>
 
     </div>
@@ -881,6 +920,25 @@
       localStorage.setItem('pbs_history', JSON.stringify(list));
     } catch (e) { /* storage unavailable */ }
   }
+
+  // ---------- Category filter chips ----------
+  (function(){
+    var tabs = document.querySelector('.pill-tab');
+    if (!tabs) return;
+    var cards = Array.prototype.slice.call(document.querySelectorAll('.grid.g3 > .card'));
+    tabs.addEventListener('click', function(e){
+      var btn = e.target.closest('button');
+      if (!btn) return;
+      tabs.querySelectorAll('button').forEach(function(b){ b.classList.remove('active'); });
+      btn.classList.add('active');
+      var cat = btn.textContent.trim();
+      cards.forEach(function(c){
+        var badge = c.querySelector('.badge');
+        var match = cat === 'Semua' || (badge && badge.textContent.trim() === cat);
+        c.style.display = match ? '' : 'none';
+      });
+    });
+  })();
 
   window.startExam = startExam;
   window.startEnglish = startEnglish;
