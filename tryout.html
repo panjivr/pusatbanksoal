@@ -26,7 +26,7 @@
   <div class="wrap">
     <div class="eyebrow">Bank Soal & Tryout</div>
     <h1 class="mt">Latihan Tryout & Bank Soal</h1>
-    <p class="lead mt">Ribuan soal CPNS, PPPK, SNBT, Kedinasan, BUMN, TOEFL, hingga IELTS dengan simulasi Computer Assisted Test (CAT) yang menyerupai sistem resmi BKN — lengkap dengan timer, navigator soal, dan pembahasan.</p>
+    <p class="lead mt">1.200+ soal CPNS, PPPK, SNBT, Kedinasan, BUMN, TOEFL, IELTS, TNI/POLRI, hingga Sertifikasi Profesi dengan simulasi Computer Assisted Test (CAT) menyerupai sistem resmi — lengkap timer, navigator soal, pembahasan, skor asli, dan sertifikat digital.</p>
 
     <div class="pill-tab mt-lg wrap-flex">
       <button class="active">Semua</button>
@@ -373,6 +373,7 @@
 <div><h5>Bantuan</h5><a href="#">Pusat Bantuan</a><a href="#">Syarat & Ketentuan</a><a href="#">Kebijakan Privasi</a><a href="admin.html">Admin</a></div>
 </div><div class="bottom"><span>© <span data-year>2026</span> PusatBankSoal.id — Seluruh hak cipta dilindungi.</span><span>Dibuat untuk pejuang ujian Indonesia 🇮🇩</span></div></div></footer>
 
+<script src="assets/cert.js"></script>
 <script src="assets/bank/bumn-akhlak.js"></script>
 <script src="assets/bank/bumn-more.js"></script>
 <script src="assets/bank/bumn-tkd.js"></script>
@@ -391,13 +392,16 @@
 <script src="assets/bank/pppk-man-sos.js"></script>
 <script src="assets/bank/pppk-more.js"></script>
 <script src="assets/bank/pppk-teknis.js"></script>
+<script src="assets/bank/sertifikasi-k3.js"></script>
+<script src="assets/bank/sertifikasi-umum.js"></script>
 <script src="assets/bank/snbt-more.js"></script>
 <script src="assets/bank/snbt-ppu-pbm.js"></script>
 <script src="assets/bank/snbt-pu-pk.js"></script>
 <script src="assets/bank/snbt-topup.js"></script>
+<script src="assets/bank/tni-akademik.js"></script>
+<script src="assets/bank/tni-psiko.js"></script>
 <script src="assets/bank/toefl-more.js"></script>
 <script src="assets/bank/toefl-reading.js"></script>
-<script src="assets/cert.js"></script>
 <script src="assets/bank/toefl-structure.js"></script>
 <script>
 (function(){
@@ -925,7 +929,9 @@
   (function(){
     var tabs = document.querySelector('.pill-tab');
     if (!tabs) return;
-    var cards = Array.prototype.slice.call(document.querySelectorAll('.grid.g3 > .card'));
+    var grid = tabs.parentNode.querySelector('.grid.g3');
+    if (!grid) return;
+    var cards = Array.prototype.slice.call(grid.children);
     tabs.addEventListener('click', function(e){
       var btn = e.target.closest('button');
       if (!btn) return;
