@@ -162,8 +162,8 @@
         </div>
         <h4 class="mt">TOEFL ITP — Structure & Reading</h4>
         <p class="muted mt flex items-center gap wrap-flex" style="font-size:13px">
-          <span class="flex items-center" style="gap:4px"><svg class="i"><use href="#i-list"></use></svg>100 soal</span>
-          <span class="flex items-center" style="gap:4px"><svg class="i"><use href="#i-clock"></use></svg>100 menit</span>
+          <span class="flex items-center" style="gap:4px"><svg class="i"><use href="#i-list"></use></svg>60 soal</span>
+          <span class="flex items-center" style="gap:4px"><svg class="i"><use href="#i-clock"></use></svg>67 menit</span>
           <span class="flex items-center" style="gap:4px"><svg class="i"><use href="#i-users"></use></svg><span data-count="14820" data-suffix=" peserta">14.820 peserta</span></span>
         </p>
         <div class="flex between items-center mt">
@@ -171,7 +171,7 @@
           <span class="muted" style="font-size:12px">Rating peserta</span>
         </div>
         <div class="bar mt"><span style="width:74%"></span></div>
-        <button class="btn btn-primary btn-sm mt-lg" style="width:100%" onclick="startExam('toefl','TOEFL ITP — Structure & Reading',100,100)">Mulai</button>
+        <button class="btn btn-primary btn-sm mt-lg" style="width:100%" onclick="startEnglish('toefl')">Mulai</button>
       </div>
 
       <div class="card lift reveal d3">
@@ -181,8 +181,8 @@
         </div>
         <h4 class="mt">IELTS Academic — Reading & Language</h4>
         <p class="muted mt flex items-center gap wrap-flex" style="font-size:13px">
-          <span class="flex items-center" style="gap:4px"><svg class="i"><use href="#i-list"></use></svg>100 soal</span>
-          <span class="flex items-center" style="gap:4px"><svg class="i"><use href="#i-clock"></use></svg>100 menit</span>
+          <span class="flex items-center" style="gap:4px"><svg class="i"><use href="#i-list"></use></svg>60 soal</span>
+          <span class="flex items-center" style="gap:4px"><svg class="i"><use href="#i-clock"></use></svg>75 menit</span>
           <span class="flex items-center" style="gap:4px"><svg class="i"><use href="#i-users"></use></svg><span data-count="9310" data-suffix=" peserta">9.310 peserta</span></span>
         </p>
         <div class="flex between items-center mt">
@@ -190,7 +190,7 @@
           <span class="muted" style="font-size:12px">Rating peserta</span>
         </div>
         <div class="bar up mt"><span style="width:68%"></span></div>
-        <button class="btn btn-primary btn-sm mt-lg" style="width:100%" onclick="startExam('ielts','IELTS Academic — Reading & Language',100,100)">Mulai</button>
+        <button class="btn btn-primary btn-sm mt-lg" style="width:100%" onclick="startEnglish('ielts')">Mulai</button>
       </div>
 
     </div>
@@ -434,6 +434,7 @@
   var submitted = false;
   var lastExam = { key: 'cpns', name: 'Demo Gratis', count: 10, minutes: 15 };
   var lastResult = null;
+  var secDefs = null, secIdx = 0, secStore = [], totalElapsed = 0;
 
   function shuffle(a){ for (var i = a.length - 1; i > 0; i--){ var j = Math.floor(Math.random() * (i + 1)); var t = a[i]; a[i] = a[j]; a[j] = t; } return a; }
   function buildQuestions(key, count){
@@ -471,7 +472,7 @@
     if (timeLeft <= 0) {
       timeLeft = 0;
       updateTimerDisplay();
-      finishExam();
+      advanceOrFinish();
       return;
     }
     updateTimerDisplay();
@@ -510,7 +511,9 @@
       qOptions.appendChild(row);
     });
     btnPrev.disabled = current === 0;
-    btnNext.innerHTML = (current === questions.length - 1 ? 'Selesai & Lihat Hasil' : 'Selanjutnya') +
+    var lastLabel = 'Selesai & Lihat Hasil';
+    if (lastExam && lastExam.sectioned && secIdx < secDefs.length - 1) lastLabel = 'Selesai Bagian';
+    btnNext.innerHTML = (current === questions.length - 1 ? lastLabel : 'Selanjutnya') +
       ' <svg class="i"><use href="#i-chevron-right"></use></svg>';
   }
 
@@ -557,8 +560,13 @@
       renderQuestion();
       renderNav();
     } else {
-      finishExam();
+      advanceOrFinish();
     }
+  }
+
+  function advanceOrFinish(){
+    if (lastExam && lastExam.sectioned) submitSection();
+    else finishExam();
   }
 
   btnPrev.addEventListener('click', goPrev);
@@ -580,8 +588,10 @@
     if (submitted) return;
     submitted = true;
     if (timerId) { clearInterval(timerId); timerId = null; }
+    renderResult(questions, answers, TOTAL_TIME - timeLeft);
+  }
 
-    var elapsed = TOTAL_TIME - timeLeft;
+  function renderResult(questions, answers, elapsed){
     var correct = 0;
     questions.forEach(function(q, i){
       if (answers[i] === q.a) correct++;
@@ -646,6 +656,7 @@
       id: (window.PBSCert ? window.PBSCert.genId() : 'PBS-' + Date.now()),
       date: new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })
     };
+    saveHistory(lastResult, correct, total, pct);
 
     var reviewList = document.getElementById('reviewList');
     reviewList.innerHTML = '';
@@ -696,7 +707,8 @@
   }
 
   document.getElementById('btnRestart').addEventListener('click', function(){
-    startExam(lastExam.key, lastExam.name, lastExam.count, lastExam.minutes);
+    if (lastExam && lastExam.sectioned) startEnglish(lastExam.key);
+    else startExam(lastExam.key, lastExam.name, lastExam.count, lastExam.minutes);
   });
 
   document.getElementById('btnCert').addEventListener('click', function(){
@@ -754,7 +766,109 @@
     timerId = setInterval(tick, 1000);
   }
 
+  // ---------- Sectioned English tests (TOEFL / IELTS) ----------
+  function buildSection(key, subs, count){
+    var src = (window.BANK && window.BANK[key]) ? window.BANK[key] : [];
+    var seen = {}, pool = [];
+    for (var i = 0; i < src.length; i++){
+      var it = src[i];
+      if (it && it.q && subs.indexOf(it.sub) > -1 && !seen[it.q]){ seen[it.q] = 1; pool.push(it); }
+    }
+    shuffle(pool);
+    var n = Math.max(1, Math.min(count || pool.length, pool.length));
+    return pool.slice(0, n);
+  }
+
+  function openOverlay(title){
+    examTitle.textContent = title;
+    examEl.classList.remove('hide');
+    examEl.style.position = 'fixed';
+    examEl.style.inset = '0';
+    examEl.style.background = 'var(--canvas)';
+    examEl.style.zIndex = '200';
+    examEl.style.overflow = 'auto';
+    document.body.style.overflow = 'hidden';
+    cheatWarning.classList.add('hide');
+  }
+
+  function startSectionExam(key, name, defs){
+    lastExam = { key: key, name: name, sectioned: true };
+    secDefs = defs.map(function(d){ return { label: d.label, minutes: d.minutes, q: buildSection(key, d.subs, d.count) }; });
+    secIdx = 0; secStore = []; totalElapsed = 0;
+    openOverlay('Simulasi — ' + name);
+    loadSection(0);
+  }
+
+  function loadSection(i){
+    secIdx = i;
+    var sec = secDefs[i];
+    questions = sec.q;
+    current = 0;
+    answers = new Array(questions.length).fill(null);
+    TOTAL_TIME = (sec.minutes || questions.length) * 60;
+    timeLeft = TOTAL_TIME;
+    submitted = false;
+    examTitle.textContent = lastExam.name + ' — Bagian ' + (i + 1) + '/' + secDefs.length + ': ' + sec.label;
+    examBody.classList.remove('hide');
+    resultPanel.classList.add('hide');
+    updateTimerDisplay();
+    renderNav();
+    renderQuestion();
+    if (timerId) clearInterval(timerId);
+    timerId = setInterval(tick, 1000);
+    if (examBody.scrollIntoView) examBody.scrollIntoView({ block: 'start' });
+  }
+
+  function submitSection(){
+    if (submitted) return;
+    submitted = true;
+    if (timerId) { clearInterval(timerId); timerId = null; }
+    totalElapsed += (secDefs[secIdx].minutes * 60 - timeLeft);
+    secStore.push({ questions: questions, answers: answers.slice() });
+    if (secIdx < secDefs.length - 1) loadSection(secIdx + 1);
+    else finishAll();
+  }
+
+  function finishAll(){
+    var allQ = [], allA = [];
+    secStore.forEach(function(s){
+      s.questions.forEach(function(q, i){ allQ.push(q); allA.push(s.answers[i]); });
+    });
+    renderResult(allQ, allA, totalElapsed);
+  }
+
+  var ENG = {
+    toefl: { name: 'TOEFL ITP — Full Simulation', defs: [
+      { label: 'Structure', subs: ['Structure'], count: 15, minutes: 15 },
+      { label: 'Written Expression', subs: ['WrittenExpression'], count: 15, minutes: 12 },
+      { label: 'Reading Comprehension', subs: ['Reading', 'Vocabulary'], count: 30, minutes: 40 }
+    ] },
+    ielts: { name: 'IELTS Academic — Full Simulation', defs: [
+      { label: 'Listening', subs: ['Listening'], count: 15, minutes: 15 },
+      { label: 'Reading', subs: ['Reading'], count: 25, minutes: 40 },
+      { label: 'Language (Grammar & Vocabulary)', subs: ['Grammar', 'Vocabulary'], count: 20, minutes: 20 }
+    ] }
+  };
+  function startEnglish(key){ var e = ENG[key]; if (e) startSectionExam(key, e.name, e.defs); }
+
+  // ---------- History + certificate persistence (localStorage) ----------
+  function saveHistory(res, correct, total, pct){
+    try {
+      var list = JSON.parse(localStorage.getItem('pbs_history') || '[]');
+      list.unshift({
+        id: res.id, testName: res.testName, badge: res.badge,
+        scoreBig: res.scoreBig, scoreCaption: res.scoreCaption,
+        predikat: res.predikat, percentile: res.percentile,
+        correct: correct, total: total, pct: pct,
+        date: res.date, ts: Date.now()
+      });
+      if (list.length > 50) list = list.slice(0, 50);
+      localStorage.setItem('pbs_history', JSON.stringify(list));
+    } catch (e) { /* storage unavailable */ }
+  }
+
   window.startExam = startExam;
+  window.startEnglish = startEnglish;
 })();
 </script>
 <script src="assets/app.js" defer></script>
