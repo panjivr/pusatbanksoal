@@ -247,6 +247,21 @@ button,summary,.pill-tab button,[role="radio"],[role="button"],.admin-nav,label[
 /* Wider breakpoint container per skill (1440px surfaces) */
 @media(min-width:1441px){.wrap{max-width:1360px}}
 
+/* Interactive bank-soal practice options */
+.bank-opts{display:flex;flex-direction:column;gap:8px}
+.bank-opt{display:flex;align-items:center;gap:12px;width:100%;text-align:left;
+  background:var(--elevated);border:1px solid var(--hair-dark);color:var(--body);
+  font-family:var(--font);font-size:14px;padding:12px 14px;border-radius:var(--r-lg);
+  cursor:pointer;transition:border-color .15s ease,background .15s ease}
+.bank-opt:hover:not(:disabled){border-color:var(--primary)}
+.bank-opt:disabled{cursor:default}
+.bank-optkey{width:24px;height:24px;flex:none;display:grid;place-items:center;border-radius:6px;
+  background:var(--card);font-weight:700;font-size:12px;font-family:var(--num);color:var(--muted-strong)}
+.bank-opt.correct{border-color:var(--up);background:rgba(14,203,129,.12);color:var(--up)}
+.bank-opt.correct .bank-optkey{background:var(--up);color:#fff}
+.bank-opt.wrong{border-color:var(--down);background:rgba(246,70,93,.12);color:var(--down)}
+.bank-opt.wrong .bank-optkey{background:var(--down);color:#fff}
+
 /* Session user menu (nav) */
 .pbs-usermenu{position:relative}
 .pbs-userbtn{display:inline-flex;align-items:center;gap:8px;background:var(--card);

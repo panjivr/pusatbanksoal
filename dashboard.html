@@ -30,7 +30,10 @@
 <p class="muted mt" id="dashTarget" style="margin-top:6px">Selamat datang kembali</p>
 </div>
 </div>
+<div class="flex gap wrap-flex">
+<a href="pembahasan.html#tersimpan" class="btn btn-ghost btn-lg" id="dashSaved"><svg class="i"><use href="#i-bookmark"></use></svg> Soal Tersimpan</a>
 <a href="tryout.html" class="btn btn-primary btn-lg">Lanjut Belajar</a>
+</div>
 </div>
 
 <div class="grid g4 mt-lg">
@@ -213,6 +216,10 @@
   $('dashHello').textContent = 'Halo, ' + user.name.split(' ')[0] + ' 👋';
   $('dashTarget').textContent = 'Target: ' + PBS.targetLabel(user.target) +
     ' · ' + (hist.length ? hist.length + ' tryout selesai' : 'Ayo mulai tryout pertamamu');
+  var savedN = PBS.bookmarkCount();
+  var savedBtn = $('dashSaved');
+  if (savedBtn) savedBtn.innerHTML = '<svg class="i"><use href="#i-bookmark"></use></svg> Soal Tersimpan' +
+    (savedN ? ' (' + savedN + ')' : '');
 
   // ---- KPI cards ----
   function badge(el, cls, text){ var b=$(el); b.className='badge mt '+cls; b.textContent=text; }

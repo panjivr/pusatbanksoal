@@ -4,7 +4,8 @@
    is NOT a substitute for real server-side auth. Exposes window.PBS. */
 (function () {
   var K_USERS = 'pbs_users', K_SESSION = 'pbs_session',
-      K_HISTORY = 'pbs_history', K_ACTIVITY = 'pbs_activity';
+      K_HISTORY = 'pbs_history', K_ACTIVITY = 'pbs_activity',
+      K_BOOKMARKS = 'pbs_bookmarks';
 
   function read(key, fallback) {
     try { return JSON.parse(localStorage.getItem(key)) || fallback; }
@@ -138,6 +139,18 @@
       return Object.keys(agg).map(function (name) {
         return { name: name, pct: Math.round((agg[name].c / agg[name].t) * 100), n: agg[name].t };
       }).sort(function (a, b) { return a.pct - b.pct; });
+    },
+
+    /* ---- Saved questions (bookmarks) ---- */
+    bookmarks: function () { return read(K_BOOKMARKS, {}); },
+    isBookmarked: function (id) { return !!this.bookmarks()[id]; },
+    bookmarkCount: function () { return Object.keys(this.bookmarks()).length; },
+    toggleBookmark: function (id, meta) {
+      var b = this.bookmarks();
+      if (b[id]) { delete b[id]; write(K_BOOKMARKS, b); return false; }
+      b[id] = meta || { ts: Date.now() };
+      write(K_BOOKMARKS, b);
+      return true;
     },
 
     /* Rebuild the nav's right side to reflect session state. */
