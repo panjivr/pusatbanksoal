@@ -2,7 +2,9 @@ name: Deploy to GitHub Pages
 
 on:
   push:
-    branches: ["claude/minimal-token-web-build-5b228s"]
+    branches:
+      - "claude/minimal-token-web-build-5b228s"
+      - "claude/fitur-fungsional-profesional-arj1wo"
   workflow_dispatch:
 
 permissions:
