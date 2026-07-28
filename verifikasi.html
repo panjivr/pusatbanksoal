@@ -2,12 +2,37 @@
 <html lang="id">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Verifikasi Sertifikat | PusatBankSoal.id</title>
-<meta name="description" content="Verifikasi keaslian sertifikat hasil tryout PusatBankSoal.id menggunakan ID atau tautan verifikasi.">
+<title>Verifikasi Keaslian Sertifikat | PusatBankSoal.id</title>
+<meta name="description" content="Verifikasi keaslian sertifikat hasil tryout PusatBankSoal.id. Tempel tautan atau masukkan ID sertifikat (PBS-YYYY-XXXX-NNN) untuk memastikan sertifikat resmi diterbitkan dan datanya utuh.">
+<meta name="robots" content="index,follow">
 <link rel="canonical" href="https://pusatbanksoal.id/verifikasi.html">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@600;700;800&family=IBM+Plex+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+<link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">
+<meta name="theme-color" content="#0a0e17">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="PusatBankSoal.id">
+<meta property="og:locale" content="id_ID">
+<meta property="og:title" content="Verifikasi Keaslian Sertifikat | PusatBankSoal.id">
+<meta property="og:description" content="Cek keaslian sertifikat hasil tryout PusatBankSoal.id lewat tautan atau ID sertifikat. Verifikasi cepat, transparan, lintas perangkat.">
+<meta property="og:url" content="https://pusatbanksoal.id/verifikasi.html">
+<meta property="og:image" content="https://pusatbanksoal.id/assets/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Verifikasi Keaslian Sertifikat | PusatBankSoal.id">
+<meta name="twitter:description" content="Cek keaslian sertifikat hasil tryout PusatBankSoal.id lewat tautan atau ID sertifikat.">
+<meta name="twitter:image" content="https://pusatbanksoal.id/assets/og.png">
 <link rel="stylesheet" href="assets/style.css">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[
+{"@type":"ListItem","position":1,"name":"Beranda","item":"https://pusatbanksoal.id/"},
+{"@type":"ListItem","position":2,"name":"Verifikasi Sertifikat","item":"https://pusatbanksoal.id/verifikasi.html"}
+]}
+</script>
 </head>
 <body>
 <nav class="nav"><div class="nav-in">
@@ -20,20 +45,32 @@
 </div></nav>
 
 <section class="section-sm"><div class="wrap" style="max-width:820px">
-  <div class="eyebrow"><svg class="i"><use href="#i-shield-check"></use></svg> Verifikasi Sertifikat</div>
-  <h1 class="mt">Cek Keaslian Sertifikat</h1>
-  <p class="lead mt">Tempel <strong>tautan verifikasi</strong> atau masukkan <strong>ID sertifikat</strong> (format <span class="num">PBS-YYYY-XXXX-NNN</span>) untuk memastikan sertifikat benar-benar diterbitkan oleh PusatBankSoal.id.</p>
+  <span class="section-eyebrow">Verifikasi Sertifikat</span>
+  <h1 class="mt">Verifikasi <span class="gradient-text">Keaslian Sertifikat</span></h1>
+  <p class="lead mt">Tempel <strong>tautan verifikasi</strong> atau masukkan <strong>ID sertifikat</strong> (format <span class="num">PBS-YYYY-XXXX-NNN</span>) untuk memastikan sebuah sertifikat benar-benar diterbitkan oleh PusatBankSoal.id dan datanya tidak diubah.</p>
+
+  <div class="trust-bar mt-lg">
+    <span><svg class="i" style="color:var(--primary)" aria-hidden="true"><use href="#i-shield-check"></use></svg> Checksum keaslian</span>
+    <span><svg class="i" style="color:var(--primary)" aria-hidden="true"><use href="#i-lock"></use></svg> Data utuh &amp; tak berubah</span>
+    <span><svg class="i" style="color:var(--primary)" aria-hidden="true"><use href="#i-globe"></use></svg> Lintas perangkat</span>
+  </div>
 
   <div class="card mt-lg">
     <label for="vInput" class="muted" style="display:block;font-size:13px;margin-bottom:6px">Tautan verifikasi / kode / ID sertifikat</label>
     <div class="flex gap wrap-flex">
       <input id="vInput" type="text" placeholder="Tempel tautan atau ID di sini…" aria-label="Kode verifikasi" style="flex:1;min-width:220px;background:var(--elevated);border:1px solid var(--hair-dark);color:var(--body);border-radius:8px;padding:12px 14px;font-size:14px;font-family:inherit">
-      <button class="btn btn-primary" id="vBtn"><svg class="i"><use href="#i-search"></use></svg> Verifikasi</button>
+      <button class="btn btn-primary" id="vBtn"><svg class="i" aria-hidden="true"><use href="#i-search"></use></svg> Verifikasi</button>
     </div>
     <p class="muted mt" style="font-size:12px">Catatan: verifikasi dari <em>tautan/kode</em> berlaku lintas perangkat. Verifikasi dari <em>ID saja</em> hanya cocok bila sertifikat diterbitkan di perangkat ini.</p>
   </div>
 
   <div id="vResult" class="mt-lg hide"></div>
+
+  <div class="grid g3 mt-lg">
+    <div class="glass-card"><div class="ico" style="margin-bottom:10px"><svg class="i" aria-hidden="true"><use href="#i-search"></use></svg></div><h4>1. Tempel kode</h4><p class="muted" style="font-size:13px">Masukkan tautan verifikasi lengkap atau ID sertifikat dari dokumen.</p></div>
+    <div class="glass-card"><div class="ico" style="margin-bottom:10px"><svg class="i" aria-hidden="true"><use href="#i-shield-check"></use></svg></div><h4>2. Cek keaslian</h4><p class="muted" style="font-size:13px">Sistem memeriksa checksum untuk memastikan data sertifikat utuh.</p></div>
+    <div class="glass-card"><div class="ico" style="margin-bottom:10px"><svg class="i" aria-hidden="true"><use href="#i-check"></use></svg></div><h4>3. Lihat hasil</h4><p class="muted" style="font-size:13px">Nama, tes, skor, predikat, dan tanggal terbit ditampilkan bila valid.</p></div>
+  </div>
 </div></section>
 
 <footer class="footer"><div class="wrap"><div class="cols">

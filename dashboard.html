@@ -3,10 +3,29 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Dashboard Belajar & Statistik Nilai | PusatBankSoal.id</title>
-<meta name="description" content="Pantau perkembangan belajarmu: grafik progres, radar kemampuan, streak, ranking nasional, dan analisis kelemahan otomatis.">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+<meta name="description" content="Dashboard belajar personalmu: grafik perkembangan skor, radar kemampuan per subtes, streak, misi harian, dan analisis kelemahan otomatis — tersimpan di perangkatmu.">
+<meta name="robots" content="noindex,follow">
 <link rel="canonical" href="https://pusatbanksoal.id/dashboard.html">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@600;700;800&family=IBM+Plex+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+<link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">
+<meta name="theme-color" content="#0a0e17">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="PusatBankSoal.id">
+<meta property="og:locale" content="id_ID">
+<meta property="og:title" content="Dashboard Belajar & Statistik Nilai | PusatBankSoal.id">
+<meta property="og:description" content="Grafik perkembangan skor, radar kemampuan per subtes, streak, dan analisis kelemahan otomatis untuk pejuang seleksi.">
+<meta property="og:url" content="https://pusatbanksoal.id/dashboard.html">
+<meta property="og:image" content="https://pusatbanksoal.id/assets/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Dashboard Belajar & Statistik Nilai | PusatBankSoal.id">
+<meta name="twitter:description" content="Grafik perkembangan skor, radar kemampuan per subtes, streak, dan analisis kelemahan otomatis.">
+<meta name="twitter:image" content="https://pusatbanksoal.id/assets/og.png">
 <link rel="stylesheet" href="assets/style.css">
 <script src="assets/auth.js"></script>
 </head>
@@ -22,19 +41,25 @@
 
 <section class="section-sm"><div class="wrap">
 
-<div class="flex between items-center wrap-flex gap">
+<span class="section-eyebrow">Dashboard Belajar</span>
+
+<div class="flex between items-center wrap-flex gap mt">
 <div class="flex items-center gap">
 <span class="avatar" id="dashAvatar" style="width:52px;height:52px;font-size:18px;background:var(--primary);color:var(--on-primary)">PB</span>
 <div>
-<h2 id="dashHello">Halo 👋</h2>
+<h1 id="dashHello" style="font-size:clamp(24px,3.4vw,32px);letter-spacing:-.6px">Halo 👋</h1>
 <p class="muted mt" id="dashTarget" style="margin-top:6px">Selamat datang kembali</p>
 </div>
 </div>
 <div class="flex gap wrap-flex">
-<a href="pembahasan.html#tersimpan" class="btn btn-ghost btn-lg" id="dashSaved"><svg class="i"><use href="#i-bookmark"></use></svg> Soal Tersimpan</a>
+<a href="pembahasan.html#tersimpan" class="btn btn-ghost btn-lg" id="dashSaved"><svg class="i" aria-hidden="true"><use href="#i-bookmark"></use></svg> Soal Tersimpan</a>
 <a href="tryout.html" class="btn btn-primary btn-lg">Lanjut Belajar</a>
 </div>
 </div>
+
+<p class="muted mt-lg" style="font-size:12.5px;display:inline-flex;align-items:center;gap:7px">
+<svg class="i" aria-hidden="true" style="color:var(--up)"><use href="#i-shield-check"></use></svg>
+Data statistikmu tersimpan lokal di perangkat ini — privat, tidak diunggah ke server.</p>
 
 <div class="grid g4 mt-lg">
 <div class="card reveal d1 lift">
@@ -61,7 +86,7 @@
 
 <div class="grid g2 mt-lg">
 <div class="card reveal d1">
-<h3>Grafik Perkembangan Skor</h3>
+<h3>Grafik <span class="gradient-text">Perkembangan</span> Skor</h3>
 <p class="muted mt" style="font-size:13px">Persentase benar dari tryout yang kamu selesaikan</p>
 <div id="scoreChart" style="margin-top:8px"></div>
 <template id="scoreChartTpl"><svg viewBox="0 0 480 220" width="100%" style="margin-top:8px;height:auto" role="img" aria-label="Grafik perkembangan skor">
@@ -128,7 +153,7 @@
 
 <div class="grid g2 mt-lg">
 <div class="card reveal d1">
-<h3><svg class="i" style="color:var(--primary)"><use href="#i-target"></use></svg> Analisis Kelemahan (AI)</h3>
+<h3><svg class="i" aria-hidden="true" style="color:var(--primary)"><use href="#i-target"></use></svg> Analisis Kelemahan <span class="gradient-text">AI</span></h3>
 <div id="weakBody" class="mt-lg"></div>
 <p class="muted mt-lg" id="weakTip" style="font-size:13px"></p>
 </div>

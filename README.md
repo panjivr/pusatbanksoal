@@ -1,18 +1,31 @@
 # PusatBankSoal.id
 
-Prototipe web **AI Education Intelligence Platform** — tryout, bank soal, dan analisis nilai untuk CPNS, PPPK, Kedinasan, SNBT/UTBK, BUMN, TNI/POLRI, dan ujian lainnya.
+**Platform Tryout & Bank Soal berbasis AI** untuk seleksi CPNS, PPPK, SNBT/UTBK, Kedinasan, BUMN, dan TNI/POLRI. Kredibel, modern, premium — bertema fintech/EdTech, bukan sekadar situs latihan soal.
 
-Dibangun sebagai situs statis (HTML + CSS + JS vanilla, tanpa build step) dengan design system bertema gelap terinspirasi Binance.
+Dibangun sebagai situs statis (HTML + CSS + JS vanilla, tanpa build step) dengan design system premium bertema gelap (deep navy + gold). Panduan brand & desain lengkap ada di [`BRAND.md`](BRAND.md), seluruh token & komponen di `assets/style.css`.
+
+## Yang ada di dalamnya
+
+- **Bank soal nyata:** **1.495+ soal terkurasi** across **9 kategori seleksi**, terus bertambah — bukan angka karangan.
+- **Sistem akun:** daftar/masuk (`auth.html`) dengan penyimpanan lokal di perangkat, target ujian, dan sesi pengguna.
+- **Bank soal interaktif & simulator CAT:** timer, navigasi soal, skor otomatis, pembahasan.
+- **Dashboard berbasis data:** KPI, grafik skor, radar kemampuan, analisis kelemahan AI, misi harian, heatmap konsistensi.
+- **Sertifikat terverifikasi:** setiap hasil bisa dicek keasliannya di `verifikasi.html` (checksum + tautan/ID lintas perangkat).
+- **SEO lengkap:** meta & Open Graph per halaman, canonical, `robots.txt`, `sitemap.xml`, dan JSON-LD terstruktur.
 
 ## Halaman
 
 | File | Isi |
 |------|-----|
 | `index.html` | Landing page: hero, kategori ujian, fitur, sorotan AI analisis, leaderboard, harga, FAQ |
+| `auth.html` | Masuk / daftar akun — panel nilai (honest), form login/daftar, opsi Google & WhatsApp |
 | `tryout.html` | Daftar tryout & **simulator CAT** interaktif (timer, navigasi soal, skor, pembahasan, deteksi pindah tab) |
+| `pembahasan.html` | Bank soal & pembahasan lengkap |
 | `dashboard.html` | Dashboard belajar: KPI, grafik skor (SVG), radar kemampuan, analisis kelemahan AI, misi harian, heatmap konsistensi |
 | `analisis.html` | AI Analisis Nilai: upload dokumen, prediksi peluang lolos, **simulasi peningkatan nilai** interaktif, rekomendasi kampus & jurusan |
-| `assets/style.css` | Design system (token warna, tipografi, komponen) |
+| `verifikasi.html` | Verifikasi keaslian sertifikat (publik, terindeks) |
+| `admin.html` | Panel admin internal (noindex,nofollow): manajemen soal, review AI, pengguna, pembayaran, konten & SEO, audit log |
+| `assets/style.css` | Design system (token warna, tipografi, komponen premium) |
 
 ## Menjalankan
 

@@ -2,13 +2,41 @@
 <html lang="id">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>AI Analisis Nilai & Rekomendasi Universitas | PusatBankSoal.id</title>
-<meta name="description" content="Upload nilai tryout, rapor, atau hasil SNBT. AI menghitung peluang lolos, merekomendasikan universitas & jurusan, dan menyusun roadmap belajar personal.">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+<title>AI Analisis Nilai & Prediksi Peluang Lolos Kampus | PusatBankSoal.id</title>
+<meta name="description" content="Upload rapor, hasil SNBT/UTBK, atau nilai tryout. AI membaca dokumenmu, memprediksi peluang lolos, mensimulasikan kenaikan nilai, dan merekomendasikan kampus & jurusan.">
+<meta name="robots" content="index,follow,max-image-preview:large">
 <link rel="canonical" href="https://pusatbanksoal.id/analisis.html">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@600;700;800&family=IBM+Plex+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+<link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">
+<meta name="theme-color" content="#0a0e17">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="PusatBankSoal.id">
+<meta property="og:locale" content="id_ID">
+<meta property="og:title" content="AI Analisis Nilai & Prediksi Peluang Lolos Kampus">
+<meta property="og:description" content="Upload nilaimu, AI memprediksi peluang lolos, mensimulasikan kenaikan nilai, dan merekomendasikan kampus & jurusan yang tepat.">
+<meta property="og:url" content="https://pusatbanksoal.id/analisis.html">
+<meta property="og:image" content="https://pusatbanksoal.id/assets/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="AI Analisis Nilai & Prediksi Peluang Lolos Kampus">
+<meta name="twitter:description" content="Upload nilaimu, AI memprediksi peluang lolos, mensimulasikan kenaikan nilai, dan merekomendasikan kampus & jurusan.">
+<meta name="twitter:image" content="https://pusatbanksoal.id/assets/og.png">
 <link rel="stylesheet" href="assets/style.css">
 <script src="assets/auth.js"></script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@graph":[
+{"@type":"WebApplication","@id":"https://pusatbanksoal.id/analisis.html#app","name":"AI Analisis Nilai PusatBankSoal.id","url":"https://pusatbanksoal.id/analisis.html","applicationCategory":"EducationalApplication","operatingSystem":"Web","inLanguage":"id-ID","description":"Aplikasi AI untuk menganalisis nilai rapor, hasil SNBT/UTBK, dan tryout: prediksi peluang lolos, simulasi kenaikan nilai, serta rekomendasi kampus dan jurusan.","offers":{"@type":"Offer","price":"0","priceCurrency":"IDR"},"publisher":{"@type":"EducationalOrganization","name":"PusatBankSoal.id","url":"https://pusatbanksoal.id/"},"featureList":["Upload dokumen nilai (PDF, JPG, PNG, Excel, CSV)","Prediksi peluang lolos kampus","Simulasi peningkatan nilai","Rekomendasi kampus & jurusan"]},
+{"@type":"BreadcrumbList","itemListElement":[
+{"@type":"ListItem","position":1,"name":"Beranda","item":"https://pusatbanksoal.id/"},
+{"@type":"ListItem","position":2,"name":"AI Analisis Nilai","item":"https://pusatbanksoal.id/analisis.html"}
+]}
+]}
+</script>
 </head>
 <body>
 <nav class="nav"><div class="nav-in">
@@ -21,9 +49,18 @@
 </div></nav>
 
 <section class="section-sm"><div class="wrap">
-<div class="eyebrow">AI SCORE ANALYSIS</div>
-<h1 class="hero-h1 mt">Ubah Nilaimu Jadi Peta Jalan Menuju Kampus Impian</h1>
-<p class="lead mt" style="max-width:76ch">Upload nilai kamu — rapor, hasil SNBT/UTBK, atau tryout dalam format PDF, JPG, screenshot, maupun Excel. AI kami membaca dokumen lewat OCR, menganalisis kekuatan & kelemahan tiap subtes, memprediksi peluang lolosmu di berbagai kampus, lalu menyusun rekomendasi jurusan dan roadmap belajar yang dipersonalisasi khusus untukmu.</p>
+<span class="section-eyebrow">AI Analisis Nilai</span>
+<h1 class="hero-h1 mt">Ubah Nilaimu Jadi <span class="gradient-text">Peta Jalan</span> Menuju Kampus Impian</h1>
+<p class="lead mt" style="max-width:76ch">Upload nilai kamu — rapor, hasil SNBT/UTBK, atau tryout dalam format PDF, JPG, screenshot, maupun Excel. AI kami membaca dokumen lewat OCR, menganalisis kekuatan &amp; kelemahan tiap subtes, memprediksi peluang lolosmu di berbagai kampus, lalu menyusun rekomendasi jurusan dan roadmap belajar yang dipersonalisasi khusus untukmu.</p>
+<div class="flex gap wrap-flex mt-lg">
+<button type="button" class="btn btn-primary btn-lg" onclick="document.getElementById('fileInput').click()">Upload Nilai Sekarang</button>
+<a href="#ringkasan" class="btn btn-ghost btn-lg">Lihat Contoh Hasil</a>
+</div>
+<div class="flex gap wrap-flex mt-lg">
+<div class="stat-chip"><b>1.495+</b><span>soal kurasi</span></div>
+<div class="stat-chip"><b>9</b><span>kategori seleksi</span></div>
+<div class="stat-chip"><b>4</b><span>langkah otomatis</span></div>
+</div>
 </div></section>
 
 <section class="section-sm"><div class="wrap">
@@ -44,18 +81,21 @@
 </div></section>
 
 <section class="section"><div class="wrap">
-<h2>Bagaimana AI Bekerja</h2>
+<span class="section-eyebrow">Cara Kerja</span>
+<h2 class="mt">Bagaimana <span class="gradient-text">AI Bekerja</span></h2>
 <p class="lead mt">Empat langkah otomatis, hasil dalam hitungan detik.</p>
 <div class="grid g4 mt-lg">
-<div class="card reveal d1"><span class="ico"><svg class="i"><use href="#i-upload"></use></svg></span><h4 class="mt">Upload Dokumen</h4><p class="muted mt">Unggah rapor, hasil SNBT/UTBK, atau nilai tryout dalam format apa pun.</p></div>
-<div class="card reveal d2"><span class="ico"><svg class="i"><use href="#i-doc"></use></svg></span><h4 class="mt">OCR & Deteksi Tabel Nilai</h4><p class="muted mt">AI membaca teks & tabel dari gambar maupun dokumen secara otomatis.</p></div>
-<div class="card reveal d3"><span class="ico"><svg class="i"><use href="#i-sparkles"></use></svg></span><h4 class="mt">Analisis & Prediksi AI</h4><p class="muted mt">Model dibandingkan dengan jutaan data historis untuk menghitung peluang lolos.</p></div>
-<div class="card reveal d4"><span class="ico"><svg class="i"><use href="#i-grad"></use></svg></span><h4 class="mt">Rekomendasi & Roadmap</h4><p class="muted mt">Dapatkan rekomendasi kampus, jurusan, dan rencana belajar harian.</p></div>
+<div class="card reveal d1 lift"><span class="ico"><svg class="i" aria-hidden="true"><use href="#i-upload"></use></svg></span><h3 class="mt" style="font-size:17px">1. Upload Dokumen</h3><p class="muted mt">Unggah rapor, hasil SNBT/UTBK, atau nilai tryout dalam format apa pun.</p></div>
+<div class="card reveal d2 lift"><span class="ico"><svg class="i" aria-hidden="true"><use href="#i-doc"></use></svg></span><h3 class="mt" style="font-size:17px">2. OCR &amp; Deteksi Tabel Nilai</h3><p class="muted mt">AI membaca teks &amp; tabel dari gambar maupun dokumen secara otomatis.</p></div>
+<div class="card reveal d3 lift"><span class="ico"><svg class="i" aria-hidden="true"><use href="#i-sparkles"></use></svg></span><h3 class="mt" style="font-size:17px">3. Analisis &amp; Prediksi AI</h3><p class="muted mt">Nilaimu dibandingkan dengan data historis passing grade untuk menghitung peluang lolos.</p></div>
+<div class="card reveal d4 lift"><span class="ico"><svg class="i" aria-hidden="true"><use href="#i-grad"></use></svg></span><h3 class="mt" style="font-size:17px">4. Rekomendasi &amp; Roadmap</h3><p class="muted mt">Dapatkan rekomendasi kampus, jurusan, dan rencana belajar harian.</p></div>
 </div>
+<div class="trust-bar mt-lg"><span><svg class="i" aria-hidden="true" style="color:var(--primary)"><use href="#i-doc"></use></svg> 1.495+ soal terkurasi</span><span><svg class="i" aria-hidden="true" style="color:var(--primary)"><use href="#i-grad"></use></svg> 9 kategori seleksi</span><span><svg class="i" aria-hidden="true" style="color:var(--up)"><use href="#i-shield-check"></use></svg> Dokumen diproses privat</span></div>
 </div></section>
 
 <section class="section" id="ringkasan"><div class="wrap">
-<h2>Ringkasan Analisis</h2>
+<span class="section-eyebrow">Hasil Analisis</span>
+<h2 class="mt">Ringkasan <span class="gradient-text">Analisis</span></h2>
 <p class="lead mt">Contoh hasil analisis dari dokumen tryout SNBT terakhir kamu.</p>
 <div class="grid g2 mt-lg">
 <div class="card reveal d1">
@@ -106,8 +146,9 @@
 </div></section>
 
 <section class="section"><div class="wrap">
-<h2>Prediksi Peluang Lolos</h2>
-<p class="lead mt">Berdasarkan nilai tryout terakhirmu, dibandingkan dengan data passing grade jutaan peserta lain.</p>
+<span class="section-eyebrow">Prediksi</span>
+<h2 class="mt">Prediksi <span class="gradient-text">Peluang Lolos</span></h2>
+<p class="lead mt">Berdasarkan nilai tryout terakhirmu, dibandingkan dengan data historis passing grade tiap kampus.</p>
 <div class="card mt-lg reveal">
 <div class="scroll-x">
 <table class="tbl">
@@ -127,7 +168,8 @@
 </div></section>
 
 <section class="section"><div class="wrap">
-<h2>Simulasi: Bagaimana jika nilaimu naik?</h2>
+<span class="section-eyebrow">Simulasi Interaktif</span>
+<h2 class="mt">Bagaimana jika nilaimu <span class="gradient-text">naik?</span></h2>
 <p class="lead mt">Geser slider untuk melihat bagaimana peluang lolosmu berubah secara real-time jika kamu berhasil meningkatkan nilai di tiap subtes.</p>
 <div class="card mt-lg reveal">
 <div class="grid g3">
@@ -177,7 +219,8 @@
 </div></section>
 
 <section class="section"><div class="wrap">
-<h2>Rekomendasi Kampus</h2>
+<span class="section-eyebrow">Rekomendasi</span>
+<h2 class="mt">Rekomendasi <span class="gradient-text">Kampus</span></h2>
 <p class="lead mt">Disusun dalam tiga kategori strategi pendaftaran: Dream, Target, dan Safe.</p>
 <div class="grid g3 mt-lg">
 <div class="card reveal d1 lift">
@@ -210,7 +253,7 @@
 
 <section class="section"><div class="wrap">
 <div class="flex between wrap-flex">
-<div><h2>Analisis Jurusan</h2><p class="lead mt">Difilter berdasarkan minat, bakat, dan kekuatan subtesmu.</p></div>
+<div><span class="section-eyebrow">Jurusan</span><h2 class="mt">Analisis <span class="gradient-text">Jurusan</span></h2><p class="lead mt">Difilter berdasarkan minat, bakat, dan kekuatan subtesmu.</p></div>
 <div class="chip-list"><span class="chip">STEM</span><span class="chip">Kesehatan</span><span class="chip">Bisnis</span><span class="chip">Sosial-Humaniora</span></div>
 </div>
 <div class="grid g3 mt-lg">
@@ -241,11 +284,37 @@
 </div>
 </div></section>
 
+<hr class="divider-glow">
+
+<section class="section"><div class="wrap">
+<span class="section-eyebrow">Metodologi</span>
+<h2 class="mt">Bagaimana prediksi <span class="gradient-text">dihitung</span></h2>
+<p class="lead mt" style="max-width:76ch">Transparansi itu penting. Prediksi peluang bukan angka ajaib — ini estimasi berbasis data yang bisa kamu pahami.</p>
+<div class="grid g3 mt-lg">
+<div class="glass-card">
+<h3 style="font-size:17px"><svg class="i" aria-hidden="true" style="color:var(--primary)"><use href="#i-chart"></use></svg> Data historis</h3>
+<p class="muted mt">Kami membandingkan nilaimu dengan rentang passing grade dan daya tampung tiap program studi dari tahun-tahun sebelumnya.</p>
+</div>
+<div class="glass-card">
+<h3 style="font-size:17px"><svg class="i" aria-hidden="true" style="color:var(--primary)"><use href="#i-target"></use></svg> Bobot per subtes</h3>
+<p class="muted mt">Tiap jurusan menimbang subtes secara berbeda — Saintek lebih berat ke penalaran matematika, Soshum ke literasi. Model menyesuaikan bobotnya.</p>
+</div>
+<div class="glass-card">
+<h3 style="font-size:17px"><svg class="i" aria-hidden="true" style="color:var(--up)"><use href="#i-shield-check"></use></svg> Estimasi, bukan jaminan</h3>
+<p class="muted mt">Angka peluang adalah panduan strategi pendaftaran, bukan kepastian. Hasil seleksi akhir tetap ditentukan oleh panitia resmi.</p>
+</div>
+</div>
+</div></section>
+
 <section class="section"><div class="wrap">
 <div class="card center reveal" style="padding:64px 24px">
-<h2>Mulai analisis nilaimu gratis</h2>
+<span class="section-eyebrow" style="justify-content:center">Gratis</span>
+<h2 class="mt">Mulai <span class="gradient-text">analisis nilaimu</span> gratis</h2>
 <p class="lead mt">Upload nilaimu sekarang dan dapatkan prediksi peluang lolos serta roadmap belajar personal dalam hitungan detik.</p>
-<button type="button" class="btn btn-primary btn-lg mt-lg" onclick="document.getElementById('fileInput').click()">Upload Nilai Sekarang</button>
+<div class="flex gap wrap-flex center mt-lg" style="justify-content:center">
+<button type="button" class="btn btn-primary btn-lg" onclick="document.getElementById('fileInput').click()">Upload Nilai Sekarang</button>
+<a href="tryout.html" class="btn btn-ghost btn-lg">Mulai Tryout Dulu</a>
+</div>
 </div>
 </div></section>
 

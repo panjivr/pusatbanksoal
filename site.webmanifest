@@ -1,0 +1,13 @@
+{
+  "name": "PusatBankSoal.id",
+  "short_name": "PusatBankSoal",
+  "description": "Platform Tryout & Bank Soal berbasis AI untuk seleksi CPNS, PPPK, SNBT/UTBK, Kedinasan, BUMN, dan TNI/POLRI.",
+  "start_url": "/",
+  "display": "standalone",
+  "theme_color": "#0a0e17",
+  "background_color": "#0a0e17",
+  "icons": [
+    { "src": "/assets/favicon.svg", "type": "image/svg+xml", "sizes": "any", "purpose": "any" },
+    { "src": "/assets/apple-touch-icon.png", "type": "image/png", "sizes": "180x180" }
+  ]
+}
