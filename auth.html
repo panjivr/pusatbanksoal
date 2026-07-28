@@ -9,6 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/style.css">
+<script src="assets/auth.js"></script>
 </head>
 <body>
 <nav class="nav"><div class="nav-in">
@@ -201,8 +202,10 @@
         setMsg(msg, 'Password minimal 6 karakter.', false);
         return;
       }
-      setMsg(msg, 'Berhasil! Mengarahkan ke dashboard...', true);
-      setTimeout(function(){ window.location = 'dashboard.html'; }, 800);
+      var r = window.PBS ? window.PBS.login(emailVal, passVal) : { ok:false, error:'Sistem akun tidak tersedia.' };
+      if(!r.ok){ setMsg(msg, r.error, false); return; }
+      setMsg(msg, 'Berhasil masuk! Mengarahkan ke dashboard...', true);
+      setTimeout(function(){ window.location = 'dashboard.html'; }, 700);
     });
   }
 
@@ -240,9 +243,21 @@
         setMsg(msg, 'Kamu harus menyetujui Syarat & Ketentuan.', false);
         return;
       }
-      setMsg(msg, 'Berhasil! Mengarahkan ke dashboard...', true);
-      setTimeout(function(){ window.location = 'dashboard.html'; }, 800);
+      var r = window.PBS ? window.PBS.register({
+        name:nameVal, email:emailVal, phone:phoneVal, password:passVal, target:targetVal
+      }) : { ok:false, error:'Sistem akun tidak tersedia.' };
+      if(!r.ok){ setMsg(msg, r.error, false); return; }
+      setMsg(msg, 'Akun berhasil dibuat! Mengarahkan ke dashboard...', true);
+      setTimeout(function(){ window.location = 'dashboard.html'; }, 700);
     });
+  }
+
+  // If already signed in, offer to continue instead of re-authenticating.
+  var me = window.PBS && window.PBS.currentUser();
+  if(me){
+    var lm = document.getElementById('loginMsg');
+    setMsg(lm, 'Kamu sudah masuk sebagai ' + me.name + '. Mengarahkan ke dashboard...', true);
+    setTimeout(function(){ window.location = 'dashboard.html'; }, 900);
   }
 })();
 </script>

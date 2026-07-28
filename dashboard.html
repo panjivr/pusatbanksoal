@@ -8,6 +8,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@500;600;700&display=swap" rel="stylesheet">
 <link rel="canonical" href="https://pusatbanksoal.id/dashboard.html">
 <link rel="stylesheet" href="assets/style.css">
+<script src="assets/auth.js"></script>
 </head>
 <body>
 <nav class="nav"><div class="nav-in">
@@ -23,10 +24,10 @@
 
 <div class="flex between items-center wrap-flex gap">
 <div class="flex items-center gap">
-<span class="avatar" style="width:52px;height:52px;font-size:18px">BS</span>
+<span class="avatar" id="dashAvatar" style="width:52px;height:52px;font-size:18px;background:var(--primary);color:var(--on-primary)">PB</span>
 <div>
-<h2>Halo, Budi Santoso 👋</h2>
-<p class="muted mt" style="margin-top:6px">Target: CPNS Kemenkeu 2026 · 45 hari lagi</p>
+<h2 id="dashHello">Halo 👋</h2>
+<p class="muted mt" id="dashTarget" style="margin-top:6px">Selamat datang kembali</p>
 </div>
 </div>
 <a href="tryout.html" class="btn btn-primary btn-lg">Lanjut Belajar</a>
@@ -35,31 +36,32 @@
 <div class="grid g4 mt-lg">
 <div class="card reveal d1 lift">
 <div class="muted stat-label"><svg class="i"><use href="#i-trend"></use></svg> Skor Rata-rata</div>
-<div class="stat-num num mt" data-count="412">412</div>
-<span class="badge badge-up mt">▲ +18 poin</span>
+<div class="stat-num num mt" id="kpiAvg">—</div>
+<span class="badge mt" id="kpiAvgBadge">Belum ada data</span>
 </div>
 <div class="card reveal d2 lift">
 <div class="muted stat-label"><svg class="i"><use href="#i-check"></use></svg> Tryout Selesai</div>
-<div class="stat-num num mt" data-count="87">87</div>
-<span class="badge badge-up mt">▲ +5 minggu ini</span>
+<div class="stat-num num mt" id="kpiCount">0</div>
+<span class="badge mt" id="kpiCountBadge">Mulai tryout pertamamu</span>
 </div>
 <div class="card reveal d3 lift">
-<div class="muted stat-label"><svg class="i"><use href="#i-trophy"></use></svg> Ranking Nasional</div>
-<div class="stat-num num mt" data-prefix="#" data-count="1204">#1.204</div>
-<span class="badge badge-up mt">▲ naik 320</span>
+<div class="muted stat-label"><svg class="i"><use href="#i-trophy"></use></svg> Skor Terbaik</div>
+<div class="stat-num num mt" id="kpiBest">—</div>
+<span class="badge mt" id="kpiBestBadge">Belum ada data</span>
 </div>
 <div class="card reveal d4 lift">
 <div class="muted stat-label"><svg class="i"><use href="#i-fire"></use></svg> Streak Belajar</div>
-<div class="stat-num num mt"><span data-count="23" data-suffix=" hari">23 hari</span> <svg class="i i-fill" style="color:var(--down)"><use href="#i-fire"></use></svg></div>
-<span class="badge badge-y mt">Jangan putus!</span>
+<div class="stat-num num mt"><span id="kpiStreak">0 hari</span> <svg class="i i-fill" style="color:var(--down)"><use href="#i-fire"></use></svg></div>
+<span class="badge badge-y mt" id="kpiStreakBadge">Kerjakan tryout hari ini!</span>
 </div>
 </div>
 
 <div class="grid g2 mt-lg">
 <div class="card reveal d1">
 <h3>Grafik Perkembangan Skor</h3>
-<p class="muted mt" style="font-size:13px">Rata-rata skor tryout 10 bulan terakhir</p>
-<svg viewBox="0 0 480 220" width="100%" style="margin-top:8px;height:auto" role="img" aria-label="Grafik perkembangan skor naik dari 298 menjadi 412">
+<p class="muted mt" style="font-size:13px">Persentase benar dari tryout yang kamu selesaikan</p>
+<div id="scoreChart" style="margin-top:8px"></div>
+<template id="scoreChartTpl"><svg viewBox="0 0 480 220" width="100%" style="margin-top:8px;height:auto" role="img" aria-label="Grafik perkembangan skor">
 <line x1="30" y1="10" x2="470" y2="10" stroke="var(--hair-dark)" stroke-width="1"/>
 <line x1="30" y1="52.5" x2="470" y2="52.5" stroke="var(--hair-dark)" stroke-width="1"/>
 <line x1="30" y1="95" x2="470" y2="95" stroke="var(--hair-dark)" stroke-width="1"/>
@@ -90,13 +92,14 @@
 <text x="372.2" y="200" text-anchor="middle" font-size="10" fill="var(--muted)">Mei</text>
 <text x="421.1" y="200" text-anchor="middle" font-size="10" fill="var(--muted)">Jun</text>
 <text x="470" y="200" text-anchor="end" font-size="10" fill="var(--primary)" font-weight="700">Jul</text>
-</svg>
+</svg></template>
 </div>
 
 <div class="card reveal d2">
 <h3>Radar Kemampuan</h3>
-<p class="muted mt" style="font-size:13px">Perbandingan kekuatan per subtes</p>
-<svg viewBox="0 0 300 300" width="100%" style="margin-top:8px;height:auto" role="img" aria-label="Radar kemampuan lima subtes: TWK, TIU, TKP, Literasi, Penalaran">
+<p class="muted mt" style="font-size:13px">Rata-rata penguasaan per subtes dari riwayatmu</p>
+<div id="radarChart" style="margin-top:8px"></div>
+<template id="radarTpl"><svg viewBox="0 0 300 300" width="100%" style="margin-top:8px;height:auto" role="img" aria-label="Radar kemampuan">
 <polygon points="150,113.33 184.87,138.67 171.56,179.67 128.44,179.67 115.13,138.67" fill="none" stroke="var(--hair-dark)" stroke-width="1"/>
 <polygon points="150,76.67 219.74,127.34 193.11,209.32 106.89,209.32 80.26,127.34" fill="none" stroke="var(--hair-dark)" stroke-width="1"/>
 <polygon points="150,40 254.62,116.01 214.66,238.99 85.34,238.99 45.38,116.01" fill="none" stroke="var(--hair-dark)" stroke-width="1"/>
@@ -116,30 +119,15 @@
 <text x="223" y="257" text-anchor="middle" font-size="11" fill="var(--muted)">TKP</text>
 <text x="77" y="257" text-anchor="middle" font-size="11" fill="var(--muted)">Literasi</text>
 <text x="2" y="113" text-anchor="start" font-size="11" fill="var(--muted)">Penalaran</text>
-</svg>
+</svg></template>
 </div>
 </div>
 
 <div class="grid g2 mt-lg">
 <div class="card reveal d1">
 <h3><svg class="i" style="color:var(--primary)"><use href="#i-target"></use></svg> Analisis Kelemahan (AI)</h3>
-<div class="mt-lg">
-<div class="flex between"><span>Penalaran Matematika</span><span class="num down">42%</span></div>
-<div class="bar down mt"><span style="width:42%"></span></div>
-</div>
-<div class="mt-lg">
-<div class="flex between"><span>Analitis &amp; Logika</span><span class="num">55%</span></div>
-<div class="bar mt"><span style="width:55%"></span></div>
-</div>
-<div class="mt-lg">
-<div class="flex between"><span>Tes Wawasan Kebangsaan</span><span class="num">78%</span></div>
-<div class="bar mt"><span style="width:78%"></span></div>
-</div>
-<div class="mt-lg">
-<div class="flex between"><span>Tes Karakteristik Pribadi</span><span class="num up">91%</span></div>
-<div class="bar up mt"><span style="width:91%"></span></div>
-</div>
-<p class="muted mt-lg" style="font-size:13px"><svg class="i" style="color:var(--primary)"><use href="#i-sparkles"></use></svg> AI merekomendasikan fokus 40% waktu belajarmu minggu ini pada <b style="color:var(--body)">Penalaran Matematika</b> — topik ini paling sering menyebabkan skor turun pada 5 tryout terakhir.</p>
+<div id="weakBody" class="mt-lg"></div>
+<p class="muted mt-lg" id="weakTip" style="font-size:13px"></p>
 </div>
 
 <div class="card reveal d2">
@@ -169,7 +157,7 @@
 <tr><td><span class="rank g1">1</span></td><td>Nadia Rahmawati</td><td>Surabaya</td><td class="num">1.024</td><td class="num up">+12</td></tr>
 <tr><td><span class="rank g2">2</span></td><td>Bagas Prasetyo</td><td>Bandung</td><td class="num">998</td><td class="num up">+5</td></tr>
 <tr><td><span class="rank g3">3</span></td><td>Cindy Amelia</td><td>Medan</td><td class="num">987</td><td class="num up">+8</td></tr>
-<tr style="background:var(--elevated)"><td><span class="rank">4</span></td><td>Budi Santoso <span class="badge badge-y" style="margin-left:6px">Kamu</span></td><td>Jakarta</td><td class="num">965</td><td class="num up">+18</td></tr>
+<tr style="background:var(--elevated)"><td><span class="rank">4</span></td><td><span id="lbMeName">Kamu</span> <span class="badge badge-y" style="margin-left:6px">Kamu</span></td><td id="lbMeCity">—</td><td class="num" id="lbMeScore">—</td><td class="num up">+18</td></tr>
 <tr><td><span class="rank">5</span></td><td>Fajar Nugroho</td><td>Yogyakarta</td><td class="num">958</td><td class="num down">−3</td></tr>
 <tr><td><span class="rank">6</span></td><td>Salsa Aulia</td><td>Makassar</td><td class="num">944</td><td class="num up">+2</td></tr>
 <tr><td><span class="rank">7</span></td><td>Rizky Ramadhan</td><td>Semarang</td><td class="num">931</td><td class="num down">−1</td></tr>
@@ -208,14 +196,130 @@
 
 <script>
 (function(){
-  var colors=['#2b3139','#5f5a38','#948337','#c8ac36','#fcd535'];
-  var box=document.getElementById('heatmap');
-  var html='';
-  for(var i=0;i<140;i++){
-    var lvl=Math.floor(Math.random()*5);
-    html+='<span style="width:13px;height:13px;border-radius:3px;background:'+colors[lvl]+'"></span>';
+  if (!window.PBS) return;
+  var user = PBS.requireAuth();          // guests are redirected to auth.html
+  if (!user) return;
+  PBS.recordActivity(1);                 // opening the dashboard counts as activity today
+
+  var hist = PBS.history();
+  var stats = PBS.stats();
+  var elev = '#2b3139';
+
+  function $(id){ return document.getElementById(id); }
+  function esc(s){ return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+  // ---- Header ----
+  $('dashAvatar').textContent = PBS.initials(user.name);
+  $('dashHello').textContent = 'Halo, ' + user.name.split(' ')[0] + ' 👋';
+  $('dashTarget').textContent = 'Target: ' + PBS.targetLabel(user.target) +
+    ' · ' + (hist.length ? hist.length + ' tryout selesai' : 'Ayo mulai tryout pertamamu');
+
+  // ---- KPI cards ----
+  function badge(el, cls, text){ var b=$(el); b.className='badge mt '+cls; b.textContent=text; }
+  if (stats.count){
+    $('kpiAvg').textContent = stats.avg + '%';
+    badge('kpiAvgBadge', stats.trend>=0?'badge-up':'badge-down',
+      (stats.trend>=0?'▲ +':'▼ ')+stats.trend+' vs sebelumnya');
+    $('kpiBest').textContent = stats.best + '%';
+    badge('kpiBestBadge','badge-y', esc(stats.last.testName||'Tryout'));
   }
-  box.innerHTML=html;
+  $('kpiCount').textContent = stats.count;
+  if (stats.count) badge('kpiCountBadge','badge-up','Total selesai');
+  var streak = PBS.streak();
+  $('kpiStreak').textContent = streak + ' hari';
+  $('kpiStreakBadge').textContent = streak>1 ? 'Pertahankan!' : 'Kerjakan tryout hari ini!';
+
+  // ---- Score line chart (real, chronological) ----
+  (function(){
+    var box=$('scoreChart'); if(!box) return;
+    var pts = hist.slice().reverse().map(function(h){ return Math.round(h.pct); });
+    if (pts.length < 2){
+      box.innerHTML = '<div class="center muted" style="padding:36px 0">'+
+        (pts.length? 'Selesaikan tryout kedua untuk melihat grafik tren.' :
+        'Belum ada data. <a class="accent" href="tryout.html">Mulai tryout</a> untuk membangun grafikmu.')+'</div>';
+      return;
+    }
+    var W=480,H=200,pad=30, n=pts.length;
+    var x=function(i){ return pad + (W-pad-10)*(n===1?0:i/(n-1)); };
+    var y=function(v){ return 10 + (H-20)*(1 - v/100); };
+    var line='', area='M'+x(0)+','+y(pts[0]);
+    pts.forEach(function(v,i){ var px=x(i).toFixed(1), py=y(v).toFixed(1);
+      line += (i? ' L':'M')+px+','+py; area += ' L'+px+','+py; });
+    area += ' L'+x(n-1).toFixed(1)+','+H+' L'+x(0).toFixed(1)+','+H+' Z';
+    var grid=''; [0,25,50,75,100].forEach(function(g){ var gy=y(g).toFixed(1);
+      grid+='<line x1="'+pad+'" y1="'+gy+'" x2="'+(W-10)+'" y2="'+gy+'" stroke="var(--hair-dark)"/>'+
+        '<text x="'+(pad-6)+'" y="'+(+gy+3)+'" text-anchor="end" font-size="9" fill="var(--muted)">'+g+'</text>'; });
+    var dots=pts.map(function(v,i){ return '<circle cx="'+x(i).toFixed(1)+'" cy="'+y(v).toFixed(1)+
+      '" r="'+(i===n-1?4:3)+'" fill="var(--primary)"/>'; }).join('');
+    box.innerHTML='<svg viewBox="0 0 '+W+' '+H+'" width="100%" style="height:auto" role="img" aria-label="Tren skor tryout">'+
+      grid+'<path d="'+area+'" fill="var(--primary)" opacity="0.12"/>'+
+      '<path d="'+line+'" fill="none" stroke="var(--primary)" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>'+
+      dots+'</svg>';
+  })();
+
+  // ---- Radar + weakness from real sub-mastery ----
+  var mastery = PBS.subMastery();
+  (function(){
+    var box=$('radarChart'); if(!box) return;
+    if (mastery.length < 3){
+      box.innerHTML='<div class="center muted" style="padding:44px 0">Selesaikan beberapa tryout agar radar kemampuanmu terbentuk.</div>';
+      return;
+    }
+    var top = mastery.slice(0,6); // weakest up to 6 axes
+    // reorder by name for stable layout
+    top = top.slice().sort(function(a,b){ return a.name<b.name?-1:1; });
+    var cx=150,cy=150,R=110,n=top.length, ring=[0.33,0.66,1];
+    function pt(i,r){ var ang=-Math.PI/2 + i*2*Math.PI/n;
+      return [cx+Math.cos(ang)*R*r, cy+Math.sin(ang)*R*r]; }
+    var svg='<svg viewBox="0 0 300 300" width="100%" style="height:auto" role="img" aria-label="Radar kemampuan">';
+    ring.forEach(function(r){ var p=top.map(function(_,i){ var q=pt(i,r); return q[0].toFixed(1)+','+q[1].toFixed(1); }).join(' ');
+      svg+='<polygon points="'+p+'" fill="none" stroke="var(--hair-dark)"/>'; });
+    top.forEach(function(_,i){ var q=pt(i,1); svg+='<line x1="150" y1="150" x2="'+q[0].toFixed(1)+'" y2="'+q[1].toFixed(1)+'" stroke="var(--hair-dark)"/>'; });
+    var poly=top.map(function(s,i){ var q=pt(i, Math.max(.08,s.pct/100)); return q[0].toFixed(1)+','+q[1].toFixed(1); }).join(' ');
+    svg+='<polygon points="'+poly+'" fill="var(--primary)" fill-opacity="0.18" stroke="var(--primary)" stroke-width="2" stroke-linejoin="round"/>';
+    top.forEach(function(s,i){ var q=pt(i,1.16); var anchor=Math.abs(q[0]-cx)<12?'middle':(q[0]>cx?'start':'end');
+      var lbl=s.name.length>12?s.name.slice(0,11)+'…':s.name;
+      svg+='<text x="'+q[0].toFixed(1)+'" y="'+q[1].toFixed(1)+'" text-anchor="'+anchor+'" font-size="10" fill="var(--muted)">'+esc(lbl)+'</text>'; });
+    svg+='</svg>';
+    box.innerHTML=svg;
+  })();
+
+  (function(){
+    var box=$('weakBody'), tip=$('weakTip'); if(!box) return;
+    if (!mastery.length){
+      box.innerHTML='<p class="muted">Analisis muncul setelah kamu menyelesaikan tryout — sistem membaca performa per subtes dari jawabanmu.</p>';
+      tip.innerHTML=''; return;
+    }
+    box.innerHTML = mastery.slice(0,5).map(function(s){
+      var cls = s.pct<55?'down':(s.pct>=80?'up':'');
+      return '<div class="mt-lg"><div class="flex between"><span>'+esc(s.name)+'</span>'+
+        '<span class="num '+cls+'">'+s.pct+'%</span></div>'+
+        '<div class="bar '+cls+' mt"><span style="width:'+s.pct+'%"></span></div></div>';
+    }).join('');
+    var w = mastery[0];
+    tip.innerHTML='<svg class="i" style="color:var(--primary)"><use href="#i-sparkles"></use></svg> '+
+      'Fokus belajarmu minggu ini sebaiknya di <b style="color:var(--body)">'+esc(w.name)+'</b> — '+
+      'penguasaanmu baru <b>'+w.pct+'%</b> dari '+w.n+' soal yang pernah kamu kerjakan pada subtes ini.';
+  })();
+
+  // ---- Leaderboard personalization ----
+  if ($('lbMeName')) $('lbMeName').textContent = user.name;
+  if ($('lbMeCity')) $('lbMeCity').textContent = '—';
+  if ($('lbMeScore')) $('lbMeScore').textContent = stats.best ? stats.best : '—';
+
+  // ---- Real consistency heatmap from activity log ----
+  (function(){
+    var box=$('heatmap'); if(!box) return;
+    var act=PBS.activity(), colors=['#2b3139','#3f4a2e','#7a6c2e','#c8ac36','#fcd535'];
+    var days=140, html='', d=new Date(); d.setDate(d.getDate()-(days-1));
+    for(var i=0;i<days;i++){
+      var key=d.toISOString().slice(0,10), c=act[key]||0;
+      var lvl=c===0?0:c===1?1:c===2?2:c<=4?3:4;
+      html+='<span title="'+key+': '+c+' aktivitas" style="width:13px;height:13px;border-radius:3px;background:'+colors[lvl]+'"></span>';
+      d.setDate(d.getDate()+1);
+    }
+    box.innerHTML=html;
+  })();
 })();
 </script>
 

@@ -8,6 +8,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@500;600;700&display=swap" rel="stylesheet">
 <link rel="canonical" href="https://pusatbanksoal.id/tryout.html">
 <link rel="stylesheet" href="assets/style.css">
+<script src="assets/auth.js"></script>
 </head>
 <body>
 <nav class="nav"><div class="nav-in">
@@ -707,7 +708,8 @@
       id: (window.PBSCert ? window.PBSCert.genId() : 'PBS-' + Date.now()),
       date: new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })
     };
-    saveHistory(lastResult, correct, total, pct);
+    saveHistory(lastResult, correct, total, pct, subs);
+    if (window.PBS) window.PBS.recordActivity(2);
 
     var reviewList = document.getElementById('reviewList');
     reviewList.innerHTML = '';
@@ -917,14 +919,14 @@
   function startEnglish(key){ var e = ENG[key]; if (e) startSectionExam(key, e.name, e.defs); }
 
   // ---------- History + certificate persistence (localStorage) ----------
-  function saveHistory(res, correct, total, pct){
+  function saveHistory(res, correct, total, pct, subs){
     try {
       var list = JSON.parse(localStorage.getItem('pbs_history') || '[]');
       list.unshift({
         id: res.id, testName: res.testName, badge: res.badge,
         scoreBig: res.scoreBig, scoreCaption: res.scoreCaption,
         predikat: res.predikat, percentile: res.percentile,
-        correct: correct, total: total, pct: pct,
+        correct: correct, total: total, pct: pct, subs: subs || null,
         date: res.date, ts: Date.now()
       });
       if (list.length > 50) list = list.slice(0, 50);
@@ -951,6 +953,13 @@
         c.style.display = match ? '' : 'none';
       });
     });
+  })();
+
+  // Prefill certificate name from the signed-in account
+  (function(){
+    var u = window.PBS && window.PBS.currentUser();
+    var el = document.getElementById('certName');
+    if (u && el && !el.value) el.value = u.name;
   })();
 
   window.startExam = startExam;

@@ -247,6 +247,29 @@ button,summary,.pill-tab button,[role="radio"],[role="button"],.admin-nav,label[
 /* Wider breakpoint container per skill (1440px surfaces) */
 @media(min-width:1441px){.wrap{max-width:1360px}}
 
+/* Session user menu (nav) */
+.pbs-usermenu{position:relative}
+.pbs-userbtn{display:inline-flex;align-items:center;gap:8px;background:var(--card);
+  border:1px solid var(--hair-dark);color:var(--body);padding:5px 12px 5px 5px;
+  border-radius:var(--r-pill);font-family:var(--font);font-weight:600;font-size:14px;
+  transition:border-color .18s ease}
+.pbs-userbtn:hover{border-color:var(--muted)}
+.pbs-userbtn .avatar{width:30px;height:30px;background:var(--primary);color:var(--on-primary)}
+.pbs-dropdown{position:absolute;top:calc(100% + 10px);right:0;min-width:230px;
+  background:var(--card);border:1px solid var(--hair-dark);border-radius:var(--r-lg);
+  padding:6px;box-shadow:0 18px 44px -18px rgba(0,0,0,.8);z-index:60;
+  opacity:0;visibility:hidden;transform:translateY(-6px);
+  transition:opacity .16s ease,transform .16s ease,visibility .16s}
+.pbs-dropdown.open{opacity:1;visibility:visible;transform:none}
+.pbs-dd-head{padding:10px 12px 12px;border-bottom:1px solid var(--hair-dark);margin-bottom:6px}
+.pbs-dropdown a,.pbs-dropdown button{display:flex;align-items:center;gap:10px;width:100%;
+  text-align:left;background:none;border:none;color:var(--body);font-family:var(--font);
+  font-size:14px;font-weight:500;padding:10px 12px;border-radius:var(--r-md);cursor:pointer;
+  transition:background .15s ease}
+.pbs-dropdown a:hover,.pbs-dropdown button:hover{background:var(--elevated)}
+.pbs-dropdown .pbs-logout{color:var(--down)}
+@media(max-width:900px){.pbs-userbtn{padding:5px}}
+
 /* Respect reduced motion — disable all non-essential animation */
 @media (prefers-reduced-motion: reduce){
   *,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;
