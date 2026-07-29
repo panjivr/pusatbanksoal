@@ -13,6 +13,19 @@ Dibangun sebagai situs statis (HTML + CSS + JS vanilla, tanpa build step) dengan
 - **Sertifikat terverifikasi:** setiap hasil bisa dicek keasliannya di `verifikasi.html` (checksum + tautan/ID lintas perangkat).
 - **SEO lengkap:** meta & Open Graph per halaman, canonical, `robots.txt`, `sitemap.xml`, dan JSON-LD terstruktur.
 
+### Riset & Skripsi (AI Research & Thesis Workspace)
+
+Fitur unggulan baru untuk mahasiswa tingkat akhir — jujur dan tanpa mengarang:
+
+- **Pencarian ilmiah nyata:** telusuri jurnal & artikel asli langsung dari **OpenAlex** dan **Crossref**, lengkap dengan DOI yang bisa diverifikasi — bukan referensi karangan.
+- **Pustaka referensi:** simpan sumber ke library dan ekspor sebagai **BibTeX / RIS**.
+- **Sitasi otomatis:** daftar pustaka & kutipan dalam gaya **APA 7, IEEE, Harvard, dan Vancouver** secara konsisten.
+- **Workspace BAB I–III:** susun kerangka proposal (latar belakang, rumusan masalah, tinjauan pustaka, metodologi) sebagai titik awal terstruktur.
+- **Cek konsistensi:** deteksi sitasi yang belum terpakai atau referensi yang belum lengkap.
+- **Ekspor:** unduh draft sebagai **DOCX / PDF**.
+
+Sepenuhnya **client-side** (data tersimpan lokal di perangkat, tidak diunggah ke server), **account-gated**, dan **jujur** — tanpa sitasi atau data palsu.
+
 ## Halaman
 
 | File | Isi |
@@ -25,6 +38,9 @@ Dibangun sebagai situs statis (HTML + CSS + JS vanilla, tanpa build step) dengan
 | `analisis.html` | AI Analisis Nilai: upload dokumen, prediksi peluang lolos, **simulasi peningkatan nilai** interaktif, rekomendasi kampus & jurusan |
 | `verifikasi.html` | Verifikasi keaslian sertifikat (publik, terindeks) |
 | `admin.html` | Panel admin internal (noindex,nofollow): manajemen soal, review AI, pengguna, pembayaran, konten & SEO, audit log |
+| `skripsi.html` | **Riset & Skripsi** — landing AI Research & Thesis Workspace: pencarian sumber ilmiah, sitasi otomatis, kerangka BAB I–III |
+| `skripsi-app.html` | Workspace skripsi interaktif (noindex): pustaka referensi, editor sitasi, draft BAB, ekspor DOCX/PDF |
+| `assets/thesis.js` | Logika Riset & Skripsi: query OpenAlex/Crossref, formatter sitasi, penyimpanan lokal draft |
 | `assets/style.css` | Design system (token warna, tipografi, komponen premium) |
 
 ## Menjalankan
