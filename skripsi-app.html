@@ -180,6 +180,8 @@
   function normText(s){ return String(s==null?'':s).toLowerCase().replace(/\s+/g,' ').replace(/^\s+|\s+$/g,''); }
 
   var STYLES=[['apa7','APA 7'],['ieee','IEEE'],['harvard','Harvard'],['vancouver','Vancouver'],['chicago','Chicago'],['mla','MLA']];
+  var SPACINGS=[['1.15','Spasi 1,15 (proposal)'],['1.5','Spasi 1,5 (skripsi)'],['2','Spasi 2,0']];
+  function spacingOptions(sel){ sel=sel||'1.5'; return SPACINGS.map(function(s){ return '<option value="'+s[0]+'"'+(s[0]===sel?' selected':'')+'>'+s[1]+'</option>'; }).join(''); }
   function styleOptions(sel){
     return STYLES.map(function(s){ return '<option value="'+s[0]+'"'+(s[0]===sel?' selected':'')+'>'+s[1]+'</option>'; }).join('');
   }
@@ -488,7 +490,7 @@
 
     wiz=null;
     var projForSearch=THESIS.getProject(pid);
-    Promise.resolve(THESIS.autoSearch(projForSearch,{limit:8})).then(function(works){
+    Promise.resolve(THESIS.autoSearch(projForSearch,{limit:50})).then(function(works){
       foundRefs[pid]=(works&&works.length)?works.slice():[];
       autoSearchErr[pid]=false;
       view='proposal'; propMode='preview'; render();
@@ -553,6 +555,7 @@
           '<div class="seg" role="group" aria-label="Mode tampilan"><button id="modePreview" class="'+(propMode==='preview'?'on':'')+'">Pratinjau</button><button id="modeEdit" class="'+(propMode==='edit'?'on':'')+'">Edit</button></div>'+
           '<span style="flex:1"></span>'+
           '<select class="f-select" id="propStyle" style="max-width:150px;padding:8px 10px" aria-label="Gaya sitasi">'+styleOptions(style)+'</select>'+
+          '<select class="f-select" id="propSpacing" style="max-width:170px;padding:8px 10px" aria-label="Spasi baris">'+spacingOptions(p.lineSpacing)+'</select>'+
           '<button class="btn btn-ghost btn-sm" id="propRefresh">'+icon('i-refresh')+' Perbarui Rujukan</button>'+
           '<button class="btn btn-ghost btn-sm" id="propCheck">'+icon('i-shield-check')+' Periksa Konsistensi</button>'+
         '</div>'+
@@ -599,6 +602,7 @@
     byId('modePreview').addEventListener('click',function(){ propMode='preview'; viewProposal(); });
     byId('modeEdit').addEventListener('click',function(){ propMode='edit'; viewProposal(); });
     byId('propStyle').addEventListener('change',function(){ THESIS.updateProject(p.id,{citationStyle:val('propStyle')}); viewProposal(); });
+    byId('propSpacing').addEventListener('change',function(){ THESIS.updateProject(p.id,{lineSpacing:val('propSpacing')}); viewProposal(); });
     byId('propRefresh').addEventListener('click',function(){ doRefreshRefs(p,this); });
     byId('propCheck').addEventListener('click',function(){
       var out=byId('propCheckOut'); out.style.display='block';
@@ -674,7 +678,7 @@
   }
   function doRefreshRefs(p,btn){
     var lbl=btn.innerHTML; btn.disabled=true; btn.textContent='Mencari…';
-    Promise.resolve(THESIS.autoSearch(THESIS.activeProject(),{limit:8})).then(function(works){
+    Promise.resolve(THESIS.autoSearch(THESIS.activeProject(),{limit:50})).then(function(works){
       btn.disabled=false;
       foundRefs[p.id]=(works&&works.length)?works.slice():[];
       autoSearchErr[p.id]=!(works&&works.length);

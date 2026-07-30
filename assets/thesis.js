@@ -1833,9 +1833,11 @@
     }
     dp += '</div></section>';
 
+    var sp = String((project && project.lineSpacing) || '1.5');
+    if (['1.15', '1.5', '2', '2.0'].indexOf(sp) === -1) sp = '1.5';
     var cssStyle =
       '<style>' +
-      '.proposal{font-family:"Times New Roman",Georgia,serif;color:#111;line-height:1.6;font-size:12pt;max-width:820px;margin:0 auto;}' +
+      '.proposal{font-family:"Times New Roman",Georgia,serif;color:#111;line-height:' + sp + ';font-size:12pt;max-width:820px;margin:0 auto;}' +
       '.proposal .page{background:#fff;padding:48px 56px;margin:0 auto 24px;box-shadow:0 1px 4px rgba(0,0,0,.15);}' +
       '.proposal h2,.proposal h3,.proposal h4{font-weight:bold;}' +
       '.proposal h2.ctr{text-align:center;font-size:14pt;margin:0 0 20px;line-height:1.4;}' +
