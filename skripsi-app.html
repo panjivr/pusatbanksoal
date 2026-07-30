@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Workspace Riset & Skripsi | PusatBankSoal.id</title>
-<meta name="description" content="Workspace riset & skripsi berbasis AI: kelola proyek, cari sumber ilmiah terverifikasi (OpenAlex/Crossref), susun rumusan & metode, dan ekspor daftar pustaka.">
+<meta name="description" content="Buat proposal skripsi S1 (BAB I–III + daftar isi + daftar pustaka) hanya dengan klik-klik: jawab beberapa pilihan, judul & rujukan dibuat otomatis dari sumber ilmiah nyata.">
 <meta name="robots" content="noindex,follow">
 <link rel="canonical" href="https://pusatbanksoal.id/skripsi-app.html">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -17,7 +17,7 @@
 <meta property="og:site_name" content="PusatBankSoal.id">
 <meta property="og:locale" content="id_ID">
 <meta property="og:title" content="Workspace Riset & Skripsi | PusatBankSoal.id">
-<meta property="og:description" content="Workspace riset & skripsi berbasis AI: sumber ilmiah terverifikasi, rumusan & metode, ekspor daftar pustaka.">
+<meta property="og:description" content="Buat proposal skripsi S1 dengan klik-klik: judul, rumusan, metode & daftar pustaka otomatis dari sumber ilmiah nyata.">
 <meta property="og:url" content="https://pusatbanksoal.id/skripsi-app.html">
 <meta property="og:image" content="https://pusatbanksoal.id/assets/og.png">
 <meta property="og:image:width" content="1200">
@@ -26,7 +26,8 @@
 <link rel="stylesheet" href="assets/style.css">
 <script src="assets/auth.js"></script>
 <style>
-/* Workspace-scoped layout. Uses brand tokens from style.css only — no hardcoded brand hex. */
+/* Workspace-scoped layout. Uses brand tokens from style.css only — no hardcoded brand hex
+   except brand gold tint on selected states (matches existing .chip-btn.on convention). */
 .ws-wrap{max-width:1280px;margin:0 auto;padding:24px 20px 64px}
 .ws-shell{display:grid;grid-template-columns:248px 1fr;gap:22px;align-items:start}
 .ws-side{position:sticky;top:80px;background:var(--card);border:1px solid var(--hair-dark);border-radius:var(--r-lg,16px);padding:12px;box-shadow:var(--sh-sm)}
@@ -64,6 +65,40 @@
 .gate-wrap{min-height:60vh;display:flex;align-items:center;justify-content:center;padding:40px 20px}
 .gate-card{max-width:440px;text-align:center;background:var(--card);border:1px solid var(--hair-dark);border-radius:var(--r-lg,16px);padding:40px 32px;box-shadow:var(--sh-lg)}
 .li-list{list-style:none;margin:0;padding:0}
+/* ---- wizard (Buat Cepat) ---- */
+.wiz-steps{display:flex;flex-wrap:wrap;gap:6px 14px;margin:14px 0 22px;padding:0;list-style:none}
+.wiz-steps li{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--muted)}
+.wiz-steps li .dot{width:26px;height:26px;border-radius:50%;display:grid;place-items:center;background:var(--elevated);border:1px solid var(--hair-dark);font-weight:700;font-size:12px;color:var(--muted-strong)}
+.wiz-steps li.active{color:var(--on-dark)}
+.wiz-steps li.active .dot{background:var(--primary);border-color:var(--primary);color:var(--on-primary)}
+.wiz-steps li.done .dot{background:var(--up);border-color:var(--up);color:#fff}
+.opt-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:12px;margin-top:6px}
+.opt-card{display:flex;gap:12px;align-items:flex-start;text-align:left;width:100%;background:var(--elevated);border:1px solid var(--hair-dark);border-radius:12px;padding:14px;cursor:pointer;font:inherit;color:var(--body);transition:border-color .15s,box-shadow .15s,background .15s}
+.opt-card:hover{border-color:var(--muted)}
+.opt-card.on{border-color:var(--primary);box-shadow:inset 0 0 0 1px var(--primary);background:rgba(252,213,53,.10)}
+.opt-key{flex:none;width:28px;height:28px;border-radius:8px;display:grid;place-items:center;background:var(--card);border:1px solid var(--hair-dark);font-weight:800;font-size:13px;color:var(--muted-strong)}
+.opt-card.on .opt-key{background:var(--primary);border-color:var(--primary);color:var(--on-primary)}
+.opt-tx{min-width:0}
+.opt-tx b{display:block;color:var(--on-dark);font-size:14px;line-height:1.3}
+.opt-tx span{display:block;color:var(--muted);font-size:12.5px;margin-top:3px}
+.wiz-actions{display:flex;justify-content:space-between;gap:10px;margin-top:22px;flex-wrap:wrap}
+.wiz-note{color:var(--muted);font-size:13px;margin-top:6px}
+/* ---- proposal view ---- */
+.prop-shell{display:grid;grid-template-columns:220px 1fr;gap:18px;align-items:start;margin-top:16px}
+.prop-outline{position:sticky;top:80px;background:var(--card);border:1px solid var(--hair-dark);border-radius:14px;padding:12px;max-height:calc(100vh - 100px);overflow:auto}
+.prop-outline h6{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:6px 6px 8px}
+.prop-jump{display:block;width:100%;text-align:left;background:transparent;border:0;color:var(--muted-strong);font:inherit;font-size:13px;padding:6px 8px;border-radius:8px;cursor:pointer}
+.prop-jump:hover{background:var(--elevated);color:var(--on-dark)}
+.prop-jump.ch{font-weight:700;color:var(--on-dark);margin-top:6px}
+.prop-jump.sec{padding-left:18px;font-size:12.5px}
+.prop-doc{min-width:0}
+.prop-frame{width:100%;height:72vh;border:1px solid var(--hair-dark);border-radius:12px;background:#fff}
+.seg{display:inline-flex;background:var(--elevated);border:1px solid var(--hair-dark);border-radius:10px;padding:3px}
+.seg button{background:transparent;border:0;color:var(--muted-strong);font:inherit;font-size:13px;padding:6px 14px;border-radius:8px;cursor:pointer}
+.seg button.on{background:var(--primary);color:var(--on-primary);font-weight:700}
+.prop-bar{height:8px;border-radius:999px;background:var(--elevated);overflow:hidden;border:1px solid var(--hair-dark)}
+.prop-bar>span{display:block;height:100%;background:var(--primary)}
+.edit-sec{margin-top:16px;border-top:1px solid var(--hair-soft);padding-top:14px}
 @media(max-width:860px){
   .ws-shell{grid-template-columns:1fr}
   .ws-side{position:fixed;top:0;left:0;bottom:0;width:270px;z-index:150;border-radius:0;transform:translateX(-100%);transition:transform .22s;overflow:auto}
@@ -72,6 +107,8 @@
   .f-grid{grid-template-columns:1fr}
   .ws-scrim{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:140;display:none}
   .ws-scrim.show{display:block}
+  .prop-shell{grid-template-columns:1fr}
+  .prop-outline{position:static;max-height:none}
 }
 @media print{
   .nav,.footer,.ws-side,.ws-topbar,.ws-toast,.no-print{display:none!important}
@@ -111,6 +148,7 @@
   /* ---------- helpers ---------- */
   function esc(s){ return String(s==null?'':s).replace(/[&<>"']/g,function(c){
     return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); }
+  function trim(s){ return String(s==null?'':s).replace(/^\s+|\s+$/g,''); }
   function icon(id){ return '<svg class="i" aria-hidden="true"><use href="#'+id+'"></use></svg>'; }
   function md(s){ // render *italic* markers from THESIS citation strings, escape the rest
     var parts = String(s==null?'':s).split(/(\*[^*]+\*)/);
@@ -139,6 +177,7 @@
   }
   function byId(id){ return document.getElementById(id); }
   function val(id){ var e=byId(id); return e?e.value:''; }
+  function normText(s){ return String(s==null?'':s).toLowerCase().replace(/\s+/g,' ').replace(/^\s+|\s+$/g,''); }
 
   var STYLES=[['apa7','APA 7'],['ieee','IEEE'],['harvard','Harvard'],['vancouver','Vancouver']];
   function styleOptions(sel){
@@ -147,6 +186,11 @@
   function authorsLine(a){
     if(!a||!a.length) return 'Penulis tidak diketahui';
     return a.map(function(x){ return x.name||[x.given,x.family].filter(Boolean).join(' '); }).filter(Boolean).join('; ');
+  }
+  function fieldLabel(cat,value){
+    var a=(THESIS.FIELDS&&THESIS.FIELDS[cat])||[];
+    for(var i=0;i<a.length;i++) if(a[i].value===value) return a[i].label;
+    return value||'';
   }
 
   /* ---------- gate / error ---------- */
@@ -173,25 +217,28 @@
   var NAV=[
     {group:'Proyek', items:[
       {id:'proyek', label:'Proyek', icon:'i-layers'},
-      {id:'ringkasan', label:'Ringkasan', icon:'i-chart'}
+      {id:'wizard', label:'Buat Cepat', icon:'i-flag'}
     ]},
-    {group:'Menyusun', items:[
-      {id:'identitas', label:'Identitas & Kampus', icon:'i-user'},
-      {id:'judul', label:'Judul & Topik', icon:'i-flag'},
+    {group:'Dokumen', items:[
+      {id:'proposal', label:'Proposal', icon:'i-book'}
+    ]},
+    {group:'Lanjutan', items:[
       {id:'sumber', label:'Sumber Ilmiah', icon:'i-search'},
       {id:'rumusan', label:'Rumusan & Tujuan', icon:'i-list'},
       {id:'metode', label:'Metode', icon:'i-brain'},
-      {id:'bab', label:'Kerangka BAB', icon:'i-book'}
-    ]},
-    {group:'Finalisasi', items:[
-      {id:'konsistensi', label:'Konsistensi', icon:'i-shield-check'},
-      {id:'ekspor', label:'Ekspor', icon:'i-doc'}
+      {id:'identitas', label:'Identitas & Kampus', icon:'i-user'},
+      {id:'konsistensi', label:'Konsistensi', icon:'i-shield-check'}
     ]}
   ];
 
-  var view='proyek';
-  function go(v){ view=v; render(); if(window.matchMedia('(max-width:860px)').matches) closeSide(); window.scrollTo(0,0); }
+  var view='proposal';
+  var wiz=null;           // wizard state
+  var propMode='preview'; // proposal view mode: preview | edit
+  var refFilter='all';
+  var foundRefs={};       // pid -> [work] auto-found, pending add
+  var autoSearchErr={};   // pid -> bool
 
+  function go(v){ view=v; render(); if(window.matchMedia('(max-width:860px)').matches) closeSide(); window.scrollTo(0,0); }
   function openSide(){ var s=byId('wsSide'),sc=byId('wsScrim'); if(s)s.classList.add('open'); if(sc)sc.classList.add('show'); }
   function closeSide(){ var s=byId('wsSide'),sc=byId('wsScrim'); if(s)s.classList.remove('open'); if(sc)sc.classList.remove('show'); }
 
@@ -214,155 +261,25 @@
           inner+
         '</section>'+
       '</div>';
-    // wire nav
     var btns=root.querySelectorAll('.ws-nav-btn');
-    Array.prototype.forEach.call(btns,function(b){ b.addEventListener('click',function(){ go(b.getAttribute('data-view')); }); });
+    Array.prototype.forEach.call(btns,function(b){ b.addEventListener('click',function(){
+      var v=b.getAttribute('data-view');
+      if(v==='wizard' && !wiz) wiz=newWiz();
+      go(v);
+    }); });
     var mt=byId('wsMenuToggle'); if(mt) mt.addEventListener('click',openSide);
     var sc=byId('wsScrim'); if(sc) sc.addEventListener('click',closeSide);
   }
 
-  function needProject(){
+  function needProject(msg){
     return '<div class="ws-card ws-empty">'+
       '<div style="font-size:26px;color:var(--primary)">'+icon('i-layers')+'</div>'+
       '<h3 style="margin-top:10px;color:var(--on-dark)">Belum ada proyek aktif</h3>'+
-      '<p class="muted" style="margin-top:8px">Buat atau pilih proyek dulu untuk mulai bekerja.</p>'+
-      '<div style="margin-top:16px"><button class="btn btn-primary" id="goProyek">Ke daftar Proyek</button></div></div>';
+      '<p class="muted" style="margin-top:8px">'+esc(msg||'Buat proposal skripsi dulu untuk mulai bekerja.')+'</p>'+
+      '<div style="margin-top:16px"><button class="btn btn-primary" id="goWizard">Buat Skripsi (Cepat)</button></div></div>';
   }
+  function wireNeed(){ var g=byId('goWizard'); if(g) g.addEventListener('click',function(){ wiz=newWiz(); go('wizard'); }); }
 
-  /* ============================================================ VIEWS */
-
-  /* ---- Proyek ---- */
-  function viewProyek(){
-    var projects=THESIS.listProjects();
-    var active=THESIS.activeProject();
-    var cards='';
-    if(!projects.length){
-      cards='<div class="ws-card ws-empty">Belum ada proyek. Buat proyek pertamamu di bawah.</div>';
-    } else {
-      cards='<div style="display:grid;gap:12px">';
-      for(var i=0;i<projects.length;i++){
-        var p=projects[i];
-        cards+='<div class="ws-card" style="display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;align-items:center">'+
-          '<div style="min-width:0"><div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">'+
-            '<h3 style="color:var(--on-dark);font-size:17px">'+esc(p.title)+'</h3>'+
-            (active&&active.id===p.id?'<span class="badge badge-up">Aktif</span>':'')+'</div>'+
-            '<p class="muted" style="margin-top:6px;font-size:13px">'+esc(p.university||'Kampus belum diisi')+(p.faculty?' · '+esc(p.faculty):'')+' · '+esc((p.state&&p.state.references?p.state.references.length:0))+' referensi</p>'+
-            '<p class="muted" style="font-size:12px;margin-top:2px">Diperbarui '+esc((p.updatedAt||'').slice(0,10))+'</p>'+
-          '</div>'+
-          '<div style="display:flex;gap:8px;flex-wrap:wrap">'+
-            '<button class="btn btn-primary btn-sm" data-open="'+p.id+'">Buka</button>'+
-            '<button class="btn btn-ghost btn-sm" data-del="'+p.id+'">Hapus</button>'+
-          '</div></div>';
-      }
-      cards+='</div>';
-    }
-    var form='<div class="ws-card" style="margin-top:16px"><h3 style="color:var(--on-dark)">Proyek Baru</h3>'+
-      '<p class="muted" style="font-size:13px;margin-top:4px">Isi minimal judul/topik. Detail lain bisa dilengkapi nanti.</p>'+
-      '<div style="margin-top:16px">'+
-      '<div class="f-row"><label class="f-label" for="npTitle">Judul / Topik Proyek *</label><input class="f-input" id="npTitle" placeholder="mis. Pengaruh Kualitas Layanan terhadap Kepuasan Pelanggan"></div>'+
-      '<div class="f-grid">'+
-        '<div class="f-row"><label class="f-label" for="npType">Jenis</label><select class="f-select" id="npType"><option value="skripsi">Skripsi (S1)</option><option value="tesis">Tesis (S2)</option><option value="disertasi">Disertasi (S3)</option></select></div>'+
-        '<div class="f-row"><label class="f-label" for="npDegree">Jenjang / Gelar</label><input class="f-input" id="npDegree" placeholder="mis. S.Kom"></div>'+
-      '</div>'+
-      '<div class="f-grid">'+
-        '<div class="f-row"><label class="f-label" for="npUni">Universitas</label><input class="f-input" id="npUni" placeholder="Nama universitas"></div>'+
-        '<div class="f-row"><label class="f-label" for="npFac">Fakultas</label><input class="f-input" id="npFac" placeholder="Fakultas"></div>'+
-      '</div>'+
-      '<div class="f-grid">'+
-        '<div class="f-row"><label class="f-label" for="npProg">Program Studi</label><input class="f-input" id="npProg" placeholder="Program studi"></div>'+
-        '<div class="f-row"><label class="f-label" for="npStyle">Gaya Sitasi</label><select class="f-select" id="npStyle">'+styleOptions('apa7')+'</select></div>'+
-      '</div>'+
-      '<button class="btn btn-primary" id="npCreate">Buat Proyek</button>'+
-      '</div></div>';
-
-    shell('<h1 style="font-size:22px;color:var(--on-dark)">Proyek</h1><p class="muted" style="margin-top:6px;margin-bottom:16px">Semua proyek risetmu.</p>'+cards+form,'Proyek');
-
-    Array.prototype.forEach.call(root.querySelectorAll('[data-open]'),function(b){
-      b.addEventListener('click',function(){ THESIS.setActive(b.getAttribute('data-open')); go('ringkasan'); });
-    });
-    Array.prototype.forEach.call(root.querySelectorAll('[data-del]'),function(b){
-      b.addEventListener('click',function(){
-        if(window.confirm('Hapus proyek ini beserta seluruh datanya? Tindakan tidak bisa dibatalkan.')){
-          THESIS.deleteProject(b.getAttribute('data-del')); toast('Proyek dihapus.'); render();
-        }
-      });
-    });
-    byId('npCreate').addEventListener('click',function(){
-      var title=val('npTitle').trim();
-      if(!title){ toast('Judul/topik proyek wajib diisi.'); byId('npTitle').focus(); return; }
-      var res=THESIS.createProject({
-        title:title, type:val('npType'), degree:val('npDegree'),
-        university:val('npUni'), faculty:val('npFac'), program:val('npProg'),
-        citationStyle:val('npStyle')
-      });
-      if(!res.ok){ toast(res.error||'Gagal membuat proyek.'); return; }
-      THESIS.setActive(res.project.id); toast('Proyek dibuat.'); go('ringkasan');
-    });
-  }
-
-  /* ---- Ringkasan ---- */
-  function viewRingkasan(){
-    var p=THESIS.activeProject();
-    if(!p){ shell(needProject(),'Ringkasan'); var g=byId('goProyek'); if(g)g.addEventListener('click',function(){go('proyek');}); return; }
-    var st=p.state, refs=st.references||[];
-    var verified=refs.filter(function(r){ return r.verification_status && r.verification_status!=='unverified'; }).length;
-    var methodOk=!!( (st.method&&st.method.family) );
-    var chips=[
-      ['Referensi', refs.length],
-      ['Terverifikasi', verified],
-      ['Rumusan', (st.questions||[]).length],
-      ['Tujuan', (st.objectives||[]).length],
-      ['Metode', methodOk?'✓':'–']
-    ].map(function(c){ return '<div class="stat-chip"><b class="num">'+esc(c[1])+'</b><span>'+esc(c[0])+'</span></div>'; }).join('');
-
-    // readiness checklist
-    var checks=[
-      ['Identitas & kampus terisi', !!(p.university)],
-      ['Judul/topik ditentukan', !!(st.topic&&st.topic.trim())],
-      ['Minimal 1 sumber ilmiah', refs.length>0],
-      ['Rumusan masalah tersusun', (st.questions||[]).length>0],
-      ['Tujuan penelitian tersusun', (st.objectives||[]).length>0],
-      ['Metode ditentukan', methodOk],
-      ['Draf BAB dimulai', hasDraft(st)]
-    ];
-    var checkHtml=checks.map(function(c){
-      return '<div class="check-item">'+
-        (c[1]?'<span style="color:var(--up)">'+icon('i-check')+'</span>':'<span style="color:var(--muted)">'+icon('i-clock')+'</span>')+
-        '<span style="color:'+(c[1]?'var(--on-dark)':'var(--muted)')+'">'+esc(c[0])+'</span></div>';
-    }).join('');
-
-    // primary CTA reflecting state
-    var cta;
-    if(!p.university) cta=['Lengkapi identitas','identitas'];
-    else if(refs.length===0) cta=['Cari sumber','sumber'];
-    else if((st.questions||[]).length===0) cta=['Susun rumusan','rumusan'];
-    else if(!methodOk) cta=['Tentukan metode','metode'];
-    else if(!hasDraft(st)) cta=['Susun BAB','bab'];
-    else cta=['Ekspor proposal','ekspor'];
-
-    var inner=
-      '<h1 style="font-size:22px;color:var(--on-dark)">'+esc(p.title)+'</h1>'+
-      '<p class="muted" style="margin-top:6px">'+esc(p.university||'Kampus belum diisi')+(p.program?' · '+esc(p.program):'')+' · gaya sitasi '+esc(p.citationStyle||'apa7').toUpperCase()+'</p>'+
-      '<div class="stat-grid" style="margin-top:16px">'+chips+'</div>'+
-      '<div style="display:grid;grid-template-columns:1fr;gap:16px;margin-top:18px">'+
-        '<div class="ws-card"><h3 style="color:var(--on-dark)">Kesiapan</h3><div style="margin-top:8px">'+checkHtml+'</div>'+
-          '<div style="margin-top:16px;display:flex;gap:10px;flex-wrap:wrap"><button class="btn btn-primary" id="ctaBtn">'+esc(cta[0])+'</button><button class="btn btn-ghost" id="ckBtn">Periksa Konsistensi</button></div>'+
-        '</div>'+
-        '<div class="ws-card" id="ckOut" style="display:none"></div>'+
-      '</div>';
-    shell(inner,'Ringkasan');
-    byId('ctaBtn').addEventListener('click',function(){ go(cta[1]); });
-    byId('ckBtn').addEventListener('click',function(){
-      var out=byId('ckOut'); out.style.display='block';
-      out.innerHTML='<h3 style="color:var(--on-dark)">Hasil Periksa Konsistensi</h3>'+renderFindings(THESIS.checkConsistency(THESIS.activeProject()));
-      out.scrollIntoView({behavior:'smooth'});
-    });
-  }
-  function hasDraft(st){
-    var ch=st.chapters||[];
-    for(var i=0;i<ch.length;i++){ var s=ch[i].sections||[]; for(var j=0;j<s.length;j++){ if((s[j].content||'').trim()) return true; } }
-    return false;
-  }
   function renderFindings(f){
     if(!f||!f.length) return '<p class="muted" style="margin-top:12px">'+icon('i-shield-check')+' Tidak ada masalah terdeteksi.</p>';
     var order={critical:0,warning:1,info:2}, labels={critical:'Kritis',warning:'Peringatan',info:'Info'};
@@ -373,108 +290,590 @@
         (x.location?'<p class="muted" style="font-size:12px;margin-top:2px">Lokasi: '+esc(x.location)+'</p>':'')+'</div>';
     }).join('');
   }
+  function hasDraft(st){
+    var ch=st.chapters||[];
+    for(var i=0;i<ch.length;i++){ var s=ch[i].sections||[]; for(var j=0;j<s.length;j++){ if((s[j].content||'').trim()) return true; } }
+    return false;
+  }
 
-  /* ---- Identitas & Kampus ---- */
+  /* ============================================================ WIZARD (Buat Cepat) */
+  function newWiz(){
+    return { step:1, bidang:'', jenjang:'s1', tujuanRiset:'',
+      x:'', y:'', objek:'', lokasi:'',
+      titleChoice:'', customTitle:'', pattern:'',
+      pendekatan:'kuantitatif', jenisData:'numerik', hasHyp:'no',
+      nama:'', nim:'', universitas:'', prodi:'', pembimbing:'', busy:false };
+  }
+  function step2Fields(tuj){
+    switch(tuj){
+      case 'perbandingan': return { x:{label:'Variabel yang diamati',ph:'mis. Hasil belajar siswa'}, y:{label:'Kelompok / kondisi yang dibandingkan',ph:'mis. Metode A dan Metode B'} };
+      case 'deskripsi':    return { x:{label:'Fokus / hal yang diteliti',ph:'mis. Kualitas pelayanan'} };
+      case 'eksplorasi':   return { x:{label:'Fenomena yang dieksplorasi',ph:'mis. Strategi bertahan UMKM'} };
+      case 'pengembangan': return { x:{label:'Produk / model yang dikembangkan',ph:'mis. Media pembelajaran interaktif'}, y:{label:'Untuk tujuan / kebutuhan (opsional)',ph:'mis. Meningkatkan motivasi belajar'} };
+      default:             return { x:{label:'Variabel X (yang memengaruhi)',ph:'mis. Kualitas layanan'}, y:{label:'Variabel Y (yang dipengaruhi)',ph:'mis. Kepuasan pelanggan'} };
+    }
+  }
+  function captureWiz(){
+    var f;
+    if((f=byId('wzX'))) wiz.x=f.value;
+    if((f=byId('wzY'))) wiz.y=f.value;
+    if((f=byId('wzObjek'))) wiz.objek=f.value;
+    if((f=byId('wzLokasi'))) wiz.lokasi=f.value;
+    if((f=byId('wzCustom'))) wiz.customTitle=f.value;
+    if((f=byId('wzNama'))) wiz.nama=f.value;
+    if((f=byId('wzNim'))) wiz.nim=f.value;
+    if((f=byId('wzUni'))) wiz.universitas=f.value;
+    if((f=byId('wzProdi'))) wiz.prodi=f.value;
+    if((f=byId('wzPemb'))) wiz.pembimbing=f.value;
+  }
+  function optCard(key,dataAttr,dataVal,selected,title,sub){
+    var on=(dataVal===selected)?' on':'';
+    return '<button type="button" class="opt-card'+on+'" '+dataAttr+'="'+esc(dataVal)+'"'+(on?' aria-pressed="true"':' aria-pressed="false"')+'>'+
+      '<span class="opt-key" aria-hidden="true">'+esc(key)+'</span>'+
+      '<span class="opt-tx"><b>'+esc(title)+'</b>'+(sub?'<span>'+esc(sub)+'</span>':'')+'</span></button>';
+  }
+  var LETTERS='ABCDEFGH';
+
+  function viewWizard(){
+    if(!wiz) wiz=newWiz();
+    if(wiz.busy){ renderWizLoading(); return; }
+    var names=['Bidang','Topik','Judul','Metode & Data','Identitas'];
+    var stepper='<ul class="wiz-steps">';
+    for(var s=0;s<names.length;s++){
+      var cls=(s+1===wiz.step)?'active':(s+1<wiz.step?'done':'');
+      stepper+='<li class="'+cls+'"><span class="dot">'+(s+1<wiz.step?'✓':(s+1))+'</span>'+esc(names[s])+'</li>';
+    }
+    stepper+='</ul>';
+
+    var body='', note='', hint='';
+    if(wiz.step===1){
+      hint='Pilih bidang keilmuan skripsimu. Jenjang default S1.';
+      var cards=(THESIS.FIELDS.bidang||[]).map(function(o,i){ return optCard(LETTERS.charAt(i%8),'data-bidang',o.value,wiz.bidang,o.label,''); }).join('');
+      body='<div class="ws-card"><label class="f-label">Bidang keilmuan</label><div class="opt-grid">'+cards+'</div>'+
+        '<div class="f-row" style="margin-top:16px;max-width:340px"><label class="f-label" for="wzJenjang">Jenjang</label><select class="f-select" id="wzJenjang">'+
+          (THESIS.FIELDS.jenjang||[]).map(function(o){ return '<option value="'+o.value+'"'+(o.value===wiz.jenjang?' selected':'')+'>'+esc(o.label)+'</option>'; }).join('')+
+        '</select></div></div>';
+    } else if(wiz.step===2){
+      hint='Mau meneliti apa? Pilih satu, lalu isi 1–2 kata kunci singkat. Kolom lain boleh dikosongkan.';
+      var tcards=(THESIS.FIELDS.tujuanRiset||[]).map(function(o,i){ return optCard(LETTERS.charAt(i%8),'data-tujuan',o.value,wiz.tujuanRiset,o.label,''); }).join('');
+      var flds=step2Fields(wiz.tujuanRiset);
+      var inputs='';
+      if(wiz.tujuanRiset){
+        inputs='<div class="f-grid" style="margin-top:16px">'+
+          '<div class="f-row"><label class="f-label" for="wzX">'+esc(flds.x.label)+'</label><input class="f-input" id="wzX" value="'+esc(wiz.x)+'" placeholder="'+esc(flds.x.ph)+'"></div>'+
+          (flds.y?'<div class="f-row"><label class="f-label" for="wzY">'+esc(flds.y.label)+'</label><input class="f-input" id="wzY" value="'+esc(wiz.y)+'" placeholder="'+esc(flds.y.ph)+'"></div>':'')+
+        '</div>'+
+        '<div class="f-grid">'+
+          '<div class="f-row"><label class="f-label" for="wzObjek">Objek / Tempat (opsional)</label><input class="f-input" id="wzObjek" value="'+esc(wiz.objek)+'" placeholder="mis. UMKM kuliner"></div>'+
+          '<div class="f-row"><label class="f-label" for="wzLokasi">Lokasi (opsional)</label><input class="f-input" id="wzLokasi" value="'+esc(wiz.lokasi)+'" placeholder="mis. Kota Bandung"></div>'+
+        '</div>';
+      }
+      body='<div class="ws-card"><label class="f-label">Tujuan penelitian</label><div class="opt-grid">'+tcards+'</div>'+inputs+'</div>';
+    } else if(wiz.step===3){
+      hint='Pilih salah satu judul (A/B/C…) yang dibuat dari kata kuncimu, atau tulis judul sendiri.';
+      var titles=THESIS.suggestTitles({ bidang:fieldLabel('bidang',wiz.bidang), tujuanRiset:wiz.tujuanRiset, x:wiz.x, y:wiz.y, objek:wiz.objek, lokasi:wiz.lokasi });
+      var tc='';
+      if(titles.length){
+        tc=titles.map(function(t,i){ return optCard(LETTERS.charAt(i%8),'data-title',t.title,wiz.titleChoice,t.title,t.pattern); }).join('');
+      } else {
+        tc='<p class="muted">Belum cukup kata kunci untuk membuat judul. Isi variabel di langkah sebelumnya, atau tulis judul sendiri di bawah.</p>';
+      }
+      var customOn=(wiz.titleChoice==='__custom__');
+      var customCard='<button type="button" class="opt-card'+(customOn?' on':'')+'" data-title="__custom__" aria-pressed="'+(customOn?'true':'false')+'">'+
+        '<span class="opt-key" aria-hidden="true">✎</span><span class="opt-tx"><b>Tulis judul sendiri</b><span>Ketik judul versimu</span></span></button>';
+      body='<div class="ws-card"><label class="f-label">Pilihan judul</label><div class="opt-grid">'+tc+customCard+'</div>'+
+        (customOn?'<div class="f-row" style="margin-top:16px"><label class="f-label" for="wzCustom">Judul sendiri</label><input class="f-input" id="wzCustom" value="'+esc(wiz.customTitle)+'" placeholder="Tulis judul skripsimu…"></div>':'')+
+      '</div>';
+    } else if(wiz.step===4){
+      hint='Dua pilihan cepat untuk menentukan metode. Ini jadi rekomendasi metode (bisa diubah nanti).';
+      var pc=(THESIS.FIELDS.pendekatan||[]).map(function(o,i){ return optCard(LETTERS.charAt(i%8),'data-pendekatan',o.value,wiz.pendekatan,o.label,''); }).join('');
+      var dc=(THESIS.FIELDS.jenisData||[]).map(function(o,i){ return optCard(LETTERS.charAt(i%8),'data-jenis',o.value,wiz.jenisData,o.label,''); }).join('');
+      var showHyp=(wiz.tujuanRiset==='pengaruh'||wiz.tujuanRiset==='perbandingan');
+      body='<div class="ws-card"><label class="f-label">Pendekatan</label><div class="opt-grid">'+pc+'</div>'+
+        '<label class="f-label" style="margin-top:18px">Jenis data</label><div class="opt-grid">'+dc+'</div>'+
+        (showHyp?'<div class="f-row" style="margin-top:18px;max-width:340px"><label class="f-label" for="wzHyp">Ada hipotesis?</label><select class="f-select" id="wzHyp"><option value="no"'+(wiz.hasHyp==='no'?' selected':'')+'>Tidak / belum</option><option value="yes"'+(wiz.hasHyp==='yes'?' selected':'')+'>Ya</option></select></div>':'')+
+      '</div>';
+    } else {
+      hint='Identitas ini opsional — boleh dilewati dan diisi nanti di menu Identitas & Kampus. Dipakai untuk halaman sampul.';
+      body='<div class="ws-card"><p class="badge badge-b" style="display:inline-block">Opsional — boleh dilewati</p>'+
+        '<div class="f-grid" style="margin-top:14px">'+
+          '<div class="f-row"><label class="f-label" for="wzNama">Nama</label><input class="f-input" id="wzNama" value="'+esc(wiz.nama)+'" placeholder="Nama lengkap"></div>'+
+          '<div class="f-row"><label class="f-label" for="wzNim">NIM</label><input class="f-input" id="wzNim" value="'+esc(wiz.nim)+'" placeholder="NIM"></div>'+
+        '</div>'+
+        '<div class="f-grid">'+
+          '<div class="f-row"><label class="f-label" for="wzUni">Universitas</label><input class="f-input" id="wzUni" value="'+esc(wiz.universitas)+'" placeholder="Nama universitas"></div>'+
+          '<div class="f-row"><label class="f-label" for="wzProdi">Program Studi</label><input class="f-input" id="wzProdi" value="'+esc(wiz.prodi)+'" placeholder="Program studi"></div>'+
+        '</div>'+
+        '<div class="f-row"><label class="f-label" for="wzPemb">Dosen Pembimbing</label><input class="f-input" id="wzPemb" value="'+esc(wiz.pembimbing)+'" placeholder="Nama pembimbing"></div>'+
+      '</div>';
+    }
+
+    var back = wiz.step>1 ? '<button class="btn btn-ghost" id="wzBack">Kembali</button>' : '<span></span>';
+    var next = wiz.step<5
+      ? '<button class="btn btn-primary" id="wzNext">Lanjut</button>'
+      : '<button class="btn btn-primary" id="wzFinish">'+icon('i-check')+' Buat Proposal</button>';
+    var skip = wiz.step===5 ? '<button class="btn btn-ghost" id="wzSkip">Lewati & Buat</button>' : '';
+
+    var inner='<h1 style="font-size:22px;color:var(--on-dark)">Buat Skripsi (Cepat)</h1>'+
+      '<p class="muted" style="margin-top:6px">'+esc(hint)+'</p>'+stepper+body+note+
+      '<div class="wiz-actions">'+back+'<div style="display:flex;gap:10px;flex-wrap:wrap">'+skip+next+'</div></div>';
+    shell(inner,'Buat Cepat');
+
+    // wire option cards
+    Array.prototype.forEach.call(root.querySelectorAll('[data-bidang]'),function(b){ b.addEventListener('click',function(){ captureWiz(); wiz.bidang=b.getAttribute('data-bidang'); viewWizard(); }); });
+    Array.prototype.forEach.call(root.querySelectorAll('[data-tujuan]'),function(b){ b.addEventListener('click',function(){ captureWiz(); wiz.tujuanRiset=b.getAttribute('data-tujuan'); viewWizard(); }); });
+    Array.prototype.forEach.call(root.querySelectorAll('[data-title]'),function(b){ b.addEventListener('click',function(){ captureWiz(); wiz.titleChoice=b.getAttribute('data-title'); viewWizard(); }); });
+    Array.prototype.forEach.call(root.querySelectorAll('[data-pendekatan]'),function(b){ b.addEventListener('click',function(){ captureWiz(); wiz.pendekatan=b.getAttribute('data-pendekatan'); viewWizard(); }); });
+    Array.prototype.forEach.call(root.querySelectorAll('[data-jenis]'),function(b){ b.addEventListener('click',function(){ captureWiz(); wiz.jenisData=b.getAttribute('data-jenis'); viewWizard(); }); });
+    var jn=byId('wzJenjang'); if(jn) jn.addEventListener('change',function(){ wiz.jenjang=jn.value; });
+    var hy=byId('wzHyp'); if(hy) hy.addEventListener('change',function(){ wiz.hasHyp=hy.value; });
+
+    var bk=byId('wzBack'); if(bk) bk.addEventListener('click',function(){ captureWiz(); wiz.step--; viewWizard(); });
+    var nx=byId('wzNext'); if(nx) nx.addEventListener('click',wizNext);
+    var fn=byId('wzFinish'); if(fn) fn.addEventListener('click',wizFinish);
+    var sk=byId('wzSkip'); if(sk) sk.addEventListener('click',wizFinish);
+  }
+  function wizNext(){
+    captureWiz();
+    if(wiz.step===1 && !wiz.bidang){ toast('Pilih bidang keilmuan dulu.'); return; }
+    if(wiz.step===2){
+      if(!wiz.tujuanRiset){ toast('Pilih tujuan penelitian dulu.'); return; }
+      if(!trim(wiz.x)){ toast('Isi minimal satu kata kunci / variabel.'); return; }
+    }
+    if(wiz.step===3){
+      var t=wiz.titleChoice==='__custom__'?trim(wiz.customTitle):wiz.titleChoice;
+      if(!t){ toast('Pilih atau tulis judul dulu.'); return; }
+    }
+    wiz.step++; viewWizard();
+  }
+  function renderWizLoading(){
+    var inner='<h1 style="font-size:22px;color:var(--on-dark)">Menyusun proposal…</h1>'+
+      '<div class="ws-card" style="margin-top:16px">'+
+        '<p class="muted">'+icon('i-refresh')+' Membuat proyek, menurunkan rumusan & tujuan, menyusun BAB I–III, dan mencari rujukan ilmiah otomatis. Mohon tunggu sebentar.</p>'+
+        '<div class="prop-bar" style="margin-top:16px"><span style="width:70%"></span></div>'+
+      '</div>';
+    shell(inner,'Buat Cepat');
+  }
+  function wizFinish(){
+    captureWiz();
+    var title=wiz.titleChoice==='__custom__'?trim(wiz.customTitle):wiz.titleChoice;
+    if(!title){ toast('Pilih atau tulis judul dulu.'); wiz.step=3; viewWizard(); return; }
+    wiz.busy=true; renderWizLoading();
+    var w=wiz; // snapshot
+    setTimeout(function(){ doFinish(title,w); },40);
+  }
+  function doFinish(title,w){
+    var bidangLabel=fieldLabel('bidang',w.bidang);
+    var goalMap={pengaruh:'relationship',perbandingan:'compare',deskripsi:'measure',eksplorasi:'explore',pengembangan:'develop'};
+    var dataMap={numerik:'numeric',teks:'text',campuran:'mixed'};
+    var res=THESIS.createProject({
+      title:title, type:'skripsi', degree:'Sarjana', citationStyle:'apa7',
+      researchInterest:bidangLabel, program:trim(w.prodi), university:trim(w.universitas),
+      researchObject:trim(w.objek), location:trim(w.lokasi), methodPref:w.pendekatan,
+      nim:trim(w.nim), supervisor1:trim(w.pembimbing)
+    });
+    if(!res.ok){ toast(res.error||'Gagal membuat proyek.'); wiz.busy=false; viewWizard(); return; }
+    var pid=res.project.id;
+    THESIS.setActive(pid);
+    THESIS.updateProject(pid,{ studentName:trim(w.nama), name:trim(w.nama), jenjang:w.jenjang });
+    var der=THESIS.deriveFromTitle(title,{ objek:w.objek, lokasi:w.lokasi, pendekatan:w.pendekatan, bidang:bidangLabel, x:w.x, y:w.y });
+    var method=THESIS.recommendMethod({ goal:goalMap[w.tujuanRiset]||'measure', dataType:dataMap[w.jenisData]||'numeric', hasHypothesis:w.hasHyp==='yes' });
+    THESIS.updateProject(pid,{state:{
+      topic:title, questions:der.questions, objectives:der.objectives, hypotheses:der.hypotheses,
+      method:method, keywords:der.keywords, variables:der.variables, benefits:der.benefits
+    }});
+    var proj=THESIS.getProject(pid);
+    var chapters=THESIS.scaffoldProposal(proj);
+    THESIS.updateProject(pid,{state:{chapters:chapters}});
+
+    wiz=null;
+    var projForSearch=THESIS.getProject(pid);
+    Promise.resolve(THESIS.autoSearch(projForSearch,{limit:8})).then(function(works){
+      foundRefs[pid]=(works&&works.length)?works.slice():[];
+      autoSearchErr[pid]=false;
+      view='proposal'; propMode='preview'; render();
+      if(works&&works.length) toast(works.length+' rujukan ditemukan otomatis — tinggal tambahkan.');
+      else toast('Proposal dibuat. Rujukan bisa dicari kapan saja.');
+    })['catch'](function(){
+      foundRefs[pid]=[]; autoSearchErr[pid]=true;
+      view='proposal'; propMode='preview'; render();
+      toast('Proposal dibuat. Pencarian rujukan otomatis tidak tersedia saat ini.');
+    });
+  }
+
+  /* ============================================================ PROPOSAL VIEW */
+  function readiness(p){
+    var st=p.state||{}, refs=st.references||[];
+    var methodOk=!!(st.method&&st.method.family);
+    var checks=[
+      ['Identitas & kampus', !!p.university],
+      ['Judul ditentukan', !!trim(p.title)],
+      ['Rumusan masalah', (st.questions||[]).length>0],
+      ['Tujuan penelitian', (st.objectives||[]).length>0],
+      ['Metode ditentukan', methodOk],
+      ['Draf BAB tersusun', hasDraft(st)],
+      ['Minimal 1 sumber', refs.length>0]
+    ];
+    var done=0; for(var i=0;i<checks.length;i++) if(checks[i][1]) done++;
+    return { checks:checks, done:done, total:checks.length, pct:Math.round(done/checks.length*100) };
+  }
+  function ensureChapters(p){
+    var st=p.state||{};
+    if(!st.chapters||!st.chapters.length){
+      var ch=THESIS.scaffoldProposal(p);
+      THESIS.updateProject(p.id,{state:{chapters:ch}});
+      return THESIS.activeProject();
+    }
+    return p;
+  }
+  function placeholderCount(content){
+    var m=String(content||'').match(/〔[^〕]*〕/g);
+    return m?m.length:0;
+  }
+
+  function viewProposal(){
+    var p=THESIS.activeProject();
+    if(!p){ shell(needProject('Belum ada proyek. Buat proposal skripsi dulu — cukup klik-klik.'),'Proposal'); wireNeed(); return; }
+    p=ensureChapters(p);
+    var st=p.state, style=p.citationStyle||'apa7';
+    var rd=readiness(p);
+    var chapters=st.chapters||[];
+
+    // header
+    var header=
+      '<h1 style="font-size:22px;color:var(--on-dark)">'+esc(p.title)+'</h1>'+
+      '<p class="muted" style="margin-top:6px">'+esc(p.university||'Kampus belum diisi')+(p.program?' · '+esc(p.program):'')+' · gaya sitasi '+esc(style.toUpperCase())+'</p>'+
+      '<div class="ws-card" style="margin-top:14px">'+
+        '<div style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:center">'+
+          '<b style="color:var(--on-dark)">Kesiapan proposal</b>'+
+          '<span class="muted" style="font-size:13px"><b class="num">'+rd.done+'</b>/'+rd.total+' · '+rd.pct+'%</span>'+
+        '</div>'+
+        '<div class="prop-bar" style="margin-top:10px"><span style="width:'+rd.pct+'%"></span></div>'+
+        '<div style="margin-top:14px;display:flex;gap:8px;flex-wrap:wrap" class="no-print">'+
+          '<div class="seg" role="group" aria-label="Mode tampilan"><button id="modePreview" class="'+(propMode==='preview'?'on':'')+'">Pratinjau</button><button id="modeEdit" class="'+(propMode==='edit'?'on':'')+'">Edit</button></div>'+
+          '<span style="flex:1"></span>'+
+          '<select class="f-select" id="propStyle" style="max-width:150px;padding:8px 10px" aria-label="Gaya sitasi">'+styleOptions(style)+'</select>'+
+          '<button class="btn btn-ghost btn-sm" id="propRefresh">'+icon('i-refresh')+' Perbarui Rujukan</button>'+
+          '<button class="btn btn-ghost btn-sm" id="propCheck">'+icon('i-shield-check')+' Periksa Konsistensi</button>'+
+        '</div>'+
+        '<div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap" class="no-print">'+
+          '<button class="btn btn-primary btn-sm" id="propDoc">'+icon('i-doc')+' Unduh Proposal (DOCX)</button>'+
+          '<button class="btn btn-ghost btn-sm" id="propPrint">Cetak / PDF</button>'+
+          '<button class="btn btn-ghost btn-sm" id="propBib">Unduh BibTeX</button>'+
+          '<button class="btn btn-ghost btn-sm" id="propRis">Unduh RIS</button>'+
+        '</div>'+
+        '<div id="propCheckOut" style="display:none;margin-top:12px"></div>'+
+      '</div>';
+
+    // auto-found sources card
+    var found=foundRefs[p.id]||[];
+    var foundCard='';
+    if(found.length){
+      foundCard='<div class="ws-card" id="foundCard"><div style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:center">'+
+        '<div><h3 style="color:var(--on-dark)">Rujukan ditemukan otomatis</h3><p class="muted" style="font-size:13px;margin-top:4px">'+found.length+' sumber ilmiah nyata dari OpenAlex/Crossref. Tinjau lalu tambahkan.</p></div>'+
+        '<div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn btn-primary btn-sm" id="addAllFound">Tambahkan Semua ke Perpustakaan</button><button class="btn btn-ghost btn-sm" id="dismissFound">Tutup</button></div></div>'+
+        '<div style="margin-top:12px">'+found.map(function(r,i){ return foundItem(r,i); }).join('')+'</div></div>';
+    } else if(autoSearchErr[p.id]){
+      foundCard='<div class="ws-card"><div class="finding info"><p style="font-size:14px">'+icon('i-search')+' Pencarian rujukan otomatis tidak tersedia (jaringan/penyedia terblokir). Proposal tetap dibuat. Gunakan <b>Perbarui Rujukan</b> atau tab <b>Sumber Ilmiah</b> untuk menambah sumber secara manual (DOI/entri manual).</p></div></div>';
+    }
+
+    // outline
+    var outline='<h6>Daftar Isi</h6>';
+    for(var c=0;c<chapters.length;c++){
+      var ch=chapters[c];
+      outline+='<button class="prop-jump ch" data-jump-ch="'+c+'" data-match="'+esc(ch.code||'')+'">'+esc((ch.code||'')+' '+(ch.title||''))+'</button>';
+      var secs=ch.sections||[];
+      for(var si=0;si<secs.length;si++){
+        outline+='<button class="prop-jump sec" data-jump-ch="'+c+'" data-jump-sec="'+si+'" data-match="'+esc(secs[si].title||'')+'">'+esc(secs[si].title)+'</button>';
+      }
+    }
+
+    var docPane = propMode==='edit'
+      ? '<div class="prop-doc" id="propDocPane">'+editChaptersHtml(p)+'</div>'
+      : '<div class="prop-doc" id="propDocPane"><iframe id="propFrame" class="prop-frame" title="Pratinjau proposal" sandbox="allow-same-origin"></iframe></div>';
+
+    var inner=header+foundCard+'<div class="prop-shell"><aside class="prop-outline" aria-label="Daftar isi">'+outline+'</aside>'+docPane+'</div>';
+    shell(inner,'Proposal');
+
+    // header wiring
+    byId('modePreview').addEventListener('click',function(){ propMode='preview'; viewProposal(); });
+    byId('modeEdit').addEventListener('click',function(){ propMode='edit'; viewProposal(); });
+    byId('propStyle').addEventListener('change',function(){ THESIS.updateProject(p.id,{citationStyle:val('propStyle')}); viewProposal(); });
+    byId('propRefresh').addEventListener('click',function(){ doRefreshRefs(p,this); });
+    byId('propCheck').addEventListener('click',function(){
+      var out=byId('propCheckOut'); out.style.display='block';
+      out.innerHTML=renderFindings(THESIS.checkConsistency(THESIS.activeProject()));
+    });
+    byId('propDoc').addEventListener('click',function(){
+      download(fileBase(p)+'.doc',buildDocDocument(THESIS.activeProject(),val('propStyle')),'application/msword'); toast('Proposal (DOCX) diunduh.');
+    });
+    byId('propPrint').addEventListener('click',function(){ printProposal(THESIS.activeProject(),val('propStyle')); });
+    byId('propBib').addEventListener('click',function(){
+      var txt=THESIS.toBibTeX((p.state.references||[])); if(!txt){ toast('Belum ada referensi.'); return; }
+      download(fileBase(p)+'.bib',txt,'application/x-bibtex;charset=utf-8'); toast('BibTeX diunduh.');
+    });
+    byId('propRis').addEventListener('click',function(){
+      var txt=THESIS.toRIS((p.state.references||[])); if(!txt){ toast('Belum ada referensi.'); return; }
+      download(fileBase(p)+'.ris',txt,'application/x-research-info-systems;charset=utf-8'); toast('RIS diunduh.');
+    });
+
+    // found sources wiring
+    if(found.length){
+      byId('addAllFound').addEventListener('click',function(){
+        var arr=foundRefs[p.id]||[], n=0;
+        for(var i=0;i<arr.length;i++){ var r=THESIS.addReference(p.id,arr[i]); if(r&&r.ok&&!r.duplicate) n++; }
+        foundRefs[p.id]=[];
+        toast(n+' referensi ditambahkan ke perpustakaan.');
+        viewProposal();
+      });
+      byId('dismissFound').addEventListener('click',function(){ foundRefs[p.id]=[]; viewProposal(); });
+      Array.prototype.forEach.call(root.querySelectorAll('[data-addfound]'),function(b){
+        b.addEventListener('click',function(){
+          var i=parseInt(b.getAttribute('data-addfound'),10);
+          var arr=foundRefs[p.id]||[]; var r=arr[i]; if(!r) return;
+          var res=THESIS.addReference(p.id,r);
+          if(res&&res.duplicate) toast('Sudah ada di perpustakaan.');
+          else toast('Ditambahkan ke perpustakaan.');
+          arr.splice(i,1); foundRefs[p.id]=arr; viewProposal();
+        });
+      });
+    }
+
+    // outline jump
+    Array.prototype.forEach.call(root.querySelectorAll('.prop-jump'),function(b){
+      b.addEventListener('click',function(){
+        var ci=b.getAttribute('data-jump-ch'), sec=b.getAttribute('data-jump-sec'), match=b.getAttribute('data-match');
+        if(propMode==='edit'){
+          var el=(sec!=null)?byId('sec_'+ci+'_'+sec):byId('chap_'+ci);
+          if(el){ el.scrollIntoView({behavior:'smooth',block:'start'}); if(sec!=null&&el.focus) try{el.focus();}catch(e){} }
+        } else {
+          jumpPreview(match);
+        }
+      });
+    });
+
+    if(propMode==='preview'){
+      var fr=byId('propFrame');
+      var doc='<!doctype html><html><head><meta charset="utf-8"><style>body{margin:0;background:#e9edf3;padding:16px}</style></head><body>'+THESIS.buildProposalHTML(THESIS.activeProject(),style)+'</body></html>';
+      fr.srcdoc=doc;
+    } else {
+      wireEdit(p);
+    }
+  }
+  function foundItem(r,i){
+    var badges='';
+    if(r.typeLabel) badges+='<span class="badge">'+esc(r.typeLabel)+'</span> ';
+    if(r.verification_status&&r.verification_status!=='unverified') badges+='<span class="badge badge-b">terverifikasi</span>';
+    return '<div class="ref-card"><div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap">'+
+      '<div style="min-width:0;flex:1"><b style="color:var(--on-dark)">'+esc(r.title||'(tanpa judul)')+'</b>'+
+        '<p class="muted" style="font-size:13px;margin-top:4px">'+esc(authorsLine(r.authors))+'</p>'+
+        '<p class="muted" style="font-size:13px;margin-top:2px">'+esc(r.year||'t.t.')+(r.venue?' · '+esc(r.venue):'')+'</p>'+
+        (r.doi?'<p style="font-size:12px;margin-top:4px"><a href="https://doi.org/'+esc(r.doi)+'" target="_blank" rel="noopener" style="color:var(--accent2)">doi.org/'+esc(r.doi)+'</a></p>':'')+
+        '<div style="margin-top:8px">'+badges+'</div></div>'+
+      '<div><button class="btn btn-ghost btn-sm" data-addfound="'+i+'">+ Tambah</button></div></div></div>';
+  }
+  function doRefreshRefs(p,btn){
+    var lbl=btn.innerHTML; btn.disabled=true; btn.textContent='Mencari…';
+    Promise.resolve(THESIS.autoSearch(THESIS.activeProject(),{limit:8})).then(function(works){
+      btn.disabled=false;
+      foundRefs[p.id]=(works&&works.length)?works.slice():[];
+      autoSearchErr[p.id]=!(works&&works.length);
+      if(works&&works.length) toast(works.length+' rujukan ditemukan.');
+      else toast('Tidak ada hasil / penyedia tidak tersedia. Coba tab Sumber Ilmiah.');
+      viewProposal();
+    })['catch'](function(){
+      btn.disabled=false; btn.innerHTML=lbl;
+      foundRefs[p.id]=[]; autoSearchErr[p.id]=true;
+      toast('Pencarian rujukan gagal (jaringan). Gunakan Sumber Ilmiah untuk entri manual.');
+      viewProposal();
+    });
+  }
+  function jumpPreview(match){
+    var fr=byId('propFrame'); if(!fr) return;
+    try{
+      var doc=fr.contentDocument; if(!doc) return;
+      var nodes=doc.querySelectorAll('h2.ctr, .chapter h3, .toc-row');
+      var m=normText(match);
+      for(var i=0;i<nodes.length;i++){
+        if(normText(nodes[i].textContent).indexOf(m)>=0){ nodes[i].scrollIntoView({block:'start'}); return; }
+      }
+    }catch(e){}
+  }
+  function editChaptersHtml(p){
+    var st=p.state, refs=st.references||[], style=p.citationStyle||'apa7';
+    var refMap={}; refs.forEach(function(r){ refMap[r.id]=r; });
+    var refOptions=refs.map(function(r){ return '<option value="'+esc(r.id)+'">'+esc((r.authors&&r.authors[0]&&(r.authors[0].family||r.authors[0].name))||r.title.slice(0,30))+' ('+esc(r.year||'t.t.')+')</option>'; }).join('');
+    var intro='<div class="ws-card"><p class="muted" style="font-size:13px">Draf ini titik awal — <b>kamu</b> yang menyempurnakan. Penanda <span style="background:rgba(252,213,53,.14);border:1px dashed var(--primary);border-radius:3px;padding:0 4px">〔…〕</span> menandai bagian yang perlu diisi (data/sumber nyata). Perubahan tersimpan otomatis saat keluar dari kotak teks.</p></div>';
+    var out=intro;
+    (st.chapters||[]).forEach(function(ch,ci){
+      if(!ch.sections||!ch.sections.length){
+        out+='<div class="ws-card" id="chap_'+ci+'"><h3 style="color:var(--on-dark)">'+esc(ch.code)+' · '+esc(ch.title)+'</h3><p class="muted" style="margin-top:8px">Bagian ini disusun otomatis dari daftar pustaka (referensi nyata di perpustakaan).</p></div>';
+        return;
+      }
+      var secs=ch.sections.map(function(sec,si){
+        var did='sec_'+ci+'_'+si;
+        var phc=placeholderCount(sec.content);
+        var cited=(sec.citationIds||[]).map(function(id){ var r=refMap[id]; return r?'<span class="chip">'+esc((r.authors&&r.authors[0]&&(r.authors[0].family||r.authors[0].name))||'ref')+' '+esc(r.year||'')+'</span>':''; }).join(' ');
+        return '<div class="edit-sec">'+
+          '<label class="f-label" for="'+did+'" style="font-weight:600;color:var(--on-dark);font-size:14px">'+esc(sec.title)+(phc?' <span class="badge badge-y" style="margin-left:6px">'+phc+' penanda 〔…〕</span>':'')+'</label>'+
+          '<textarea class="f-area" id="'+did+'" data-ci="'+ci+'" data-si="'+si+'" placeholder="Tulis isi bagian ini…">'+esc(sec.content||'')+'</textarea>'+
+          '<div style="margin-top:8px;display:flex;gap:8px;align-items:center;flex-wrap:wrap">'+
+            (refs.length?('<select class="f-select" style="max-width:280px;padding:8px 10px;font-size:13px" data-refsel="'+did+'"><option value="">Sisipkan sitasi…</option>'+refOptions+'</select><button class="chip-btn" data-insert="'+did+'" data-ci="'+ci+'" data-si="'+si+'">Sisipkan</button>'):'<span class="muted" style="font-size:13px">Tambahkan referensi (Perbarui Rujukan / tab Sumber) untuk menyisipkan sitasi.</span>')+
+          '</div>'+
+          (cited?'<div style="margin-top:8px"><span class="muted" style="font-size:12px">Disitasi: </span>'+cited+'</div>':'')+
+        '</div>';
+      }).join('');
+      out+='<div class="ws-card" id="chap_'+ci+'"><h3 style="color:var(--on-dark)">'+esc(ch.code)+' · '+esc(ch.title)+'</h3>'+secs+'</div>';
+    });
+    return out;
+  }
+  function wireEdit(p){
+    var style=p.citationStyle||'apa7';
+    var refMap={}; (p.state.references||[]).forEach(function(r){ refMap[r.id]=r; });
+    Array.prototype.forEach.call(root.querySelectorAll('textarea[data-ci]'),function(ta){
+      ta.addEventListener('blur',function(){ saveSection(p.id,parseInt(ta.getAttribute('data-ci'),10),parseInt(ta.getAttribute('data-si'),10),ta.value,null); });
+    });
+    Array.prototype.forEach.call(root.querySelectorAll('[data-insert]'),function(b){
+      b.addEventListener('click',function(){
+        var did=b.getAttribute('data-insert');
+        var sel=root.querySelector('[data-refsel="'+did+'"]');
+        var refId=sel?sel.value:'';
+        if(!refId){ toast('Pilih referensi dulu.'); return; }
+        var ref=refMap[refId];
+        var cite=THESIS.formatInText(ref,style) || ('('+((ref.authors&&ref.authors[0]&&(ref.authors[0].family||ref.authors[0].name))||'—')+', '+(ref.year||'t.t.')+')');
+        var ta=byId(did);
+        var start=ta.selectionStart, end=ta.selectionEnd;
+        if(typeof start==='number'){ ta.value=ta.value.slice(0,start)+' '+cite+' '+ta.value.slice(end); }
+        else { ta.value+=' '+cite; }
+        saveSection(p.id,parseInt(b.getAttribute('data-ci'),10),parseInt(b.getAttribute('data-si'),10),ta.value,refId);
+        toast('Sitasi disisipkan: '+cite);
+        viewProposal();
+      });
+    });
+  }
+  function saveSection(pid,ci,si,content,addRefId){
+    var p=THESIS.getProject(pid); if(!p) return;
+    var chapters=JSON.parse(JSON.stringify(p.state.chapters));
+    if(!chapters[ci]||!chapters[ci].sections[si]) return;
+    chapters[ci].sections[si].content=content;
+    if(addRefId){
+      var cids=chapters[ci].sections[si].citationIds||[];
+      if(cids.indexOf(addRefId)<0) cids.push(addRefId);
+      chapters[ci].sections[si].citationIds=cids;
+    }
+    THESIS.updateProject(pid,{state:{chapters:chapters}});
+  }
+  function fileBase(p){ return (p.title||'proposal').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'').slice(0,60)||'proposal'; }
+  function buildDocDocument(p,style){
+    var inner=THESIS.buildProposalHTML(p,style||p.citationStyle||'apa7');
+    return '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40">'+
+      '<head><meta charset="utf-8"><title>'+esc(p.title||'Proposal')+'</title></head><body>'+inner+'</body></html>';
+  }
+  function printProposal(p,style){
+    var w=window.open('','_blank');
+    if(!w){ toast('Popup diblokir. Izinkan popup untuk mencetak.'); return; }
+    w.document.open();
+    w.document.write('<!doctype html><html lang="id"><head><meta charset="utf-8"><title>'+esc(p.title||'Proposal')+'</title></head><body>'+THESIS.buildProposalHTML(p,style||p.citationStyle||'apa7')+'</body></html>');
+    w.document.close(); w.focus();
+    setTimeout(function(){ try{ w.print(); }catch(e){} },350);
+  }
+
+  /* ============================================================ PROYEK */
+  function viewProyek(){
+    var projects=THESIS.listProjects();
+    var active=THESIS.activeProject();
+    var top='<div class="ws-card" style="display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;align-items:center">'+
+      '<div><h3 style="color:var(--on-dark)">Buat skripsi baru</h3><p class="muted" style="font-size:13px;margin-top:4px">Jawab beberapa pilihan — judul, rumusan, metode & rujukan dibuat otomatis.</p></div>'+
+      '<button class="btn btn-primary" id="npWizard">'+icon('i-flag')+' Buat Skripsi (Cepat)</button></div>';
+    var cards='';
+    if(!projects.length){
+      cards='<div class="ws-card ws-empty">Belum ada proyek. Mulai dengan "Buat Skripsi (Cepat)".</div>';
+    } else {
+      cards='<div style="display:grid;gap:12px">';
+      for(var i=0;i<projects.length;i++){
+        var p=projects[i];
+        cards+='<div class="ws-card" style="display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;align-items:center">'+
+          '<div style="min-width:0"><div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">'+
+            '<h3 style="color:var(--on-dark);font-size:17px">'+esc(p.title)+'</h3>'+
+            (active&&active.id===p.id?'<span class="badge badge-up">Aktif</span>':'')+'</div>'+
+            '<p class="muted" style="margin-top:6px;font-size:13px">'+esc(p.university||'Kampus belum diisi')+(p.program?' · '+esc(p.program):'')+' · '+esc((p.state&&p.state.references?p.state.references.length:0))+' referensi</p>'+
+            '<p class="muted" style="font-size:12px;margin-top:2px">Diperbarui '+esc((p.updatedAt||'').slice(0,10))+'</p></div>'+
+          '<div style="display:flex;gap:8px;flex-wrap:wrap">'+
+            '<button class="btn btn-primary btn-sm" data-open="'+p.id+'">Buka</button>'+
+            '<button class="btn btn-ghost btn-sm" data-del="'+p.id+'">Hapus</button></div></div>';
+      }
+      cards+='</div>';
+    }
+    var manual='<details class="ws-card"><summary style="cursor:pointer;color:var(--on-dark);font-weight:600">Lanjutan: buat proyek manual</summary>'+
+      '<div style="margin-top:14px">'+
+      '<div class="f-row"><label class="f-label" for="npTitle">Judul / Topik Proyek *</label><input class="f-input" id="npTitle" placeholder="mis. Pengaruh Kualitas Layanan terhadap Kepuasan Pelanggan"></div>'+
+      '<div class="f-grid">'+
+        '<div class="f-row"><label class="f-label" for="npUni">Universitas</label><input class="f-input" id="npUni" placeholder="Nama universitas"></div>'+
+        '<div class="f-row"><label class="f-label" for="npProg">Program Studi</label><input class="f-input" id="npProg" placeholder="Program studi"></div>'+
+      '</div>'+
+      '<div class="f-row" style="max-width:280px"><label class="f-label" for="npStyle">Gaya Sitasi</label><select class="f-select" id="npStyle">'+styleOptions('apa7')+'</select></div>'+
+      '<button class="btn btn-ghost" id="npCreate">Buat Proyek Kosong</button>'+
+      '</div></details>';
+
+    shell('<h1 style="font-size:22px;color:var(--on-dark)">Proyek</h1><p class="muted" style="margin-top:6px;margin-bottom:16px">Semua proyek risetmu.</p>'+top+'<div style="margin-top:16px">'+cards+'</div>'+'<div style="margin-top:16px">'+manual+'</div>','Proyek');
+
+    byId('npWizard').addEventListener('click',function(){ wiz=newWiz(); go('wizard'); });
+    Array.prototype.forEach.call(root.querySelectorAll('[data-open]'),function(b){
+      b.addEventListener('click',function(){ THESIS.setActive(b.getAttribute('data-open')); go('proposal'); });
+    });
+    Array.prototype.forEach.call(root.querySelectorAll('[data-del]'),function(b){
+      b.addEventListener('click',function(){
+        if(window.confirm('Hapus proyek ini beserta seluruh datanya? Tindakan tidak bisa dibatalkan.')){
+          THESIS.deleteProject(b.getAttribute('data-del')); toast('Proyek dihapus.'); render();
+        }
+      });
+    });
+    var nc=byId('npCreate'); if(nc) nc.addEventListener('click',function(){
+      var title=val('npTitle').trim();
+      if(!title){ toast('Judul/topik proyek wajib diisi.'); byId('npTitle').focus(); return; }
+      var res=THESIS.createProject({ title:title, type:'skripsi', university:val('npUni'), program:val('npProg'), citationStyle:val('npStyle') });
+      if(!res.ok){ toast(res.error||'Gagal membuat proyek.'); return; }
+      THESIS.setActive(res.project.id); toast('Proyek dibuat.'); go('proposal');
+    });
+  }
+
+  /* ============================================================ IDENTITAS */
   function viewIdentitas(){
     var p=THESIS.activeProject();
-    if(!p){ shell(needProject(),'Identitas'); var g=byId('goProyek'); if(g)g.addEventListener('click',function(){go('proyek');}); return; }
+    if(!p){ shell(needProject(),'Identitas'); wireNeed(); return; }
     var up=p.state.universityProfile||{};
     function f(id,label,v,ph){ return '<div class="f-row"><label class="f-label" for="'+id+'">'+esc(label)+'</label><input class="f-input" id="'+id+'" value="'+esc(v||'')+'" placeholder="'+esc(ph||'')+'"></div>'; }
     var inner='<h1 style="font-size:22px;color:var(--on-dark)">Identitas & Kampus</h1>'+
-      '<p class="muted" style="margin-top:6px;margin-bottom:16px">Data ini dipakai pada halaman sampul & ekspor. Isi sesuai identitas resmimu.</p>'+
+      '<p class="muted" style="margin-top:6px;margin-bottom:16px">Data ini dipakai pada halaman sampul & ekspor proposal. Isi sesuai identitas resmimu.</p>'+
       '<div class="ws-card">'+
         f('idTitle','Judul Proyek',p.title)+
-        '<div class="f-grid">'+f('idNim','NIM',p.nim)+f('idYear','Tahun Akademik',p.academicYear)+'</div>'+
+        '<div class="f-grid">'+f('idName','Nama Mahasiswa',p.studentName||p.name)+f('idNim','NIM',p.nim)+'</div>'+
         '<div class="f-grid">'+f('idUni','Universitas',p.university)+f('idFac','Fakultas',p.faculty)+'</div>'+
         '<div class="f-grid">'+f('idProg','Program Studi',p.program)+f('idConc','Konsentrasi',p.concentration)+'</div>'+
         '<div class="f-grid">'+f('idSup1','Dosen Pembimbing 1',p.supervisor1)+f('idSup2','Dosen Pembimbing 2',p.supervisor2)+'</div>'+
-        '<div class="f-grid">'+f('idCity','Kota',p.city)+f('idDegree','Gelar',p.degree)+'</div>'+
-        '<h4 style="color:var(--on-dark);margin-top:8px">Profil Kampus (opsional)</h4>'+
-        '<div class="f-grid" style="margin-top:12px">'+f('upRektor','Rektor',up.rector)+f('upDekan','Dekan',up.dean)+'</div>'+
+        '<div class="f-grid">'+f('idCity','Kota',p.city)+f('idYear','Tahun Akademik',p.academicYear)+'</div>'+
         '<div class="f-row"><label class="f-label" for="idStyle">Gaya Sitasi</label><select class="f-select" id="idStyle">'+styleOptions(p.citationStyle)+'</select></div>'+
         '<button class="btn btn-primary" id="idSave">Simpan</button>'+
       '</div>';
     shell(inner,'Identitas');
     byId('idSave').addEventListener('click',function(){
-      var patch={
-        title:val('idTitle').trim()||p.title, nim:val('idNim'), academicYear:val('idYear'),
-        university:val('idUni'), faculty:val('idFac'), program:val('idProg'),
+      var name=val('idName');
+      THESIS.updateProject(p.id,{
+        title:val('idTitle').trim()||p.title, studentName:name, name:name, nim:val('idNim'),
+        academicYear:val('idYear'), university:val('idUni'), faculty:val('idFac'), program:val('idProg'),
         concentration:val('idConc'), supervisor1:val('idSup1'), supervisor2:val('idSup2'),
-        city:val('idCity'), degree:val('idDegree'), citationStyle:val('idStyle'),
-        state:{ universityProfile:{ rector:val('upRektor'), dean:val('upDekan') } }
-      };
-      var res=THESIS.updateProject(p.id,patch);
-      toast(res.ok?'Identitas tersimpan.':(res.error||'Gagal menyimpan.'));
+        city:val('idCity'), citationStyle:val('idStyle')
+      });
+      toast('Identitas tersimpan.');
     });
   }
 
-  /* ---- Judul & Topik ---- */
-  var ID_STOP=['yang','dan','di','ke','dari','untuk','pada','dengan','terhadap','atau','dalam','sebagai','adalah','ini','itu','oleh','akan','the','of','and','a','an','to','in','on','for','studi','analisis','pengaruh','penerapan','implementasi','kajian'];
-  function analyzeTitle(title){
-    var t=title.trim();
-    var words=t.toLowerCase().replace(/[^a-z0-9À-ɏ\s]/g,' ').split(/\s+/).filter(Boolean);
-    var kw=words.filter(function(w){ return w.length>3 && ID_STOP.indexOf(w)<0; });
-    // dedupe keep order
-    var seen={}, keywords=[];
-    kw.forEach(function(w){ if(!seen[w]){ seen[w]=1; keywords.push(w); } });
-    // variables heuristic: split on "terhadap"/"dan"/"pada"
-    var vars=[];
-    var mrx=t.split(/\bterhadap\b|\bdan\b/i).map(function(s){return s.trim();}).filter(function(s){return s.length>3;});
-    if(mrx.length>1) vars=mrx.slice(0,3);
-    var wordCount=words.length;
-    var flags=[];
-    if(wordCount<4) flags.push(['warning','Judul mungkin terlalu pendek — pertimbangkan memperjelas variabel & objek.']);
-    if(wordCount>20) flags.push(['warning','Judul cukup panjang — pertimbangkan meringkas agar fokus.']);
-    if(vars.length<2) flags.push(['info','Belum terdeteksi relasi antar-variabel yang jelas (mis. "X terhadap Y").']);
-    if(!flags.length) flags.push(['info','Panjang & struktur judul dalam rentang wajar.']);
-    return { at:new Date().toISOString(), title:t, wordCount:wordCount, keywords:keywords.slice(0,12), variables:vars, flags:flags };
-  }
-  function viewJudul(){
-    var p=THESIS.activeProject();
-    if(!p){ shell(needProject(),'Judul'); var g=byId('goProyek'); if(g)g.addEventListener('click',function(){go('proyek');}); return; }
-    var st=p.state, ta=st.titleAnalysis;
-    var inner='<h1 style="font-size:22px;color:var(--on-dark)">Judul & Topik</h1>'+
-      '<p class="muted" style="margin-top:6px;margin-bottom:16px">Rumuskan topik & judul kerja. Analisis di bawah bersifat heuristik.</p>'+
-      '<div class="ws-card">'+
-        '<div class="f-row"><label class="f-label" for="jTopic">Topik / Area Penelitian</label><input class="f-input" id="jTopic" value="'+esc(st.topic)+'" placeholder="mis. kepuasan pelanggan e-commerce"></div>'+
-        '<div class="f-row"><label class="f-label" for="jTitle">Judul Kerja</label><input class="f-input" id="jTitle" value="'+esc(p.title)+'"></div>'+
-        '<div style="display:flex;gap:10px;flex-wrap:wrap"><button class="btn btn-primary" id="jSave">Simpan</button><button class="btn btn-ghost" id="jAnalyze">Analisis Judul</button></div>'+
-        '<div id="jOut">'+renderTitleAnalysis(ta)+'</div>'+
-      '</div>';
-    shell(inner,'Judul');
-    byId('jSave').addEventListener('click',function(){
-      THESIS.updateProject(p.id,{ title:val('jTitle').trim()||p.title, state:{ topic:val('jTopic') } });
-      toast('Tersimpan.');
-    });
-    byId('jAnalyze').addEventListener('click',function(){
-      var title=val('jTitle').trim();
-      if(!title){ toast('Isi judul kerja dulu.'); return; }
-      var res=analyzeTitle(title);
-      THESIS.updateProject(p.id,{ title:title, state:{ topic:val('jTopic'), titleAnalysis:res } });
-      byId('jOut').innerHTML=renderTitleAnalysis(res);
-      toast('Analisis heuristik selesai.');
-    });
-  }
-  function renderTitleAnalysis(ta){
-    if(!ta) return '';
-    var kw=(ta.keywords||[]).map(function(k){ return '<span class="chip">'+esc(k)+'</span>'; }).join(' ')||'<span class="muted">—</span>';
-    var vars=(ta.variables||[]).map(function(v){ return '<li class="muted mt">'+icon('i-target')+' '+esc(v)+'</li>'; }).join('')||'<li class="muted">Belum terdeteksi variabel eksplisit.</li>';
-    var flags=(ta.flags||[]).map(function(fl){ return '<div class="finding '+esc(fl[0])+'"><p style="font-size:14px">'+esc(fl[1])+'</p></div>'; }).join('');
-    return '<div style="margin-top:18px;border-top:1px solid var(--hair-soft);padding-top:16px">'+
-      '<p class="badge badge-b" style="display:inline-block">Analisis heuristik, bukan penilaian resmi</p>'+
-      '<p class="muted" style="margin-top:10px;font-size:13px">Jumlah kata: <b class="num">'+esc(ta.wordCount)+'</b></p>'+
-      '<h4 style="color:var(--on-dark);margin-top:12px">Kandidat kata kunci</h4><div class="chip-list" style="margin-top:8px">'+kw+'</div>'+
-      '<h4 style="color:var(--on-dark);margin-top:14px">Kandidat variabel</h4><ul class="li-list" style="margin-top:6px">'+vars+'</ul>'+
-      '<div style="margin-top:14px">'+flags+'</div></div>';
-  }
-
-  /* ---- Sumber Ilmiah ---- */
-  var refFilter='all';
+  /* ============================================================ SUMBER */
   function viewSumber(){
     var p=THESIS.activeProject();
-    if(!p){ shell(needProject(),'Sumber'); var g=byId('goProyek'); if(g)g.addEventListener('click',function(){go('proyek');}); return; }
+    if(!p){ shell(needProject(),'Sumber'); wireNeed(); return; }
     var inner='<h1 style="font-size:22px;color:var(--on-dark)">Sumber Ilmiah</h1>'+
-      '<p class="muted" style="margin-top:6px;margin-bottom:16px">Cari jurnal & artikel dari OpenAlex / Crossref. Setiap referensi adalah data nyata — tidak ada yang direkayasa.</p>'+
+      '<p class="muted" style="margin-top:6px;margin-bottom:16px">Rujukan biasanya ditemukan otomatis saat membuat proposal. Di sini kamu bisa mencari tambahan atau menambah manual. Setiap referensi adalah data nyata — tidak ada yang direkayasa.</p>'+
       '<div class="ws-card">'+
         '<div style="display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end">'+
           '<div style="flex:1;min-width:200px"><label class="f-label" for="sQ">Kata kunci</label><input class="f-input" id="sQ" placeholder="mis. service quality customer satisfaction"></div>'+
@@ -484,7 +883,7 @@
         '</div>'+
         '<div id="sResults" style="margin-top:16px"></div>'+
       '</div>'+
-      '<div class="ws-card"><h3 style="color:var(--on-dark)">Impor Manual</h3>'+
+      '<details class="ws-card"><summary style="cursor:pointer;color:var(--on-dark);font-weight:600">Lanjutan: impor via DOI / entri manual</summary>'+
         '<div class="f-grid" style="margin-top:12px">'+
           '<div class="f-row"><label class="f-label" for="mDoi">Verifikasi via DOI</label><div style="display:flex;gap:8px"><input class="f-input" id="mDoi" placeholder="10.xxxx/xxxx"><button class="btn btn-ghost" id="mDoiBtn">Verifikasi</button></div></div>'+
         '</div>'+
@@ -500,7 +899,7 @@
         '</div>'+
         '<div class="f-row"><label class="f-label" for="emDoi">DOI (opsional)</label><input class="f-input" id="emDoi"></div>'+
         '<button class="btn btn-ghost" id="emAdd">Tambah ke Perpustakaan</button>'+
-      '</div>'+
+      '</details>'+
       '<div class="ws-card"><div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px"><h3 style="color:var(--on-dark)">Perpustakaan</h3>'+
         '<div style="display:flex;gap:6px">'+
           '<button class="chip-btn'+(refFilter==='all'?' on':'')+'" data-filter="all">Semua</button>'+
@@ -519,7 +918,6 @@
     byId('mDoiBtn').addEventListener('click',doVerifyDoi);
     byId('emAdd').addEventListener('click',doManualAdd);
   }
-
   function doSearch(){
     var p=THESIS.activeProject(); if(!p) return;
     var q=val('sQ').trim(), prov=val('sProv'), n=parseInt(val('sN'),10)||8;
@@ -530,7 +928,7 @@
     var pr = prov==='crossref' ? THESIS.searchCrossref(q,{rows:n}) : THESIS.searchOpenAlex(q,{perPage:n});
     Promise.resolve(pr).then(function(results){
       btn.disabled=false; btn.textContent=lbl;
-      if(!results||!results.length){ out.innerHTML='<p class="muted">Tidak ada hasil. Coba kata kunci lain atau gunakan impor manual di bawah.</p>'; return; }
+      if(!results||!results.length){ out.innerHTML='<p class="muted">Tidak ada hasil. Coba kata kunci lain atau gunakan impor manual.</p>'; return; }
       out.innerHTML=results.map(function(r,i){ return resultCard(r,i); }).join('');
       window._searchResults=results;
       Array.prototype.forEach.call(out.querySelectorAll('[data-add]'),function(b){
@@ -546,7 +944,7 @@
     })['catch'](function(err){
       btn.disabled=false; btn.textContent=lbl;
       out.innerHTML='<div class="finding warning"><p style="font-size:14px"><b>Pencarian gagal.</b> '+esc(err&&err.message||'Kesalahan jaringan')+'</p>'+
-        '<p class="muted" style="font-size:13px;margin-top:6px">Jika jaringan diblokir, gunakan <b>Impor Manual</b> (DOI atau entri manual) di bawah.</p></div>';
+        '<p class="muted" style="font-size:13px;margin-top:6px">Jika jaringan diblokir, gunakan <b>impor via DOI / entri manual</b> di atas.</p></div>';
     });
   }
   function resultCard(r,i){
@@ -559,10 +957,8 @@
         '<p class="muted" style="font-size:13px;margin-top:4px">'+esc(authorsLine(r.authors))+'</p>'+
         '<p class="muted" style="font-size:13px;margin-top:2px">'+esc(r.year||'t.t.')+(r.venue?' · '+esc(r.venue):'')+'</p>'+
         (r.doi?'<p style="font-size:12px;margin-top:4px"><a href="https://doi.org/'+esc(r.doi)+'" target="_blank" rel="noopener" style="color:var(--accent2)">doi.org/'+esc(r.doi)+'</a></p>':'')+
-        '<div style="margin-top:8px">'+badges+'</div>'+
-      '</div>'+
-      '<div><button class="btn btn-primary btn-sm" data-add="'+i+'">+ Perpustakaan</button></div>'+
-      '</div></div>';
+        '<div style="margin-top:8px">'+badges+'</div></div>'+
+      '<div><button class="btn btn-primary btn-sm" data-add="'+i+'">+ Perpustakaan</button></div></div></div>';
   }
   function doVerifyDoi(){
     var p=THESIS.activeProject(); if(!p) return;
@@ -615,8 +1011,7 @@
           '<div style="margin-top:8px;display:flex;gap:8px;align-items:center;flex-wrap:wrap">'+
             '<input class="f-input" style="max-width:260px;padding:8px 10px;font-size:13px" data-tags="'+esc(r.id)+'" value="'+esc((r.tags||[]).join(', '))+'" placeholder="tag1, tag2" aria-label="Tag referensi">'+
             '<button class="chip-btn" data-savetags="'+esc(r.id)+'">Simpan tag</button>'+
-          '</div>'+
-        '</div>'+
+          '</div></div>'+
         '<div style="display:flex;flex-direction:column;gap:6px"><button class="btn btn-ghost btn-sm" data-cite="'+esc(r.id)+'" data-intext="'+esc(intext)+'">Salin sitasi</button><button class="btn btn-ghost btn-sm" data-rm="'+esc(r.id)+'">Hapus</button></div>'+
         '</div></div>';
     }).join('');
@@ -640,15 +1035,15 @@
     });
   }
 
-  /* ---- Rumusan & Tujuan ---- */
+  /* ============================================================ RUMUSAN & TUJUAN */
   function viewRumusan(){
     var p=THESIS.activeProject();
-    if(!p){ shell(needProject(),'Rumusan'); var g=byId('goProyek'); if(g)g.addEventListener('click',function(){go('proyek');}); return; }
+    if(!p){ shell(needProject(),'Rumusan'); wireNeed(); return; }
     var st=p.state, qs=st.questions||[], objs=st.objectives||[], gaps=st.gaps||[];
     var qHtml=qs.length?qs.map(function(q){
       return '<div class="ref-card"><div style="display:flex;justify-content:space-between;gap:10px"><div style="flex:1"><b class="muted" style="font-size:12px">'+esc(q.id)+'</b><p style="margin-top:4px">'+esc(q.text)+'</p></div>'+
         '<button class="btn btn-ghost btn-sm" data-rmq="'+esc(q.id)+'">Hapus</button></div></div>';
-    }).join(''):'<p class="muted">Belum ada rumusan masalah.</p>';
+    }).join(''):'<p class="muted">Belum ada rumusan masalah. Buat lewat "Buat Cepat" agar terisi otomatis.</p>';
     var qOpts='<option value="">— tanpa rumusan —</option>'+qs.map(function(q){ return '<option value="'+esc(q.id)+'">'+esc(q.text.slice(0,60))+'</option>'; }).join('');
     var oHtml=objs.length?objs.map(function(o){
       var link=o.questionId?(function(){ for(var i=0;i<qs.length;i++) if(qs[i].id===o.questionId) return qs[i].text.slice(0,50); return '(rumusan hilang)'; })():'';
@@ -657,7 +1052,7 @@
     }).join(''):'<p class="muted">Belum ada tujuan penelitian.</p>';
 
     var inner='<h1 style="font-size:22px;color:var(--on-dark)">Rumusan & Tujuan</h1>'+
-      '<p class="muted" style="margin-top:6px;margin-bottom:16px">Setiap tujuan idealnya menjawab satu rumusan masalah.</p>'+
+      '<p class="muted" style="margin-top:6px;margin-bottom:16px">Sudah diisi otomatis dari judul — silakan sunting. Setiap tujuan idealnya menjawab satu rumusan masalah.</p>'+
       '<div class="ws-card"><h3 style="color:var(--on-dark)">Rumusan Masalah</h3><div style="margin-top:12px">'+qHtml+'</div>'+
         '<div style="margin-top:12px;display:flex;gap:8px"><input class="f-input" id="newQ" placeholder="Tulis satu rumusan masalah…"><button class="btn btn-primary" id="addQ">Tambah</button></div>'+
       '</div>'+
@@ -670,7 +1065,6 @@
         '<button class="btn btn-ghost" id="saveGaps" style="margin-top:10px">Simpan Catatan</button>'+
       '</div>';
     shell(inner,'Rumusan');
-
     byId('addQ').addEventListener('click',function(){
       var t=val('newQ').trim(); if(!t){ toast('Isi rumusan dulu.'); return; }
       var nq=qs.slice(); nq.push({id:THESIS.uid('q'),text:t,rationale:''});
@@ -693,13 +1087,13 @@
     });
   }
 
-  /* ---- Metode ---- */
+  /* ============================================================ METODE */
   function viewMetode(){
     var p=THESIS.activeProject();
-    if(!p){ shell(needProject(),'Metode'); var g=byId('goProyek'); if(g)g.addEventListener('click',function(){go('proyek');}); return; }
+    if(!p){ shell(needProject(),'Metode'); wireNeed(); return; }
     var m=p.state.method||{};
     var inner='<h1 style="font-size:22px;color:var(--on-dark)">Metode Penelitian</h1>'+
-      '<p class="muted" style="margin-top:6px;margin-bottom:16px">Jawab beberapa pertanyaan — sistem memberi <b>rekomendasi</b> heuristik untuk kamu tinjau bersama dosen.</p>'+
+      '<p class="muted" style="margin-top:6px;margin-bottom:16px">Sistem memberi <b>rekomendasi</b> heuristik untuk kamu tinjau bersama dosen — bukan keputusan final.</p>'+
       '<div class="ws-card">'+
         '<div class="f-row"><label class="f-label" for="mGoal">Tujuan utama penelitian</label><select class="f-select" id="mGoal">'+
           '<option value="measure">Mengukur / mendeskripsikan</option>'+
@@ -750,83 +1144,10 @@
     });
   }
 
-  /* ---- Kerangka BAB ---- */
-  function viewBab(){
-    var p=THESIS.activeProject();
-    if(!p){ shell(needProject(),'BAB'); var g=byId('goProyek'); if(g)g.addEventListener('click',function(){go('proyek');}); return; }
-    var st=p.state;
-    if(!st.chapters||!st.chapters.length){
-      THESIS.updateProject(p.id,{state:{chapters:THESIS.defaultChapters(p.type||'skripsi')}});
-      p=THESIS.activeProject(); st=p.state;
-    }
-    var refs=st.references||[];
-    var style=p.citationStyle||'apa7';
-    var refMap={}; refs.forEach(function(r){ refMap[r.id]=r; });
-    var refOptions=refs.map(function(r){ return '<option value="'+esc(r.id)+'">'+esc((r.authors&&r.authors[0]&&(r.authors[0].family||r.authors[0].name))||r.title.slice(0,30))+' ('+esc(r.year||'t.t.')+')</option>'; }).join('');
-
-    var chaptersHtml=st.chapters.map(function(ch,ci){
-      if(!ch.sections||!ch.sections.length){
-        return '<div class="ws-card"><h3 style="color:var(--on-dark)">'+esc(ch.code)+' · '+esc(ch.title)+'</h3><p class="muted" style="margin-top:8px">Bagian ini otomatis dari Daftar Pustaka (lihat tab Ekspor).</p></div>';
-      }
-      var secs=ch.sections.map(function(sec,si){
-        var cited=(sec.citationIds||[]).map(function(id){ var r=refMap[id]; return r?'<span class="chip">'+esc((r.authors&&r.authors[0]&&(r.authors[0].family||r.authors[0].name))||'ref')+' '+esc(r.year||'')+'</span>':''; }).join(' ');
-        var did='sec_'+ci+'_'+si;
-        return '<div style="margin-top:16px;border-top:1px solid var(--hair-soft);padding-top:14px">'+
-          '<label class="f-label" for="'+did+'" style="font-weight:600;color:var(--on-dark);font-size:14px">'+esc(sec.title)+'</label>'+
-          '<textarea class="f-area" id="'+did+'" data-ci="'+ci+'" data-si="'+si+'" placeholder="Tulis isi bagian ini…">'+esc(sec.content||'')+'</textarea>'+
-          '<div style="margin-top:8px;display:flex;gap:8px;align-items:center;flex-wrap:wrap">'+
-            (refs.length?('<select class="f-select" style="max-width:280px;padding:8px 10px;font-size:13px" data-refsel="'+did+'"><option value="">Pilih referensi…</option>'+refOptions+'</select><button class="chip-btn" data-insert="'+did+'" data-ci="'+ci+'" data-si="'+si+'">Sisipkan Sitasi</button>'):'<span class="muted" style="font-size:13px">Tambahkan referensi di tab Sumber untuk menyisipkan sitasi.</span>')+
-          '</div>'+
-          (cited?'<div style="margin-top:8px"><span class="muted" style="font-size:12px">Disitasi: </span>'+cited+'</div>':'')+
-        '</div>';
-      }).join('');
-      return '<div class="ws-card"><h3 style="color:var(--on-dark)">'+esc(ch.code)+' · '+esc(ch.title)+'</h3>'+secs+'</div>';
-    }).join('');
-
-    var inner='<h1 style="font-size:22px;color:var(--on-dark)">Kerangka BAB</h1>'+
-      '<p class="muted" style="margin-top:6px;margin-bottom:16px">Alat bantu penulisan — <b>kamu</b> yang menulis; sistem menjaga sitasi tetap tertaut ke sumber nyata. Isi tersimpan otomatis saat kamu keluar dari kotak teks.</p>'+
-      chaptersHtml;
-    shell(inner,'BAB');
-
-    // autosave on blur
-    Array.prototype.forEach.call(root.querySelectorAll('textarea[data-ci]'),function(ta){
-      ta.addEventListener('blur',function(){ saveSection(p.id,parseInt(ta.getAttribute('data-ci'),10),parseInt(ta.getAttribute('data-si'),10),ta.value,null); });
-    });
-    Array.prototype.forEach.call(root.querySelectorAll('[data-insert]'),function(b){
-      b.addEventListener('click',function(){
-        var did=b.getAttribute('data-insert');
-        var sel=root.querySelector('[data-refsel="'+did+'"]');
-        var refId=sel?sel.value:'';
-        if(!refId){ toast('Pilih referensi dulu.'); return; }
-        var ref=refMap[refId];
-        var cite=THESIS.formatInText(ref,style) || ('('+((ref.authors&&ref.authors[0]&&(ref.authors[0].family||ref.authors[0].name))||'—')+', '+(ref.year||'t.t.')+')');
-        var ta=byId(did);
-        var start=ta.selectionStart, end=ta.selectionEnd;
-        if(typeof start==='number'){ ta.value=ta.value.slice(0,start)+' '+cite+' '+ta.value.slice(end); }
-        else { ta.value+=' '+cite; }
-        saveSection(p.id,parseInt(b.getAttribute('data-ci'),10),parseInt(b.getAttribute('data-si'),10),ta.value,refId);
-        toast('Sitasi disisipkan: '+cite);
-        viewBab();
-      });
-    });
-  }
-  function saveSection(pid,ci,si,content,addRefId){
-    var p=THESIS.getProject(pid); if(!p) return;
-    var chapters=JSON.parse(JSON.stringify(p.state.chapters));
-    if(!chapters[ci]||!chapters[ci].sections[si]) return;
-    chapters[ci].sections[si].content=content;
-    if(addRefId){
-      var cids=chapters[ci].sections[si].citationIds||[];
-      if(cids.indexOf(addRefId)<0) cids.push(addRefId);
-      chapters[ci].sections[si].citationIds=cids;
-    }
-    THESIS.updateProject(pid,{state:{chapters:chapters}});
-  }
-
-  /* ---- Konsistensi ---- */
+  /* ============================================================ KONSISTENSI */
   function viewKonsistensi(){
     var p=THESIS.activeProject();
-    if(!p){ shell(needProject(),'Konsistensi'); var g=byId('goProyek'); if(g)g.addEventListener('click',function(){go('proyek');}); return; }
+    if(!p){ shell(needProject(),'Konsistensi'); wireNeed(); return; }
     var inner='<h1 style="font-size:22px;color:var(--on-dark)">Konsistensi</h1>'+
       '<p class="muted" style="margin-top:6px;margin-bottom:16px">Pemeriksaan aturan deterministik atas keselarasan rumusan, tujuan, metode, dan sitasi.</p>'+
       '<div class="ws-card"><button class="btn btn-primary" id="runCk">Jalankan Pemeriksaan</button><div id="ckList" style="margin-top:14px"></div></div>';
@@ -836,98 +1157,18 @@
     run();
   }
 
-  /* ---- Ekspor ---- */
-  function viewEkspor(){
-    var p=THESIS.activeProject();
-    if(!p){ shell(needProject(),'Ekspor'); var g=byId('goProyek'); if(g)g.addEventListener('click',function(){go('proyek');}); return; }
-    var refs=p.state.references||[];
-    var style=p.citationStyle||'apa7';
-    var inner='<h1 style="font-size:22px;color:var(--on-dark)">Ekspor</h1>'+
-      '<p class="muted" style="margin-top:6px;margin-bottom:16px">Unduh daftar pustaka & draf proposal. Semua entri diformat deterministik dari data referensimu.</p>'+
-      '<div class="ws-card">'+
-        '<div class="f-row" style="max-width:280px"><label class="f-label" for="exStyle">Gaya Sitasi</label><select class="f-select" id="exStyle">'+styleOptions(style)+'</select></div>'+
-        '<div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:8px" class="no-print">'+
-          '<button class="btn btn-ghost" id="exBib">Unduh BibTeX</button>'+
-          '<button class="btn btn-ghost" id="exRis">Unduh RIS</button>'+
-          '<button class="btn btn-primary" id="exDoc">Unduh Proposal (DOCX)</button>'+
-          '<button class="btn btn-ghost" id="exPrint">Cetak / PDF</button>'+
-        '</div>'+
-      '</div>'+
-      '<div class="ws-card"><h3 style="color:var(--on-dark)">Daftar Pustaka</h3><div id="bibPreview" style="margin-top:12px"></div></div>';
-    shell(inner,'Ekspor');
-    function renderBib(){
-      var s=val('exStyle');
-      var built=THESIS.buildBibliography(refs,s);
-      var box=byId('bibPreview');
-      if(!built.length){ box.innerHTML='<p class="muted">Belum ada referensi. Tambahkan di tab Sumber Ilmiah.</p>'; return; }
-      var numeric=(s==='ieee'||s==='vancouver');
-      box.innerHTML='<ol class="li-list" style="counter-reset:bib">'+built.map(function(b,i){
-        return '<p style="margin-top:10px;padding-left:'+(numeric?'34px':'28px')+';text-indent:-'+(numeric?'34px':'28px')+'px;line-height:1.6">'+(numeric?('['+(i+1)+'] '):'')+md(b.entry)+'</p>';
-      }).join('')+'</ol>';
-    }
-    byId('exStyle').addEventListener('change',function(){
-      THESIS.updateProject(p.id,{citationStyle:val('exStyle')}); renderBib();
-    });
-    renderBib();
-    byId('exBib').addEventListener('click',function(){
-      var txt=THESIS.toBibTeX(refs); if(!txt){ toast('Belum ada referensi.'); return; }
-      download(fileBase(p)+'.bib',txt,'application/x-bibtex;charset=utf-8'); toast('BibTeX diunduh.');
-    });
-    byId('exRis').addEventListener('click',function(){
-      var txt=THESIS.toRIS(refs); if(!txt){ toast('Belum ada referensi.'); return; }
-      download(fileBase(p)+'.ris',txt,'application/x-research-info-systems;charset=utf-8'); toast('RIS diunduh.');
-    });
-    byId('exDoc').addEventListener('click',function(){
-      download(fileBase(p)+'.doc',buildDocHtml(p,val('exStyle')),'application/msword'); toast('Proposal (DOCX) diunduh.');
-    });
-    byId('exPrint').addEventListener('click',function(){ window.print(); });
-  }
-  function fileBase(p){ return (p.title||'proposal').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'').slice(0,60)||'proposal'; }
-  function stripMd(s){ return String(s==null?'':s).replace(/\*([^*]+)\*/g,'$1'); }
-  function buildDocHtml(p,style){
-    var st=p.state, refs=st.references||[];
-    var esc2=esc;
-    var cover='<div style="text-align:center;margin-bottom:48pt">'+
-      '<p style="font-size:16pt;font-weight:bold">'+esc2(p.title)+'</p>'+
-      '<p style="margin-top:24pt">PROPOSAL '+esc2((p.type||'SKRIPSI').toUpperCase())+'</p>'+
-      (p.nim?'<p style="margin-top:24pt">NIM: '+esc2(p.nim)+'</p>':'')+
-      (p.program?'<p>Program Studi '+esc2(p.program)+'</p>':'')+
-      (p.faculty?'<p>'+esc2(p.faculty)+'</p>':'')+
-      (p.university?'<p style="font-weight:bold">'+esc2(p.university)+'</p>':'')+
-      (p.city?'<p>'+esc2(p.city)+'</p>':'')+
-      (p.academicYear?'<p>'+esc2(p.academicYear)+'</p>':'')+
-      '</div>';
-    var body='';
-    (st.chapters||[]).forEach(function(ch){
-      if(!ch.sections||!ch.sections.length) return;
-      body+='<h1 style="font-size:14pt">'+esc2(ch.code)+' '+esc2(ch.title)+'</h1>';
-      ch.sections.forEach(function(sec){
-        body+='<h2 style="font-size:12pt">'+esc2(sec.title)+'</h2>';
-        body+='<p style="text-align:justify;line-height:1.5">'+(sec.content?esc2(sec.content).replace(/\n/g,'<br>'):'<i>[Bagian ini belum diisi]</i>')+'</p>';
-      });
-    });
-    var bib=THESIS.buildBibliography(refs,style);
-    var bibHtml='<h1 style="font-size:14pt">DAFTAR PUSTAKA</h1>';
-    if(bib.length){ bib.forEach(function(b,i){ bibHtml+='<p style="line-height:1.5">'+((style==='ieee'||style==='vancouver')?('['+(i+1)+'] '):'')+esc2(stripMd(b.entry))+'</p>'; }); }
-    else bibHtml+='<p><i>[Belum ada referensi]</i></p>';
-    return '<html xmlns:w="urn:schemas-microsoft-com:office:word"><head><meta charset="utf-8"><title>'+esc2(p.title)+'</title></head>'+
-      '<body style="font-family:\'Times New Roman\',serif;font-size:12pt">'+cover+body+bibHtml+'</body></html>';
-  }
-
   /* ---------- router ---------- */
   function render(){
     switch(view){
       case 'proyek': return viewProyek();
-      case 'ringkasan': return viewRingkasan();
-      case 'identitas': return viewIdentitas();
-      case 'judul': return viewJudul();
+      case 'wizard': return viewWizard();
+      case 'proposal': return viewProposal();
       case 'sumber': return viewSumber();
       case 'rumusan': return viewRumusan();
       case 'metode': return viewMetode();
-      case 'bab': return viewBab();
+      case 'identitas': return viewIdentitas();
       case 'konsistensi': return viewKonsistensi();
-      case 'ekspor': return viewEkspor();
-      default: return viewProyek();
+      default: return viewProposal();
     }
   }
 
@@ -935,7 +1176,8 @@
   function boot(){
     if(!(window.PBS && typeof PBS.currentUser==='function' && PBS.currentUser())){ renderGate(); return; }
     if(typeof window.THESIS==='undefined'){ renderFatal('Modul THESIS gagal dimuat (assets/thesis.js).'); return; }
-    view = THESIS.activeProject() ? 'ringkasan' : 'proyek';
+    if(THESIS.activeProject()){ view='proposal'; }
+    else { view='wizard'; wiz=newWiz(); }
     render();
   }
   boot();

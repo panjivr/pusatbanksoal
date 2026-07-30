@@ -1014,6 +1014,792 @@
   }
 
   /* ====================================================================== */
+  /* PROPOSAL WIZARD (simple input -> detailed, non-fabricated output)       */
+  /* ------------------------------------------------------------------      */
+  /* Everything below is either (a) deterministic template prose weaving in   */
+  /* the student's OWN inputs, or (b) an explicit 〔placeholder〕 marking where */
+  /* real facts/data/sources must be supplied. Never invents citations,      */
+  /* statistics, participant data, or findings.                              */
+  /* ====================================================================== */
+
+  // Wrap text as a clearly-marked placeholder for real content.
+  function ph(s) { return '〔' + s + '〕'; } // 〔 … 〕
+
+  /* ---- 1) FIELDS: choice catalogs for the wizard UI --------------------- */
+  var FIELDS = {
+    bidang: [
+      { value: 'manajemen',   label: 'Manajemen' },
+      { value: 'akuntansi',   label: 'Akuntansi' },
+      { value: 'ekonomi',     label: 'Ekonomi' },
+      { value: 'pendidikan',  label: 'Pendidikan' },
+      { value: 'informatika', label: 'Informatika / Ilmu Komputer' },
+      { value: 'teknik',      label: 'Teknik' },
+      { value: 'hukum',       label: 'Hukum' },
+      { value: 'psikologi',   label: 'Psikologi' },
+      { value: 'kesehatan',   label: 'Kesehatan / Keperawatan' },
+      { value: 'komunikasi',  label: 'Ilmu Komunikasi' },
+      { value: 'sosial',      label: 'Sosial & Politik' },
+      { value: 'pertanian',   label: 'Pertanian' },
+      { value: 'lainnya',     label: 'Lainnya' }
+    ],
+    jenjang: [
+      { value: 's1', label: 'S1 (Sarjana / Skripsi)' },
+      { value: 'd3', label: 'D3 (Tugas Akhir)' },
+      { value: 's2', label: 'S2 (Tesis)' }
+    ],
+    pendekatan: [
+      { value: 'kuantitatif', label: 'Kuantitatif (angka, uji statistik)' },
+      { value: 'kualitatif',  label: 'Kualitatif (naratif, makna, kasus)' }
+    ],
+    tujuanRiset: [
+      { value: 'pengaruh',     label: 'Menguji pengaruh/hubungan antar-variabel' },
+      { value: 'perbandingan', label: 'Membandingkan dua kelompok/kondisi' },
+      { value: 'deskripsi',    label: 'Mendeskripsikan suatu keadaan/fenomena' },
+      { value: 'eksplorasi',   label: 'Mengeksplorasi fenomena secara mendalam' },
+      { value: 'pengembangan', label: 'Mengembangkan produk/model (R&D)' }
+    ],
+    jenisData: [
+      { value: 'numerik',  label: 'Numerik (angka/skala)' },
+      { value: 'teks',     label: 'Teks (wawancara/dokumen)' },
+      { value: 'campuran', label: 'Campuran (numerik + teks)' }
+    ],
+    citationStyles: [
+      { value: 'apa7',      label: 'APA 7th' },
+      { value: 'ieee',      label: 'IEEE' },
+      { value: 'harvard',   label: 'Harvard' },
+      { value: 'vancouver', label: 'Vancouver' }
+    ]
+  };
+
+  /* ---- small text helpers shared by the wizard -------------------------- */
+  function splitVars(s) {
+    s = trim(s);
+    if (!s) return [];
+    var parts = s.split(/\s*,\s*|\s+dan\s+|\s+serta\s+/i);
+    var out = [];
+    for (var i = 0; i < parts.length; i++) { var p = trim(parts[i]); if (p) out.push(p); }
+    return out;
+  }
+  // join non-empty word segments with single spaces (graceful slot omission)
+  function joinSeg() {
+    var o = [];
+    for (var i = 0; i < arguments.length; i++) { var a = trim(arguments[i]); if (a) o.push(a); }
+    return o.join(' ').replace(/\s+/g, ' ');
+  }
+  function asList(v) { return isArray(v) ? v : (trim(v) ? splitVars(v) : []); }
+  function uniq(arr) {
+    var seen = {}, out = [];
+    for (var i = 0; i < arr.length; i++) {
+      var v = trim(arr[i]); if (!v) continue;
+      var k = v.toLowerCase(); if (seen[k]) continue; seen[k] = 1; out.push(v);
+    }
+    return out;
+  }
+  // "pada {objek} di {lokasi}" tail, omitting empty slots.
+  function ctxTail(objek, lokasi) {
+    objek = trim(objek); lokasi = trim(lokasi);
+    if (objek) return ' pada ' + objek + (lokasi ? ' di ' + lokasi : '');
+    if (lokasi) return ' di ' + lokasi;
+    return '';
+  }
+
+  /* ---- 2) suggestTitles: pure recombination of the student's words ------ */
+  function suggestTitles(inp) {
+    inp = inp || {};
+    var X = asList(inp.x).join(' dan ');
+    var Y = asList(inp.y).join(' dan ');
+    var objek = trim(inp.objek), lokasi = trim(inp.lokasi);
+    var tuj = trim(inp.tujuanRiset || inp.tujuan || '').toLowerCase();
+    var pOb = objek ? 'pada ' + objek : '';
+    var pLo = lokasi ? 'di ' + lokasi : '';
+    var out = [];
+    function add(title, pattern) {
+      title = trim(title).replace(/\s+/g, ' ');
+      if (title) out.push({ title: title, pattern: pattern });
+    }
+    if (tuj === 'perbandingan') {
+      add(joinSeg('Perbandingan', X, Y ? 'dan ' + Y : '', pOb, pLo),
+        'Perbandingan {X} dan {Y} pada {objek} di {lokasi}');
+      add(joinSeg('Analisis Perbandingan', X, pOb, pLo),
+        'Analisis Perbandingan {X} pada {objek} di {lokasi}');
+      add(joinSeg('Studi Komparatif', X, Y ? 'dan ' + Y : '', pOb),
+        'Studi Komparatif {X} dan {Y} pada {objek}');
+    } else if (tuj === 'deskripsi') {
+      add(joinSeg('Analisis', X, pOb, pLo), 'Analisis {X} pada {objek} di {lokasi}');
+      add(joinSeg('Gambaran', X, pOb, pLo), 'Gambaran {X} pada {objek} di {lokasi}');
+      add(joinSeg('Deskripsi', X, pOb), 'Deskripsi {X} pada {objek}');
+    } else if (tuj === 'eksplorasi') {
+      add(joinSeg('Eksplorasi', X, pOb, pLo), 'Eksplorasi {X} pada {objek} di {lokasi}');
+      add(joinSeg('Studi Kasus', X, pOb, pLo), 'Studi Kasus {X} pada {objek} di {lokasi}');
+      add(joinSeg('Kajian Mendalam mengenai', X, pOb), 'Kajian Mendalam {X} pada {objek}');
+    } else if (tuj === 'pengembangan') {
+      add(joinSeg('Pengembangan', X, Y ? 'untuk ' + Y : '', pOb),
+        'Pengembangan {X} untuk {Y} pada {objek}');
+      add(joinSeg('Perancangan', X, pOb, pLo), 'Perancangan {X} pada {objek} di {lokasi}');
+      add(joinSeg('Rancang Bangun', X, Y ? 'untuk ' + Y : '', pOb),
+        'Rancang Bangun {X} untuk {Y} pada {objek}');
+    } else { // default: pengaruh
+      add(joinSeg('Pengaruh', X, Y ? 'terhadap ' + Y : '', pOb, pLo),
+        'Pengaruh {X} terhadap {Y} pada {objek} di {lokasi}');
+      add(joinSeg('Analisis Pengaruh', X, Y ? 'terhadap ' + Y : '', pOb),
+        'Analisis Pengaruh {X} terhadap {Y} pada {objek}');
+      add(joinSeg('Pengaruh', X, Y ? 'terhadap ' + Y : '',
+        objek ? '(Studi ' + ('pada ' + objek + (lokasi ? ' di ' + lokasi : '')) + ')' : ''),
+        'Pengaruh {X} terhadap {Y} (Studi pada {objek} di {lokasi})');
+    }
+    // dedupe by title, cap 6
+    var seen = {}, res = [];
+    for (var i = 0; i < out.length; i++) {
+      var key = out[i].title.toLowerCase();
+      if (seen[key]) continue; seen[key] = 1; res.push(out[i]);
+    }
+    return res.slice(0, 6);
+  }
+
+  /* ---- 3) deriveFromTitle: heuristic Indonesian parse -> RQ/OBJ/etc ----- */
+  function deriveFromTitle(title, inp) {
+    inp = inp || {};
+    var t = trim(title);
+    var objek = trim(inp.objek), lokasi = trim(inp.lokasi);
+    var work = t, m;
+
+    // Peel off " di {lokasi}" then " pada {objek}" from the tail.
+    m = work.match(/\s+di\s+(.+)$/i);
+    if (m) { if (!lokasi) lokasi = trim(m[1]); work = trim(work.slice(0, m.index)); }
+    m = work.match(/\s+pada\s+(.+)$/i);
+    if (m) { if (!objek) objek = trim(m[1]); work = trim(work.slice(0, m.index)); }
+
+    var x = [], y = [], type = 'deskripsi', rel = false;
+    if ((m = work.match(/pengaruh\s+(.+?)\s+terhadap\s+(.+)$/i))) {
+      x = splitVars(m[1]); y = splitVars(m[2]); type = 'pengaruh'; rel = true;
+    } else if ((m = work.match(/hubungan\s+(?:antara\s+)?(.+?)\s+(?:dengan|dan)\s+(.+)$/i))) {
+      x = splitVars(m[1]); y = splitVars(m[2]); type = 'hubungan'; rel = true;
+    } else if ((m = work.match(/(?:perbandingan|komparatif|komparasi)\s+(.+?)(?:\s+(?:dan|dengan)\s+(.+))?$/i))) {
+      x = splitVars(m[1]); if (m[2]) x = x.concat(splitVars(m[2])); type = 'perbandingan';
+    } else if ((m = work.match(/(?:pengembangan|perancangan|rancang\s+bangun)\s+(.+?)(?:\s+untuk\s+(.+))?$/i))) {
+      x = splitVars(m[1]); if (m[2]) y = splitVars(m[2]); type = 'pengembangan';
+    } else {
+      var core = work.replace(/^(analisis|gambaran|deskripsi|studi(?:\s+kasus)?|kajian|eksplorasi|penerapan|implementasi|efektivitas|evaluasi)\s+/i, '');
+      x = splitVars(core);
+      type = /eksplor|studi\s+kasus|kajian\s+mendalam/i.test(work) ? 'eksplorasi' : 'deskripsi';
+    }
+    // Explicit user variables override the parse.
+    if (inp.x != null && trim(asList(inp.x).join(''))) x = asList(inp.x);
+    if (inp.y != null && trim(asList(inp.y).join(''))) y = asList(inp.y);
+    x = uniq(x); y = uniq(y);
+
+    // Approach: honor explicit choice, else infer from research goal.
+    var approach = trim(inp.pendekatan || inp.approach || '').toLowerCase();
+    if (approach !== 'kuantitatif' && approach !== 'kualitatif') {
+      approach = (type === 'pengaruh' || type === 'hubungan' || type === 'perbandingan')
+        ? 'kuantitatif' : 'kualitatif';
+    }
+
+    var design;
+    if (type === 'pengaruh' || type === 'hubungan') design = 'Kuantitatif asosiatif/korelasional';
+    else if (type === 'perbandingan') design = 'Kuantitatif komparatif';
+    else if (type === 'pengembangan') design = 'Penelitian dan Pengembangan (R&D)';
+    else if (type === 'eksplorasi') design = 'Kualitatif eksploratif (studi kasus)';
+    else design = (approach === 'kuantitatif') ? 'Kuantitatif deskriptif' : 'Kualitatif deskriptif';
+
+    var ctx = ctxTail(objek, lokasi);
+    var xStr = x.join(', ');
+    var yStr = y.join(' dan ');
+    var keywords = uniq([].concat(x, y, objek ? [objek] : [], inp.bidang ? [inp.bidang] : []));
+
+    var questions = [], objectives = [];
+    function addQO(qText, oText, qid) {
+      var q = { id: qid || uid('rq'), text: qText };
+      var o = { id: uid('obj'), text: oText, questionId: q.id };
+      questions.push(q); objectives.push(o);
+    }
+
+    var yTarget = yStr || ph('variabel terikat');
+    if (type === 'pengaruh' || type === 'hubungan') {
+      var verb = (type === 'hubungan') ? 'berhubungan dengan' : 'berpengaruh terhadap';
+      var averb = (type === 'hubungan') ? 'hubungan' : 'pengaruh';
+      for (var i = 0; i < (x.length || 1); i++) {
+        var xi = x[i] || ph('variabel bebas');
+        addQO(
+          'Apakah ' + xi + ' ' + verb + ' ' + yTarget + ctx + '?',
+          'Untuk menguji dan menganalisis ' + averb + ' ' + xi + ' terhadap ' + yTarget + ctx + '.'
+        );
+      }
+      if (x.length > 1) {
+        addQO(
+          'Apakah ' + xStr + ' secara simultan ' + verb + ' ' + yTarget + ctx + '?',
+          'Untuk menguji ' + averb + ' ' + xStr + ' secara simultan terhadap ' + yTarget + ctx + '.'
+        );
+      }
+    } else if (type === 'perbandingan') {
+      addQO(
+        'Apakah terdapat perbedaan ' + (xStr || ph('variabel')) + ' antar kelompok yang dibandingkan' + ctx + '?',
+        'Untuk menganalisis perbedaan ' + (xStr || ph('variabel')) + ' antar kelompok yang dibandingkan' + ctx + '.'
+      );
+    } else if (type === 'pengembangan') {
+      addQO(
+        'Bagaimana mengembangkan ' + (xStr || ph('produk/model')) + (yStr ? ' untuk ' + yStr : '') + ctx + '?',
+        'Untuk mengembangkan ' + (xStr || ph('produk/model')) + (yStr ? ' untuk ' + yStr : '') + ctx + '.'
+      );
+      addQO(
+        'Bagaimana kelayakan ' + (xStr || ph('produk/model')) + ' yang dikembangkan' + ctx + '?',
+        'Untuk menguji kelayakan ' + (xStr || ph('produk/model')) + ' yang dikembangkan' + ctx + '.'
+      );
+    } else { // deskripsi / eksplorasi
+      var q1v = (type === 'eksplorasi') ? 'Bagaimana ' : 'Bagaimana gambaran ';
+      for (var k = 0; k < (x.length || 1); k++) {
+        var xk = x[k] || ph('fokus penelitian');
+        addQO(
+          q1v + xk + ctx + '?',
+          'Untuk mendeskripsikan ' + xk + ctx + '.'
+        );
+      }
+      if (type === 'eksplorasi') {
+        addQO(
+          'Faktor-faktor apa yang memengaruhi ' + (xStr || ph('fokus penelitian')) + ctx + '?',
+          'Untuk mengeksplorasi faktor-faktor yang memengaruhi ' + (xStr || ph('fokus penelitian')) + ctx + '.'
+        );
+      }
+    }
+
+    var hypotheses = [];
+    if (approach === 'kuantitatif' && rel) {
+      for (var h = 0; h < (x.length || 1); h++) {
+        var xh = x[h] || ph('variabel bebas');
+        hypotheses.push({
+          id: uid('hyp'),
+          text: 'Terdapat pengaruh yang signifikan antara ' + xh + ' terhadap ' + yTarget + ctx + '.'
+        });
+      }
+      if (x.length > 1) {
+        hypotheses.push({
+          id: uid('hyp'),
+          text: 'Terdapat pengaruh yang signifikan antara ' + xStr + ' secara simultan terhadap ' + yTarget + ctx + '.'
+        });
+      }
+    }
+
+    var topik = uniq([].concat(x, y)).join(' dan ') || ph('topik penelitian');
+    var bidang = trim(inp.bidang) || ph('bidang keilmuan');
+    var benefits = {
+      teoritis: [
+        'Hasil penelitian ini diharapkan dapat memperkaya khazanah keilmuan ' + bidang +
+          ', khususnya kajian mengenai ' + topik + '.',
+        'Penelitian ini dapat menjadi rujukan dan bahan pembanding bagi penelitian selanjutnya yang berkaitan dengan ' + topik + '.'
+      ],
+      praktis: [
+        'Bagi ' + (objek || ph('objek penelitian')) + ', hasil penelitian ini diharapkan menjadi bahan pertimbangan dalam ' +
+          ph('pengambilan keputusan/kebijakan terkait') + '.',
+        'Bagi peneliti, penelitian ini menjadi sarana penerapan ilmu yang diperoleh selama perkuliahan.',
+        'Bagi pembaca, penelitian ini diharapkan menambah wawasan mengenai ' + topik + '.'
+      ]
+    };
+
+    return {
+      variables: { x: x, y: y },
+      keywords: keywords,
+      approach: approach,
+      design: design,
+      type: type,
+      objek: objek,
+      lokasi: lokasi,
+      questions: questions,
+      objectives: objectives,
+      hypotheses: hypotheses,
+      benefits: benefits
+    };
+  }
+
+  /* ---- 4) scaffoldProposal: full S1 proposal chapters (templated) ------- */
+  function methodApproach(st) {
+    var fam = trim((st && st.method && st.method.family) || '').toLowerCase();
+    if (fam.indexOf('quant') >= 0 || fam === 'kuantitatif' || fam.indexOf('mixed') >= 0) return 'kuantitatif';
+    if (fam.indexOf('qual') >= 0 || fam === 'kualitatif') return 'kualitatif';
+    return '';
+  }
+  function numList(arr) {
+    var o = [];
+    for (var i = 0; i < arr.length; i++) o.push((i + 1) + '. ' + arr[i]);
+    return o.join('\n');
+  }
+  function textsOf(arr) {
+    var o = [];
+    for (var i = 0; i < (arr || []).length; i++) o.push(arr[i].text);
+    return o;
+  }
+  function refShort(ref) {
+    var fam = (ref.authors && ref.authors.length) ? authFamily(ref.authors[0]) : (ref.venue || 'Anonim');
+    if (ref.authors && ref.authors.length > 1) fam += ' dkk.';
+    var yr = (ref.year != null && ref.year !== '') ? ref.year : ph('tahun');
+    return fam + ' (' + yr + '). ' + (trim(ref.title) || ph('judul'));
+  }
+
+  function scaffoldProposal(project) {
+    project = project || {};
+    var st = project.state || {};
+    var title = trim(project.title || st.topic || '');
+
+    var der = deriveFromTitle(title, {
+      objek: project.researchObject || '',
+      lokasi: project.location || '',
+      pendekatan: methodApproach(st) || trim(project.methodPref || ''),
+      bidang: project.program || project.concentration || project.researchInterest || ''
+    });
+
+    var approach = methodApproach(st) || der.approach;
+    var method = st.method || {};
+    var refs = isArray(st.references) ? st.references : [];
+
+    // Prefer content the student already produced; else use derived defaults.
+    var questions = (st.questions && st.questions.length) ? st.questions : der.questions;
+    var objectives = (st.objectives && st.objectives.length) ? st.objectives : der.objectives;
+    var hypotheses = (st.hypotheses && st.hypotheses.length) ? st.hypotheses : der.hypotheses;
+
+    var xs = der.variables.x, ys = der.variables.y;
+    var allVars = uniq([].concat(xs, ys));
+    if (!allVars.length) allVars = [ph('konstruk/variabel utama')];
+
+    var objek = der.objek || trim(project.researchObject);
+    var lokasi = der.lokasi || trim(project.location);
+    var ctx = ctxTail(objek, lokasi);
+    var xStr = xs.join(', ') || ph('variabel bebas');
+    var yStr = ys.join(', ') || ph('variabel terikat');
+    var topik = uniq([].concat(xs, ys)).join(' dan ') || ph('topik penelitian');
+    var bidang = trim(project.researchInterest || project.program || '') || ph('bidang keilmuan');
+
+    var qTexts = textsOf(questions);
+    var oTexts = textsOf(objectives);
+    var hTexts = textsOf(hypotheses);
+
+    // -------- BAB I --------------------------------------------------------
+    var latar = '';
+    latar += 'Kajian mengenai ' + topik + ' menempati posisi penting dalam bidang ' + bidang +
+      ' dewasa ini. Secara umum, ' + xStr + ' diyakini memiliki peran strategis terhadap ' +
+      (ys.length ? yStr : ph('luaran yang diharapkan')) + '.\n\n';
+    latar += 'Namun demikian, kondisi di lapangan menunjukkan ' +
+      ph('uraikan fenomena/data aktual terkait masalah + sumber (mis. laporan resmi, berita, data lembaga)') +
+      '. Kondisi tersebut mengindikasikan adanya kesenjangan antara harapan dan kenyataan' + ctx + '.\n\n';
+    latar += 'Masalah utama yang menjadi fokus penelitian ini adalah ' +
+      ph('rumusan masalah inti disertai data pendukung') + '. Apabila dibiarkan, hal ini berpotensi menimbulkan ' +
+      ph('dampak/akibat yang mungkin terjadi') + '.\n\n';
+    latar += 'Beberapa penelitian terdahulu telah mengkaji tema serupa, antara lain ' +
+      ph('sebutkan penelitian terdahulu + temuannya + sumber dari perpustakaan referensi') +
+      '. Meskipun demikian, masih terdapat celah penelitian (research gap), yaitu ' +
+      ph('jelaskan perbedaan/kesenjangan dengan penelitian ini') + '.\n\n';
+    latar += 'Berdasarkan uraian tersebut, penelitian berjudul “' + (title || ph('judul penelitian')) +
+      '” penting untuk dilakukan guna ' +
+      (oTexts.length ? oTexts[0].replace(/^Untuk\s+/i, '').replace(/\.$/, '') : ph('mencapai tujuan penelitian')) + '.';
+
+    var identifikasi = 'Berdasarkan latar belakang di atas, dapat diidentifikasi beberapa masalah, antara lain: ' +
+      '(1) ' + ph('masalah pertama + data pendukung') + '; ' +
+      '(2) ' + ph('masalah kedua') + '; ' +
+      '(3) ' + ph('masalah ketiga') + '. ' +
+      'Masalah-masalah tersebut perlu dikaji lebih lanjut terkait ' + topik + ctx + '.';
+
+    var batasan = 'Agar penelitian lebih terarah dan mendalam, ruang lingkup dibatasi pada kajian ' + topik + ctx +
+      '. Penelitian ini berfokus pada ' + (objek || ph('objek penelitian')) +
+      ' dan tidak membahas ' + ph('aspek/variabel lain yang berada di luar fokus penelitian') + '.';
+
+    var rumusan = qTexts.length
+      ? 'Berdasarkan latar belakang di atas, rumusan masalah dalam penelitian ini adalah sebagai berikut:\n\n' + numList(qTexts)
+      : 'Rumusan masalah penelitian: ' + ph('susun rumusan masalah dalam bentuk pertanyaan penelitian') + '.';
+
+    var tujuan = oTexts.length
+      ? 'Sejalan dengan rumusan masalah, tujuan penelitian ini adalah sebagai berikut:\n\n' + numList(oTexts)
+      : 'Tujuan penelitian: ' + ph('rumuskan tujuan penelitian sesuai rumusan masalah') + '.';
+
+    var manfaat = '### Manfaat Teoritis\n' + numList(der.benefits.teoritis) +
+      '\n\n### Manfaat Praktis\n' + numList(der.benefits.praktis);
+
+    var sistematika =
+      'Untuk memberikan gambaran menyeluruh, penulisan proposal ini disusun dengan sistematika sebagai berikut:\n\n' +
+      'BAB I PENDAHULUAN, memuat latar belakang, identifikasi masalah, batasan masalah, rumusan masalah, tujuan penelitian, manfaat penelitian, dan sistematika penulisan.\n' +
+      'BAB II TINJAUAN PUSTAKA, memuat landasan teori, penelitian terdahulu, kerangka berpikir, dan hipotesis.\n' +
+      'BAB III METODE PENELITIAN, memuat jenis dan pendekatan penelitian, lokasi dan waktu, populasi dan sampel, definisi operasional variabel, teknik pengumpulan data, instrumen penelitian, uji validitas dan reliabilitas, serta teknik analisis data.\n' +
+      'DAFTAR PUSTAKA, memuat seluruh sumber rujukan yang digunakan.';
+
+    // -------- BAB II -------------------------------------------------------
+    var landasan = 'Bab ini menyajikan landasan teori yang menjadi dasar penelitian. Setiap konsep berikut perlu dilengkapi definisi dari ahli beserta sitasi dari perpustakaan referensi.\n\n';
+    for (var v = 0; v < allVars.length; v++) {
+      var vv = allVars[v];
+      landasan += '### ' + vv + '\n';
+      landasan += vv + ' dalam penelitian ini dipahami sebagai ' +
+        ph('lengkapi definisi ' + vv + ' menurut ahli + sitasi dari perpustakaan') +
+        '. Konsep ini diukur/ditinjau melalui dimensi dan indikator ' +
+        ph('sebutkan dimensi/indikator + sumber') + '.\n\n';
+    }
+    landasan += '*Catatan: sisipkan sitasi dari perpustakaan referensi pada setiap sub-bab teori di atas.*';
+
+    var terdahulu = 'Penelitian terdahulu digunakan sebagai pembanding dan penunjuk posisi (state of the art) penelitian ini. ' +
+      'Rangkum minimal ' + ph('3–5') + ' penelitian relevan dalam bentuk tabel dengan kolom: No, Nama & Tahun, Judul, Metode, Hasil, dan Perbedaan dengan penelitian ini.\n\n';
+    if (refs.length) {
+      var lim = Math.min(refs.length, 5);
+      for (var rr = 0; rr < lim; rr++) {
+        terdahulu += (rr + 1) + '. ' + refShort(refs[rr]) +
+          ' [Metode: ' + ph('isi') + '; Hasil: ' + ph('isi') + '; Perbedaan: ' + ph('isi') + ']\n';
+      }
+    } else {
+      terdahulu += ph('lengkapi dengan penelitian terdahulu dari perpustakaan referensi (gunakan Auto-Search)') + '\n';
+    }
+
+    var kerangka;
+    if (approach === 'kuantitatif' && ys.length) {
+      kerangka = 'Kerangka berpikir menggambarkan keterkaitan antar variabel. Variabel bebas dalam penelitian ini adalah ' +
+        xStr + ', sedangkan variabel terikatnya adalah ' + yStr + '. Secara skematis, ' + xStr +
+        ' diduga memengaruhi ' + yStr + ctx + '. ' + ph('sisipkan diagram/bagan kerangka berpikir (X → Y)') + '.';
+    } else {
+      kerangka = 'Kerangka berpikir menggambarkan alur pemikiran penelitian mengenai ' + topik + ctx +
+        '. ' + ph('uraikan alur berpikir dan sisipkan bagan kerangka konseptual') + '.';
+    }
+
+    var hipotesis;
+    if (hTexts.length) {
+      hipotesis = 'Berdasarkan kerangka berpikir dan kajian teori, hipotesis penelitian dirumuskan sebagai berikut:\n\n' +
+        numList(hTexts);
+    } else {
+      hipotesis = 'Penelitian ini menggunakan pendekatan ' + approach +
+        ' sehingga tidak merumuskan hipotesis statistik. ' +
+        ph('jika diperlukan, susun proposisi atau dugaan sementara') + '.';
+    }
+
+    // -------- BAB III ------------------------------------------------------
+    var jenis = 'Penelitian ini menggunakan pendekatan ' + approach + ' dengan jenis ' + der.design + '. ' +
+      (trim(method.design) ? 'Desain penelitian yang digunakan adalah ' + method.design + '. ' : '') +
+      'Pemilihan pendekatan ini didasarkan pada tujuan penelitian, yaitu ' +
+      (oTexts.length ? oTexts[0].replace(/^Untuk\s+/i, '').replace(/\.$/, '') : ph('tujuan penelitian')) + '.';
+
+    var lokasiWaktu = 'Penelitian ini dilaksanakan di ' + (lokasi || objek || ph('lokasi penelitian')) +
+      '. Adapun waktu penelitian direncanakan berlangsung dari ' + ph('bulan/tahun mulai') +
+      ' sampai dengan ' + ph('bulan/tahun selesai') + '.';
+
+    var populasi;
+    if (approach === 'kuantitatif') {
+      populasi = 'Populasi dalam penelitian ini adalah ' + (objek || ph('populasi')) + ' yang berjumlah ' +
+        ph('jumlah populasi + sumber data') + '. Teknik pengambilan sampel menggunakan ' +
+        ph('sebutkan teknik sampling, mis. simple random / purposive sampling') +
+        '. Ukuran sampel ditentukan menggunakan ' + ph('rumus penentuan sampel, mis. Slovin / Krejcie-Morgan') +
+        ' sehingga diperoleh ' + ph('jumlah sampel') + ' responden.';
+    } else {
+      populasi = 'Subjek/informan penelitian dipilih menggunakan teknik ' +
+        ph('purposive sampling / snowball sampling') + '. Informan terdiri atas ' +
+        ph('sebutkan informan kunci beserta kriterianya') +
+        '. Jumlah informan disesuaikan dengan ' + ph('prinsip kecukupan/saturasi data') + '.';
+    }
+
+    var defOp = 'Definisi operasional menjelaskan variabel penelitian secara terukur agar dapat diamati dan diukur.\n\n';
+    for (var d = 0; d < allVars.length; d++) {
+      var dv = allVars[d];
+      defOp += '### ' + dv + '\n';
+      defOp += dv + ' didefinisikan secara operasional sebagai ' + ph('definisi operasional ' + dv) +
+        ', dan diukur melalui indikator ' + ph('sebutkan indikator + skala pengukuran') + '.\n\n';
+    }
+
+    var pengumpulan;
+    if (approach === 'kuantitatif') {
+      pengumpulan = 'Data primer dikumpulkan melalui penyebaran ' + ph('kuesioner/angket') +
+        ' dengan skala ' + ph('mis. Likert 1–5') + '. Data sekunder diperoleh dari ' +
+        ph('dokumen/laporan/sumber data') + '.';
+    } else {
+      pengumpulan = 'Data dikumpulkan melalui wawancara mendalam, observasi, dan dokumentasi terhadap ' +
+        (objek || ph('subjek penelitian')) + '. ' + ph('rincikan prosedur pengumpulan data untuk tiap teknik') + '.';
+    }
+
+    var instrumen = 'Instrumen utama dalam penelitian ini adalah ' +
+      (approach === 'kuantitatif'
+        ? 'kuesioner yang disusun berdasarkan indikator setiap variabel'
+        : 'peneliti sendiri sebagai instrumen kunci, dibantu pedoman wawancara dan lembar observasi') +
+      '. Kisi-kisi instrumen ' + ph('lampirkan kisi-kisi instrumen penelitian') + '.';
+
+    var validitas;
+    if (approach === 'kuantitatif') {
+      validitas = 'Instrumen diuji validitasnya menggunakan ' + ph('mis. korelasi Pearson / analisis faktor') +
+        ' dan reliabilitasnya menggunakan ' + ph('mis. Cronbach’s Alpha') +
+        '. Instrumen dinyatakan layak apabila memenuhi kriteria ' + ph('sebutkan nilai ambang batas') + '.';
+    } else {
+      validitas = 'Keabsahan data diuji melalui triangulasi ' + ph('sumber/teknik/waktu') +
+        ', member checking, serta ' + ph('teknik pemeriksaan keabsahan lainnya') + '.';
+    }
+
+    var analisis;
+    if (approach === 'kuantitatif') {
+      analisis = 'Data dianalisis menggunakan ' + (trim(method.design) ? method.design : 'analisis statistik yang sesuai') +
+        '. Tahapan analisis meliputi uji asumsi klasik (' +
+        ph('normalitas, multikolinearitas, heteroskedastisitas') + '), ' +
+        (hTexts.length ? 'analisis regresi untuk menguji hipotesis, ' : '') +
+        'serta uji ' + ph('t / F dan koefisien determinasi') + ' dengan bantuan perangkat ' +
+        ph('mis. SPSS / SmartPLS') + '.';
+    } else {
+      analisis = 'Data dianalisis menggunakan model interaktif ' + ph('mis. Miles & Huberman') +
+        ' yang meliputi tahap reduksi data, penyajian data, dan penarikan kesimpulan/verifikasi.';
+    }
+
+    function S(title, content) { return { title: title, content: content, citationIds: [] }; }
+
+    return [
+      { code: 'BAB I', title: 'Pendahuluan', sections: [
+        S('Latar Belakang Masalah', latar),
+        S('Identifikasi Masalah', identifikasi),
+        S('Batasan Masalah', batasan),
+        S('Rumusan Masalah', rumusan),
+        S('Tujuan Penelitian', tujuan),
+        S('Manfaat Penelitian', manfaat),
+        S('Sistematika Penulisan', sistematika)
+      ] },
+      { code: 'BAB II', title: 'Tinjauan Pustaka', sections: [
+        S('Landasan Teori', landasan),
+        S('Penelitian Terdahulu', terdahulu),
+        S('Kerangka Berpikir', kerangka),
+        S('Hipotesis', hipotesis)
+      ] },
+      { code: 'BAB III', title: 'Metode Penelitian', sections: [
+        S('Jenis dan Pendekatan Penelitian', jenis),
+        S('Lokasi dan Waktu Penelitian', lokasiWaktu),
+        S('Populasi dan Sampel', populasi),
+        S('Definisi Operasional Variabel', defOp),
+        S('Teknik Pengumpulan Data', pengumpulan),
+        S('Instrumen Penelitian', instrumen),
+        S('Uji Validitas dan Reliabilitas', validitas),
+        S('Teknik Analisis Data', analisis)
+      ] },
+      { code: 'DAFTAR PUSTAKA', title: 'Daftar Pustaka', sections: [] }
+    ];
+  }
+
+  /* ---- 5) autoSearch: merge OpenAlex + Crossref, rank, annotate --------- */
+  function typeLabelOf(t) {
+    t = trim(t).toLowerCase();
+    if (/book-chapter|chapter|bab/.test(t)) return 'Bab Buku';
+    if (/book|monograph|buku/.test(t)) return 'Buku';
+    if (/proceed|conference|prosiding/.test(t)) return 'Prosiding';
+    if (/thesis|dissertation|disertasi|tesis/.test(t)) return 'Tesis/Disertasi';
+    if (/report|laporan/.test(t)) return 'Laporan';
+    if (/journal|article|artikel|paper/.test(t) || t === '') return 'Artikel Jurnal';
+    return 'Publikasi';
+  }
+
+  function autoSearch(project, opts) {
+    opts = opts || {};
+    var limit = opts.limit || 12;
+    var st = (project && project.state) || {};
+    var kws = isArray(opts.keywords) ? opts.keywords
+            : (isArray(st.keywords) ? st.keywords : []);
+    var base = trim(opts.query || (project && project.title) || st.topic || '');
+    var query = trim(base + ' ' + (kws.join(' ')));
+    var perPage = Math.max(limit, 10);
+
+    // Reflect each provider promise so one failing never rejects the whole run.
+    function safe(p) {
+      return p.then(function (v) { return isArray(v) ? v : []; },
+                    function () { return []; });
+    }
+    var pOA, pCR;
+    try { pOA = safe(searchOpenAlex(query, { perPage: perPage })); }
+    catch (e) { pOA = Promise.resolve([]); }
+    try { pCR = safe(searchCrossref(query, { rows: perPage })); }
+    catch (e2) { pCR = Promise.resolve([]); }
+
+    var qToks = query.toLowerCase().split(/\s+/);
+    var yearNow = new Date().getFullYear();
+
+    return Promise.all([pOA, pCR]).then(function (rs) {
+      var merged = rs[0].concat(rs[1]);
+      // dedupe reusing the existing DOI/OpenAlexId/title logic
+      var kept = [];
+      for (var i = 0; i < merged.length; i++) {
+        if (findDuplicate(kept, merged[i])) continue;
+        kept.push(merged[i]);
+      }
+      // annotate + score (relevance x2, recency, light citation weight)
+      for (var j = 0; j < kept.length; j++) {
+        var r = kept[j];
+        r.pdfUrl = (r.oaUrl || '') || (r.openAccess && r.url ? r.url : '');
+        r.typeLabel = typeLabelOf(r.type);
+        var title = (r.title || '').toLowerCase(), rel = 0;
+        for (var t = 0; t < qToks.length; t++) {
+          if (qToks[t].length > 2 && title.indexOf(qToks[t]) >= 0) rel++;
+        }
+        var rec = (typeof r.year === 'number') ? Math.max(0, 1 - (yearNow - r.year) / 50) : 0;
+        var cit = (typeof r.citationCount === 'number') ? Math.min(1, r.citationCount / 500) : 0;
+        r._score = rel * 2 + rec + cit * 0.5;
+      }
+      kept.sort(function (a, b) { return (b._score || 0) - (a._score || 0); });
+      return kept.slice(0, limit);
+    })['catch'](function () { return []; }); // never fabricate on total failure
+  }
+
+  /* ---- 6) buildProposalHTML: complete printable document body ----------- */
+  function escHtml(s) {
+    return String(s == null ? '' : s)
+      .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  }
+  function inlineFmt(s) {
+    // turn 〔…〕 into a visible placeholder chip and *italic* into <em>
+    s = s.replace(/〔([^〕]*)〕/g, '<span class="ph">〔$1〕</span>');
+    s = s.replace(/\*([^*]+)\*/g, '<em>$1</em>');
+    return s;
+  }
+  function renderContentHTML(text) {
+    var lines = String(text || '').split(/\n/), h = '';
+    for (var i = 0; i < lines.length; i++) {
+      var raw = trim(lines[i]);
+      if (!raw) continue;
+      if (/^###\s+/.test(raw)) h += '<h4>' + inlineFmt(escHtml(raw.replace(/^###\s+/, ''))) + '</h4>';
+      else h += '<p>' + inlineFmt(escHtml(raw)) + '</p>';
+    }
+    return h;
+  }
+  function romanOf(code) {
+    var m = String(code || '').match(/BAB\s+([IVXLC]+)/i);
+    if (!m) return 0;
+    var map = { I: 1, II: 2, III: 3, IV: 4, V: 5, VI: 6, VII: 7, VIII: 8 };
+    return map[m[1].toUpperCase()] || 0;
+  }
+
+  function buildProposalHTML(project, style) {
+    project = project || {};
+    var st = project.state || {};
+    style = (style || project.citationStyle || 'apa7');
+
+    var chapters = (st.chapters && st.chapters.length &&
+                    hasNonEmptyContent(st.chapters)) ? st.chapters : scaffoldProposal(project);
+
+    function orDash(s) {
+      s = trim(s);
+      return s ? escHtml(s) : '<span class="ph">〔—〕</span>';
+    }
+    var title = trim(project.title || st.topic || '');
+    var tahun = trim(project.academicYear || '') || String(new Date().getFullYear());
+
+    /* ---- cover ---- */
+    var cover =
+      '<section class="page cover">' +
+        '<p class="cover-kind">PROPOSAL ' + escHtml((project.type || 'SKRIPSI').toUpperCase()) + '</p>' +
+        '<h1 class="cover-title">' + (title ? escHtml(title.toUpperCase()) : '<span class="ph">〔JUDUL PENELITIAN〕</span>') + '</h1>' +
+        '<p class="cover-sub">Diajukan untuk memenuhi salah satu syarat memperoleh gelar ' +
+          orDash(project.degree || 'Sarjana') + '</p>' +
+        '<div class="cover-logo">〔logo〕</div>' +
+        '<div class="cover-author">' +
+          '<p><strong>Oleh:</strong></p>' +
+          '<p>' + orDash(project.studentName || project.author || project.name) + '</p>' +
+          '<p>NIM: ' + orDash(project.nim) + '</p>' +
+        '</div>' +
+        '<div class="cover-inst">' +
+          '<p>' + orDash(project.program) + '</p>' +
+          '<p>' + orDash(project.faculty) + '</p>' +
+          '<p>' + orDash(project.university) + '</p>' +
+          '<p>' + orDash(project.city) + '</p>' +
+          '<p>' + escHtml(tahun) + '</p>' +
+        '</div>' +
+      '</section>';
+
+    /* ---- kata pengantar ---- */
+    var kata =
+      '<section class="page">' +
+        '<h2 class="ctr">KATA PENGANTAR</h2>' +
+        '<p>Puji syukur penulis panjatkan ke hadirat Tuhan Yang Maha Esa atas segala rahmat dan karunia-Nya sehingga proposal penelitian yang berjudul “' +
+          (title ? escHtml(title) : '<span class="ph">〔judul〕</span>') +
+          '” ini dapat diselesaikan.</p>' +
+        '<p>Penulis menyadari bahwa penyusunan proposal ini tidak lepas dari bantuan berbagai pihak. Oleh karena itu, penulis menyampaikan terima kasih kepada ' +
+          '<span class="ph">〔sebutkan pihak: dosen pembimbing, keluarga, dan pihak terkait〕</span>.</p>' +
+        '<p>Penulis menyadari proposal ini masih jauh dari sempurna. Kritik dan saran yang membangun sangat diharapkan demi perbaikan penelitian selanjutnya.</p>' +
+        '<p class="right">' + orDash(project.city) + ', ' + escHtml(tahun) + '<br>Penulis</p>' +
+      '</section>';
+
+    /* ---- daftar isi ---- */
+    var toc = '<section class="page"><h2 class="ctr">DAFTAR ISI</h2><div class="toc">';
+    for (var c = 0; c < chapters.length; c++) {
+      var ch = chapters[c];
+      var n = romanOf(ch.code);
+      var chLabel = (ch.code || '') + (ch.title ? '  ' + ch.title.toUpperCase() : '');
+      toc += '<div class="toc-row toc-chapter"><span>' + escHtml(chLabel) +
+             '</span><span class="toc-pg">' + ph('hal') + '</span></div>';
+      var secs = ch.sections || [];
+      for (var s = 0; s < secs.length; s++) {
+        var num = n ? (n + '.' + (s + 1) + ' ') : '';
+        toc += '<div class="toc-row toc-section"><span>' + escHtml(num + secs[s].title) +
+               '</span><span class="toc-pg">' + ph('hal') + '</span></div>';
+      }
+    }
+    toc = toc.replace(/〔hal〕/g, '<span class="ph">〔hal〕</span>');
+    toc += '</div></section>';
+
+    /* ---- chapters ---- */
+    var body = '';
+    for (var ci = 0; ci < chapters.length; ci++) {
+      var cc = chapters[ci];
+      if (/DAFTAR PUSTAKA/i.test(cc.code || '')) continue; // rendered separately
+      var cn = romanOf(cc.code);
+      body += '<section class="page chapter">';
+      body += '<h2 class="ctr">' + escHtml(cc.code || '') + '<br>' +
+              escHtml((cc.title || '').toUpperCase()) + '</h2>';
+      var css = cc.sections || [];
+      for (var si = 0; si < css.length; si++) {
+        var sec = css[si];
+        var hn = cn ? (cn + '.' + (si + 1) + '  ') : '';
+        body += '<h3>' + escHtml(hn + sec.title) + '</h3>';
+        body += '<div class="sec">' + renderContentHTML(sec.content) + '</div>';
+      }
+      body += '</section>';
+    }
+
+    /* ---- daftar pustaka (real refs only, via existing formatter) ---- */
+    var refs = isArray(st.references) ? st.references : [];
+    var dp = '<section class="page"><h2 class="ctr">DAFTAR PUSTAKA</h2><div class="biblio">';
+    if (refs.length) {
+      var bib = buildBibliography(refs, style);
+      var numbered = /ieee|vancouver/i.test(style);
+      for (var b = 0; b < bib.length; b++) {
+        var prefix = '';
+        if (/ieee/i.test(style)) prefix = '[' + (b + 1) + '] ';
+        else if (/vancouver/i.test(style)) prefix = (b + 1) + '. ';
+        dp += '<p class="ref">' + escHtml(prefix) + inlineFmt(escHtml(bib[b].entry)) + '</p>';
+      }
+      void numbered;
+    } else {
+      dp += '<p class="ph">〔lengkapi daftar pustaka dengan referensi nyata dari perpustakaan (gunakan Auto-Search / DOI)〕</p>';
+    }
+    dp += '</div></section>';
+
+    var cssStyle =
+      '<style>' +
+      '.proposal{font-family:"Times New Roman",Georgia,serif;color:#111;line-height:1.6;font-size:12pt;max-width:820px;margin:0 auto;}' +
+      '.proposal .page{background:#fff;padding:48px 56px;margin:0 auto 24px;box-shadow:0 1px 4px rgba(0,0,0,.15);}' +
+      '.proposal h2,.proposal h3,.proposal h4{font-weight:bold;}' +
+      '.proposal h2.ctr{text-align:center;font-size:14pt;margin:0 0 20px;line-height:1.4;}' +
+      '.proposal h3{font-size:12pt;margin:18px 0 6px;}' +
+      '.proposal h4{font-size:12pt;margin:12px 0 4px;font-style:italic;}' +
+      '.proposal p{margin:0 0 10px;text-align:justify;text-indent:0;}' +
+      '.proposal .sec p{text-indent:2em;}' +
+      '.proposal .cover{text-align:center;min-height:60vh;}' +
+      '.proposal .cover-kind{font-weight:bold;letter-spacing:2px;margin-top:12px;}' +
+      '.proposal .cover-title{font-size:16pt;font-weight:bold;text-transform:uppercase;margin:28px 20px;line-height:1.5;}' +
+      '.proposal .cover-sub{font-style:italic;margin:16px 40px;}' +
+      '.proposal .cover-logo{margin:28px 0;color:#888;}' +
+      '.proposal .cover-author p,.proposal .cover-inst p{margin:2px 0;}' +
+      '.proposal .cover-inst{margin-top:28px;font-weight:bold;}' +
+      '.proposal .right,.proposal p.right{text-align:right;text-indent:0;}' +
+      '.proposal .toc-row{display:flex;justify-content:space-between;gap:8px;border-bottom:1px dotted #bbb;padding:3px 0;}' +
+      '.proposal .toc-chapter{font-weight:bold;margin-top:8px;}' +
+      '.proposal .toc-section{padding-left:18px;}' +
+      '.proposal .toc-pg{flex:0 0 auto;}' +
+      '.proposal .biblio .ref{padding-left:2em;text-indent:-2em;text-align:left;}' +
+      '.proposal .ph{background:#fff3cd;color:#8a6d00;border:1px dashed #d9a900;border-radius:3px;padding:0 3px;font-style:italic;font-size:.92em;}' +
+      '@media print{.proposal .page{box-shadow:none;margin:0;page-break-after:always;}}' +
+      '</style>';
+
+    return '<div class="proposal">' + cssStyle + cover + kata + toc + body + dp + '</div>';
+  }
+
+  // true if any chapter section already has authored content (else re-scaffold)
+  function hasNonEmptyContent(chapters) {
+    for (var i = 0; i < (chapters || []).length; i++) {
+      var secs = chapters[i].sections || [];
+      for (var j = 0; j < secs.length; j++) if (trim(secs[j].content)) return true;
+    }
+    return false;
+  }
+
+  /* ====================================================================== */
   /* PUBLIC API                                                              */
   /* ====================================================================== */
   var THESIS = {
@@ -1046,6 +1832,13 @@
     // reasoning
     recommendMethod: recommendMethod,
     checkConsistency: checkConsistency,
+    // proposal wizard (simple input -> detailed, non-fabricated output)
+    FIELDS: FIELDS,
+    suggestTitles: suggestTitles,
+    deriveFromTitle: deriveFromTitle,
+    scaffoldProposal: scaffoldProposal,
+    autoSearch: autoSearch,
+    buildProposalHTML: buildProposalHTML,
     // meta
     _keys: { projects: K_PROJECTS, active: K_ACTIVE, cache: K_CACHE }
   };

@@ -3,6 +3,17 @@
    Passwords are hashed (djb2) so they are not stored in plain text, but this
    is NOT a substitute for real server-side auth. Exposes window.PBS. */
 (function () {
+  /* THEME INIT — runs at script-eval (in <head>, before <body> paints) to
+     prevent a flash of the wrong theme. Dark is the default (:root). */
+  try {
+    var _theme = localStorage.getItem('pbs_theme');
+    if (_theme === 'light' || _theme === 'dark') {
+      document.documentElement.setAttribute('data-theme', _theme);
+    } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) {
+      document.documentElement.setAttribute('data-theme', 'light');
+    }
+  } catch (e) {}
+
   var K_USERS = 'pbs_users', K_SESSION = 'pbs_session',
       K_HISTORY = 'pbs_history', K_ACTIVITY = 'pbs_activity',
       K_BOOKMARKS = 'pbs_bookmarks';
@@ -164,6 +175,8 @@
         if (c !== toggle) right.removeChild(c);
       });
       var frag = document.createDocumentFragment();
+      // Theme toggle is always first in .nav-right (guest + logged-in states).
+      frag.appendChild(buildThemeToggle());
       if (u) {
         var wrap = document.createElement('div');
         wrap.className = 'pbs-usermenu';
@@ -195,6 +208,34 @@
       if (u) wireUserMenu(right);
     }
   };
+
+  /* ---- Theme toggle (nav) ---- */
+  var SUN_ICON = '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/>' +
+    '<path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>';
+  var MOON_ICON = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>';
+
+  function currentTheme() {
+    return document.documentElement.getAttribute('data-theme') || 'dark';
+  }
+  function themeIcon(t) { return t === 'light' ? SUN_ICON : MOON_ICON; }
+
+  function buildThemeToggle() {
+    var btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'pbs-theme';
+    btn.setAttribute('aria-label', 'Ganti tema');
+    var t = currentTheme();
+    btn.setAttribute('aria-pressed', t === 'light' ? 'true' : 'false');
+    btn.innerHTML = themeIcon(t);
+    btn.addEventListener('click', function () {
+      var next = currentTheme() === 'light' ? 'dark' : 'light';
+      document.documentElement.setAttribute('data-theme', next);
+      try { localStorage.setItem('pbs_theme', next); } catch (e) {}
+      btn.innerHTML = themeIcon(next);
+      btn.setAttribute('aria-pressed', next === 'light' ? 'true' : 'false');
+    });
+    return btn;
+  }
 
   function escapeHtml(s) {
     return String(s == null ? '' : s).replace(/&/g, '&amp;')
