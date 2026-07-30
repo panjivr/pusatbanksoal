@@ -558,6 +558,8 @@
           '<select class="f-select" id="propSpacing" style="max-width:170px;padding:8px 10px" aria-label="Spasi baris">'+spacingOptions(p.lineSpacing)+'</select>'+
           '<button class="btn btn-ghost btn-sm" id="propRefresh">'+icon('i-refresh')+' Perbarui Rujukan</button>'+
           '<button class="btn btn-ghost btn-sm" id="propCheck">'+icon('i-shield-check')+' Periksa Konsistensi</button>'+
+          '<button class="btn btn-ghost btn-sm" id="propStyleChk">'+icon('i-sparkles')+' Cek Gaya (anti-AI)</button>'+
+          '<button class="btn btn-ghost btn-sm" id="propPlagChk">'+icon('i-shield-check')+' Cek Plagiasi</button>'+
         '</div>'+
         '<div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap" class="no-print">'+
           '<button class="btn btn-primary btn-sm" id="propDoc">'+icon('i-doc')+' Unduh Proposal (DOCX)</button>'+
@@ -607,6 +609,22 @@
     byId('propCheck').addEventListener('click',function(){
       var out=byId('propCheckOut'); out.style.display='block';
       out.innerHTML=renderFindings(THESIS.checkConsistency(THESIS.activeProject()));
+    });
+    byId('propStyleChk').addEventListener('click',function(){
+      var res=THESIS.styleCheck(THESIS.activeProject()); var out=byId('propCheckOut'); out.style.display='block';
+      var col=res.score>=85?'var(--up)':res.score>=70?'var(--primary)':'var(--down)';
+      var h='<div class="ws-card"><div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap"><b style="color:var(--on-dark)">Cek Gaya (anti-pola AI)</b><span class="badge" style="color:'+col+'">Skor '+res.score+'/100</span></div><p class="muted" style="font-size:12.5px;margin-top:6px">'+esc(res.note)+'</p>';
+      if(!res.flags.length) h+='<p style="margin-top:10px;color:var(--up);font-size:13px">Tidak ada pola tulisan khas AI yang menonjol.</p>';
+      else h+='<div style="margin-top:10px">'+res.flags.map(function(f){ return '<div style="border-left:3px solid '+(f.severity==='tinggi'?'var(--down)':'var(--primary)')+';padding:6px 10px;margin-bottom:6px;background:var(--elevated);border-radius:4px;font-size:13px"><b>'+esc(f.label)+'</b> — '+f.count+'x ('+esc(f.severity)+'). '+esc(f.advice)+'</div>'; }).join('')+'</div>';
+      out.innerHTML=h+'</div>';
+    });
+    byId('propPlagChk').addEventListener('click',function(){
+      var res=THESIS.plagiarismCheck(THESIS.activeProject()); var out=byId('propCheckOut'); out.style.display='block';
+      var col=res.selfSimilarity>=25?'var(--down)':res.selfSimilarity>=15?'var(--primary)':'var(--up)';
+      var h='<div class="ws-card"><div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap"><b style="color:var(--on-dark)">Cek Plagiasi (internal)</b><span class="badge" style="color:'+col+'">Kemiripan '+res.selfSimilarity+'%</span></div><p class="muted" style="font-size:12.5px;margin-top:6px">'+esc(res.note)+'</p>';
+      if(!res.duplicateCount) h+='<p style="margin-top:10px;color:var(--up);font-size:13px">Tidak ada kalimat yang sangat mirip antarbagian.</p>';
+      else h+='<p class="muted" style="margin-top:10px;font-size:13px"><b class="num">'+res.duplicateCount+'</b> pasang kalimat mirip. Contoh:</p>'+res.duplicates.slice(0,6).map(function(d){ return '<div style="border-left:3px solid var(--primary);padding:6px 10px;margin-bottom:6px;background:var(--elevated);border-radius:4px;font-size:12.5px"><b>'+d.sim+'% mirip</b><br>• '+esc(d.a)+'…<br>• '+esc(d.b)+'…</div>'; }).join('');
+      out.innerHTML=h+'</div>';
     });
     byId('propDoc').addEventListener('click',function(){
       download(fileBase(p)+'.doc',buildDocDocument(THESIS.activeProject(),val('propStyle')),'application/msword'); toast('Proposal (DOCX) diunduh.');

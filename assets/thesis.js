@@ -1930,6 +1930,91 @@
   /* ====================================================================== */
   /* PUBLIC API                                                              */
   /* ====================================================================== */
+  /* ---- 7) styleCheck + plagiarismCheck (honest, client-side) ------------- */
+  function _collectText(project) {
+    var st = (project && project.state) || {};
+    var chs = (st.chapters && hasNonEmptyContent(st.chapters)) ? st.chapters : scaffoldProposal(project);
+    var out = [];
+    for (var i = 0; i < chs.length; i++) {
+      var secs = chs[i].sections || [];
+      for (var j = 0; j < secs.length; j++) if (secs[j].content) out.push(secs[j].content);
+    }
+    return out.join('\n\n');
+  }
+  function _plainProse(t) {
+    return String(t || '').replace(/〔[^〕]*〕/g, ' ').replace(/\([^)]*\d{4}[^)]*\)/g, ' ').replace(/\s+/g, ' ');
+  }
+
+  // Flag phrasings that make Indonesian prose read as AI-generated.
+  function styleCheck(project) {
+    var text = _plainProse(_collectText(project));
+    var lc = ' ' + text.toLowerCase() + ' ';
+    var words = (text.match(/[A-Za-zÀ-ÿ']+/g) || []).length || 1;
+    var flags = [];
+    var PATTERNS = [
+      { label: 'Klise pembuka umum', re: /\b(di era (globalisasi|modern|digital)|di zaman (sekarang|modern)|seiring (berjalannya waktu|perkembangan zaman)|tak? dapat dipungkiri|tidak dapat dipungkiri|dewasa ini|di dunia yang serba cepat)\b/g, advice: 'Ganti pembuka klise dengan data/fakta spesifik yang relevan.' },
+      { label: 'Konektor formulaik berlebihan', re: /\b(selain itu|lebih lanjut|di sisi lain|dengan demikian|oleh karena itu|adapun|di samping itu)\b/g, advice: 'Kurangi konektor formulaik; variasikan transisi antarkalimat.' },
+      { label: 'Frasa pengisi tanpa makna', re: /\b(penting untuk (dicatat|diketahui)|perlu (dicatat|diketahui) bahwa|secara keseluruhan|pada akhirnya|singkatnya|dapat disimpulkan bahwa)\b/g, advice: 'Hapus frasa pengisi yang tidak menambah informasi.' },
+      { label: 'Diksi bombastis khas AI', re: /\b(menyelami|menggali lebih dalam|lanskap|holistik|multifaset|tak terbantahkan|sangat krusial|permadani|simfoni)\b/g, advice: 'Gunakan diksi akademik yang lugas dan spesifik.' },
+      { label: 'Intensifier berlebihan', re: /\b(sangat|sungguh|amat|begitu)\b/g, advice: 'Batasi kata penguat; biarkan data yang berbicara.' }
+    ];
+    for (var i = 0; i < PATTERNS.length; i++) {
+      var m = lc.match(PATTERNS[i].re);
+      var c = m ? m.length : 0;
+      if (!c) continue;
+      if (PATTERNS[i].label === 'Intensifier berlebihan' && c < 6) continue;
+      var sev = (c >= 4) ? 'tinggi' : (c >= 2 ? 'sedang' : 'rendah');
+      if (PATTERNS[i].label === 'Intensifier berlebihan') sev = (c >= 10) ? 'tinggi' : 'sedang';
+      flags.push({ label: PATTERNS[i].label, count: c, per1000: Math.round(c / words * 1000 * 10) / 10, severity: sev, advice: PATTERNS[i].advice });
+    }
+    var arr = text.split(/[.!?]+\s+/).filter(function (s) { return s.trim().length > 0; });
+    var openings = {};
+    for (var s2 = 0; s2 < arr.length; s2++) {
+      var w0 = (arr[s2].trim().split(/\s+/)[0] || '').toLowerCase();
+      if (w0) openings[w0] = (openings[w0] || 0) + 1;
+    }
+    var maxOpen = 0, maxWord = '';
+    for (var k in openings) if (openings[k] > maxOpen) { maxOpen = openings[k]; maxWord = k; }
+    if (arr.length >= 6 && maxOpen >= Math.max(3, Math.ceil(arr.length * 0.25))) {
+      flags.push({ label: 'Awal kalimat monoton', count: maxOpen, severity: 'sedang', advice: 'Banyak kalimat diawali kata yang sama ("' + maxWord + '"). Variasikan struktur kalimat.' });
+    }
+    var score = 100;
+    for (var f = 0; f < flags.length; f++) score -= (flags[f].severity === 'tinggi' ? 14 : flags[f].severity === 'sedang' ? 8 : 4);
+    if (score < 0) score = 0;
+    return { score: score, wordCount: words, flags: flags,
+      note: 'Pemeriksaan gaya bersifat heuristik untuk menghindari pola tulisan yang terkesan dihasilkan AI. Bukan vonis; gunakan sebagai panduan menyunting.' };
+  }
+
+  // Internal similarity between passages (verbatim/near-duplicate). NOT a web/Turnitin check.
+  function plagiarismCheck(project) {
+    var text = _plainProse(_collectText(project));
+    var sents = text.split(/[.!?]+\s+/).map(function (s) { return s.trim(); })
+      .filter(function (s) { return s.split(/\s+/).length >= 6; });
+    function shingles(s) {
+      var w = s.toLowerCase().replace(/[^a-z0-9\s]/g, '').split(/\s+/).filter(Boolean);
+      var sh = {}; for (var i = 0; i + 2 < w.length; i++) sh[w[i] + ' ' + w[i + 1] + ' ' + w[i + 2]] = 1; return sh;
+    }
+    function jac(a, b) {
+      var inter = 0, uni = 0, seen = {};
+      for (var k in a) { seen[k] = 1; uni++; }
+      for (var k2 in b) { if (a[k2]) inter++; else uni++; }
+      return uni ? inter / uni : 0;
+    }
+    var shs = []; for (var s = 0; s < sents.length; s++) shs.push(shingles(sents[s]));
+    var dups = [];
+    for (var i = 0; i < sents.length; i++) for (var j = i + 1; j < sents.length; j++) {
+      var sim = jac(shs[i], shs[j]);
+      if (sim >= 0.5) dups.push({ a: sents[i].slice(0, 140), b: sents[j].slice(0, 140), sim: Math.round(sim * 100) });
+    }
+    dups.sort(function (x, y) { return y.sim - x.sim; });
+    var seenSh = {}, total = 0, repeat = 0;
+    for (var s3 = 0; s3 < shs.length; s3++) for (var k3 in shs[s3]) { total++; if (seenSh[k3]) repeat++; else seenSh[k3] = 1; }
+    var selfSim = total ? Math.round(repeat / total * 100) : 0;
+    return { selfSimilarity: selfSim, sentenceCount: sents.length,
+      duplicates: dups.slice(0, 15), duplicateCount: dups.length,
+      note: 'Cek plagiasi INTERNAL: mengukur kemiripan/pengulangan antarbagian dokumenmu sendiri (bukan pembanding basis data web/Turnitin). Turunkan angka dengan memparafrase bagian yang mirip.' };
+  }
+
   var THESIS = {
     // projects
     uid: uid,
@@ -1960,6 +2045,8 @@
     // reasoning
     recommendMethod: recommendMethod,
     checkConsistency: checkConsistency,
+    styleCheck: styleCheck,
+    plagiarismCheck: plagiarismCheck,
     // proposal wizard (simple input -> detailed, non-fabricated output)
     FIELDS: FIELDS,
     suggestTitles: suggestTitles,
