@@ -1466,23 +1466,47 @@
     var hTexts = textsOf(hypotheses);
 
     // -------- BAB I --------------------------------------------------------
-    var latar = '';
-    latar += 'Kajian mengenai ' + topik + ' menempati posisi penting dalam bidang ' + bidang +
-      ' dewasa ini. Secara umum, ' + xStr + ' diyakini memiliki peran strategis terhadap ' +
-      (ys.length ? yStr : ph('luaran yang diharapkan')) + '.\n\n';
-    latar += 'Namun demikian, kondisi di lapangan menunjukkan ' +
-      ph('uraikan fenomena/data aktual terkait masalah + sumber (mis. laporan resmi, berita, data lembaga)') +
-      '. Kondisi tersebut mengindikasikan adanya kesenjangan antara harapan dan kenyataan' + ctx + '.\n\n';
-    latar += 'Masalah utama yang menjadi fokus penelitian ini adalah ' +
-      ph('rumusan masalah inti disertai data pendukung') + '. Apabila dibiarkan, hal ini berpotensi menimbulkan ' +
-      ph('dampak/akibat yang mungkin terjadi') + '.\n\n';
-    latar += 'Beberapa penelitian terdahulu telah mengkaji tema serupa, antara lain ' +
-      ph('sebutkan penelitian terdahulu + temuannya + sumber dari perpustakaan referensi') +
-      '. Meskipun demikian, masih terdapat celah penelitian (research gap), yaitu ' +
-      ph('jelaskan perbedaan/kesenjangan dengan penelitian ini') + '.\n\n';
-    latar += 'Berdasarkan uraian tersebut, penelitian berjudul “' + (title || ph('judul penelitian')) +
-      '” penting untuk dilakukan guna ' +
-      (oTexts.length ? oTexts[0].replace(/^Untuk\s+/i, '').replace(/\.$/, '') : ph('mencapai tujuan penelitian')) + '.';
+    // Latar belakang: funnel umum -> khusus -> masalah -> gap -> penelitian ini.
+    // Setiap paragraf diberi sitasi nyata (bila referensi tersedia) atau
+    // placeholder sumber -- tidak pernah mengarang sumber.
+    var _ci = 0;
+    function cM() {
+      if (refs.length) {
+        var w = refs[_ci % refs.length]; _ci++;
+        var fam = (w.authors && w.authors[0]) ? authFamily(w.authors[0]) : trim(w.venue);
+        var yr = (w.year != null && w.year !== '') ? w.year : 't.t.';
+        if (fam) return ' (' + fam + (w.authors && w.authors.length > 1 ? ' dkk.' : '') + ', ' + yr + ')';
+      }
+      return ' ' + ph('sumber');
+    }
+    var yLabel = ys.length ? yStr : ph('luaran yang diharapkan');
+    var objl = objek || ph('objek penelitian');
+    var P = [];
+    P.push('Perkembangan ilmu pengetahuan dan dinamika di bidang ' + bidang + ' menempatkan ' + topik + ' sebagai salah satu isu yang memperoleh perhatian luas, baik pada tataran global maupun nasional' + cM() + '.');
+    P.push('Dalam konteks Indonesia, perhatian terhadap ' + topik + ' semakin menguat seiring tuntutan mutu, akuntabilitas, dan daya saing di ' + bidang + cM() + '.');
+    P.push('Secara konseptual, ' + xStr + ' dipahami sebagai ' + ph('definisi/konsep variabel bebas menurut ahli') + ' yang menjadi salah satu determinan penting dalam ' + bidang + cM() + '.');
+    P.push('Adapun ' + yLabel + ' merupakan ' + ph('definisi/konsep variabel terikat menurut ahli') + ' yang kerap dijadikan tolok ukur keberhasilan' + ctx + cM() + '.');
+    P.push('Secara teoretis, ' + xStr + ' diyakini memiliki keterkaitan dengan ' + yLabel + ', sebagaimana dijelaskan dalam ' + ph('teori/kerangka teori yang relevan') + cM() + '.');
+    P.push('Sejumlah studi empiris memperkuat argumen tersebut dengan menunjukkan bahwa ' + ph('ringkas temuan empiris pendukung + data') + cM() + '.');
+    P.push('Kondisi ideal yang diharapkan adalah ' + ph('gambaran kondisi ideal/standar/target') + ' sehingga ' + yLabel + ' dapat tercapai secara optimal' + ctx + cM() + '.');
+    P.push('Namun demikian, kondisi aktual di lapangan menunjukkan ' + ph('uraikan fenomena/data aktual terkait masalah -- mis. laporan resmi, berita, data lembaga') + ', yang mengindikasikan kesenjangan antara harapan dan kenyataan' + ctx + cM() + '.');
+    P.push('Fenomena tersebut juga tampak pada ' + objl + ', di mana ' + ph('data/indikasi masalah spesifik pada objek penelitian') + cM() + '.');
+    P.push('Kesenjangan ini diduga dipengaruhi oleh sejumlah faktor, antara lain ' + ph('faktor-faktor penyebab yang diduga') + cM() + '.');
+    P.push('Apabila permasalahan ini dibiarkan, dampak yang berpotensi muncul adalah ' + ph('dampak/akibat yang mungkin terjadi') + ', sehingga penanganannya menjadi mendesak' + cM() + '.');
+    P.push('Urgensi kajian ini semakin kuat mengingat ' + ph('alasan urgensi -- kebijakan, kebutuhan praktis, atau tuntutan keilmuan') + cM() + '.');
+    P.push('Beberapa penelitian terdahulu telah mengkaji tema serupa; salah satunya menemukan bahwa ' + ph('penelitian terdahulu 1 + temuannya') + cM() + '.');
+    P.push('Penelitian lain menyimpulkan ' + ph('penelitian terdahulu 2 + temuannya') + ', meskipun dengan konteks dan metode yang berbeda' + cM() + '.');
+    P.push('Meskipun demikian, masih terdapat celah penelitian (research gap), yaitu ' + ph('jelaskan perbedaan/kesenjangan dengan penelitian ini -- variabel, konteks, metode, atau temuan yang belum konsisten') + cM() + '.');
+    P.push('Kebaruan penelitian ini terletak pada ' + ph('aspek kebaruan/novelty -- fokus, pendekatan, atau konteks objek yang belum banyak diteliti') + ', khususnya pada ' + objl + cM() + '.');
+    P.push('Secara teoretis, penelitian ini diharapkan memperkaya kajian mengenai ' + topik + ' dalam bidang ' + bidang + cM() + '.');
+    P.push('Secara praktis, hasil penelitian ini diharapkan memberi manfaat bagi ' + ph('pihak yang memperoleh manfaat -- mis. instansi, praktisi, masyarakat') + cM() + '.');
+    if (approach === 'kuantitatif') {
+      P.push('Pemilihan pendekatan kuantitatif dinilai relevan karena penelitian ini bertujuan menguji ' + ph('hubungan/pengaruh antarvariabel secara terukur') + cM() + '.');
+    } else {
+      P.push('Pendekatan kualitatif dipilih karena penelitian ini berupaya memahami secara mendalam ' + ph('makna/proses/fenomena yang diteliti') + cM() + '.');
+    }
+    P.push('Berdasarkan seluruh uraian di atas, penelitian berjudul "' + (title || ph('judul penelitian')) + '" penting untuk dilakukan guna ' + (oTexts.length ? oTexts[0].replace(/^Untuk\s+/i, '').replace(/\.$/, '') : ph('mencapai tujuan penelitian')) + '.');
+    var latar = P.join('\n\n');
 
     var identifikasi = 'Berdasarkan latar belakang di atas, dapat diidentifikasi beberapa masalah, antara lain: ' +
       '(1) ' + ph('masalah pertama + data pendukung') + '; ' +
