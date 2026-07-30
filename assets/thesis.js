@@ -609,6 +609,26 @@
     return parts.join(', ');
   }
 
+  function nameInverted(a) { var f = authFamily(a), g = trim(authGiven(a)); return g ? (f + ', ' + g) : f; }
+  function nameNormal(a) { var f = authFamily(a), g = trim(authGiven(a)); return g ? (g + ' ' + f) : f; }
+
+  // Chicago (author-date) author list: "Last, First, and First Last"
+  function chicagoAuthors(authors) {
+    if (!authors || !authors.length) return '';
+    if (authors.length === 1) return nameInverted(authors[0]);
+    var parts = [nameInverted(authors[0])];
+    for (var i = 1; i < authors.length; i++) parts.push(nameNormal(authors[i]));
+    return parts.slice(0, -1).join(', ') + ', and ' + parts[parts.length - 1];
+  }
+
+  // MLA author list: "Last, First", 2 → "..., and First Last", 3+ → "..., et al."
+  function mlaAuthors(authors) {
+    if (!authors || !authors.length) return '';
+    if (authors.length === 1) return nameInverted(authors[0]);
+    if (authors.length === 2) return nameInverted(authors[0]) + ', and ' + nameNormal(authors[1]);
+    return nameInverted(authors[0]) + ', et al.';
+  }
+
   function volIssuePages_apa(w) {
     var s = '';
     if (w.volume) {
@@ -697,6 +717,42 @@
       return trim(v);
     }
 
+    if (style === 'chicago') {
+      // Chicago author-date: Author. Year. "Title." *Venue* Vol (Issue): Pages. URL.
+      var c = chicagoAuthors(w.authors);
+      c = c ? dotEnd(c) + ' ' : '';
+      c += year + '. ';
+      c += '"' + trim(title.replace(/\.$/, '')) + '." ';
+      if (venue) {
+        c += '*' + venue + '*';
+        if (w.volume) c += ' ' + w.volume;
+        if (w.issue) c += ' (' + w.issue + ')';
+        if (w.pages) c += ': ' + w.pages;
+        c += '. ';
+      }
+      if (doiUrl) c += doiUrl + '.';
+      return trim(c);
+    }
+
+    if (style === 'mla') {
+      // MLA Works Cited: Author. "Title." *Venue*, vol. X, no. Y, Year, pp. Z. URL.
+      var m = mlaAuthors(w.authors);
+      m = m ? dotEnd(m) + ' ' : '';
+      m += '"' + trim(title.replace(/\.$/, '')) + '." ';
+      if (venue) {
+        m += '*' + venue + '*';
+        if (w.volume) m += ', vol. ' + w.volume;
+        if (w.issue) m += ', no. ' + w.issue;
+        m += ', ' + year;
+        if (w.pages) m += ', pp. ' + w.pages;
+        m += '. ';
+      } else {
+        m += year + '. ';
+      }
+      if (doiUrl) m += doiUrl + '.';
+      return trim(m);
+    }
+
     // fallback: APA
     return formatBibliography(w, 'apa7');
   }
@@ -718,6 +774,23 @@
       return page ? '(' + fam + ', ' + year + ', p. ' + page + ')'
                   : '(' + fam + ', ' + year + ')';
     }
+    if (style === 'chicago') {
+      // Chicago author-date: (Author Year, page)
+      var aa = w.authors || [], af;
+      if (!aa.length) af = w.venue || 'Anonim';
+      else if (aa.length === 1) af = authFamily(aa[0]);
+      else if (aa.length === 2) af = authFamily(aa[0]) + ' and ' + authFamily(aa[1]);
+      else if (aa.length === 3) af = authFamily(aa[0]) + ', ' + authFamily(aa[1]) + ', and ' + authFamily(aa[2]);
+      else af = authFamily(aa[0]) + ' et al.';
+      return page ? '(' + af + ' ' + year + ', ' + page + ')' : '(' + af + ' ' + year + ')';
+    }
+    if (style === 'mla') {
+      // MLA author-page: (Author page) / (Author)
+      var mf = (w.authors && w.authors.length) ? authFamily(w.authors[0]) : (w.venue || 'Anonim');
+      if (w.authors && w.authors.length > 2) mf = authFamily(w.authors[0]) + ' et al.';
+      else if (w.authors && w.authors.length === 2) mf = authFamily(w.authors[0]) + ' and ' + authFamily(w.authors[1]);
+      return page ? '(' + mf + ' ' + page + ')' : '(' + mf + ')';
+    }
     // IEEE / Vancouver are numeric — the running number is assigned by the
     // caller against buildBibliography() order; return '' as a placeholder.
     return '';
@@ -731,7 +804,7 @@
   function buildBibliography(refs, style) {
     refs = isArray(refs) ? refs.slice() : [];
     style = (style || 'apa7').toLowerCase();
-    var alpha = (style === 'apa7' || style === 'apa' || style === 'harvard');
+    var alpha = (style === 'apa7' || style === 'apa' || style === 'harvard' || style === 'chicago' || style === 'mla');
     if (alpha) {
       refs.sort(function (a, b) {
         var fa = firstFamily(a), fb = firstFamily(b);

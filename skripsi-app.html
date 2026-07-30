@@ -179,7 +179,7 @@
   function val(id){ var e=byId(id); return e?e.value:''; }
   function normText(s){ return String(s==null?'':s).toLowerCase().replace(/\s+/g,' ').replace(/^\s+|\s+$/g,''); }
 
-  var STYLES=[['apa7','APA 7'],['ieee','IEEE'],['harvard','Harvard'],['vancouver','Vancouver']];
+  var STYLES=[['apa7','APA 7'],['ieee','IEEE'],['harvard','Harvard'],['vancouver','Vancouver'],['chicago','Chicago'],['mla','MLA']];
   function styleOptions(sel){
     return STYLES.map(function(s){ return '<option value="'+s[0]+'"'+(s[0]===sel?' selected':'')+'>'+s[1]+'</option>'; }).join('');
   }
