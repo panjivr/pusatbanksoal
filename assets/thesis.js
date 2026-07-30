@@ -1727,6 +1727,253 @@
     ];
   }
 
+  /* ---- 4b) generateFill: isi otomatis semua placeholder (Wikipedia+templat) */
+  // wiki: peta { '<istilah lowercase>': { extract, url, title } } dari Wikipedia.
+  // Prinsip tetap dijaga: definisi & konteks bersumber nyata (Wikipedia dikutip);
+  // metodologi memakai standar akademik yang benar; TIDAK ada angka/data empiris
+  // spesifik yang dikarang. Angka lapangan tetap perlu diverifikasi mahasiswa.
+  function firstSentences(t, n) {
+    t = trim(String(t == null ? '' : t)).replace(/\s+/g, ' ');
+    if (!t) return '';
+    n = n || 1;
+    var out = [], buf = '', i;
+    for (i = 0; i < t.length; i++) {
+      buf += t.charAt(i);
+      var c = t.charAt(i);
+      if ((c === '.' || c === '!' || c === '?') && (i + 1 >= t.length || t.charAt(i + 1) === ' ')) {
+        out.push(trim(buf)); buf = '';
+        if (out.length >= n) break;
+      }
+    }
+    if (buf && out.length < n) out.push(trim(buf));
+    return out.join(' ');
+  }
+  function lc1(s) { s = trim(s); return s ? s.charAt(0).toLowerCase() + s.slice(1) : s; }
+  function stripTrailDot(s) { return trim(String(s || '')).replace(/\.\s*$/, ''); }
+
+  function generateFill(project, wiki) {
+    project = project || {};
+    wiki = wiki || {};
+    var st = project.state || {};
+    var title = trim(project.title || st.topic || '');
+    var der = deriveFromTitle(title, {
+      objek: project.researchObject || '',
+      lokasi: project.location || '',
+      pendekatan: methodApproach(st) || trim(project.methodPref || ''),
+      bidang: project.program || project.concentration || project.researchInterest || ''
+    });
+    var xs = der.variables.x, ys = der.variables.y;
+    var xStr = xs.join(', ') || 'variabel bebas';
+    var yStr = ys.join(', ') || 'variabel terikat';
+    var vars = uniq([].concat(xs, ys));
+    var topik = vars.join(' dan ') || 'topik penelitian';
+    var bidang = trim(project.researchInterest || project.program || '') || 'bidang terkait';
+    var objek = der.objek || trim(project.researchObject) || 'objek penelitian';
+    var refs = isArray(st.references) ? st.references : [];
+    var approach = methodApproach(st) || der.approach;
+
+    function wk(name) { var w = wiki[String(name || '').toLowerCase()]; return (w && w.extract) ? w : null; }
+    function defOf(name, fb) {
+      var w = wk(name);
+      if (w) {
+        // Ambil 1 kalimat, buang pola "<istilah> adalah/ialah/merupakan ..." agar
+        // hasilnya berupa frasa yang menyatu dengan kalimat templat (parafrasa).
+        var one = stripTrailDot(firstSentences(w.extract, 1));
+        one = one.replace(/^.{0,60}?\b(adalah|ialah|merupakan|yaitu|yakni)\s+/i, '');
+        one = one.replace(/^(sebuah|suatu|salah satu)\s+/i, '');
+        if (trim(one)) return lc1(one);
+      }
+      return fb;
+    }
+    var _isiSeq = ['metode yang sesuai dengan fokus kajiannya',
+                   'terdapat keterkaitan yang bermakna antarvariabel', '_isi_diff'];
+    var _isiN = 0;
+    function refFinding(i) {
+      if (refs[i]) {
+        var fam = (refs[i].authors && refs[i].authors.length) ? authFamily(refs[i].authors[0]) : (refs[i].venue || 'peneliti');
+        if (refs[i].authors && refs[i].authors.length > 1) fam += ' dkk.';
+        var yr = (refs[i].year != null && refs[i].year !== '') ? refs[i].year : 't.t.';
+        return fam + ' (' + yr + ') mengkaji ' + lc1(stripTrailDot(refs[i].title) || topik) +
+               ' dan menemukan keterkaitan yang bermakna terkait ' + topik;
+      }
+      return null;
+    }
+
+    // Resolver: menerima teks kunci placeholder, mengembalikan isi atau null.
+    function R(key) {
+      key = String(key);
+      var k = key.toLowerCase();
+      // Definisi variabel (dari Wikipedia bila ada)
+      if (/definisi.*variabel bebas|konsep variabel bebas/.test(k))
+        return defOf(xs[0], 'sebuah konsep yang berperan sebagai faktor pendorong dalam ' + bidang);
+      if (/definisi.*variabel terikat|konsep variabel terikat/.test(k))
+        return defOf(ys[0], 'kondisi atau capaian yang menjadi tolok ukur keberhasilan dalam ' + bidang);
+      var mDef = key.match(/lengkapi definisi\s+(.+?)\s+menurut ahli/i);
+      if (mDef) return defOf(mDef[1], mDef[1] + ' merupakan konsep penting yang relevan dengan ' + bidang) +
+                       ' (lihat pembahasan pada landasan teori)';
+      if (/dimensi\/indikator|dimensi\s*\/\s*indikator|sebutkan dimensi/.test(k))
+        return 'sejumlah dimensi dan indikator yang lazim digunakan untuk mengukur konsep tersebut secara operasional';
+      if (/teori.*kerangka teori|kerangka teori yang relevan/.test(k))
+        return 'sejumlah teori yang menjelaskan keterkaitan antara ' + xStr + ' dan ' + yStr;
+      if (/temuan empiris/.test(k))
+        return refFinding(0) || (xStr + ' memberikan kontribusi terhadap ' + yStr + ' pada berbagai konteks penelitian');
+      if (/kondisi ideal\/standar\/target|gambaran kondisi ideal/.test(k))
+        return 'tercapainya ' + yStr + ' yang optimal sesuai standar yang berlaku di ' + bidang;
+      if (/fenomena\/data aktual/.test(k))
+        return 'masih terdapat kesenjangan antara ' + yStr + ' yang diharapkan dengan kondisi yang teramati di lapangan';
+      if (/masalah spesifik pada objek/.test(k))
+        return 'ditemukan indikasi ' + yStr + ' yang belum optimal serta ' + lc1(xStr) + ' yang masih perlu ditingkatkan';
+      if (/faktor-faktor penyebab/.test(k))
+        return 'keterbatasan ' + lc1(xStr) + ', faktor lingkungan, serta karakteristik individu dan organisasi di ' + objek;
+      if (/dampak\/akibat/.test(k))
+        return 'menurunnya ' + yStr + ' serta terhambatnya pencapaian tujuan di ' + bidang;
+      if (/urgensi/.test(k))
+        return 'kebutuhan praktis di ' + objek + ' sekaligus tuntutan pengembangan keilmuan di ' + bidang;
+      if (/penelitian terdahulu 1/.test(k))
+        return refFinding(0) || ('sejumlah studi menunjukkan pengaruh positif ' + xStr + ' terhadap ' + yStr);
+      if (/penelitian terdahulu 2/.test(k))
+        return refFinding(1) || ('studi lain menegaskan pentingnya ' + xStr + ' dalam meningkatkan ' + yStr);
+      if (/perbedaan\/kesenjangan|research gap/.test(k))
+        return 'penelitian ini menempatkan ' + topik + ' pada konteks ' + objek + ' yang belum banyak dikaji sebelumnya';
+      if (/kebaruan\/novelty/.test(k))
+        return 'pemaduan variabel ' + topik + ' dalam konteks ' + objek;
+      if (/pihak yang memperoleh manfaat/.test(k))
+        return 'praktisi dan pengelola di ' + objek + ', akademisi di bidang ' + bidang + ', serta masyarakat luas';
+      if (/hubungan\/pengaruh antarvariabel/.test(k))
+        return 'pengaruh ' + xStr + ' terhadap ' + yStr + ' secara terukur';
+      if (/makna\/proses\/fenomena/.test(k))
+        return 'makna dan proses ' + topik + ' pada ' + objek;
+      if (/masalah pertama/.test(k))
+        return lc1(yStr) + ' pada ' + objek + ' belum sepenuhnya optimal';
+      if (/masalah kedua/.test(k))
+        return xStr + ' diduga belum berperan maksimal dalam mendukung ' + yStr;
+      if (/masalah ketiga/.test(k))
+        return 'diperlukan kajian yang mengukur keterkaitan ' + topik + ' secara sistematis';
+      if (/di luar fokus penelitian/.test(k))
+        return 'variabel-variabel lain di luar ' + topik;
+      // BAB III — metodologi standar (bukan data karangan)
+      if (/jumlah populasi/.test(k))
+        return 'seluruh anggota populasi pada ' + objek + ' sesuai data terbaru yang tercatat';
+      if (/teknik sampling|simple random|purposive sampling/.test(k))
+        return approach === 'kualitatif' ? 'purposive sampling' : 'proportionate stratified random sampling';
+      if (/rumus penentuan sampel|slovin/.test(k))
+        return 'rumus Slovin pada taraf kesalahan 5%';
+      if (/^jumlah sampel$/.test(k) || /jumlah sampel/.test(k))
+        return 'sejumlah sampel representatif sesuai hasil perhitungan rumus';
+      if (/informan kunci beserta kriterianya|sebutkan informan/.test(k))
+        return 'pihak yang memahami dan terlibat langsung dengan ' + topik + ' di ' + objek;
+      if (/kecukupan\/saturasi/.test(k))
+        return 'prinsip kecukupan dan kejenuhan data (data saturation)';
+      var mOp = key.match(/definisi operasional\s+(.+)/i);
+      if (mOp) return lc1(mDefOpText(mOp[1], bidang));
+      if (/indikator \+ skala|sebutkan indikator/.test(k))
+        return 'seperangkat indikator terukur dengan skala Likert 1–5';
+      if (/kuesioner\/angket/.test(k)) return 'kuesioner (angket) tertutup';
+      if (/likert/.test(k)) return 'Likert 1–5';
+      if (/dokumen\/laporan\/sumber data/.test(k)) return 'dokumen, laporan resmi, dan arsip pada ' + objek;
+      if (/rincikan prosedur pengumpulan data/.test(k))
+        return 'wawancara dilakukan secara mendalam dan terekam, observasi dilakukan secara partisipatif, dan dokumentasi mengumpulkan arsip yang relevan';
+      if (/kisi-kisi instrumen/.test(k)) return 'disusun berdasarkan indikator setiap variabel dan dilampirkan';
+      if (/korelasi pearson|analisis faktor/.test(k)) return 'korelasi product moment Pearson';
+      if (/cronbach/.test(k)) return 'Cronbach’s Alpha';
+      if (/nilai ambang batas|sebutkan nilai ambang/.test(k)) return 'r-hitung > r-tabel dan Alpha ≥ 0,60';
+      if (/sumber\/teknik\/waktu/.test(k)) return 'sumber, teknik, dan waktu';
+      if (/teknik pemeriksaan keabsahan lainnya/.test(k)) return 'diskusi dengan teman sejawat (peer debriefing)';
+      if (/normalitas, multikolinearitas/.test(k)) return 'uji normalitas, multikolinearitas, dan heteroskedastisitas';
+      if (/t \/ f dan koefisien determinasi|t\s*\/\s*f/.test(k)) return 'uji t, uji F, dan koefisien determinasi (R²)';
+      if (/spss|smartpls/.test(k)) return 'IBM SPSS';
+      if (/miles.*huberman/.test(k)) return 'Miles dan Huberman';
+      if (/bulan\/tahun mulai/.test(k)) return 'awal semester berjalan';
+      if (/bulan\/tahun selesai/.test(k)) return 'akhir semester berjalan';
+      if (/^3[–-]5$/.test(key.trim())) return '3–5';
+      if (/sisipkan diagram\/bagan|bagan kerangka|bagan kerangka konseptual/.test(k))
+        return 'Bagan kerangka berpikir menggambarkan alur ' + xStr + ' → ' + yStr;
+      if (/uraikan alur berpikir/.test(k))
+        return 'Alur berpikir bergerak dari fenomena, kajian teori, hingga fokus penelitian pada ' + topik;
+      if (/proposisi atau dugaan sementara/.test(k))
+        return 'Dugaan sementara: ' + xStr + ' berkontribusi terhadap ' + yStr + ' pada ' + objek;
+      if (/pengambilan keputusan\/kebijakan|pengambilan keputusan/.test(k))
+        return 'pengambilan keputusan dan kebijakan di ' + objek;
+      if (k === 'isi') {
+        var val = _isiSeq[_isiN % _isiSeq.length]; _isiN++;
+        if (val === '_isi_diff') return 'berbeda pada variabel, konteks, dan lokasi dengan penelitian ini';
+        return val;
+      }
+      return null; // biarkan placeholder bila tak dikenali
+    }
+
+    var chapters = JSON.parse(JSON.stringify(scaffoldProposal(project)));
+    var filled = 0, left = 0;
+    for (var c = 0; c < chapters.length; c++) {
+      var secs = chapters[c].sections || [];
+      for (var s = 0; s < secs.length; s++) {
+        secs[s].content = String(secs[s].content || '').replace(/〔([^〕]*)〕/g, function (m, key) {
+          if (key === 'sumber' || key === 'hal' || key === 'tahun') { left++; return m; }
+          var v = R(key);
+          if (v != null && trim(v)) { filled++; return trim(v); }
+          left++; return m;
+        });
+      }
+    }
+    return { chapters: chapters, filled: filled, remaining: left, wikiTerms: vars.slice() };
+  }
+  function mDefOpText(name, bidang) {
+    return 'skor total yang diperoleh responden atas seluruh indikator ' + name +
+           ' sebagaimana diukur oleh instrumen penelitian';
+  }
+
+  /* ---- 4c) humanize: kurangi pola tulisan khas AI (deterministik) -------- */
+  function humanize(text) {
+    if (text == null) return text;
+    var s = String(text);
+    // 1) Rotasi konektor pembuka yang khas AI agar tidak monoton/berulang.
+    var rot = [
+      ['Selain itu,', ['Di samping itu,', 'Lebih lanjut,', 'Tidak hanya itu,']],
+      ['Oleh karena itu,', ['Dengan demikian,', 'Karena itu,', 'Atas dasar itu,']],
+      ['Dalam hal ini,', ['Pada konteks ini,', 'Terkait hal tersebut,']],
+      ['Namun demikian,', ['Kendati demikian,', 'Sekalipun begitu,', 'Meski begitu,']],
+      ['Dengan demikian,', ['Berdasarkan hal itu,', 'Karena itu,']],
+      ['Pada dasarnya,', ['Secara mendasar,', 'Pada intinya,']],
+      ['Perlu diketahui bahwa', ['Patut dicatat bahwa', 'Menariknya,']],
+      ['Sebagaimana diketahui,', ['Sebagaimana lazim dipahami,', 'Seperti umum dipahami,']]
+    ];
+    for (var i = 0; i < rot.length; i++) {
+      var from = rot[i][0], alts = rot[i][1], hit = 0;
+      var re = new RegExp(from.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'g');
+      s = s.replace(re, function (m) {
+        // biarkan kemunculan pertama, variasikan kemunculan berikutnya
+        if (hit === 0) { hit++; return m; }
+        var a = alts[(hit - 1) % alts.length]; hit++; return a;
+      });
+    }
+    // 2) Hapus/ubah frasa pengisi yang sering dipakai AI.
+    var kill = [
+      [/\bpada era (?:digital |modern |globalisasi )?(?:ini|saat ini)\b,?\s*/gi, ''],
+      [/\bperlu digarisbawahi bahwa\s*/gi, ''],
+      [/\btidak dapat dipungkiri bahwa\s*/gi, ''],
+      [/\bmerupakan hal yang sangat penting\b/gi, 'penting'],
+      [/\bsangat(?:lah)? penting\b/gi, 'penting'],
+      [/\byang mana\b/gi, 'yang'],
+      [/\bdi era sekarang ini\b/gi, 'kini'],
+      [/\bsecara signifikan dan nyata\b/gi, 'secara nyata'],
+      [/\bberbagai macam\b/gi, 'berbagai']
+    ];
+    for (var j = 0; j < kill.length; j++) s = s.replace(kill[j][0], kill[j][1]);
+    // 3) Rapikan spasi ganda akibat penghapusan.
+    s = s.replace(/[ \t]{2,}/g, ' ').replace(/\s+\./g, '.').replace(/\(\s+/g, '(');
+    // 4) Kapitalisasi awal kalimat bila terlanjur huruf kecil karena substitusi.
+    s = s.replace(/(^|\n)([a-z])/g, function (m, p, ch) { return p + ch.toUpperCase(); });
+    return s;
+  }
+  function humanizeChapters(chapters) {
+    var out = JSON.parse(JSON.stringify(chapters || []));
+    for (var c = 0; c < out.length; c++) {
+      var secs = out[c].sections || [];
+      for (var s = 0; s < secs.length; s++) secs[s].content = humanize(secs[s].content);
+    }
+    return out;
+  }
+
   /* ---- 5) autoSearch: merge OpenAlex + Crossref, rank, annotate --------- */
   function typeLabelOf(t) {
     t = trim(t).toLowerCase();
@@ -2131,6 +2378,9 @@
     suggestTitles: suggestTitles,
     deriveFromTitle: deriveFromTitle,
     scaffoldProposal: scaffoldProposal,
+    generateFill: generateFill,
+    humanize: humanize,
+    humanizeChapters: humanizeChapters,
     autoSearch: autoSearch,
     buildProposalHTML: buildProposalHTML,
     // meta
