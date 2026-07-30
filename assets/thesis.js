@@ -1291,6 +1291,12 @@
     if (type === 'pengaruh' || type === 'hubungan') {
       var verb = (type === 'hubungan') ? 'berhubungan dengan' : 'berpengaruh terhadap';
       var averb = (type === 'hubungan') ? 'hubungan' : 'pengaruh';
+      // descriptive rumusan for each variable first (Indonesian thesis convention)
+      for (var dq = 0; dq < (x.length || 1); dq++) {
+        var dxq = x[dq] || ph('variabel bebas');
+        addQO('Bagaimana gambaran ' + dxq + ctx + '?', 'Untuk mendeskripsikan ' + dxq + ctx + '.');
+      }
+      addQO('Bagaimana gambaran ' + yTarget + ctx + '?', 'Untuk mendeskripsikan ' + yTarget + ctx + '.');
       for (var i = 0; i < (x.length || 1); i++) {
         var xi = x[i] || ph('variabel bebas');
         addQO(
@@ -1333,6 +1339,21 @@
           'Untuk mengeksplorasi faktor-faktor yang memengaruhi ' + (xStr || ph('fokus penelitian')) + ctx + '.'
         );
       }
+    }
+
+    // ensure >= 3 rumusan masalah (Indonesian thesis convention)
+    var qFocus = xStr || objek || ph('fokus penelitian');
+    var qTarget = yStr || objek || ph('objek penelitian');
+    var topUps = [
+      ['Faktor-faktor apa saja yang memengaruhi ' + qFocus + ctx + '?',
+       'Untuk mengidentifikasi faktor-faktor yang memengaruhi ' + qFocus + ctx + '.'],
+      ['Bagaimana upaya yang dapat dilakukan untuk mengoptimalkan ' + qFocus + ctx + '?',
+       'Untuk merumuskan upaya optimalisasi ' + qFocus + ctx + '.'],
+      ['Bagaimana implikasi ' + qFocus + ' terhadap ' + qTarget + ctx + '?',
+       'Untuk menganalisis implikasi ' + qFocus + ' terhadap ' + qTarget + ctx + '.']
+    ];
+    for (var tu = 0; tu < topUps.length && questions.length < 3; tu++) {
+      addQO(topUps[tu][0], topUps[tu][1]);
     }
 
     var hypotheses = [];
@@ -1624,7 +1645,7 @@
         S('Kerangka Berpikir', kerangka),
         S('Hipotesis', hipotesis)
       ] },
-      { code: 'BAB III', title: 'Metode Penelitian', sections: [
+      { code: 'BAB III', title: 'Metode Penelitian', sections: (approach === 'kuantitatif') ? [
         S('Jenis dan Pendekatan Penelitian', jenis),
         S('Lokasi dan Waktu Penelitian', lokasiWaktu),
         S('Populasi dan Sampel', populasi),
@@ -1632,6 +1653,14 @@
         S('Teknik Pengumpulan Data', pengumpulan),
         S('Instrumen Penelitian', instrumen),
         S('Uji Validitas dan Reliabilitas', validitas),
+        S('Teknik Analisis Data', analisis)
+      ] : [
+        S('Jenis dan Pendekatan Penelitian', jenis),
+        S('Lokasi dan Waktu Penelitian', lokasiWaktu),
+        S('Sumber Data dan Subjek Penelitian', populasi),
+        S('Teknik Pengumpulan Data', pengumpulan),
+        S('Instrumen Penelitian', instrumen),
+        S('Keabsahan Data', validitas),
         S('Teknik Analisis Data', analisis)
       ] },
       { code: 'DAFTAR PUSTAKA', title: 'Daftar Pustaka', sections: [] }
