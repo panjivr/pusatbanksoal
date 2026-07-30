@@ -1541,6 +1541,37 @@
     } else {
       P.push('Pendekatan kualitatif dipilih karena penelitian ini berupaya memahami secara mendalam ' + ph('makna/proses/fenomena yang diteliti') + cM() + '.');
     }
+    // --- Perluasan latar belakang (target ~10 halaman) ---
+    P.push('Pada tataran kebijakan, perhatian terhadap ' + topik + ' tercermin dari ' + ph('sebutkan kebijakan/regulasi/program pemerintah yang relevan + sumber') + ', yang menegaskan bahwa persoalan ini bukan semata isu teknis, melainkan juga menyangkut kepentingan yang lebih luas' + cM() + '.');
+    P.push('Secara empiris, kecenderungan yang terjadi selama beberapa tahun terakhir memperlihatkan ' + ph('gambaran tren/perkembangan data terkait topik + sumber statistik, mis. BPS atau laporan lembaga') + ', sehingga menuntut kajian yang lebih cermat' + cM() + '.');
+    P.push('Perbandingan antara kondisi di ' + (lokasi || 'wilayah lain') + ' dengan daerah maupun negara lain turut memperlihatkan adanya perbedaan capaian yang menarik untuk ditelusuri lebih lanjut' + cM() + '.');
+    // Pendalaman tiap variabel
+    for (var pv = 0; pv < allVars.length; pv++) {
+      var pvn = allVars[pv];
+      P.push('Dalam bidang ' + bidang + ', ' + pvn + ' menempati kedudukan yang penting karena ' + ph('jelaskan peran dan kontribusi ' + pvn) + '. Pemahaman yang utuh atas ' + pvn + ' menjadi pijakan untuk menelaah persoalan yang diangkat dalam penelitian ini' + cM() + '.');
+      P.push('Sejumlah kajian menunjukkan bahwa ' + pvn + ' dipengaruhi oleh ' + ph('faktor-faktor yang memengaruhi ' + pvn) + ', sekaligus berdampak pada ' + ph('konsekuensi atau keterkaitan ' + pvn) + '. Keterkaitan tersebut memperkuat alasan mengapa ' + pvn + ' layak dikaji lebih mendalam' + cM() + '.');
+    }
+    // Penelitian terdahulu dari perpustakaan (bila tersedia)
+    var _npr = Math.min(refs.length, 5);
+    for (var psx = 0; psx < _npr; psx++) {
+      var _w = refs[psx];
+      var _fam = (_w.authors && _w.authors[0]) ? authFamily(_w.authors[0]) : trim(_w.venue);
+      var _yr = (_w.year != null && _w.year !== '') ? _w.year : 't.t.';
+      var _cite = _fam ? _fam + (_w.authors && _w.authors.length > 1 ? ' dkk.' : '') + ' (' + _yr + ')' : 'salah satu penelitian terdahulu';
+      P.push('Kajian ' + _cite + ' menelaah persoalan yang berdekatan dan menyimpulkan bahwa ' + ph('ringkas temuan utama penelitian ini') + '. Hasil tersebut memberi rujukan awal, meskipun konteks, metode, atau fokus kajiannya berbeda dengan penelitian yang penulis lakukan.');
+    }
+    P.push('Bila temuan-temuan tersebut disandingkan, tampak adanya perbedaan hasil pada beberapa penelitian, terutama menyangkut ' + ph('aspek yang temuannya belum konsisten') + '. Ketidakkonsistenan ini membuka ruang bagi pengujian ulang pada konteks yang berbeda' + cM() + '.');
+    P.push('Ditinjau dari sisi objek penelitian, kondisi pada ' + objl + ' memiliki kekhasan tersendiri, yaitu ' + ph('karakteristik khusus objek/lokasi yang membedakannya') + ', yang belum banyak disentuh oleh penelitian sebelumnya' + cM() + '.');
+    P.push('Dengan mempertimbangkan celah teoretis maupun praktis di atas, penelitian ini diarahkan untuk mengkaji ' + topik + ' secara lebih terfokus dan kontekstual' + ctx + cM() + '.');
+    // Sudut pandang tambahan agar latar belakang utuh dan tidak repetitif
+    P.push('Secara akademik, pembahasan mengenai ' + topik + ' masih menyisakan sejumlah pertanyaan yang belum sepenuhnya terjawab. Beragam pendekatan yang digunakan peneliti terdahulu menghasilkan simpulan yang tidak selalu seragam, sehingga kajian lanjutan tetap diperlukan untuk memperkuat maupun menguji kembali temuan yang ada' + cM() + '.');
+    P.push('Dari sisi kebutuhan praktis, ' + (objl) + ' menghadapi tuntutan untuk terus membenahi diri. Berbagai upaya telah ditempuh, namun hasilnya belum sepenuhnya sesuai harapan karena ' + ph('kendala/keterbatasan upaya yang sudah dilakukan') + '. Keadaan ini menandakan bahwa persoalan yang dihadapi bersifat kompleks dan menuntut penanganan yang berbasis data' + cM() + '.');
+    P.push('Apabila ditinjau dari dampaknya, persoalan pada ' + yLabel + ' tidak hanya berpengaruh dalam jangka pendek. Dalam rentang yang lebih panjang, kondisi tersebut berpotensi memengaruhi ' + ph('dampak lanjutan pada aspek sosial/ekonomi/organisasi') + ', sehingga penanganannya perlu diletakkan sebagai prioritas' + cM() + '.');
+    P.push('Pengamatan awal yang penulis lakukan memperlihatkan ' + ph('hasil observasi/wawancara awal atau data pendahuluan di lapangan') + '. Indikasi ini memperkuat dugaan bahwa terdapat persoalan nyata yang layak diangkat sebagai fokus penelitian' + cM() + '.');
+    P.push('Berbagai data pendukung juga menunjukkan ' + ph('angka/persentase/temuan awal + sumber') + '. Bila angka tersebut dibandingkan dengan target atau standar yang ditetapkan, terlihat selisih yang cukup berarti dan menuntut penjelasan yang lebih menyeluruh' + cM() + '.');
+    P.push('Penelitian ini menempatkan diri untuk mengisi kekosongan tersebut dengan memadukan tinjauan teoretis dan bukti lapangan. Melalui cara itu, hasil yang diperoleh diharapkan tidak berhenti pada deskripsi, melainkan mampu menjelaskan keterkaitan antarfaktor yang selama ini belum banyak diuraikan' + cM() + '.');
+    P.push('Pemilihan ' + objl + ' sebagai objek penelitian didasarkan pada pertimbangan bahwa ' + ph('alasan representativeness/keunikan/akses data pada objek') + '. Dengan demikian, temuan penelitian diharapkan relevan baik bagi objek yang diteliti maupun bagi konteks yang lebih luas' + cM() + '.');
+
     P.push('Berdasarkan seluruh uraian di atas, penelitian berjudul "' + (title || ph('judul penelitian')) + '" penting untuk dilakukan guna ' + (oTexts.length ? oTexts[0].replace(/^Untuk\s+/i, '').replace(/\.$/, '') : ph('mencapai tujuan penelitian')) + '.');
     var latar = P.join('\n\n');
 
@@ -1636,11 +1667,25 @@
       'Seluruh tahapan penelitian dirancang mengikuti kaidah ilmiah agar temuan yang dihasilkan dapat dipertanggungjawabkan dan memiliki tingkat kepercayaan yang memadai' + cM() + '.'
     ].join('\n\n');
 
+    var jadwalTbl = [
+      '| No | Kegiatan | 1 | 2 | 3 | 4 | 5 | 6 |',
+      '|---|---|---|---|---|---|---|---|',
+      '| 1 | Penyusunan proposal | √ | √ |  |  |  |  |',
+      '| 2 | Seminar proposal |  | √ |  |  |  |  |',
+      '| 3 | Penyusunan dan uji coba instrumen |  | √ | √ |  |  |  |',
+      '| 4 | Pengumpulan data |  |  | √ | √ |  |  |',
+      '| 5 | Pengolahan dan analisis data |  |  |  | √ | √ |  |',
+      '| 6 | Penyusunan laporan hasil |  |  |  |  | √ | √ |',
+      '| 7 | Ujian/sidang skripsi |  |  |  |  |  | √ |'
+    ].join('\n');
     var lokasiWaktu = [
       'Penelitian ini dilaksanakan di ' + (lokasi || objek || ph('lokasi penelitian')) +
         '. Lokasi tersebut dipilih dengan pertimbangan ' + ph('alasan pemilihan lokasi — relevansi dengan masalah, keterjangkauan, atau ketersediaan data') + '.',
       'Kegiatan penelitian direncanakan berlangsung sejak ' + ph('bulan/tahun mulai') + ' sampai dengan ' + ph('bulan/tahun selesai') +
-        '. Rentang waktu tersebut mencakup tahap persiapan dan penyusunan instrumen, pengumpulan data, pengolahan dan analisis data, hingga penyusunan laporan ' + ph('sesuaikan dengan jadwal penelitian') + '.'
+        '. Rentang waktu tersebut mencakup tahap persiapan dan penyusunan instrumen, pengumpulan data, pengolahan dan analisis data, hingga penyusunan laporan. Rincian tahapan beserta alokasi waktunya disajikan pada tabel jadwal berikut.',
+      'Tabel 3.1 Jadwal Penelitian',
+      jadwalTbl,
+      'Keterangan: angka 1–6 menunjukkan bulan pelaksanaan; tanda √ menandai kegiatan yang berlangsung pada bulan tersebut. ' + ph('sesuaikan jumlah bulan dan jadwal dengan rencana penelitian yang sebenarnya') + '.'
     ].join('\n\n');
 
     var populasi;
@@ -2110,13 +2155,42 @@
         return '<sup class="fn">' + ctx.n + '</sup>';
       });
   }
+  function renderTableHTML(rows, ctx) {
+    var parsed = [];
+    for (var r = 0; r < rows.length; r++) {
+      var cs = rows[r].replace(/^\|/, '').replace(/\|$/, '').split('|');
+      for (var j = 0; j < cs.length; j++) cs[j] = trim(cs[j]);
+      var isSep = cs.length && cs.join('') !== '' ? true : false;
+      isSep = true;
+      for (var k = 0; k < cs.length; k++) { if (!/^:?-{2,}:?$/.test(cs[k]) && cs[k] !== '') { isSep = false; break; } }
+      if (isSep && cs.join('').replace(/[-:]/g, '') === '') continue; // separator row
+      parsed.push(cs);
+    }
+    if (!parsed.length) return '';
+    var out = '<table class="prop-tbl">';
+    for (var p = 0; p < parsed.length; p++) {
+      out += '<tr>';
+      var tag = (p === 0) ? 'th' : 'td';
+      for (var c = 0; c < parsed[p].length; c++)
+        out += '<' + tag + '>' + applyFootnotes(inlineFmt(escHtml(parsed[p][c])), ctx) + '</' + tag + '>';
+      out += '</tr>';
+    }
+    return out + '</table>';
+  }
   function renderContentHTML(text, ctx) {
-    var lines = String(text || '').split(/\n/), h = '';
-    for (var i = 0; i < lines.length; i++) {
+    var lines = String(text || '').split(/\n/), h = '', i = 0;
+    while (i < lines.length) {
       var raw = trim(lines[i]);
-      if (!raw) continue;
+      if (!raw) { i++; continue; }
+      if (/^\|.*\|$/.test(raw)) {            // markdown table block
+        var rows = [];
+        while (i < lines.length && /^\|.*\|$/.test(trim(lines[i]))) { rows.push(trim(lines[i])); i++; }
+        h += renderTableHTML(rows, ctx);
+        continue;
+      }
       if (/^###\s+/.test(raw)) h += '<h4>' + inlineFmt(escHtml(raw.replace(/^###\s+/, ''))) + '</h4>';
       else h += '<p>' + applyFootnotes(inlineFmt(escHtml(raw)), ctx) + '</p>';
+      i++;
     }
     return h;
   }
@@ -2277,6 +2351,10 @@
       '.proposal .biblio .ref{padding-left:2em;text-indent:-2em;text-align:left;}' +
       '.proposal sup.fn{font-size:.7em;line-height:0;vertical-align:super;}' +
       '.proposal .ph{background:#fff3cd;color:#8a6d00;border:1px dashed #d9a900;border-radius:3px;padding:0 3px;font-style:italic;font-size:.92em;}' +
+      '.proposal table.prop-tbl{border-collapse:collapse;width:100%;margin:8px 0 14px;font-size:11pt;}' +
+      '.proposal table.prop-tbl th,.proposal table.prop-tbl td{border:1px solid #333;padding:5px 8px;text-align:center;vertical-align:middle;}' +
+      '.proposal table.prop-tbl th{font-weight:bold;background:#f0f0f0;}' +
+      '.proposal table.prop-tbl td:nth-child(2){text-align:left;}' +
       '@media print{.proposal .page{box-shadow:none;margin:0;page-break-after:always;}}' +
       '</style>';
 
