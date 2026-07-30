@@ -140,6 +140,7 @@
 </div><div class="bottom"><span>© <span data-year>2026</span> PusatBankSoal.id — Seluruh hak cipta dilindungi.</span><span>Dibuat untuk pejuang ujian Indonesia 🇮🇩</span></div></div></footer>
 
 <script src="assets/thesis.js"></script>
+<script src="assets/wiki.js"></script>
 <script>
 (function(){
   "use strict";
@@ -561,6 +562,11 @@
           '<button class="btn btn-ghost btn-sm" id="propStyleChk">'+icon('i-sparkles')+' Cek Gaya (anti-AI)</button>'+
           '<button class="btn btn-ghost btn-sm" id="propPlagChk">'+icon('i-shield-check')+' Cek Plagiasi</button>'+
         '</div>'+
+        '<div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap;align-items:center" class="no-print">'+
+          '<button class="btn btn-primary btn-sm" id="propGenFull">'+icon('i-sparkles')+' Generate Penuh (Wikipedia + AI)</button>'+
+          '<button class="btn btn-ghost btn-sm" id="propHumanize">'+icon('i-refresh')+' Humanize (anti-AI)</button>'+
+          '<span class="muted" style="font-size:12px">Isi otomatis BAB I–III dari sumber gratis, lalu di-humanize.</span>'+
+        '</div>'+
         '<div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap" class="no-print">'+
           '<button class="btn btn-primary btn-sm" id="propDoc">'+icon('i-doc')+' Unduh Proposal (DOCX)</button>'+
           '<button class="btn btn-ghost btn-sm" id="propPrint">Cetak / PDF</button>'+
@@ -625,6 +631,35 @@
       if(!res.duplicateCount) h+='<p style="margin-top:10px;color:var(--up);font-size:13px">Tidak ada kalimat yang sangat mirip antarbagian.</p>';
       else h+='<p class="muted" style="margin-top:10px;font-size:13px"><b class="num">'+res.duplicateCount+'</b> pasang kalimat mirip. Contoh:</p>'+res.duplicates.slice(0,6).map(function(d){ return '<div style="border-left:3px solid var(--primary);padding:6px 10px;margin-bottom:6px;background:var(--elevated);border-radius:4px;font-size:12.5px"><b>'+d.sim+'% mirip</b><br>• '+esc(d.a)+'…<br>• '+esc(d.b)+'…</div>'; }).join('');
       out.innerHTML=h+'</div>';
+    });
+    byId('propGenFull').addEventListener('click',function(){
+      var btn=this, proj=THESIS.activeProject(); if(!proj) return;
+      var der=THESIS.deriveFromTitle(proj.title||'',{objek:proj.researchObject||'',bidang:proj.program||proj.researchInterest||''});
+      var terms=[]; (der.variables.x||[]).concat(der.variables.y||[]).forEach(function(t){ t=String(t||'').trim(); if(t&&terms.indexOf(t)<0) terms.push(t); });
+      if(proj.title) terms.push(proj.title.replace(/^pengaruh\s+|^hubungan\s+|^analisis\s+/i,''));
+      var old=btn.innerHTML, done=false;
+      btn.disabled=true; btn.innerHTML=icon('i-refresh')+' Mengambil data & menulis…';
+      function finish(wiki){
+        if(done) return; done=true;
+        var g=THESIS.generateFill(proj, wiki||{});
+        var chapters=THESIS.humanizeChapters(g.chapters);
+        THESIS.updateProject(proj.id,{state:{chapters:chapters}});
+        btn.disabled=false; btn.innerHTML=old;
+        var nsrc=wiki?Object.keys(wiki).length:0;
+        toast('Draf BAB I–III dibuat: '+g.filled+' bagian terisi'+(nsrc?' · '+nsrc+' sumber Wikipedia':'')+' · sudah di-humanize.');
+        propMode='preview'; viewProposal();
+      }
+      if(window.WIKI){
+        var timer=setTimeout(function(){ finish({}); },12000); // fallback bila jaringan lambat
+        Promise.resolve(WIKI.fetchTerms(terms)).then(function(map){ clearTimeout(timer); finish(map||{}); })
+          .catch(function(){ clearTimeout(timer); finish({}); });
+      } else { finish({}); }
+    });
+    byId('propHumanize').addEventListener('click',function(){
+      var proj=THESIS.activeProject(); if(!proj) return;
+      var chapters=THESIS.humanizeChapters((proj.state&&proj.state.chapters)||[]);
+      THESIS.updateProject(proj.id,{state:{chapters:chapters}});
+      toast('Teks di-humanize — pola & kata khas AI dikurangi.'); viewProposal();
     });
     byId('propDoc').addEventListener('click',function(){
       download(fileBase(p)+'.doc',buildDocDocument(THESIS.activeProject(),val('propStyle')),'application/msword'); toast('Proposal (DOCX) diunduh.');
