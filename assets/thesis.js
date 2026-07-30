@@ -1573,16 +1573,17 @@
       'DAFTAR PUSTAKA, memuat seluruh sumber rujukan yang digunakan.';
 
     // -------- BAB II -------------------------------------------------------
-    var landasan = 'Bab ini menyajikan landasan teori yang menjadi dasar penelitian. Setiap konsep berikut perlu dilengkapi definisi dari ahli beserta sitasi dari perpustakaan referensi.\n\n';
+    var landasan = 'Bab ini menyajikan landasan teori yang menjadi dasar penelitian. Setiap konsep diuraikan mulai dari definisi menurut para ahli, dimensi dan indikatornya, sampai keterkaitannya dengan variabel lain, disertai sitasi dari perpustakaan referensi.\n\n';
     for (var v = 0; v < allVars.length; v++) {
       var vv = allVars[v];
       landasan += '### ' + vv + '\n';
-      landasan += vv + ' dalam penelitian ini dipahami sebagai ' +
-        ph('lengkapi definisi ' + vv + ' menurut ahli + sitasi dari perpustakaan') +
-        '. Konsep ini diukur/ditinjau melalui dimensi dan indikator ' +
-        ph('sebutkan dimensi/indikator + sumber') + '.\n\n';
+      landasan += 'Secara teoretis, ' + vv + ' dimaknai sebagai ' + ph('definisi ' + vv + ' menurut ahli') + cM() +
+        '. Pengertian tersebut menjadi acuan utama dalam memahami kedudukan ' + vv + ' pada penelitian ini.\n\n';
+      landasan += 'Sejumlah ahli merumuskan ' + vv + ' dengan penekanan yang berbeda-beda; keberagaman rumusan itu justru memperkaya pemahaman sekaligus membantu peneliti menetapkan batasan konsep yang dipakai' + cM() + '.\n\n';
+      landasan += vv + ' dijabarkan melalui dimensi dan indikator ' + ph('sebutkan dimensi/indikator ' + vv) +
+        ', yang selanjutnya menjadi dasar penyusunan definisi operasional dan butir instrumen' + cM() + '.\n\n';
     }
-    landasan += '*Catatan: sisipkan sitasi dari perpustakaan referensi pada setiap sub-bab teori di atas.*';
+    landasan += '*Catatan: lengkapi setiap definisi di atas dengan kutipan dari perpustakaan referensi melalui tombol Sisipkan Sitasi.*';
 
     var terdahulu = 'Penelitian terdahulu digunakan sebagai pembanding dan penunjuk posisi (state of the art) penelitian ini. ' +
       'Rangkum minimal ' + ph('3–5') + ' penelitian relevan dalam bentuk tabel dengan kolom: No, Nama & Tahun, Judul, Metode, Hasil, dan Perbedaan dengan penelitian ini.\n\n';
@@ -1598,12 +1599,17 @@
 
     var kerangka;
     if (approach === 'kuantitatif' && ys.length) {
-      kerangka = 'Kerangka berpikir menggambarkan keterkaitan antar variabel. Variabel bebas dalam penelitian ini adalah ' +
-        xStr + ', sedangkan variabel terikatnya adalah ' + yStr + '. Secara skematis, ' + xStr +
-        ' diduga memengaruhi ' + yStr + ctx + '. ' + ph('sisipkan diagram/bagan kerangka berpikir (X → Y)') + '.';
+      kerangka = [
+        'Kerangka berpikir menggambarkan alur logika yang menautkan variabel-variabel penelitian. Variabel bebas dalam penelitian ini adalah ' + xStr + ', sedangkan variabel terikatnya adalah ' + yStr + '.',
+        'Berpijak pada kajian teori dan temuan terdahulu, ' + xStr + ' diduga berpengaruh terhadap ' + yStr + ctx +
+          '. Keterkaitan tersebut digambarkan dalam bagan kerangka berpikir berikut ' + ph('sisipkan bagan kerangka berpikir (X → Y)') + '.'
+      ].join('\n\n');
     } else {
-      kerangka = 'Kerangka berpikir menggambarkan alur pemikiran penelitian mengenai ' + topik + ctx +
-        '. ' + ph('uraikan alur berpikir dan sisipkan bagan kerangka konseptual') + '.';
+      kerangka = [
+        'Kerangka berpikir memuat alur penalaran yang memandu penelitian dalam memahami ' + topik + ctx + '.',
+        'Alur tersebut bermula dari ' + ph('kondisi/fenomena awal') + ', kemudian ditelaah melalui ' + ph('konsep/teori yang digunakan') +
+          ', hingga menghasilkan ' + ph('pemahaman/temuan yang diharapkan') + '. ' + ph('sisipkan bagan kerangka konseptual') + '.'
+      ].join('\n\n');
     }
 
     var hipotesis;
@@ -1617,74 +1623,107 @@
     }
 
     // -------- BAB III ------------------------------------------------------
-    var jenis = 'Penelitian ini menggunakan pendekatan ' + approach + ' dengan jenis ' + der.design + '. ' +
-      (trim(method.design) ? 'Desain penelitian yang digunakan adalah ' + method.design + '. ' : '') +
-      'Pemilihan pendekatan ini didasarkan pada tujuan penelitian, yaitu ' +
-      (oTexts.length ? oTexts[0].replace(/^Untuk\s+/i, '').replace(/\.$/, '') : ph('tujuan penelitian')) + '.';
+    var jenis = [
+      'Penelitian ini menggunakan pendekatan ' + approach + ' dengan jenis ' + der.design + '. ' +
+        (trim(method.design) ? 'Rancangan yang digunakan adalah ' + method.design + '. ' : '') +
+        'Pemilihan pendekatan ini bertolak dari tujuan yang hendak dicapai, yaitu ' +
+        (oTexts.length ? oTexts[0].replace(/^Untuk\s+/i, '').replace(/\.$/, '') : ph('tujuan penelitian')) + ctx + '.',
+      (approach === 'kuantitatif'
+        ? 'Pendekatan kuantitatif dipandang tepat karena persoalan yang dikaji menuntut pengukuran serta pengujian keterkaitan antarvariabel secara sistematis. Melalui data berupa angka, peneliti dapat menilai sejauh mana ' + xStr + ' berhubungan dengan ' + yStr + ' dan menguji dugaan yang telah dirumuskan' + cM() + '.'
+        : 'Pendekatan kualitatif dipilih karena fokus kajian terletak pada pemahaman makna, proses, dan pengalaman yang sukar direduksi menjadi angka. Peneliti berupaya menggali ' + topik + ' secara mendalam dan apa adanya sesuai konteks yang berkembang di lapangan' + cM() + '.'),
+      'Jenis ' + der.design + ' digunakan karena ' + ph('jelaskan alasan pemilihan jenis/desain sesuai karakteristik masalah') +
+        '. Dengan rancangan tersebut, data yang terkumpul diharapkan mampu menjawab setiap rumusan masalah secara utuh dan runtut.',
+      'Seluruh tahapan penelitian dirancang mengikuti kaidah ilmiah agar temuan yang dihasilkan dapat dipertanggungjawabkan dan memiliki tingkat kepercayaan yang memadai' + cM() + '.'
+    ].join('\n\n');
 
-    var lokasiWaktu = 'Penelitian ini dilaksanakan di ' + (lokasi || objek || ph('lokasi penelitian')) +
-      '. Adapun waktu penelitian direncanakan berlangsung dari ' + ph('bulan/tahun mulai') +
-      ' sampai dengan ' + ph('bulan/tahun selesai') + '.';
+    var lokasiWaktu = [
+      'Penelitian ini dilaksanakan di ' + (lokasi || objek || ph('lokasi penelitian')) +
+        '. Lokasi tersebut dipilih dengan pertimbangan ' + ph('alasan pemilihan lokasi — relevansi dengan masalah, keterjangkauan, atau ketersediaan data') + '.',
+      'Kegiatan penelitian direncanakan berlangsung sejak ' + ph('bulan/tahun mulai') + ' sampai dengan ' + ph('bulan/tahun selesai') +
+        '. Rentang waktu tersebut mencakup tahap persiapan dan penyusunan instrumen, pengumpulan data, pengolahan dan analisis data, hingga penyusunan laporan ' + ph('sesuaikan dengan jadwal penelitian') + '.'
+    ].join('\n\n');
 
     var populasi;
     if (approach === 'kuantitatif') {
-      populasi = 'Populasi dalam penelitian ini adalah ' + (objek || ph('populasi')) + ' yang berjumlah ' +
-        ph('jumlah populasi + sumber data') + '. Teknik pengambilan sampel menggunakan ' +
-        ph('sebutkan teknik sampling, mis. simple random / purposive sampling') +
-        '. Ukuran sampel ditentukan menggunakan ' + ph('rumus penentuan sampel, mis. Slovin / Krejcie-Morgan') +
-        ' sehingga diperoleh ' + ph('jumlah sampel') + ' responden.';
+      populasi = [
+        'Populasi merupakan keseluruhan subjek yang memiliki karakteristik tertentu dan menjadi sasaran penelitian' + cM() +
+          '. Populasi dalam penelitian ini adalah ' + (objek || ph('populasi')) + ' dengan jumlah ' + ph('jumlah populasi + sumber data') + '.',
+        'Mengingat ukuran populasi yang ' + ph('relatif besar/terbatas') + ', penarikan sampel dilakukan dengan teknik ' +
+          ph('teknik sampling, mis. simple random / proportionate stratified / purposive sampling') + '. Teknik tersebut dipilih karena ' +
+          ph('alasan kesesuaian teknik dengan karakteristik populasi') + '.',
+        'Ukuran sampel ditetapkan menggunakan ' + ph('rumus, mis. Slovin / Krejcie–Morgan') + ' pada taraf kesalahan ' + ph('mis. 5%') +
+          ', sehingga diperoleh ' + ph('jumlah sampel') + ' responden. Jumlah tersebut dinilai memadai untuk mewakili populasi sekaligus memenuhi syarat analisis statistik yang digunakan' + cM() + '.'
+      ].join('\n\n');
     } else {
-      populasi = 'Subjek/informan penelitian dipilih menggunakan teknik ' +
-        ph('purposive sampling / snowball sampling') + '. Informan terdiri atas ' +
-        ph('sebutkan informan kunci beserta kriterianya') +
-        '. Jumlah informan disesuaikan dengan ' + ph('prinsip kecukupan/saturasi data') + '.';
+      populasi = [
+        'Subjek penelitian ditentukan secara sengaja (purposive) dengan mempertimbangkan penguasaan informan terhadap persoalan yang dikaji' + cM() +
+          '. Informan kunci dalam penelitian ini adalah ' + ph('sebutkan informan kunci beserta kriterianya') + '.',
+        'Untuk memperkaya sudut pandang, penambahan informan ditempuh secara snowball hingga data dipandang jenuh, yakni ketika keterangan yang diperoleh mulai berulang dan tidak lagi memunculkan informasi baru' + cM() + '.',
+        'Sumber data terdiri atas data primer yang digali langsung melalui ' + ph('wawancara/observasi') +
+          ' serta data sekunder yang bersumber dari ' + ph('dokumen, arsip, atau laporan resmi') + '.'
+      ].join('\n\n');
     }
 
-    var defOp = 'Definisi operasional menjelaskan variabel penelitian secara terukur agar dapat diamati dan diukur.\n\n';
+    var defOp = 'Definisi operasional diperlukan untuk menerjemahkan konsep yang bersifat abstrak menjadi sesuatu yang terukur, sehingga setiap variabel dapat diamati dan dinilai secara jelas' + cM() + '. Uraian berikut menjabarkan batasan dan pengukuran tiap variabel.\n\n';
     for (var d = 0; d < allVars.length; d++) {
       var dv = allVars[d];
       defOp += '### ' + dv + '\n';
-      defOp += dv + ' didefinisikan secara operasional sebagai ' + ph('definisi operasional ' + dv) +
-        ', dan diukur melalui indikator ' + ph('sebutkan indikator + skala pengukuran') + '.\n\n';
+      defOp += dv + ' secara operasional diartikan sebagai ' + ph('definisi operasional ' + dv) +
+        '. Batasan ini mengacu pada konsep ' + dv + ' yang telah diuraikan pada Bab II agar terdapat kesinambungan antara teori dan pengukuran.\n\n';
+      defOp += 'Variabel ' + dv + ' diukur melalui indikator ' + ph('sebutkan indikator ' + dv) +
+        ' dengan skala ' + ph('skala pengukuran, mis. Likert 1–5') + '. Setiap indikator selanjutnya dijabarkan menjadi butir-butir pernyataan pada instrumen penelitian.\n\n';
     }
 
     var pengumpulan;
     if (approach === 'kuantitatif') {
-      pengumpulan = 'Data primer dikumpulkan melalui penyebaran ' + ph('kuesioner/angket') +
-        ' dengan skala ' + ph('mis. Likert 1–5') + '. Data sekunder diperoleh dari ' +
-        ph('dokumen/laporan/sumber data') + '.';
+      pengumpulan = [
+        'Pengumpulan data primer dilakukan dengan menyebarkan ' + ph('kuesioner/angket') + ' kepada responden. Angket disusun berdasarkan indikator setiap variabel dan menggunakan skala ' + ph('mis. Likert 1–5') + ' untuk menilai persepsi responden' + cM() + '.',
+        'Sebagai pelengkap, data sekunder dihimpun dari ' + ph('dokumen, laporan, atau arsip resmi') + '. Prosedur pengumpulan ditempuh melalui tahap ' + ph('perizinan, penyebaran, hingga penarikan angket') + ' agar data yang terkumpul lengkap dan sahih.'
+      ].join('\n\n');
     } else {
-      pengumpulan = 'Data dikumpulkan melalui wawancara mendalam, observasi, dan dokumentasi terhadap ' +
-        (objek || ph('subjek penelitian')) + '. ' + ph('rincikan prosedur pengumpulan data untuk tiap teknik') + '.';
+      pengumpulan = [
+        'Data dikumpulkan melalui tiga teknik yang saling melengkapi, yaitu wawancara mendalam, observasi, dan dokumentasi' + cM() + '. Wawancara diarahkan untuk menggali ' + ph('informasi/pengalaman informan') + ' secara langsung dari sumbernya.',
+        'Observasi dilakukan untuk mengamati ' + ph('perilaku, kegiatan, atau kondisi di lapangan') + ', sementara dokumentasi digunakan untuk menghimpun ' + ph('dokumen, foto, atau catatan pendukung') + '. Perpaduan ketiga teknik ini membuat data yang diperoleh lebih kaya dan dapat saling menguatkan.'
+      ].join('\n\n');
     }
 
-    var instrumen = 'Instrumen utama dalam penelitian ini adalah ' +
-      (approach === 'kuantitatif'
-        ? 'kuesioner yang disusun berdasarkan indikator setiap variabel'
-        : 'peneliti sendiri sebagai instrumen kunci, dibantu pedoman wawancara dan lembar observasi') +
-      '. Kisi-kisi instrumen ' + ph('lampirkan kisi-kisi instrumen penelitian') + '.';
+    var instrumen = (approach === 'kuantitatif') ? [
+      'Instrumen utama penelitian ini adalah kuesioner yang butir-butirnya dikembangkan dari indikator tiap variabel. Penyusunan butir berpedoman pada kisi-kisi instrumen agar setiap indikator terwakili secara proporsional' + cM() + '.',
+      'Kisi-kisi instrumen memuat variabel, indikator, nomor butir, dan jumlah butir ' + ph('lampirkan kisi-kisi instrumen') + '. Sebelum digunakan pada sampel sebenarnya, instrumen terlebih dahulu diujicobakan kepada ' + ph('responden uji coba di luar sampel') + '.'
+    ].join('\n\n') : [
+      'Dalam penelitian kualitatif, peneliti berkedudukan sebagai instrumen kunci yang terlibat langsung dalam pengumpulan maupun penafsiran data' + cM() + '. Untuk menjaga arah penggalian data, peneliti dibantu pedoman wawancara dan lembar observasi.',
+      'Pedoman wawancara memuat pokok-pokok pertanyaan yang dikembangkan dari fokus penelitian ' + ph('lampirkan pedoman wawancara dan lembar observasi') + '. Pedoman bersifat lentur sehingga dapat berkembang menyesuaikan jawaban informan di lapangan.'
+    ].join('\n\n');
 
     var validitas;
     if (approach === 'kuantitatif') {
-      validitas = 'Instrumen diuji validitasnya menggunakan ' + ph('mis. korelasi Pearson / analisis faktor') +
-        ' dan reliabilitasnya menggunakan ' + ph('mis. Cronbach’s Alpha') +
-        '. Instrumen dinyatakan layak apabila memenuhi kriteria ' + ph('sebutkan nilai ambang batas') + '.';
+      validitas = [
+        'Instrumen yang baik harus memenuhi syarat valid dan reliabel' + cM() + '. Uji validitas dilakukan untuk memastikan bahwa butir-butir instrumen benar-benar mengukur apa yang seharusnya diukur, menggunakan ' + ph('mis. korelasi product moment Pearson') + '.',
+        'Uji reliabilitas dilakukan untuk menilai keajekan instrumen apabila digunakan berulang, dengan teknik ' + ph('mis. Cronbach’s Alpha') + '. Instrumen dinyatakan reliabel apabila koefisiennya melampaui ' + ph('nilai ambang, mis. 0,60') + '.',
+        'Butir yang tidak memenuhi kriteria validitas maupun reliabilitas akan ' + ph('diperbaiki atau digugurkan') + ' sebelum instrumen dipakai pada sampel yang sesungguhnya.'
+      ].join('\n\n');
     } else {
-      validitas = 'Keabsahan data diuji melalui triangulasi ' + ph('sumber/teknik/waktu') +
-        ', member checking, serta ' + ph('teknik pemeriksaan keabsahan lainnya') + '.';
+      validitas = [
+        'Keabsahan data diperiksa untuk menjamin bahwa temuan penelitian benar-benar mencerminkan keadaan di lapangan' + cM() + '. Pemeriksaan utama ditempuh melalui triangulasi ' + ph('sumber, teknik, dan waktu') + '.',
+        'Triangulasi sumber dilakukan dengan membandingkan keterangan dari beberapa informan, triangulasi teknik dengan memadukan hasil wawancara, observasi, dan dokumentasi, sedangkan triangulasi waktu dengan pengecekan pada kesempatan yang berbeda' + cM() + '.',
+        'Selain triangulasi, keabsahan data diperkuat melalui ' + ph('member checking, perpanjangan pengamatan, atau diskusi teman sejawat') + ' agar hasil penelitian semakin dapat dipercaya.'
+      ].join('\n\n');
     }
 
     var analisis;
     if (approach === 'kuantitatif') {
-      analisis = 'Data dianalisis menggunakan ' + (trim(method.design) ? method.design : 'analisis statistik yang sesuai') +
-        '. Tahapan analisis meliputi uji asumsi klasik (' +
-        ph('normalitas, multikolinearitas, heteroskedastisitas') + '), ' +
-        (hTexts.length ? 'analisis regresi untuk menguji hipotesis, ' : '') +
-        'serta uji ' + ph('t / F dan koefisien determinasi') + ' dengan bantuan perangkat ' +
-        ph('mis. SPSS / SmartPLS') + '.';
+      analisis = [
+        'Analisis diawali dengan statistik deskriptif untuk menggambarkan karakteristik responden serta sebaran jawaban pada setiap variabel' + cM() + '.',
+        'Sebelum pengujian hipotesis, dilakukan uji asumsi klasik yang mencakup uji normalitas, uji multikolinearitas, dan uji heteroskedastisitas ' + ph('tambahkan uji autokorelasi bila memakai data runtut waktu') + '. Rangkaian uji ini memastikan model yang digunakan memenuhi syarat sehingga hasilnya tidak bias.',
+        'Pengujian hipotesis dilakukan dengan ' + (trim(method.design) ? method.design : ph('analisis regresi yang sesuai')) +
+          ', dilanjutkan uji ' + ph('t dan/atau F') + ' serta koefisien determinasi untuk menilai besarnya kontribusi variabel bebas terhadap variabel terikat. Seluruh perhitungan dibantu perangkat lunak ' + ph('mis. SPSS / SmartPLS') + '.'
+      ].join('\n\n');
     } else {
-      analisis = 'Data dianalisis menggunakan model interaktif ' + ph('mis. Miles & Huberman') +
-        ' yang meliputi tahap reduksi data, penyajian data, dan penarikan kesimpulan/verifikasi.';
+      analisis = [
+        'Data dianalisis dengan model interaktif ' + ph('mis. Miles & Huberman') + ' yang berlangsung secara terus-menerus sejak proses pengumpulan data' + cM() + '.',
+        'Tahap reduksi data dilakukan dengan memilah dan merangkum informasi yang relevan dengan fokus penelitian. Data yang telah direduksi kemudian disajikan dalam bentuk ' + ph('uraian naratif, matriks, atau bagan') + ' agar polanya mudah dipahami.',
+        'Langkah terakhir adalah penarikan kesimpulan dan verifikasi, yaitu memaknai pola yang muncul dan mengujinya kembali pada data agar simpulan yang dihasilkan benar-benar berpijak pada temuan di lapangan.'
+      ].join('\n\n');
     }
 
     function S(title, content) { return { title: title, content: content, citationIds: [] }; }
