@@ -629,6 +629,40 @@
     return nameInverted(authors[0]) + ', et al.';
   }
 
+  // Chicago notes-bibliography footnote author list (natural order).
+  function chicagoNoteAuthors(authors) {
+    if (!authors || !authors.length) return '';
+    if (authors.length === 1) return nameNormal(authors[0]);
+    if (authors.length === 2) return nameNormal(authors[0]) + ' and ' + nameNormal(authors[1]);
+    if (authors.length === 3)
+      return nameNormal(authors[0]) + ', ' + nameNormal(authors[1]) + ', and ' + nameNormal(authors[2]);
+    return nameNormal(authors[0]) + ' et al.';
+  }
+
+  // Full Chicago footnote (catatan kaki) entry for a reference.
+  function formatFootnote(w) {
+    w = w || {};
+    var year = (w.year != null && w.year !== '') ? w.year : 't.t.';
+    var title = trim(w.title);
+    var venue = trim(w.venue);
+    var doi = normDoi(w.doi);
+    var s = chicagoNoteAuthors(w.authors);
+    s = s ? s + ', ' : '';
+    s += '"' + trim(title.replace(/\.$/, '')) + ',"';
+    if (venue) {
+      s += ' *' + venue + '*';
+      if (w.volume) s += ' ' + w.volume;
+      if (w.issue) s += ', no. ' + w.issue;
+      s += ' (' + year + ')';
+      if (w.pages) s += ': ' + w.pages;
+    } else {
+      s += ' ' + year;
+    }
+    s = dotEnd(trim(s));
+    if (doi) s += ' https://doi.org/' + doi + '.';
+    return trim(s);
+  }
+
   function volIssuePages_apa(w) {
     var s = '';
     if (w.volume) {
@@ -648,6 +682,7 @@
   function formatBibliography(w, style) {
     w = w || {};
     style = (style || 'apa7').toLowerCase();
+    if (style === 'chicago-notes') style = 'chicago'; // NB bibliography ~ author-date entry
     var year = (w.year != null && w.year !== '') ? w.year : 'n.d.';
     var title = trim(w.title);
     var venue = trim(w.venue);
@@ -760,6 +795,7 @@
   function formatInText(w, style, page) {
     w = w || {};
     style = (style || 'apa7').toLowerCase();
+    if (style === 'chicago-notes') style = 'chicago';
     var year = (w.year != null && w.year !== '') ? w.year : 'n.d.';
     var fam = (w.authors && w.authors.length) ? authFamily(w.authors[0]) : (w.venue || 'Anonim');
     if (w.authors && w.authors.length > 2) fam = authFamily(w.authors[0]) + ' et al.';
@@ -804,7 +840,7 @@
   function buildBibliography(refs, style) {
     refs = isArray(refs) ? refs.slice() : [];
     style = (style || 'apa7').toLowerCase();
-    var alpha = (style === 'apa7' || style === 'apa' || style === 'harvard' || style === 'chicago' || style === 'mla');
+    var alpha = (style === 'apa7' || style === 'apa' || style === 'harvard' || style === 'chicago' || style === 'chicago-notes' || style === 'mla');
     if (alpha) {
       refs.sort(function (a, b) {
         var fa = firstFamily(a), fb = firstFamily(b);
@@ -1764,13 +1800,37 @@
     s = s.replace(/\*([^*]+)\*/g, '<em>$1</em>');
     return s;
   }
-  function renderContentHTML(text) {
+  // Chicago notes: turn baked author-date citations "(Fam dkk., 2020)" into
+  // sequential superscript footnote markers, collecting the full note text.
+  // Only citations that resolve to a real reference are converted; unresolved
+  // ones and 〔sumber〕 placeholders are left untouched (no fabrication).
+  function applyFootnotes(html, ctx) {
+    if (!ctx) return html;
+    var refs = ctx.refs || [];
+    return html.replace(/\(([^()]{1,80}?),\s*((?:19|20)\d{2}|t\.t\.|n\.d\.)\)/g,
+      function (whole, who, yr) {
+        var fam = trim(who).replace(/\s+(dkk\.|et al\.|&.*)$/, '').trim();
+        var famL = fam.toLowerCase();
+        var ref = null;
+        for (var i = 0; i < refs.length; i++) {
+          var rf = refs[i];
+          var rfam = (rf.authors && rf.authors[0]) ? authFamily(rf.authors[0]) : trim(rf.venue);
+          var ryr = (rf.year != null && rf.year !== '') ? String(rf.year) : 't.t.';
+          if (String(rfam).toLowerCase() === famL && (ryr === yr || (yr === 'n.d.' && ryr === 't.t.'))) { ref = rf; break; }
+        }
+        if (!ref) return whole; // unresolved — keep as-is
+        ctx.n++;
+        ctx.notes.push({ n: ctx.n, text: formatFootnote(ref) });
+        return '<sup class="fn">' + ctx.n + '</sup>';
+      });
+  }
+  function renderContentHTML(text, ctx) {
     var lines = String(text || '').split(/\n/), h = '';
     for (var i = 0; i < lines.length; i++) {
       var raw = trim(lines[i]);
       if (!raw) continue;
       if (/^###\s+/.test(raw)) h += '<h4>' + inlineFmt(escHtml(raw.replace(/^###\s+/, ''))) + '</h4>';
-      else h += '<p>' + inlineFmt(escHtml(raw)) + '</p>';
+      else h += '<p>' + applyFootnotes(inlineFmt(escHtml(raw)), ctx) + '</p>';
     }
     return h;
   }
@@ -1788,6 +1848,13 @@
 
     var chapters = (st.chapters && st.chapters.length &&
                     hasNonEmptyContent(st.chapters)) ? st.chapters : scaffoldProposal(project);
+
+    // Chicago notes-bibliography: render in-text citations as superscript
+    // footnote markers and collect the notes for a Catatan Kaki section.
+    var notesMode = String(style).toLowerCase() === 'chicago-notes';
+    var fnCtx = notesMode
+      ? { refs: (isArray(st.references) ? st.references : []), n: 0, notes: [] }
+      : null;
 
     function orDash(s) {
       s = trim(s);
@@ -1863,9 +1930,20 @@
         var sec = css[si];
         var hn = cn ? (cn + '.' + (si + 1) + '  ') : '';
         body += '<h3>' + escHtml(hn + sec.title) + '</h3>';
-        body += '<div class="sec">' + renderContentHTML(sec.content) + '</div>';
+        body += '<div class="sec">' + renderContentHTML(sec.content, fnCtx) + '</div>';
       }
       body += '</section>';
+    }
+
+    /* ---- catatan kaki (Chicago notes) ---- */
+    var fn = '';
+    if (notesMode && fnCtx.notes.length) {
+      fn = '<section class="page"><h2 class="ctr">CATATAN KAKI</h2><div class="biblio">';
+      for (var fi = 0; fi < fnCtx.notes.length; fi++) {
+        fn += '<p class="ref"><sup>' + fnCtx.notes[fi].n + '</sup> ' +
+              inlineFmt(escHtml(fnCtx.notes[fi].text)) + '</p>';
+      }
+      fn += '</div></section>';
     }
 
     /* ---- daftar pustaka (real refs only, via existing formatter) ---- */
@@ -1911,11 +1989,12 @@
       '.proposal .toc-section{padding-left:18px;}' +
       '.proposal .toc-pg{flex:0 0 auto;}' +
       '.proposal .biblio .ref{padding-left:2em;text-indent:-2em;text-align:left;}' +
+      '.proposal sup.fn{font-size:.7em;line-height:0;vertical-align:super;}' +
       '.proposal .ph{background:#fff3cd;color:#8a6d00;border:1px dashed #d9a900;border-radius:3px;padding:0 3px;font-style:italic;font-size:.92em;}' +
       '@media print{.proposal .page{box-shadow:none;margin:0;page-break-after:always;}}' +
       '</style>';
 
-    return '<div class="proposal">' + cssStyle + cover + kata + toc + body + dp + '</div>';
+    return '<div class="proposal">' + cssStyle + cover + kata + toc + body + fn + dp + '</div>';
   }
 
   // true if any chapter section already has authored content (else re-scaffold)
