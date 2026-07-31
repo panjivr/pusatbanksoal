@@ -142,6 +142,7 @@
 
 <script src="assets/thesis.js"></script>
 <script src="assets/wiki.js"></script>
+<script src="assets/files.js"></script>
 <script>
 (function(){
   "use strict";
@@ -235,6 +236,11 @@
     ]},
     {group:'Alat Bantu', items:[
       {id:'alat', label:'Alat Mahasiswa', icon:'i-sparkles'}
+    ]},
+    {group:'Fitur Pro', items:[
+      {id:'doctor', label:'Skripsi Doctor', icon:'i-shield-check'},
+      {id:'sidang', label:'Simulasi Sidang', icon:'i-brain'},
+      {id:'datalab', label:'Analisis Data', icon:'i-list'}
     ]}
   ];
 
@@ -1558,6 +1564,129 @@
     });
   }
 
+  /* ===================================================== FITUR PRO */
+  var examState=null;
+  function levelColor(l){ return l==='critical'?'var(--down)':l==='warning'?'var(--primary)':'var(--muted)'; }
+  function levelLabel(l){ return l==='critical'?'Kritis':l==='warning'?'Perhatian':'Info'; }
+
+  function viewDoctor(){
+    var inner='<h1 style="font-size:22px;color:var(--on-dark)">Skripsi Doctor</h1>'+
+      '<p class="muted" style="margin-top:6px">Unggah/ tempel naskah — audit menyeluruh: kelengkapan BAB, sitasi vs daftar pustaka, konsistensi angka, kata baku, pola AI.</p>'+
+      '<div class="ws-card" style="margin-top:14px">'+
+        '<div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">'+
+          '<input type="file" id="docFile" accept=".docx,.txt" style="font-size:13px">'+
+          '<span class="muted" style="font-size:12px">Format: DOCX atau TXT. (PDF: ekspor dulu ke DOCX.)</span>'+
+        '</div>'+
+        '<div style="margin-top:10px"><textarea id="docText" class="f-input" rows="7" style="width:100%;padding:10px" placeholder="…atau tempel seluruh naskah skripsi di sini"></textarea></div>'+
+        '<div style="margin-top:10px"><button class="btn btn-primary btn-sm" id="docRun">'+icon('i-shield-check')+' Audit Sekarang</button></div>'+
+        '<div id="docOut" style="display:none;margin-top:14px"></div>'+
+      '</div>';
+    shell(inner,'Skripsi Doctor');
+    byId('docFile').addEventListener('change',function(){
+      var f=this.files&&this.files[0]; if(!f) return;
+      if(!window.FILES){ toast('Modul pembaca berkas gagal dimuat.'); return; }
+      toast('Membaca berkas…');
+      FILES.readFile(f).then(function(res){ byId('docText').value=res.text||''; toast('Berkas terbaca. Klik Audit.'); })
+        .catch(function(e){ toast('Gagal membaca: '+e.message); });
+    });
+    byId('docRun').addEventListener('click',function(){
+      var t=byId('docText').value; if(t.trim().length<80){ toast('Teks terlalu pendek untuk diaudit.'); return; }
+      var a=THESIS.auditDocument(t), col=a.score>=80?'var(--up)':a.score>=60?'var(--primary)':'var(--down)';
+      var h='<div class="ws-card"><div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap"><b style="color:var(--on-dark)">Hasil Audit</b><span class="badge" style="color:'+col+';font-size:15px">Skor '+a.score+'/100</span></div>'+
+        '<p class="muted" style="font-size:12.5px;margin-top:6px">'+esc(a.note)+'</p>'+
+        '<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;font-size:12.5px">'+
+          '<span class="badge">'+a.citations+' sitasi</span><span class="badge">'+a.references+' referensi</span><span class="badge">'+a.stats.words+' kata</span><span class="badge">≈'+a.stats.pages+' hal</span></div>';
+      var secs=Object.keys(a.sections).map(function(k){ return '<span class="badge" style="color:'+(a.sections[k]?'var(--up)':'var(--muted)')+'">'+(a.sections[k]?'✓ ':'○ ')+esc(k)+'</span>'; }).join(' ');
+      h+='<div style="margin-top:10px;display:flex;gap:6px;flex-wrap:wrap">'+secs+'</div>';
+      if(!a.findings.length) h+='<p style="margin-top:12px;color:var(--up);font-size:14px">Tidak ada masalah besar terdeteksi. Tetap periksa manual.</p>';
+      else h+='<div style="margin-top:12px">'+a.findings.map(function(f){ return '<div style="border-left:3px solid '+levelColor(f.level)+';padding:6px 10px;margin-bottom:6px;background:var(--elevated);border-radius:4px;font-size:13px"><b style="color:'+levelColor(f.level)+'">'+levelLabel(f.level)+'</b> — '+esc(f.msg)+'</div>'; }).join('')+'</div>';
+      var o=byId('docOut'); o.style.display='block'; o.innerHTML=h+'</div>';
+    });
+  }
+
+  function viewSidang(){
+    var p=THESIS.activeProject();
+    if(!p){ shell(needProject('Aktifkan proyek dulu agar simulasi sesuai penelitianmu.'),'Simulasi Sidang'); wireNeed(); return; }
+    var inner='<h1 style="font-size:22px;color:var(--on-dark)">Simulasi Sidang</h1>'+
+      '<p class="muted" style="margin-top:6px">AI berperan sebagai penguji. Jawab tiap pertanyaan, dapatkan skor & masukan. <b>Penilaian heuristik</b>, latihan saja.</p>';
+    if(!examState){
+      inner+='<div class="ws-card" style="margin-top:14px"><b style="color:var(--on-dark)">Pilih tipe penguji</b>'+
+        '<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px">'+
+          '<button class="btn btn-ghost btn-sm" data-persona="santai">😌 Santai</button>'+
+          '<button class="btn btn-primary btn-sm" data-persona="metodologi">🎓 Metodologi</button>'+
+          '<button class="btn btn-ghost btn-sm" data-persona="killer">🔥 Killer</button>'+
+        '</div></div>';
+      shell(inner,'Simulasi Sidang');
+      Array.prototype.forEach.call(root.querySelectorAll('[data-persona]'),function(bp){ bp.addEventListener('click',function(){
+        var sim=THESIS.examSim(THESIS.activeProject(),bp.getAttribute('data-persona'));
+        examState={ persona:sim.persona, note:sim.note, qs:sim.questions, i:0, results:[] };
+        viewSidang();
+      }); });
+      return;
+    }
+    var st=examState;
+    if(st.i>=st.qs.length){
+      var avg=Math.round(st.results.reduce(function(s,x){return s+x.score;},0)/(st.results.length||1));
+      var col=avg>=75?'var(--up)':avg>=55?'var(--primary)':'var(--down)';
+      inner+='<div class="ws-card" style="margin-top:14px"><div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px"><b style="color:var(--on-dark)">Selesai — Rata-rata Skor</b><span class="badge" style="color:'+col+';font-size:16px">'+avg+'/100</span></div>';
+      inner+=st.results.map(function(x,i){ return '<div style="border-left:3px solid '+(x.score>=60?'var(--up)':'var(--primary)')+';padding:6px 10px;margin-top:8px;background:var(--elevated);border-radius:4px;font-size:13px"><b>'+(i+1)+'. '+esc(st.qs[i].q)+'</b><br><span class="muted">Skor '+x.score+' ('+esc(x.verdict)+'). '+esc(x.feedback)+'</span></div>'; }).join('');
+      inner+='<div style="margin-top:12px"><button class="btn btn-primary btn-sm" id="simRestart">Ulangi</button></div></div>';
+      shell(inner,'Simulasi Sidang');
+      byId('simRestart').addEventListener('click',function(){ examState=null; viewSidang(); });
+      return;
+    }
+    var q=st.qs[st.i];
+    inner+='<div class="ws-card" style="margin-top:14px"><div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px"><span class="muted" style="font-size:12.5px">'+esc(st.note)+'</span><span class="muted" style="font-size:12.5px">Pertanyaan '+(st.i+1)+'/'+st.qs.length+'</span></div>'+
+      '<p style="margin-top:10px;font-size:16px;color:var(--on-dark)"><b>Penguji:</b> '+esc(q.q)+'</p>'+
+      '<textarea id="simAns" class="f-input" rows="5" style="width:100%;padding:10px;margin-top:10px" placeholder="Ketik jawabanmu…"></textarea>'+
+      '<div style="margin-top:10px;display:flex;gap:8px"><button class="btn btn-primary btn-sm" id="simSubmit">Jawab</button><button class="btn btn-ghost btn-sm" id="simSkip">Lewati</button></div>'+
+      '<div id="simFb" style="display:none;margin-top:12px"></div></div>';
+    shell(inner,'Simulasi Sidang');
+    byId('simSubmit').addEventListener('click',function(){
+      var ans=byId('simAns').value; if(!ans.trim()){ toast('Ketik jawaban dulu.'); return; }
+      var sc=THESIS.scoreExamAnswer(ans,q);
+      var col=sc.score>=80?'var(--up)':sc.score>=50?'var(--primary)':'var(--down)';
+      var fb=byId('simFb'); fb.style.display='block';
+      fb.innerHTML='<div style="border-radius:6px;background:var(--elevated);padding:10px"><div style="display:flex;justify-content:space-between;flex-wrap:wrap"><b style="color:var(--on-dark)">Kualitas jawaban</b><span class="badge" style="color:'+col+'">'+sc.score+'/100 · '+esc(sc.verdict)+'</span></div><p class="muted" style="font-size:13px;margin-top:6px">'+esc(sc.feedback)+'</p><div style="margin-top:10px"><button class="btn btn-primary btn-sm" id="simNext">Pertanyaan berikutnya</button></div></div>';
+      st.results.push(sc);
+      byId('simSubmit').disabled=true; byId('simSkip').disabled=true;
+      byId('simNext').addEventListener('click',function(){ st.i++; viewSidang(); });
+    });
+    byId('simSkip').addEventListener('click',function(){ st.results.push({score:0,verdict:'Dilewati',feedback:'Tidak dijawab. '+(q.hint||'')}); st.i++; viewSidang(); });
+  }
+
+  function viewDataLab(){
+    var inner='<h1 style="font-size:22px;color:var(--on-dark)">Analisis Data</h1>'+
+      '<p class="muted" style="margin-top:6px">Unggah CSV atau XLSX — sistem mendeteksi tipe tiap kolom, menghitung statistik, dan menyarankan uji. <b>Tidak mengarang nilai.</b></p>'+
+      '<div class="ws-card" style="margin-top:14px">'+
+        '<input type="file" id="dlFile" accept=".csv,.tsv,.xlsx" style="font-size:13px">'+
+        '<span class="muted" style="font-size:12px;margin-left:8px">Format: CSV, TSV, atau XLSX. Baris pertama = judul kolom.</span>'+
+        '<div id="dlOut" style="display:none;margin-top:14px"></div>'+
+      '</div>';
+    shell(inner,'Analisis Data');
+    byId('dlFile').addEventListener('change',function(){
+      var f=this.files&&this.files[0]; if(!f) return;
+      if(!window.FILES){ toast('Modul pembaca berkas gagal dimuat.'); return; }
+      toast('Membaca data…');
+      FILES.readFile(f).then(function(res){
+        if(!res.headers||!res.headers.length){ toast('Tidak menemukan tabel data.'); return; }
+        var a=THESIS.analyzeDataset(res.headers,res.rows);
+        var h='<div class="ws-card"><b style="color:var(--on-dark)">Ringkasan Data</b><p class="muted" style="font-size:13px;margin-top:4px"><b class="num">'+a.n+'</b> baris · <b class="num">'+a.columns.length+'</b> kolom</p>';
+        h+='<div style="overflow-x:auto;margin-top:10px"><table style="width:100%;border-collapse:collapse;font-size:12.5px"><tr><th style="border:1px solid var(--line);padding:5px;text-align:left">Kolom</th><th style="border:1px solid var(--line);padding:5px">Tipe</th><th style="border:1px solid var(--line);padding:5px;text-align:left">Ringkas</th></tr>';
+        for(var i=0;i<a.columns.length;i++){ var c=a.columns[i]; var sum='';
+          if(c.stats) sum='mean '+c.stats.mean+' · median '+c.stats.median+' · SD '+c.stats.sd+' · min '+c.stats.min+' · max '+c.stats.max;
+          else if(c.freq) sum=c.freq.map(function(x){return esc(x.label)+' ('+x.count+', '+x.pct+'%)';}).join(', ');
+          else sum='—';
+          h+='<tr><td style="border:1px solid var(--line);padding:5px"><b>'+esc(c.name)+'</b></td><td style="border:1px solid var(--line);padding:5px;text-align:center"><span class="badge">'+esc(c.type)+'</span></td><td style="border:1px solid var(--line);padding:5px">'+sum+'</td></tr>';
+        }
+        h+='</table></div>';
+        h+='<p style="margin-top:12px;color:var(--on-dark)"><b>Saran Analisis</b></p><ul style="margin:6px 0 0 18px;font-size:13px">'+a.suggestions.map(function(s){return '<li style="margin-bottom:4px">'+esc(s)+'</li>';}).join('')+'</ul>';
+        var o=byId('dlOut'); o.style.display='block'; o.innerHTML=h+'</div>';
+        toast('Data dianalisis.');
+      }).catch(function(e){ toast('Gagal membaca: '+e.message); });
+    });
+  }
+
   function render(){
     switch(view){
       case 'proyek': return viewProyek();
@@ -1569,6 +1698,9 @@
       case 'identitas': return viewIdentitas();
       case 'konsistensi': return viewKonsistensi();
       case 'alat': return viewAlat();
+      case 'doctor': return viewDoctor();
+      case 'sidang': return viewSidang();
+      case 'datalab': return viewDataLab();
       default: return viewProposal();
     }
   }
