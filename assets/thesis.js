@@ -2781,6 +2781,98 @@
   }
   function listRevisions(id) { var p = getProject(id); return (p && p.state && p.state.revisions) || []; }
 
+  /* ---- 4k) Front-matter, daftar isi, konsistensi istilah, motto --------- */
+  function generateTOC(project) {
+    project = project || {};
+    var st = project.state || {};
+    var chapters = (st.chapters && st.chapters.length && hasNonEmptyContent(st.chapters)) ? st.chapters : scaffoldProposal(project);
+    var out = [];
+    for (var c = 0; c < chapters.length; c++) {
+      var ch = chapters[c], n = romanOf(ch.code), secs = ch.sections || [], subs = [];
+      for (var s = 0; s < secs.length; s++) subs.push({ num: n ? (n + '.' + (s + 1)) : '', title: secs[s].title });
+      out.push({ code: ch.code, title: ch.title, subs: subs });
+    }
+    return out;
+  }
+
+  // Bundel halaman awal (front matter) sebagai satu HTML untuk ekspor DOCX.
+  function frontMatterDoc(project) {
+    project = project || {};
+    var x = _ctxOf(project);
+    var tahun = trim(project.academicYear || '') || String(new Date().getFullYear());
+    function od(s) { s = trim(s); return s || '〔—〕'; }
+    var ap = generateApprovalPages(project);
+    var ab = generateAbstract(project);
+    var kp = generateKataPengantar(project);
+    var toc = generateTOC(project);
+    var H = [];
+    // Cover
+    H.push('<div style="text-align:center"><p><b>PROPOSAL ' + escHtml((project.type || 'SKRIPSI').toUpperCase()) + '</b></p>' +
+      '<h2>' + (x.title ? escHtml(x.title.toUpperCase()) : '〔JUDUL〕') + '</h2>' +
+      '<p><i>Diajukan untuk memenuhi salah satu syarat memperoleh gelar ' + od(project.degree || 'Sarjana') + '</i></p>' +
+      '<p>Oleh:<br><b>' + od(project.studentName || project.name) + '</b><br>NIM: ' + od(project.nim) + '</p>' +
+      '<p>' + od(project.program) + '<br>' + od(project.faculty) + '<br>' + od(project.university) + '<br>' + od(project.city) + '<br>' + escHtml(tahun) + '</p></div>');
+    // Persetujuan & Pengesahan
+    function pg(o) { return '<h3 style="text-align:center">' + escHtml(o.title) + '</h3><p style="text-align:justify">' + escHtml(o.body) + '</p>' + o.lines.map(function (l) { return '<p>' + escHtml(l) + '</p>'; }).join(''); }
+    H.push(pg(ap.persetujuan)); H.push(pg(ap.pengesahan));
+    // Kata Pengantar
+    H.push('<h3 style="text-align:center">KATA PENGANTAR</h3>' + kp.split('\n\n').map(function (p2) { return '<p style="text-align:justify">' + escHtml(p2) + '</p>'; }).join(''));
+    // Abstrak
+    H.push('<h3 style="text-align:center">ABSTRAK</h3><p style="text-align:justify">' + escHtml(ab.id) + '</p><p><b>Kata kunci:</b> ' + escHtml(ab.keywords.join('; ')) + '</p>' +
+      '<h3 style="text-align:center">ABSTRACT</h3><p style="text-align:justify;font-style:italic">' + escHtml(ab.en) + '</p><p><i><b>Keywords:</b> ' + escHtml(ab.keywords.join('; ')) + '</i></p>');
+    // Daftar Isi
+    var toch = '<h3 style="text-align:center">DAFTAR ISI</h3>';
+    for (var i = 0; i < toc.length; i++) {
+      toch += '<p><b>' + escHtml((toc[i].code || '') + '  ' + (toc[i].title || '').toUpperCase()) + '</b> ......... 〔hal〕</p>';
+      for (var j = 0; j < toc[i].subs.length; j++) toch += '<p style="margin-left:24px">' + escHtml((toc[i].subs[j].num ? toc[i].subs[j].num + ' ' : '') + toc[i].subs[j].title) + ' ......... 〔hal〕</p>';
+    }
+    H.push(toch);
+    return H.join('<br style="page-break-after:always">');
+  }
+
+  // Cek konsistensi istilah (variasi ejaan/istilah yang tercampur).
+  var _TERMVAR = [
+    ['e-commerce', 'ecommerce', 'e commerce'], ['daring', 'online'], ['luring', 'offline'],
+    ['unggah', 'upload'], ['unduh', 'download'], ['gawai', 'gadget'], ['peladen', 'server'],
+    ['swafoto', 'selfie'], ['narahubung', 'contact person'], ['pramuniaga', 'sales'],
+    ['analisis', 'analisa'], ['objek', 'obyek'], ['sistem', 'sistim'], ['praktik', 'praktek'],
+    ['teknik', 'tehnik'], ['kualitas', 'kwalitas'], ['kuesioner', 'kuisioner', 'angket'],
+    ['pascapandemi', 'pasca pandemi', 'pasca-pandemi']
+  ];
+  function termConsistency(text) {
+    var s = String(text || ''), lower = s.toLowerCase(), issues = [];
+    for (var g = 0; g < _TERMVAR.length; g++) {
+      var grp = _TERMVAR[g], used = [];
+      for (var v = 0; v < grp.length; v++) {
+        var re = new RegExp('(^|[^a-z])' + grp[v].replace(/[-\s]/g, '[-\\s]?').replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '([^a-z]|$)', 'g');
+        var m = lower.match(re); if (m && m.length) used.push({ term: grp[v], count: m.length });
+      }
+      if (used.length > 1) {
+        used.sort(function (a, b) { return b.count - a.count; });
+        issues.push({ variants: used, suggestion: 'Gunakan "' + used[0].term + '" secara konsisten (varian: ' + used.slice(1).map(function (u) { return u.term; }).join(', ') + ').' });
+      }
+    }
+    return { issues: issues, total: issues.length,
+      note: issues.length ? 'Ada istilah dengan penulisan tidak konsisten.' : 'Tidak terdeteksi istilah yang tercampur.' };
+  }
+
+  function generateMotto(project) {
+    var x = _ctxOf(project);
+    var mottos = [
+      '"Sesungguhnya bersama kesulitan ada kemudahan." (QS. Al-Insyirah: 6)',
+      '"Pendidikan adalah senjata paling ampuh untuk mengubah dunia." — Nelson Mandela',
+      '"Sedikit demi sedikit, lama-lama menjadi bukit."',
+      '"Orang yang menuntut ilmu berarti menuntut rahmat." — HR. Ibnu Majah',
+      '"Keberhasilan adalah hasil dari kerja keras, doa, dan pantang menyerah."'
+    ];
+    var persembahan = 'Skripsi ini penulis persembahkan kepada:\n' +
+      '1. Kedua orang tua tercinta yang tiada henti memberikan doa, kasih sayang, dan dukungan;\n' +
+      '2. Bapak/Ibu dosen ' + (trim(project.program) ? 'Program Studi ' + project.program + ' ' : '') + 'yang telah membagikan ilmunya;\n' +
+      '3. Keluarga, sahabat, dan teman seperjuangan yang selalu memberi semangat;\n' +
+      '4. Almamater tercinta ' + (trim(project.university) || '〔nama kampus〕') + '.';
+    void x; return { mottos: mottos, persembahan: persembahan };
+  }
+
   /* ---- 5) autoSearch: merge OpenAlex + Crossref, rank, annotate --------- */
   function typeLabelOf(t) {
     t = trim(t).toLowerCase();
@@ -3393,6 +3485,10 @@
     scoreExamAnswer: scoreExamAnswer,
     analyzeDataset: analyzeDataset,
     readabilityCheck: readabilityCheck,
+    generateTOC: generateTOC,
+    frontMatterDoc: frontMatterDoc,
+    termConsistency: termConsistency,
+    generateMotto: generateMotto,
     addRevision: addRevision,
     toggleRevision: toggleRevision,
     deleteRevision: deleteRevision,

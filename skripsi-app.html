@@ -1369,6 +1369,15 @@
       '<button class="btn btn-primary btn-sm" id="tKp">'+icon('i-book')+' Buat Kata Pengantar</button>');
     cards+=toolCard('apv','Halaman Persetujuan & Pengesahan','Template halaman persetujuan pembimbing dan pengesahan penguji.',
       '<button class="btn btn-primary btn-sm" id="tApv">'+icon('i-shield-check')+' Buat Halaman</button>');
+    cards+=toolCard('fm','Ekspor Bundel Halaman Awal (DOCX)','Gabung cover, persetujuan, pengesahan, kata pengantar, abstrak & daftar isi jadi satu dokumen.',
+      '<button class="btn btn-primary btn-sm" id="tFm">'+icon('i-doc')+' Unduh Halaman Awal</button>');
+    cards+=toolCard('toc','Generator Daftar Isi','Susun daftar isi otomatis dari struktur bab proyek.',
+      '<button class="btn btn-primary btn-sm" id="tToc">'+icon('i-list')+' Buat Daftar Isi</button>');
+    cards+=toolCard('tk','Cek Konsistensi Istilah','Deteksi istilah yang penulisannya tercampur (mis. daring/online, objek/obyek).',
+      '<textarea id="tkIn" class="f-input" rows="4" style="width:100%;padding:10px" placeholder="Tempel teks…"></textarea>'+
+      '<div style="margin-top:8px"><button class="btn btn-primary btn-sm" id="tTk">Periksa</button></div>');
+    cards+=toolCard('mo','Motto & Persembahan','Pilihan motto dan template halaman persembahan.',
+      '<button class="btn btn-primary btn-sm" id="tMo">'+icon('i-sparkles')+' Buat</button>');
     // ── Sidang & Revisi ──
     cards+=catHead('7 · Sidang & Revisi');
     cards+=toolCard('csk','Checklist Kesiapan Skripsi','Audit otomatis BAB I–III, referensi & identitas sebelum menghadap dosen.',
@@ -1604,6 +1613,42 @@
       });
       var stop=byId('tmStop'); if(stop) stop.addEventListener('click',function(){ tmClear(); var d=byId('tmDisp'); if(d){ d.textContent='--:--'; d.style.color='var(--primary)'; } });
     }
+    if((b=byId('tFm'))) b.addEventListener('click',function(){
+      var pr=needP(); if(!pr) return;
+      download('halaman-awal-skripsi.doc',docWrap('Halaman Awal',THESIS.frontMatterDoc(pr)),'application/msword');
+      toast('Halaman awal (DOCX) diunduh.');
+    });
+    if((b=byId('tToc'))) b.addEventListener('click',function(){
+      var pr=needP(); if(!pr) return; var toc=THESIS.generateTOC(pr);
+      var h='<div class="ws-card"><b style="color:var(--on-dark)">Daftar Isi</b><div class="toc" style="margin-top:10px">';
+      for(var i=0;i<toc.length;i++){ h+='<div style="display:flex;justify-content:space-between;font-weight:600;margin-top:6px"><span>'+esc((toc[i].code||'')+' '+(toc[i].title||'').toUpperCase())+'</span><span class="muted">〔hal〕</span></div>';
+        for(var j=0;j<toc[i].subs.length;j++){ h+='<div style="display:flex;justify-content:space-between;padding-left:18px;font-size:13.5px"><span>'+esc((toc[i].subs[j].num?toc[i].subs[j].num+' ':'')+toc[i].subs[j].title)+'</span><span class="muted">〔hal〕</span></div>'; } }
+      h+='</div><div style="margin-top:12px"><button class="btn btn-ghost btn-sm" id="tocDoc">Unduh (DOCX)</button></div></div>';
+      show('toc',h);
+      byId('tocDoc').addEventListener('click',function(){
+        var inner='<h3 style="text-align:center">DAFTAR ISI</h3>';
+        for(var i=0;i<toc.length;i++){ inner+='<p><b>'+esc((toc[i].code||'')+' '+(toc[i].title||'').toUpperCase())+'</b> ......... 〔hal〕</p>'; for(var j=0;j<toc[i].subs.length;j++) inner+='<p style="margin-left:24px">'+esc((toc[i].subs[j].num?toc[i].subs[j].num+' ':'')+toc[i].subs[j].title)+' ......... 〔hal〕</p>'; }
+        download('daftar-isi.doc',docWrap('Daftar Isi',inner),'application/msword'); toast('Daftar isi diunduh.');
+      });
+    });
+    if((b=byId('tTk'))) b.addEventListener('click',function(){
+      var t=byId('tkIn').value; if(t.trim().length<20){ toast('Tempel teks yang cukup dulu.'); return; }
+      var r=THESIS.termConsistency(t);
+      var h='<div class="ws-card"><b style="color:var(--on-dark)">Konsistensi Istilah</b><p class="muted" style="font-size:13px;margin-top:4px">'+esc(r.note)+'</p>';
+      if(r.total) h+='<div style="margin-top:8px">'+r.issues.map(function(x){ return '<div style="border-left:3px solid var(--primary);padding:6px 10px;margin-bottom:6px;background:var(--elevated);border-radius:4px;font-size:13px">'+esc(x.suggestion)+' <span class="muted">('+x.variants.map(function(v){return v.term+'×'+v.count;}).join(', ')+')</span></div>'; }).join('')+'</div>';
+      show('tk',h+'</div>');
+    });
+    if((b=byId('tMo'))) b.addEventListener('click',function(){
+      var m=THESIS.generateMotto(THESIS.activeProject()||{});
+      var h='<div class="ws-card"><b style="color:var(--on-dark)">Motto (pilih salah satu)</b><ul style="margin:6px 0 0 18px;font-size:13.5px">'+m.mottos.map(function(x){return '<li style="margin-bottom:4px">'+esc(x)+'</li>';}).join('')+'</ul>'+
+        '<p style="margin-top:10px;color:var(--on-dark)"><b>Halaman Persembahan</b></p>'+m.persembahan.split('\n').map(function(l){return '<p style="font-size:13.5px">'+esc(l)+'</p>';}).join('')+
+        '<div style="margin-top:10px"><button class="btn btn-ghost btn-sm" id="moDoc">Unduh (DOCX)</button></div></div>';
+      show('mo',h);
+      byId('moDoc').addEventListener('click',function(){
+        var inner='<h3 style="text-align:center">MOTTO</h3><ul>'+m.mottos.map(function(x){return '<li>'+esc(x)+'</li>';}).join('')+'</ul><h3 style="text-align:center">PERSEMBAHAN</h3>'+m.persembahan.split('\n').map(function(l){return '<p>'+esc(l)+'</p>';}).join('');
+        download('motto-persembahan.doc',docWrap('Motto & Persembahan',inner),'application/msword'); toast('Diunduh.');
+      });
+    });
   }
 
   /* ===================================================== FITUR PRO */
