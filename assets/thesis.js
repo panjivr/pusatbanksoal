@@ -2538,6 +2538,65 @@
       note: 'Parafrase yang benar mengubah struktur dan pilihan kata (bukan sekadar ganti sinonim) DAN tetap mencantumkan sitasi. Alat ini memandu, bukan menulis ulang otomatis, agar hasilnya benar-benar bahasamu sendiri.' };
   }
 
+  // ---- BibTeX import (parse .bib text -> add real references) ----
+  function _bibClean(s) { return String(s || '').replace(/[{}]/g, '').replace(/\\[a-zA-Z]+\s?/g, '').replace(/\s+/g, ' ').trim(); }
+  function _bibAuthors(a) {
+    if (!a) return [];
+    return a.split(/\s+and\s+/i).map(function (x) {
+      x = _bibClean(x); if (!x) return null;
+      if (x.indexOf(',') > -1) { var p = x.split(','); return { family: trim(p[0]), given: trim(p[1] || ''), name: x }; }
+      var parts = x.split(/\s+/); var fam = parts.pop(); return { family: fam, given: parts.join(' '), name: x };
+    }).filter(Boolean);
+  }
+  function _parseBibBody(body) {
+    var fields = {}, k = body.indexOf(','); if (k < 0) return fields;
+    var s = body.slice(k + 1), i = 0, n = s.length;
+    while (i < n) {
+      while (i < n && /[\s,]/.test(s[i])) i++;
+      var eq = s.indexOf('=', i); if (eq < 0) break;
+      var name = trim(s.slice(i, eq)).toLowerCase(); i = eq + 1;
+      while (i < n && /\s/.test(s[i])) i++;
+      var val = '', j;
+      if (s[i] === '{') { var d = 0; for (j = i; j < n; j++) { if (s[j] === '{') d++; else if (s[j] === '}') { d--; if (d === 0) { j++; break; } } } val = s.slice(i + 1, j - 1); i = j; }
+      else if (s[i] === '"') { j = i + 1; while (j < n && s[j] !== '"') j++; val = s.slice(i + 1, j); i = j + 1; }
+      else { j = i; while (j < n && s[j] !== ',') j++; val = trim(s.slice(i, j)); i = j; }
+      if (name) fields[name] = val;
+    }
+    return fields;
+  }
+  function importBibTeX(project, text) {
+    var pid = (project && project.id) ? project.id : (activeProject() && activeProject().id);
+    if (!pid) return { ok: false, error: 'Tidak ada proyek aktif.' };
+    var s = String(text || ''), i = 0, n = s.length, added = 0, dup = 0, total = 0;
+    while (i < n) {
+      var at = s.indexOf('@', i); if (at < 0) break;
+      var br = s.indexOf('{', at); if (br < 0) break;
+      var type = trim(s.slice(at + 1, br)).toLowerCase();
+      var d = 0, j = br, end = -1;
+      for (; j < n; j++) { if (s[j] === '{') d++; else if (s[j] === '}') { d--; if (d === 0) { end = j; break; } } }
+      if (end < 0) break;
+      var body = s.slice(br + 1, end); i = end + 1;
+      if (type === 'comment' || type === 'preamble' || type === 'string') continue;
+      var f = _parseBibBody(body);
+      var title = _bibClean(f.title || ''); if (!title) continue;
+      total++;
+      var work = {
+        source: 'manual',
+        type: type === 'book' ? 'book' : (type === 'inproceedings' || type === 'conference') ? 'proceedings' : (type === 'misc' ? 'misc' : 'journal-article'),
+        title: title, authors: _bibAuthors(f.author || ''),
+        year: f.year ? parseInt(f.year, 10) : null,
+        venue: _bibClean(f.journal || f.booktitle || ''), publisher: _bibClean(f.publisher || ''),
+        volume: f.volume || '', issue: f.number || '', pages: (f.pages || '').replace(/--/g, '–'),
+        doi: (f.doi || '').replace(/^https?:\/\/doi\.org\//i, ''), url: f.url || '',
+        abstract: _bibClean(f.abstract || ''),
+        verification_status: f.doi ? 'identifier_verified' : 'unverified'
+      };
+      var res = addReference(pid, work);
+      if (res && res.duplicate) dup++; else if (res && res.reference) added++;
+    }
+    return { ok: true, added: added, duplicate: dup, total: total };
+  }
+
   var THESIS = {
     // projects
     uid: uid,
@@ -2564,6 +2623,7 @@
     buildBibliography: buildBibliography,
     // exports
     toBibTeX: toBibTeX,
+    importBibTeX: importBibTeX,
     toRIS: toRIS,
     // reasoning
     recommendMethod: recommendMethod,

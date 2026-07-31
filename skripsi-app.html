@@ -990,6 +990,11 @@
         '</div>'+
         '<div class="f-row"><label class="f-label" for="emDoi">DOI (opsional)</label><input class="f-input" id="emDoi"></div>'+
         '<button class="btn btn-ghost" id="emAdd">Tambah ke Perpustakaan</button>'+
+        '<h4 style="color:var(--on-dark);margin-top:16px">Impor BibTeX (.bib)</h4>'+
+        '<p class="muted" style="font-size:12.5px;margin:4px 0 8px">Tempel isi file .bib atau pilih berkas — semua entri (jurnal/buku) langsung masuk ke perpustakaan.</p>'+
+        '<input type="file" id="bibFile" accept=".bib,text/plain" style="font-size:13px;margin-bottom:8px">'+
+        '<textarea class="f-area" id="bibIn" placeholder="@article{...}"></textarea>'+
+        '<button class="btn btn-ghost" id="bibAdd" style="margin-top:8px">'+icon('i-doc')+' Impor BibTeX</button>'+
       '</details>'+
       '<div class="ws-card"><div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px"><h3 style="color:var(--on-dark)">Perpustakaan</h3>'+
         '<div style="display:flex;gap:6px">'+
@@ -1008,6 +1013,18 @@
     byId('sQ').addEventListener('keydown',function(e){ if(e.key==='Enter') doSearch(); });
     byId('mDoiBtn').addEventListener('click',doVerifyDoi);
     byId('emAdd').addEventListener('click',doManualAdd);
+    byId('bibFile').addEventListener('change',function(e){
+      var f=e.target.files&&e.target.files[0]; if(!f) return;
+      var rd=new FileReader(); rd.onload=function(){ byId('bibIn').value=rd.result||''; }; rd.readAsText(f);
+    });
+    byId('bibAdd').addEventListener('click',function(){
+      var p=THESIS.activeProject(); if(!p) return;
+      var txt=val('bibIn'); if(!txt.trim()){ toast('Tempel isi .bib atau pilih berkas dulu.'); return; }
+      var r=THESIS.importBibTeX(p,txt);
+      if(!r.ok){ toast(r.error||'Gagal impor.'); return; }
+      toast(r.added+' referensi ditambahkan'+(r.duplicate?' · '+r.duplicate+' duplikat dilewati':'')+'.');
+      byId('bibIn').value=''; renderLibrary();
+    });
   }
   function doSearch(){
     var p=THESIS.activeProject(); if(!p) return;
