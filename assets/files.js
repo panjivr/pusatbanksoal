@@ -182,10 +182,79 @@
     return { headers: headers, rows: rows };
   }
 
+  /* ---- PDF (best-effort, teks berbasis huruf; PDF hasil scan = gambar) --- */
+  function latin1(u8) {
+    var s = ''; for (var i = 0; i < u8.length; i += 8192) s += String.fromCharCode.apply(null, u8.subarray(i, Math.min(i + 8192, u8.length)));
+    return s;
+  }
+  function inflateZlib(bytes) {
+    // stream zlib (header 2 byte) -> DecompressionStream('deflate')
+    if (!bytes || !bytes.length) return Promise.resolve(new Uint8Array(0));
+    if (typeof DecompressionStream === 'undefined') return Promise.reject(new Error('DecompressionStream tidak didukung.'));
+    var ds = new DecompressionStream('deflate');
+    var writer = ds.writable.getWriter(); writer.write(bytes); writer.close();
+    var reader = ds.readable.getReader(), chunks = [], total = 0;
+    return (function pump() {
+      return reader.read().then(function (r) {
+        if (r.done) { var out = new Uint8Array(total), off = 0; for (var i = 0; i < chunks.length; i++) { out.set(chunks[i], off); off += chunks[i].length; } return out; }
+        chunks.push(r.value); total += r.value.length; return pump();
+      });
+    })();
+  }
+  function pdfTextFromStream(s) {
+    if (!/BT|Tj|TJ/.test(s)) return '';
+    var out = '', i = 0, L = s.length;
+    var oct = { n: '\n', r: '\r', t: '\t', b: '\b', f: '\f', '(': '(', ')': ')', '\\': '\\' };
+    while (i < L) {
+      var ch = s.charAt(i);
+      if (ch === '(') {
+        var depth = 1, str = '', j = i + 1;
+        while (j < L && depth > 0) {
+          var c = s.charAt(j);
+          if (c === '\\') {
+            var nx = s.charAt(j + 1);
+            if (oct[nx] !== undefined) { str += oct[nx]; j += 2; }
+            else if (nx >= '0' && nx <= '7') { var o = nx; j += 2; var cnt = 1; while (cnt < 3 && s.charAt(j) >= '0' && s.charAt(j) <= '7') { o += s.charAt(j); j++; cnt++; } str += String.fromCharCode(parseInt(o, 8) & 0xff); }
+            else { str += nx; j += 2; }
+          } else if (c === '(') { depth++; str += c; j++; }
+          else if (c === ')') { depth--; if (depth > 0) str += c; j++; }
+          else { str += c; j++; }
+        }
+        out += str; i = j;
+      } else if (ch === 'T' && s.charAt(i + 1) === '*') { out += '\n'; i += 2; }
+      else if (ch === 'T' && (s.charAt(i + 1) === 'd' || s.charAt(i + 1) === 'D')) { out += ' '; i += 2; }
+      else i++;
+    }
+    return out;
+  }
+  function readPdf(ab) {
+    var u8 = new Uint8Array(ab), raw = latin1(u8);
+    var jobs = [], meta = [], re = /stream\r?\n/g, m;
+    while ((m = re.exec(raw))) {
+      var start = m.index + m[0].length;
+      var end = raw.indexOf('endstream', start); if (end < 0) continue;
+      if (raw.charAt(end - 1) === '\n') end--; if (raw.charAt(end - 1) === '\r') end--;
+      var dictStart = raw.lastIndexOf('<<', m.index);
+      var dict = dictStart >= 0 ? raw.slice(dictStart, m.index) : '';
+      var bytes = u8.subarray(start, end);
+      if (/FlateDecode/.test(dict)) { jobs.push(inflateZlib(bytes).then(function (b) { return latin1(b); }).catch(function () { return ''; })); }
+      else { jobs.push(Promise.resolve(latin1(bytes))); }
+      meta.push(true);
+    }
+    return Promise.all(jobs).then(function (streams) {
+      var text = '';
+      for (var i = 0; i < streams.length; i++) text += pdfTextFromStream(streams[i]) + '\n';
+      text = text.replace(/[ \t]{2,}/g, ' ').replace(/\n{3,}/g, '\n\n').trim();
+      if (text.replace(/\s/g, '').length < 20) throw new Error('Teks tidak terbaca (mungkin PDF hasil scan/gambar). Ekspor ke DOCX untuk hasil terbaik.');
+      return text;
+    });
+  }
+
   function readFile(file) {
     var name = (file && file.name || '').toLowerCase();
     return file.arrayBuffer().then(function (ab) {
       if (/\.docx$/.test(name)) return readDocx(ab).then(function (t) { return { kind: 'docx', text: t }; });
+      if (/\.pdf$/.test(name)) return readPdf(ab).then(function (t) { return { kind: 'pdf', text: t }; });
       if (/\.xlsx$/.test(name)) return readXlsx(ab).then(function (d) { return { kind: 'xlsx', headers: d.headers, rows: d.rows }; });
       if (/\.csv$/.test(name) || /\.tsv$/.test(name)) { var d2 = readCsv(utf8(new Uint8Array(ab))); return { kind: 'csv', headers: d2.headers, rows: d2.rows }; }
       // fallback: teks polos
@@ -193,5 +262,5 @@
     });
   }
 
-  global.FILES = { readDocx: readDocx, readXlsx: readXlsx, readCsv: readCsv, readFile: readFile };
+  global.FILES = { readDocx: readDocx, readXlsx: readXlsx, readCsv: readCsv, readPdf: readPdf, readFile: readFile };
 })(typeof window !== 'undefined' ? window : this);

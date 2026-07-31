@@ -2743,6 +2743,44 @@
     return { n: rows.length, columns: cols, suggestions: sug };
   }
 
+  /* ---- 4j) Keterbacaan + Revisi Dosen Tracker --------------------------- */
+  function readabilityCheck(text) {
+    var sents = (String(text || '').match(/[^.!?]+[.!?]+/g) || []).map(trim).filter(function (s) { return s.split(/\s+/).length >= 2; });
+    var long = [], totalW = 0;
+    for (var i = 0; i < sents.length; i++) {
+      var w = sents[i].split(/\s+/).length; totalW += w;
+      if (w > 30) long.push({ text: sents[i].slice(0, 130), words: w });
+    }
+    long.sort(function (a, b) { return b.words - a.words; });
+    var avg = sents.length ? Math.round(totalW / sents.length) : 0;
+    var issues = [];
+    if (long.length) issues.push('Ada ' + long.length + ' kalimat sangat panjang (>30 kata) — pertimbangkan memecahnya.');
+    if (avg > 25) issues.push('Rata-rata panjang kalimat ' + avg + ' kata (ideal 15–22).');
+    if (!issues.length) issues.push('Panjang kalimat sudah wajar dan mudah dibaca.');
+    return { sentences: sents.length, avgWords: avg, longSentences: long.slice(0, 8), issues: issues,
+      note: 'Kalimat pendek–menengah lebih mudah dipahami penguji.' };
+  }
+
+  function _withProject(id, fn) {
+    var list = allProjects();
+    for (var i = 0; i < list.length; i++) if (list[i].id === id) {
+      list[i].state = list[i].state || {}; fn(list[i]); list[i].updatedAt = now(); saveAll(list);
+      return { ok: true, project: list[i] };
+    }
+    return { ok: false, error: 'Proyek tidak ditemukan.' };
+  }
+  function addRevision(id, note) {
+    note = trim(note); if (!note) return { ok: false, error: 'Catatan kosong.' };
+    return _withProject(id, function (p) { p.state.revisions = p.state.revisions || []; p.state.revisions.unshift({ id: uid('rev'), note: note, done: false, ts: now() }); });
+  }
+  function toggleRevision(id, rid) {
+    return _withProject(id, function (p) { var rs = p.state.revisions || []; for (var i = 0; i < rs.length; i++) if (rs[i].id === rid) rs[i].done = !rs[i].done; });
+  }
+  function deleteRevision(id, rid) {
+    return _withProject(id, function (p) { p.state.revisions = (p.state.revisions || []).filter(function (r) { return r.id !== rid; }); });
+  }
+  function listRevisions(id) { var p = getProject(id); return (p && p.state && p.state.revisions) || []; }
+
   /* ---- 5) autoSearch: merge OpenAlex + Crossref, rank, annotate --------- */
   function typeLabelOf(t) {
     t = trim(t).toLowerCase();
@@ -3354,6 +3392,11 @@
     examSim: examSim,
     scoreExamAnswer: scoreExamAnswer,
     analyzeDataset: analyzeDataset,
+    readabilityCheck: readabilityCheck,
+    addRevision: addRevision,
+    toggleRevision: toggleRevision,
+    deleteRevision: deleteRevision,
+    listRevisions: listRevisions,
     autoSearch: autoSearch,
     buildProposalHTML: buildProposalHTML,
     // meta

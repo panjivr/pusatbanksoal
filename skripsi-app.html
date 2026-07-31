@@ -1362,6 +1362,9 @@
     cards+=toolCard('ct','Penghitung Kata & Estimasi Halaman','Hitung kata, karakter, kalimat, paragraf, dan perkiraan jumlah halaman.',
       '<textarea id="ctIn" class="f-input" rows="4" style="width:100%;padding:10px" placeholder="Tempel teks…"></textarea>'+
       '<div style="margin-top:8px"><button class="btn btn-primary btn-sm" id="tCt">Hitung</button></div>');
+    cards+=toolCard('rd','Cek Keterbacaan','Deteksi kalimat terlalu panjang & rata-rata panjang kalimat agar mudah dibaca penguji.',
+      '<textarea id="rdIn" class="f-input" rows="4" style="width:100%;padding:10px" placeholder="Tempel teks…"></textarea>'+
+      '<div style="margin-top:8px"><button class="btn btn-primary btn-sm" id="tRd">Periksa</button></div>');
     cards+=toolCard('kp','Generator Kata Pengantar','Buat kata pengantar lengkap termasuk ucapan terima kasih.',
       '<button class="btn btn-primary btn-sm" id="tKp">'+icon('i-book')+' Buat Kata Pengantar</button>');
     cards+=toolCard('apv','Halaman Persetujuan & Pengesahan','Template halaman persetujuan pembimbing dan pengesahan penguji.',
@@ -1376,6 +1379,12 @@
       '<button class="btn btn-primary btn-sm" id="tSld">Buat Outline</button>');
     cards+=toolCard('jdw','Jadwal Penelitian','Buat tabel jadwal (Gantt) penelitian selama 6 bulan.',
       '<button class="btn btn-primary btn-sm" id="tJdw">Buat Jadwal</button>');
+    cards+=toolCard('rev','Revisi Dosen Tracker','Catat masukan dosen, tandai selesai, pantau progres revisi. Tersimpan di proyek.',
+      '<div style="display:flex;gap:8px;flex-wrap:wrap"><input id="revIn" class="f-input" style="flex:1;min-width:180px;padding:8px" placeholder="Tulis catatan revisi dari dosen…"><button class="btn btn-primary btn-sm" id="tRevAdd">Tambah</button></div>');
+    cards+=toolCard('tm','Timer Latihan Sidang','Latih presentasi dengan hitung mundur 7 / 10 / 15 menit.',
+      '<div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center"><select id="tmMin" class="f-select" style="padding:8px"><option value="7">7 menit</option><option value="10" selected>10 menit</option><option value="15">15 menit</option></select>'+
+      '<button class="btn btn-primary btn-sm" id="tmStart">Mulai</button><button class="btn btn-ghost btn-sm" id="tmStop">Stop</button>'+
+      '<span id="tmDisp" class="num" style="font-size:24px;color:var(--primary);margin-left:6px">--:--</span></div>');
 
     shell(head+cards,'Alat Mahasiswa');
 
@@ -1562,6 +1571,39 @@
         download('prediksi-pertanyaan-sidang.doc',docWrap('Prediksi Pertanyaan Sidang',inner),'application/msword'); toast('Prediksi diunduh.');
       });
     });
+    if((b=byId('tRd'))) b.addEventListener('click',function(){
+      var t=byId('rdIn').value; if(t.trim().length<20){ toast('Tempel teks yang cukup dulu.'); return; }
+      var r=THESIS.readabilityCheck(t);
+      var h='<div class="ws-card"><div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px"><b style="color:var(--on-dark)">Keterbacaan</b><span class="badge">'+r.sentences+' kalimat · rerata '+r.avgWords+' kata</span></div><p class="muted" style="font-size:13px;margin-top:6px">'+esc(r.note)+'</p><ul style="margin:8px 0 0 18px;font-size:13px">'+r.issues.map(function(x){return '<li style="margin-bottom:3px">'+esc(x)+'</li>';}).join('')+'</ul>';
+      if(r.longSentences.length) h+='<p style="margin-top:8px;color:var(--on-dark);font-size:13px"><b>Kalimat terpanjang:</b></p>'+r.longSentences.map(function(s){return '<div style="border-left:3px solid var(--primary);padding:5px 9px;margin-top:5px;background:var(--elevated);border-radius:4px;font-size:12.5px"><b>'+s.words+' kata</b> — '+esc(s.text)+'…</div>';}).join('');
+      show('rd',h+'</div>');
+    });
+    function renderRev(){
+      var pr=THESIS.activeProject(); var o=byId('revOut'); if(!o) return;
+      if(!pr){ o.style.display='block'; o.innerHTML='<p class="muted" style="font-size:13px">Aktifkan proyek dulu untuk menyimpan revisi.</p>'; return; }
+      var rs=THESIS.listRevisions(pr.id); o.style.display='block';
+      if(!rs.length){ o.innerHTML='<p class="muted" style="font-size:13px">Belum ada catatan revisi.</p>'; return; }
+      var done=0; for(var i=0;i<rs.length;i++) if(rs[i].done) done++;
+      var h='<div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:8px"><b style="color:var(--on-dark)">Progres revisi</b><span class="badge">'+done+'/'+rs.length+' selesai</span></div>';
+      h+=rs.map(function(r){ return '<div style="display:flex;gap:8px;align-items:flex-start;padding:6px 0;border-bottom:1px solid var(--line)"><input type="checkbox" data-revtog="'+r.id+'"'+(r.done?' checked':'')+' style="margin-top:3px"><span style="flex:1;font-size:13.5px'+(r.done?';text-decoration:line-through;opacity:.6':'')+'">'+esc(r.note)+'</span><button class="btn btn-ghost btn-sm" data-revdel="'+r.id+'" style="padding:2px 8px">✕</button></div>'; }).join('');
+      o.innerHTML=h;
+      Array.prototype.forEach.call(o.querySelectorAll('[data-revtog]'),function(c){ c.addEventListener('change',function(){ THESIS.toggleRevision(pr.id,c.getAttribute('data-revtog')); renderRev(); }); });
+      Array.prototype.forEach.call(o.querySelectorAll('[data-revdel]'),function(bt){ bt.addEventListener('click',function(){ THESIS.deleteRevision(pr.id,bt.getAttribute('data-revdel')); renderRev(); }); });
+    }
+    if((b=byId('tRevAdd'))){ renderRev(); b.addEventListener('click',function(){
+      var pr=needP(); if(!pr) return; var v=byId('revIn').value; if(!v.trim()){ toast('Tulis catatan dulu.'); return; }
+      THESIS.addRevision(pr.id,v); byId('revIn').value=''; renderRev(); toast('Revisi ditambahkan.');
+    }); var ri=byId('revIn'); if(ri) ri.addEventListener('keydown',function(e){ if(e.key==='Enter'){ e.preventDefault(); byId('tRevAdd').click(); } }); }
+    if((b=byId('tmStart'))){
+      var tmId=null;
+      function tmClear(){ if(tmId){ clearInterval(tmId); tmId=null; } }
+      b.addEventListener('click',function(){
+        tmClear(); var total=parseInt(byId('tmMin').value,10)*60, left=total;
+        function paint(){ var m=Math.floor(left/60), s=left%60; var d=byId('tmDisp'); if(d){ d.textContent=(m<10?'0':'')+m+':'+(s<10?'0':'')+s; d.style.color=left<=30?'var(--down)':left<=60?'var(--primary)':'var(--up)'; } }
+        paint(); tmId=setInterval(function(){ left--; if(left<0){ tmClear(); toast('Waktu habis!'); var d=byId('tmDisp'); if(d){ d.textContent='00:00'; } return; } paint(); },1000);
+      });
+      var stop=byId('tmStop'); if(stop) stop.addEventListener('click',function(){ tmClear(); var d=byId('tmDisp'); if(d){ d.textContent='--:--'; d.style.color='var(--primary)'; } });
+    }
   }
 
   /* ===================================================== FITUR PRO */
@@ -1574,8 +1616,8 @@
       '<p class="muted" style="margin-top:6px">Unggah/ tempel naskah — audit menyeluruh: kelengkapan BAB, sitasi vs daftar pustaka, konsistensi angka, kata baku, pola AI.</p>'+
       '<div class="ws-card" style="margin-top:14px">'+
         '<div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">'+
-          '<input type="file" id="docFile" accept=".docx,.txt" style="font-size:13px">'+
-          '<span class="muted" style="font-size:12px">Format: DOCX atau TXT. (PDF: ekspor dulu ke DOCX.)</span>'+
+          '<input type="file" id="docFile" accept=".docx,.pdf,.txt" style="font-size:13px">'+
+          '<span class="muted" style="font-size:12px">Format: DOCX, PDF (berbasis teks), atau TXT. PDF hasil scan tidak terbaca.</span>'+
         '</div>'+
         '<div style="margin-top:10px"><textarea id="docText" class="f-input" rows="7" style="width:100%;padding:10px" placeholder="…atau tempel seluruh naskah skripsi di sini"></textarea></div>'+
         '<div style="margin-top:10px"><button class="btn btn-primary btn-sm" id="docRun">'+icon('i-shield-check')+' Audit Sekarang</button></div>'+
@@ -1600,7 +1642,15 @@
       h+='<div style="margin-top:10px;display:flex;gap:6px;flex-wrap:wrap">'+secs+'</div>';
       if(!a.findings.length) h+='<p style="margin-top:12px;color:var(--up);font-size:14px">Tidak ada masalah besar terdeteksi. Tetap periksa manual.</p>';
       else h+='<div style="margin-top:12px">'+a.findings.map(function(f){ return '<div style="border-left:3px solid '+levelColor(f.level)+';padding:6px 10px;margin-bottom:6px;background:var(--elevated);border-radius:4px;font-size:13px"><b style="color:'+levelColor(f.level)+'">'+levelLabel(f.level)+'</b> — '+esc(f.msg)+'</div>'; }).join('')+'</div>';
+      h+='<div style="margin-top:12px"><button class="btn btn-ghost btn-sm" id="docDoc">Unduh Laporan (DOCX)</button></div>';
       var o=byId('docOut'); o.style.display='block'; o.innerHTML=h+'</div>';
+      byId('docDoc').addEventListener('click',function(){
+        var inner='<h2>Laporan Audit Skripsi</h2><p><b>Skor konsistensi:</b> '+a.score+'/100</p>'+
+          '<p>Sitasi: '+a.citations+' · Referensi: '+a.references+' · Kata: '+a.stats.words+' · ≈'+a.stats.pages+' halaman</p>'+
+          '<h3>Temuan</h3>'+(a.findings.length?'<ul>'+a.findings.map(function(f){return '<li>['+levelLabel(f.level)+'] '+esc(f.msg)+'</li>';}).join('')+'</ul>':'<p>Tidak ada masalah besar terdeteksi.</p>')+
+          '<p><i>'+esc(a.note)+'</i></p>';
+        download('laporan-audit-skripsi.doc',docWrap('Laporan Audit',inner),'application/msword'); toast('Laporan diunduh.');
+      });
     });
   }
 
