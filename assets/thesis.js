@@ -2276,6 +2276,149 @@
     return humanize(s);
   }
 
+  /* ---- 4e) Alat bantu tambahan ------------------------------------------ */
+  // Kata Pengantar lengkap (mengisi bagian ucapan terima kasih).
+  function generateKataPengantar(project) {
+    var x = _ctxOf(project);
+    var jud = x.title || 'penelitian ini';
+    var pemb = trim(project && (project.pembimbing || project.advisor));
+    var uni = trim(project && (project.university || project.universitas));
+    var pihak = 'Bapak/Ibu ' + (pemb || 'dosen pembimbing') + ' selaku dosen pembimbing yang telah membimbing dengan sabar, ' +
+      'para dosen ' + (x.bidang !== 'bidang terkait' ? 'Program Studi ' + (project.program || '') + ' ' : '') + (uni ? uni + ' ' : '') +
+      'atas ilmu yang diberikan, serta kedua orang tua, keluarga, dan sahabat yang senantiasa memberikan dukungan';
+    return 'Puji syukur penulis panjatkan ke hadirat Tuhan Yang Maha Esa atas rahmat dan karunia-Nya sehingga ' +
+      'proposal/skripsi yang berjudul "' + jud + '" dapat diselesaikan dengan baik.\n\n' +
+      'Penyusunan karya ini tidak lepas dari bantuan berbagai pihak. Oleh karena itu, penulis menyampaikan terima kasih kepada ' + pihak + '.\n\n' +
+      'Penulis menyadari karya ini masih memiliki kekurangan. Kritik dan saran yang membangun sangat penulis harapkan demi perbaikan pada masa mendatang. ' +
+      'Semoga karya ini bermanfaat bagi pembaca dan pengembangan ' + x.bidang + '.';
+  }
+
+  // Halaman persetujuan & pengesahan (template siap isi).
+  function generateApprovalPages(project) {
+    var p = project || {}, x = _ctxOf(project);
+    var nama = trim(p.studentName || p.author || p.name) || '〔Nama Mahasiswa〕';
+    var nim = trim(p.nim) || '〔NIM〕';
+    var prodi = trim(p.program) || '〔Program Studi〕';
+    return {
+      persetujuan: {
+        title: 'HALAMAN PERSETUJUAN',
+        body: 'Proposal/Skripsi berjudul "' + (x.title || '〔Judul〕') + '" yang disusun oleh ' + nama +
+          ' (NIM: ' + nim + '), Program Studi ' + prodi + ', telah disetujui untuk diujikan/diseminarkan.',
+        lines: ['Pembimbing I: ' + (trim(p.pembimbing) || '〔Nama & NIP〕'), 'Pembimbing II: 〔Nama & NIP〕']
+      },
+      pengesahan: {
+        title: 'HALAMAN PENGESAHAN',
+        body: 'Proposal/Skripsi ini telah dipertahankan di hadapan Dewan Penguji dan dinyatakan lulus pada tanggal 〔tanggal ujian〕.',
+        lines: ['Ketua Penguji: 〔Nama & NIP〕', 'Penguji I: 〔Nama & NIP〕', 'Penguji II: 〔Nama & NIP〕', 'Mengetahui, Ketua Program Studi: 〔Nama & NIP〕']
+      }
+    };
+  }
+
+  // Cek kata baku (KBBI) — daftar kata tidak baku + saran.
+  var _BAKU = { 'aktifitas': 'aktivitas', 'analisa': 'analisis', 'apotik': 'apotek', 'atlit': 'atlet',
+    'cabe': 'cabai', 'efektifitas': 'efektivitas', 'faham': 'paham', 'fikir': 'pikir', 'hakekat': 'hakikat',
+    'hipotesa': 'hipotesis', 'ijin': 'izin', 'jadual': 'jadwal', 'karir': 'karier', 'katagori': 'kategori',
+    'kongkrit': 'konkret', 'kreatifitas': 'kreativitas', 'kwalitas': 'kualitas', 'kwitansi': 'kuitansi',
+    'metoda': 'metode', 'nasehat': 'nasihat', 'obyek': 'objek', 'praktek': 'praktik', 'propinsi': 'provinsi',
+    'resiko': 'risiko', 'sistim': 'sistem', 'standarisasi': 'standardisasi', 'subyek': 'subjek',
+    'tehnik': 'teknik', 'teoritis': 'teoretis', 'trampil': 'terampil', 'ustad': 'ustaz',
+    'aktual': 'aktual', 'nomer': 'nomor', 'frekwensi': 'frekuensi', 'konsekwensi': 'konsekuensi',
+    'komplek': 'kompleks', 'himbau': 'imbau', 'antri': 'antre', 'silahkan': 'silakan', 'rubah': 'ubah',
+    'merubah': 'mengubah', 'sekedar': 'sekadar', 'terlanjur': 'telanjur', 'negri': 'negeri', 'sarat': 'syarat' };
+  function bakuCheck(text) {
+    var s = String(text || ''), out = [], seen = {};
+    var words = s.toLowerCase().match(/[a-z]+/g) || [];
+    for (var i = 0; i < words.length; i++) {
+      var w = words[i];
+      if (_BAKU[w] && _BAKU[w] !== w && !seen[w]) {
+        seen[w] = 1;
+        var re = new RegExp('\\b' + w + '\\b', 'gi'), m = s.match(re);
+        out.push({ found: w, suggestion: _BAKU[w], count: m ? m.length : 1 });
+      }
+    }
+    out.sort(function (a, b) { return b.count - a.count; });
+    return { issues: out, total: out.length,
+      note: out.length ? 'Ditemukan ' + out.length + ' kata tidak baku. Sesuaikan dengan KBBI.' : 'Tidak ada kata tidak baku umum yang terdeteksi.' };
+  }
+
+  // Ringkasan ekstraktif (pilih kalimat terpenting berdasar frekuensi kata).
+  var _STOP = ' yang dan di ke dari untuk pada dengan adalah ini itu akan atau juga dalam sebagai oleh karena agar dapat tidak para suatu telah lebih '.split(' ');
+  function summarize(text, n) {
+    n = n || 3;
+    var sents = (String(text || '').match(/[^.!?]+[.!?]+/g) || []).map(function (t) { return t.trim(); })
+      .filter(function (t) { return t.split(/\s+/).length >= 5; });
+    if (sents.length <= n) return sents.join(' ');
+    var freq = {}, i, j;
+    for (i = 0; i < sents.length; i++) {
+      var ws = sents[i].toLowerCase().match(/[a-z]+/g) || [];
+      for (j = 0; j < ws.length; j++) if (_STOP.indexOf(ws[j]) < 0 && ws[j].length > 3) freq[ws[j]] = (freq[ws[j]] || 0) + 1;
+    }
+    var scored = [];
+    for (i = 0; i < sents.length; i++) {
+      var wk = sents[i].toLowerCase().match(/[a-z]+/g) || [], sc = 0;
+      for (j = 0; j < wk.length; j++) sc += (freq[wk[j]] || 0);
+      scored.push({ i: i, s: sents[i], sc: sc / (wk.length || 1) });
+    }
+    scored.sort(function (a, b) { return b.sc - a.sc; });
+    var pick = scored.slice(0, n).sort(function (a, b) { return a.i - b.i; });
+    return pick.map(function (x) { return x.s; }).join(' ');
+  }
+
+  // Panduan pertanyaan wawancara (kualitatif) dari variabel.
+  function generateInterviewGuide(project) {
+    var x = _ctxOf(project);
+    var vars = x.vars.length ? x.vars : ['fokus penelitian'];
+    var groups = [];
+    for (var i = 0; i < vars.length; i++) {
+      var v = vars[i];
+      groups.push({ topic: v, questions: [
+        'Bagaimana pemahaman Anda mengenai ' + lc1(v) + ' di ' + (x.objek || 'tempat ini') + '?',
+        'Bagaimana ' + lc1(v) + ' berjalan selama ini menurut pengalaman Anda?',
+        'Faktor apa yang menurut Anda memengaruhi ' + lc1(v) + '?',
+        'Kendala apa yang dihadapi terkait ' + lc1(v) + ', dan bagaimana mengatasinya?',
+        'Harapan Anda ke depan mengenai ' + lc1(v) + '?'
+      ] });
+    }
+    return { note: 'Pedoman wawancara semi-terstruktur — kembangkan sesuai jawaban informan.', groups: groups };
+  }
+
+  // Deteksi singkatan untuk Daftar Singkatan.
+  function abbreviations(text) {
+    var s = String(text || ''), m = s.match(/\b[A-Z]{2,}[A-Za-z]*\b/g) || [], seen = {}, out = [];
+    for (var i = 0; i < m.length; i++) { var a = m[i]; if (!seen[a] && a.length >= 2 && a.length <= 8) { seen[a] = 1; out.push(a); } }
+    out.sort();
+    return out;
+  }
+
+  // Statistik teks + estimasi halaman.
+  function countText(text) {
+    var s = String(text || ''), t = s.trim();
+    var words = t ? (t.match(/\S+/g) || []).length : 0;
+    var chars = s.replace(/\s/g, '').length;
+    var sents = t ? (t.split(/[.!?]+\s+/).filter(function (x) { return x.trim(); }).length) : 0;
+    var paras = t ? (t.split(/\n\s*\n/).filter(function (x) { return x.trim(); }).length) : 0;
+    return { words: words, chars: chars, sentences: sents, paragraphs: paras,
+      pages: Math.max(1, Math.round(words / 300)), readMinutes: Math.max(1, Math.round(words / 200)) };
+  }
+
+  // Statistik kemutakhiran referensi.
+  function refRecency(project) {
+    var refs = (project && project.state && isArray(project.state.references)) ? project.state.references : [];
+    var now = new Date().getFullYear(), y5 = 0, y10 = 0, withY = 0, oldest = null, newest = null;
+    for (var i = 0; i < refs.length; i++) {
+      var yr = parseInt(refs[i].year, 10);
+      if (!yr) continue; withY++;
+      if (now - yr <= 5) y5++; if (now - yr <= 10) y10++;
+      if (oldest == null || yr < oldest) oldest = yr; if (newest == null || yr > newest) newest = yr;
+    }
+    var pct5 = withY ? Math.round(y5 / withY * 100) : 0;
+    return { total: refs.length, withYear: withY, within5: y5, within10: y10, pct5: pct5,
+      oldest: oldest, newest: newest,
+      note: !refs.length ? 'Belum ada referensi.' :
+        (pct5 >= 60 ? 'Bagus — mayoritas referensi mutakhir (≤5 tahun).' :
+         'Perbanyak referensi 5 tahun terakhir agar lebih mutakhir (' + pct5 + '% saat ini).') };
+  }
+
   /* ---- 5) autoSearch: merge OpenAlex + Crossref, rank, annotate --------- */
   function typeLabelOf(t) {
     t = trim(t).toLowerCase();
@@ -2867,6 +3010,14 @@
     generateSchedule: generateSchedule,
     generateDefenseOutline: generateDefenseOutline,
     paraphrase: paraphrase,
+    generateKataPengantar: generateKataPengantar,
+    generateApprovalPages: generateApprovalPages,
+    bakuCheck: bakuCheck,
+    summarize: summarize,
+    generateInterviewGuide: generateInterviewGuide,
+    abbreviations: abbreviations,
+    countText: countText,
+    refRecency: refRecency,
     autoSearch: autoSearch,
     buildProposalHTML: buildProposalHTML,
     // meta

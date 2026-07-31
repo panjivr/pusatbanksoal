@@ -1319,6 +1319,34 @@
     cards+=toolCard('prf','Parafrase & Humanize Teks','Tempel teks, dapatkan versi parafrasa untuk mengurangi duplikasi & pola AI.',
       '<textarea id="prfIn" class="f-input" rows="5" style="width:100%;padding:10px" placeholder="Tempel kalimat/paragraf di sini…"></textarea>'+
       '<div style="margin-top:8px"><button class="btn btn-primary btn-sm" id="tPrf">'+icon('i-refresh')+' Parafrase</button></div>');
+    // 7) Kata Pengantar
+    cards+=toolCard('kp','Generator Kata Pengantar','Buat kata pengantar lengkap termasuk ucapan terima kasih.',
+      '<button class="btn btn-primary btn-sm" id="tKp">'+icon('i-book')+' Buat Kata Pengantar</button>');
+    // 8) Halaman persetujuan & pengesahan
+    cards+=toolCard('apv','Halaman Persetujuan & Pengesahan','Template halaman persetujuan pembimbing dan pengesahan penguji.',
+      '<button class="btn btn-primary btn-sm" id="tApv">'+icon('i-shield-check')+' Buat Halaman</button>');
+    // 9) Cek kata baku
+    cards+=toolCard('bk','Cek Kata Baku (KBBI)','Deteksi kata tidak baku dan saran bentuk bakunya.',
+      '<textarea id="bkIn" class="f-input" rows="4" style="width:100%;padding:10px" placeholder="Tempel teks untuk diperiksa…"></textarea>'+
+      '<div style="margin-top:8px"><button class="btn btn-primary btn-sm" id="tBk">Periksa</button></div>');
+    // 10) Ringkasan otomatis
+    cards+=toolCard('rk','Ringkasan Otomatis','Ringkas teks panjang jadi beberapa kalimat inti (bantu tinjauan pustaka).',
+      '<textarea id="rkIn" class="f-input" rows="5" style="width:100%;padding:10px" placeholder="Tempel abstrak/paragraf panjang…"></textarea>'+
+      '<div style="margin-top:8px;display:flex;gap:8px;align-items:center"><label class="muted" style="font-size:13px">Jumlah kalimat <select id="rkN" class="f-select" style="padding:6px;margin-left:6px"><option>2</option><option selected>3</option><option>4</option><option>5</option></select></label><button class="btn btn-primary btn-sm" id="tRk">Ringkas</button></div>');
+    // 11) Pedoman wawancara
+    cards+=toolCard('iv','Pedoman Wawancara (Kualitatif)','Buat daftar pertanyaan wawancara semi-terstruktur per variabel.',
+      '<button class="btn btn-primary btn-sm" id="tIv">'+icon('i-list')+' Buat Pertanyaan</button>');
+    // 12) Daftar singkatan
+    cards+=toolCard('sg','Daftar Singkatan Otomatis','Deteksi singkatan (huruf kapital) dari teks untuk Daftar Singkatan.',
+      '<textarea id="sgIn" class="f-input" rows="4" style="width:100%;padding:10px" placeholder="Tempel teks…"></textarea>'+
+      '<div style="margin-top:8px"><button class="btn btn-primary btn-sm" id="tSg">Deteksi</button></div>');
+    // 13) Penghitung kata
+    cards+=toolCard('ct','Penghitung Kata & Estimasi Halaman','Hitung kata, karakter, kalimat, paragraf, dan perkiraan jumlah halaman.',
+      '<textarea id="ctIn" class="f-input" rows="4" style="width:100%;padding:10px" placeholder="Tempel teks…"></textarea>'+
+      '<div style="margin-top:8px"><button class="btn btn-primary btn-sm" id="tCt">Hitung</button></div>');
+    // 14) Kemutakhiran referensi
+    cards+=toolCard('rc','Cek Kemutakhiran Referensi','Analisis apakah daftar pustaka proyek cukup mutakhir (≤5 tahun).',
+      '<button class="btn btn-primary btn-sm" id="tRc">Analisis Referensi</button>');
 
     shell(head+cards,'Alat Mahasiswa');
 
@@ -1387,6 +1415,61 @@
       var out=THESIS.paraphrase(t);
       show('prf','<div class="ws-card"><b style="color:var(--on-dark)">Hasil Parafrase</b><p style="margin-top:6px;font-size:14px;text-align:justify">'+esc(out)+'</p><div style="margin-top:10px"><button class="btn btn-ghost btn-sm" id="prfCopy">Salin</button></div><p class="muted" style="font-size:12px;margin-top:8px">Tinjau kembali hasilnya agar makna tetap tepat sebelum dipakai.</p></div>');
       byId('prfCopy').addEventListener('click',function(){ copyText(out); });
+    });
+    if((b=byId('tKp'))) b.addEventListener('click',function(){
+      var pr=needP(); if(!pr) return; var kp=THESIS.generateKataPengantar(pr);
+      show('kp','<div class="ws-card"><b style="color:var(--on-dark)">KATA PENGANTAR</b>'+kp.split('\n\n').map(function(p2){return '<p style="margin-top:8px;font-size:14px;text-align:justify">'+esc(p2)+'</p>';}).join('')+'<div style="margin-top:10px;display:flex;gap:8px"><button class="btn btn-ghost btn-sm" id="kpCopy">Salin</button><button class="btn btn-ghost btn-sm" id="kpDoc">Unduh (DOCX)</button></div></div>');
+      byId('kpCopy').addEventListener('click',function(){ copyText(kp); });
+      byId('kpDoc').addEventListener('click',function(){ download('kata-pengantar.doc',docWrap('Kata Pengantar','<h3 style="text-align:center">KATA PENGANTAR</h3>'+kp.split('\n\n').map(function(p2){return '<p style="text-align:justify">'+esc(p2)+'</p>';}).join('')),'application/msword'); toast('Kata pengantar diunduh.'); });
+    });
+    if((b=byId('tApv'))) b.addEventListener('click',function(){
+      var pr=needP(); if(!pr) return; var a=THESIS.generateApprovalPages(pr);
+      function block(x){ return '<div style="margin-top:10px"><b style="color:var(--on-dark)">'+esc(x.title)+'</b><p style="margin-top:6px;font-size:14px;text-align:justify">'+esc(x.body)+'</p>'+x.lines.map(function(l){return '<p style="font-size:13.5px;margin-top:8px">'+esc(l)+'</p>';}).join('')+'</div>'; }
+      show('apv','<div class="ws-card">'+block(a.persetujuan)+'<hr style="border-color:var(--line);margin:12px 0">'+block(a.pengesahan)+'<div style="margin-top:10px"><button class="btn btn-ghost btn-sm" id="apvDoc">Unduh (DOCX)</button></div></div>');
+      byId('apvDoc').addEventListener('click',function(){
+        function db(x){ return '<h3 style="text-align:center">'+esc(x.title)+'</h3><p style="text-align:justify">'+esc(x.body)+'</p>'+x.lines.map(function(l){return '<p>'+esc(l)+'</p>';}).join(''); }
+        download('halaman-pengesahan.doc',docWrap('Pengesahan',db(a.persetujuan)+'<br>'+db(a.pengesahan)),'application/msword'); toast('Halaman diunduh.');
+      });
+    });
+    if((b=byId('tBk'))) b.addEventListener('click',function(){
+      var t=byId('bkIn').value; if(!t.trim()){ toast('Tempel teks dulu.'); return; }
+      var r=THESIS.bakuCheck(t);
+      var h='<div class="ws-card"><b style="color:var(--on-dark)">Cek Kata Baku</b><p class="muted" style="font-size:13px;margin-top:4px">'+esc(r.note)+'</p>';
+      if(r.total) h+='<div style="margin-top:10px">'+r.issues.map(function(x){return '<div style="display:flex;gap:8px;align-items:center;font-size:13.5px;padding:4px 0"><span style="color:var(--down)">'+esc(x.found)+'</span> → <b style="color:var(--up)">'+esc(x.suggestion)+'</b> <span class="muted">('+x.count+'x)</span></div>';}).join('')+'</div>';
+      show('bk',h+'</div>');
+    });
+    if((b=byId('tRk'))) b.addEventListener('click',function(){
+      var t=byId('rkIn').value; if(!t.trim()){ toast('Tempel teks dulu.'); return; }
+      var out=THESIS.summarize(t,parseInt(byId('rkN').value,10)||3);
+      show('rk','<div class="ws-card"><b style="color:var(--on-dark)">Ringkasan</b><p style="margin-top:6px;font-size:14px;text-align:justify">'+esc(out)+'</p><div style="margin-top:10px"><button class="btn btn-ghost btn-sm" id="rkCopy">Salin</button></div></div>');
+      byId('rkCopy').addEventListener('click',function(){ copyText(out); });
+    });
+    if((b=byId('tIv'))) b.addEventListener('click',function(){
+      var pr=needP(); if(!pr) return; var g=THESIS.generateInterviewGuide(pr);
+      var h='<div class="ws-card"><b style="color:var(--on-dark)">Pedoman Wawancara</b><p class="muted" style="font-size:13px;margin-top:4px">'+esc(g.note)+'</p>'; var no=1;
+      for(var i=0;i<g.groups.length;i++){ h+='<p style="margin-top:10px;color:var(--on-dark)"><b>Topik: '+esc(g.groups[i].topic)+'</b></p>'; for(var j=0;j<g.groups[i].questions.length;j++){ h+='<p style="font-size:13.5px;margin-top:3px">'+(no++)+'. '+esc(g.groups[i].questions[j])+'</p>'; } }
+      h+='<div style="margin-top:12px"><button class="btn btn-ghost btn-sm" id="ivDoc">Unduh (DOCX)</button></div></div>';
+      show('iv',h);
+      byId('ivDoc').addEventListener('click',function(){
+        var inner='<h3>Pedoman Wawancara</h3><p>'+esc(g.note)+'</p>'; var n2=1;
+        for(var i=0;i<g.groups.length;i++){ inner+='<p><b>Topik: '+esc(g.groups[i].topic)+'</b></p><ol>'; for(var j=0;j<g.groups[i].questions.length;j++){ inner+='<li>'+esc(g.groups[i].questions[j])+'</li>'; } inner+='</ol>'; void n2; }
+        download('pedoman-wawancara.doc',docWrap('Pedoman Wawancara',inner),'application/msword'); toast('Pedoman diunduh.');
+      });
+    });
+    if((b=byId('tSg'))) b.addEventListener('click',function(){
+      var t=byId('sgIn').value; if(!t.trim()){ toast('Tempel teks dulu.'); return; }
+      var a=THESIS.abbreviations(t);
+      show('sg','<div class="ws-card"><b style="color:var(--on-dark)">Daftar Singkatan</b>'+(a.length?'<div style="margin-top:8px;font-size:14px">'+a.map(function(x){return '<div style="padding:3px 0"><b>'+esc(x)+'</b> = 〔kepanjangan〕</div>';}).join('')+'</div>':'<p class="muted" style="margin-top:8px;font-size:13px">Tidak ada singkatan terdeteksi.</p>')+'</div>');
+    });
+    if((b=byId('tCt'))) b.addEventListener('click',function(){
+      var t=byId('ctIn').value; var c=THESIS.countText(t);
+      show('ct','<div class="ws-card"><b style="color:var(--on-dark)">Statistik Teks</b><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:10px;margin-top:10px">'+
+        [['Kata',c.words],['Karakter',c.chars],['Kalimat',c.sentences],['Paragraf',c.paragraphs],['≈ Halaman',c.pages],['≈ Baca (mnt)',c.readMinutes]].map(function(p2){return '<div style="background:var(--elevated);border-radius:6px;padding:10px;text-align:center"><div class="num" style="font-size:20px;color:var(--primary)">'+p2[1]+'</div><div class="muted" style="font-size:12px">'+p2[0]+'</div></div>';}).join('')+'</div></div>');
+    });
+    if((b=byId('tRc'))) b.addEventListener('click',function(){
+      var pr=needP(); if(!pr) return; var r=THESIS.refRecency(pr);
+      var col=r.pct5>=60?'var(--up)':r.pct5>=40?'var(--primary)':'var(--down)';
+      show('rc','<div class="ws-card"><div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap"><b style="color:var(--on-dark)">Kemutakhiran Referensi</b><span class="badge" style="color:'+col+'">'+r.pct5+'% ≤5 thn</span></div><p class="muted" style="font-size:13px;margin-top:6px">'+esc(r.note)+'</p><p style="font-size:13.5px;margin-top:8px">Total: <b class="num">'+r.total+'</b> · ≤5 thn: <b class="num">'+r.within5+'</b> · ≤10 thn: <b class="num">'+r.within10+'</b>'+(r.oldest?' · rentang '+r.oldest+'–'+r.newest:'')+'</p></div>');
     });
   }
 
