@@ -2419,6 +2419,182 @@
          'Perbanyak referensi 5 tahun terakhir agar lebih mutakhir (' + pct5 + '% saat ini).') };
   }
 
+  /* ---- 4f) Ide penelitian, metodologi, statistik, sidang ----------------- */
+  // Paket ide: judul alternatif, rumusan, tujuan, manfaat, variabel, hipotesis, kerangka.
+  function ideaKit(project) {
+    var x = _ctxOf(project);
+    var xJoin = x.xs.join(' dan ') || 'variabel bebas';
+    var yJoin = x.ys.join(' dan ') || 'variabel terikat';
+    var pats = suggestTitles({ title: x.title, researchInterest: x.bidang, researchObject: x.objek, location: (project && project.location) || '' }) || [];
+    var titles = [];
+    for (var i = 0; i < pats.length; i++) {
+      var t = String(pats[i].pattern || pats[i].title || '')
+        .replace(/\{X\}/g, xJoin).replace(/\{Y\}/g, yJoin)
+        .replace(/\s*(pada|di)\s*\{objek\}/g, x.objek ? ' $1 ' + x.objek : '')
+        .replace(/\s*di\s*\{lokasi\}/g, (project && project.location) ? ' di ' + project.location : '')
+        .replace(/\{objek\}/g, x.objek || '').replace(/\{lokasi\}/g, (project && project.location) || '')
+        .replace(/\s{2,}/g, ' ').trim();
+      if (t && titles.indexOf(t) < 0) titles.push(t);
+    }
+    var kerangka = x.approach === 'kuantitatif'
+      ? 'Variabel bebas (' + xJoin + ') diduga memengaruhi variabel terikat (' + yJoin + ')'
+        + (x.objek ? ' pada ' + x.objek : '') + '. Secara skematis: ' + xJoin + ' → ' + yJoin + '.'
+      : 'Alur berpikir bergerak dari fenomena ' + x.topik + (x.objek ? ' di ' + x.objek : '')
+        + ', ditinjau melalui teori yang relevan, menuju pemahaman mendalam atas ' + x.topik + '.';
+    return {
+      titles: titles,
+      rumusan: textsOfSafe(project, 'questions', x.der.questions),
+      tujuan: textsOfSafe(project, 'objectives', x.der.objectives),
+      hipotesis: textsOfSafe(project, 'hypotheses', x.der.hypotheses),
+      manfaat: x.der.benefits, variables: x.der.variables, kerangka: kerangka
+    };
+  }
+  function textsOfSafe(project, key, fallback) {
+    var st = (project && project.state) || {};
+    var arr = (st[key] && st[key].length) ? st[key] : fallback;
+    return textsOf(arr || []);
+  }
+
+  // Tabel operasional variabel.
+  function operationalTable(project) {
+    var x = _ctxOf(project);
+    var vars = x.vars.length ? x.vars : ['variabel penelitian'];
+    var rows = [];
+    for (var i = 0; i < vars.length; i++) {
+      rows.push({
+        variable: vars[i],
+        definition: lc1(vars[i]) + ' sebagai ' + '〔definisi operasional〕 yang diukur pada ' + (x.objek || 'objek penelitian'),
+        indicators: 'Indikator 1, Indikator 2, Indikator 3 〔sesuaikan dengan teori〕',
+        scale: x.approach === 'kuantitatif' ? 'Likert 1–5 (interval)' : 'Deskriptif kualitatif'
+      });
+    }
+    return rows;
+  }
+
+  // Matriks penelitian terdahulu dari daftar pustaka (metadata nyata).
+  function matrixPriorResearch(project) {
+    var refs = (project && project.state && isArray(project.state.references)) ? project.state.references : [];
+    var rows = [];
+    for (var i = 0; i < refs.length && i < 15; i++) {
+      var r = refs[i];
+      var fam = (r.authors && r.authors.length) ? authFamily(r.authors[0]) + (r.authors.length > 1 ? ' dkk.' : '') : (r.venue || 'Anonim');
+      rows.push({
+        no: i + 1, author: fam, year: (r.year != null && r.year !== '') ? r.year : 't.t.',
+        title: trim(r.title) || '〔judul〕', method: '〔metode〕', findings: '〔temuan utama〕', difference: '〔perbedaan dengan penelitian ini〕'
+      });
+    }
+    return rows;
+  }
+
+  // Kalkulator sampel: Slovin, Cochran, dan koreksi populasi terbatas.
+  function sampleSize(opts) {
+    opts = opts || {};
+    var method = (opts.method || 'slovin').toLowerCase();
+    var N = parseFloat(opts.N), e = parseFloat(opts.e) || 0.05;
+    if (method === 'cochran') {
+      var z = parseFloat(opts.z) || 1.96, p = (opts.p != null) ? parseFloat(opts.p) : 0.5;
+      var n0 = (z * z * p * (1 - p)) / (e * e);
+      var out = { method: 'Cochran', n0: Math.ceil(n0), z: z, p: p, e: e };
+      if (N > 0) { out.n = Math.ceil(n0 / (1 + (n0 - 1) / N)); out.N = N; out.note = 'Dengan koreksi populasi terbatas (N=' + N + ').'; }
+      else { out.n = Math.ceil(n0); out.note = 'Populasi tak terbatas/tidak diketahui.'; }
+      return out;
+    }
+    if (!(N > 0)) return null;
+    return { method: 'Slovin', N: N, e: e, n: Math.ceil(N / (1 + N * e * e)) };
+  }
+
+  // Statistik deskriptif dari deret angka.
+  function descriptiveStats(input) {
+    var nums = String(input || '').split(/[\s,;\n\t]+/).map(function (s) { return parseFloat(s); }).filter(function (v) { return !isNaN(v); });
+    if (!nums.length) return null;
+    var n = nums.length, sum = 0, i;
+    for (i = 0; i < n; i++) sum += nums[i];
+    var mean = sum / n;
+    var sorted = nums.slice().sort(function (a, b) { return a - b; });
+    var median = (n % 2) ? sorted[(n - 1) / 2] : (sorted[n / 2 - 1] + sorted[n / 2]) / 2;
+    var freq = {}, mode = sorted[0], best = 0;
+    for (i = 0; i < n; i++) { freq[nums[i]] = (freq[nums[i]] || 0) + 1; if (freq[nums[i]] > best) { best = freq[nums[i]]; mode = nums[i]; } }
+    var ss = 0; for (i = 0; i < n; i++) ss += (nums[i] - mean) * (nums[i] - mean);
+    var variance = n > 1 ? ss / (n - 1) : 0;
+    function rnd(v) { return Math.round(v * 1000) / 1000; }
+    return { n: n, sum: rnd(sum), mean: rnd(mean), median: rnd(median), mode: mode,
+      min: sorted[0], max: sorted[n - 1], range: rnd(sorted[n - 1] - sorted[0]),
+      variance: rnd(variance), sd: rnd(Math.sqrt(variance)) };
+  }
+
+  // Pemilih uji statistik (pohon keputusan sederhana).
+  function pickStatTest(a) {
+    a = a || {};
+    var goal = a.goal, scale = a.scale, groups = a.groups, paired = a.paired, normal = a.normal !== false;
+    if (goal === 'hubungan') {
+      if (scale === 'nominal') return { test: 'Uji Chi-Square', reason: 'Menguji hubungan/asosiasi antara dua variabel kategorik (nominal).' };
+      if (scale === 'ordinal') return { test: 'Korelasi Spearman (rho)', reason: 'Menguji hubungan antar variabel berjenjang (ordinal) atau data tidak normal.' };
+      return { test: normal ? 'Korelasi Pearson (r)' : 'Korelasi Spearman', reason: normal ? 'Hubungan antar variabel numerik yang berdistribusi normal.' : 'Data numerik tidak normal → gunakan Spearman.' };
+    }
+    if (goal === 'pengaruh') {
+      return { test: (a.manyX ? 'Regresi Linear Berganda' : 'Regresi Linear Sederhana'), reason: 'Menguji pengaruh variabel bebas terhadap variabel terikat yang numerik.' };
+    }
+    if (goal === 'perbedaan') {
+      if (scale === 'nominal') return { test: 'Uji Chi-Square', reason: 'Membandingkan proporsi/frekuensi antar kelompok kategorik.' };
+      if (groups === '2') {
+        if (!normal || scale === 'ordinal') return { test: paired ? 'Uji Wilcoxon' : 'Uji Mann-Whitney', reason: 'Dua kelompok, data ordinal/tidak normal.' };
+        return { test: paired ? 'Uji t berpasangan (paired t-test)' : 'Uji t independen (independent t-test)', reason: 'Membandingkan rata-rata dua kelompok data numerik yang normal.' };
+      }
+      if (groups === '>2') {
+        if (!normal || scale === 'ordinal') return { test: paired ? 'Uji Friedman' : 'Uji Kruskal-Wallis', reason: 'Lebih dari dua kelompok, data ordinal/tidak normal.' };
+        return { test: 'ANOVA' + (paired ? ' Repeated Measures' : ' satu arah'), reason: 'Membandingkan rata-rata lebih dari dua kelompok data numerik yang normal.' };
+      }
+      return { test: 'Uji t satu sampel', reason: 'Membandingkan rata-rata satu kelompok dengan nilai acuan.' };
+    }
+    return { test: 'Statistik deskriptif', reason: 'Tujuan mendeskripsikan data → sajikan mean, median, SD, dan distribusi frekuensi.' };
+  }
+
+  // Prediksi pertanyaan sidang + poin jawaban.
+  function generateExamQuestions(project) {
+    var x = _ctxOf(project);
+    var quant = x.approach === 'kuantitatif';
+    var q = [
+      { q: 'Apa latar belakang dan urgensi Anda memilih topik ' + x.topik + '?', a: 'Tekankan kesenjangan (gap), fenomena/data awal' + (x.objek ? ' di ' + x.objek : '') + ', dan manfaatnya.' },
+      { q: 'Apa rumusan masalah dan tujuan penelitian Anda?', a: 'Sebutkan rumusan lalu pasangkan dengan tujuan yang selaras satu per satu.' },
+      { q: 'Mengapa Anda memilih pendekatan ' + x.approach + '?', a: quant ? 'Karena menguji ' + (x.ys.length ? 'pengaruh/hubungan antarvariabel secara terukur' : 'variabel secara terukur') + '.' : 'Karena berupaya memahami makna/proses fenomena secara mendalam.' },
+      { q: quant ? 'Bagaimana Anda menentukan populasi dan sampel?' : 'Bagaimana Anda memilih informan?', a: quant ? 'Jelaskan populasi, teknik sampling, dan rumus ukuran sampel (mis. Slovin 5%).' : 'Jelaskan purposive/snowball sampling dan kriteria informan kunci.' },
+      { q: quant ? 'Bagaimana Anda menguji validitas dan reliabilitas instrumen?' : 'Bagaimana Anda menjaga keabsahan data?', a: quant ? 'Validitas: korelasi Pearson (r-hitung>r-tabel); reliabilitas: Cronbach’s Alpha ≥ 0,60.' : 'Triangulasi sumber/teknik/waktu, member checking, perpanjangan pengamatan.' },
+      { q: quant ? 'Mengapa memakai teknik analisis tersebut?' : 'Bagaimana proses analisis data Anda?', a: quant ? 'Sesuaikan dengan tujuan: regresi untuk pengaruh, korelasi untuk hubungan; sertakan uji asumsi klasik.' : 'Model Miles & Huberman: reduksi data, penyajian, penarikan kesimpulan.' },
+      { q: 'Apa kebaruan (novelty) penelitian Anda dibanding penelitian terdahulu?', a: 'Tunjukkan perbedaan variabel/konteks/objek/metode dari penelitian yang Anda rujuk.' },
+      { q: 'Apa keterbatasan penelitian dan saran Anda?', a: 'Akui keterbatasan (lingkup, sampel, waktu) dan beri saran praktis serta untuk penelitian lanjutan.' }
+    ];
+    return q;
+  }
+
+  // Checklist audit skripsi (status dari data proyek + heuristik).
+  function skripsiChecklist(project) {
+    var st = (project && project.state) || {};
+    var x = _ctxOf(project);
+    var refs = isArray(st.references) ? st.references : [];
+    function draftHas(codeRe) {
+      var ch = st.chapters || [];
+      for (var i = 0; i < ch.length; i++) if (codeRe.test(ch[i].code || '')) {
+        var secs = ch[i].sections || [];
+        for (var j = 0; j < secs.length; j++) if (trim(secs[j].content) && !/^〔/.test(trim(secs[j].content))) return true;
+      }
+      return false;
+    }
+    var items = [
+      { label: 'Judul penelitian sudah ditetapkan', done: !!x.title },
+      { label: 'Variabel/fokus penelitian teridentifikasi', done: x.vars.length > 0 },
+      { label: 'Rumusan masalah minimal 3', done: (st.questions || x.der.questions || []).length >= 3 },
+      { label: 'Tujuan selaras dengan rumusan', done: (st.objectives || x.der.objectives || []).length >= (st.questions || x.der.questions || []).length && (st.objectives || []).length !== 0 || (x.der.objectives || []).length >= 3 },
+      { label: 'BAB I memiliki draf isi', done: draftHas(/BAB I\b/) },
+      { label: 'BAB II (tinjauan pustaka) memiliki draf', done: draftHas(/BAB II\b/) },
+      { label: 'BAB III (metode) memiliki draf', done: draftHas(/BAB III\b/) },
+      { label: 'Daftar pustaka minimal 15 referensi', done: refs.length >= 15 },
+      { label: 'Referensi cukup mutakhir (≥60% ≤5 tahun)', done: refRecency(project).pct5 >= 60 && refs.length > 0 },
+      { label: 'Identitas (nama, NIM, kampus, prodi) lengkap', done: !!(trim(project.studentName || project.name) && trim(project.nim) && trim(project.university) && trim(project.program)) }
+    ];
+    var done = 0; for (var i = 0; i < items.length; i++) if (items[i].done) done++;
+    return { items: items, done: done, total: items.length, pct: Math.round(done / items.length * 100) };
+  }
+
   /* ---- 5) autoSearch: merge OpenAlex + Crossref, rank, annotate --------- */
   function typeLabelOf(t) {
     t = trim(t).toLowerCase();
@@ -3018,6 +3194,14 @@
     abbreviations: abbreviations,
     countText: countText,
     refRecency: refRecency,
+    ideaKit: ideaKit,
+    operationalTable: operationalTable,
+    matrixPriorResearch: matrixPriorResearch,
+    sampleSize: sampleSize,
+    descriptiveStats: descriptiveStats,
+    pickStatTest: pickStatTest,
+    generateExamQuestions: generateExamQuestions,
+    skripsiChecklist: skripsiChecklist,
     autoSearch: autoSearch,
     buildProposalHTML: buildProposalHTML,
     // meta

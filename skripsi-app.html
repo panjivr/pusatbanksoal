@@ -1296,57 +1296,80 @@
       '<p class="muted" style="margin-top:6px">Kumpulan alat gratis untuk mempercepat tugas skripsi'+(p?' · proyek: '+pName:'')+'.</p>'+
       '<div style="margin-top:14px"></div>'+needMsg;
 
+    function catHead(t){ return '<h2 style="color:var(--on-dark);font-size:15px;letter-spacing:.4px;text-transform:uppercase;margin:18px 0 10px;padding-bottom:6px;border-bottom:1px solid var(--line)">'+esc(t)+'</h2>'; }
     var cards='';
-    // 1) Abstrak
+    // ── Ide & Proposal ──
+    cards+=catHead('1 · Ide & Proposal');
+    cards+=toolCard('idea','Generator Ide Penelitian','Judul alternatif, rumusan masalah, tujuan, manfaat, variabel, hipotesis & kerangka berpikir — dari judul proyek.',
+      '<button class="btn btn-primary btn-sm" id="tIdea">'+icon('i-sparkles')+' Buat Ide Lengkap</button>');
     cards+=toolCard('abs','Generator Abstrak (ID + EN) & Kata Kunci','Buat draf abstrak Bahasa Indonesia dan Inggris beserta kata kunci dari data proyek.',
       '<button class="btn btn-primary btn-sm" id="tAbs">'+icon('i-sparkles')+' Buat Abstrak</button>');
-    // 2) Kalkulator sampel
-    cards+=toolCard('smp','Kalkulator Ukuran Sampel (Slovin)','Hitung jumlah sampel dari populasi dengan rumus Slovin.',
-      '<div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">'+
-        '<label class="muted" style="font-size:13px">Populasi (N) <input id="smpN" type="number" min="1" value="100" class="f-input" style="width:120px;padding:8px;margin-left:6px"></label>'+
-        '<label class="muted" style="font-size:13px">Taraf kesalahan <select id="smpE" class="f-select" style="padding:8px;margin-left:6px"><option value="0.01">1%</option><option value="0.05" selected>5%</option><option value="0.1">10%</option></select></label>'+
-        '<button class="btn btn-primary btn-sm" id="tSmp">Hitung</button></div>');
-    // 3) Kuesioner
-    cards+=toolCard('kus','Generator Kuesioner (Skala Likert)','Buat kerangka item angket per variabel — siap disesuaikan dengan indikatormu.',
-      '<button class="btn btn-primary btn-sm" id="tKus">'+icon('i-list')+' Buat Kuesioner</button>');
-    // 4) Jadwal
-    cards+=toolCard('jdw','Jadwal Penelitian','Buat tabel jadwal (Gantt) penelitian selama 6 bulan.',
-      '<button class="btn btn-primary btn-sm" id="tJdw">Buat Jadwal</button>');
-    // 5) Outline sidang
-    cards+=toolCard('sld','Outline Slide Sidang','Susun kerangka slide presentasi sidang/seminar proposal.',
-      '<button class="btn btn-primary btn-sm" id="tSld">Buat Outline</button>');
-    // 6) Parafrase
-    cards+=toolCard('prf','Parafrase & Humanize Teks','Tempel teks, dapatkan versi parafrasa untuk mengurangi duplikasi & pola AI.',
-      '<textarea id="prfIn" class="f-input" rows="5" style="width:100%;padding:10px" placeholder="Tempel kalimat/paragraf di sini…"></textarea>'+
-      '<div style="margin-top:8px"><button class="btn btn-primary btn-sm" id="tPrf">'+icon('i-refresh')+' Parafrase</button></div>');
-    // 7) Kata Pengantar
-    cards+=toolCard('kp','Generator Kata Pengantar','Buat kata pengantar lengkap termasuk ucapan terima kasih.',
-      '<button class="btn btn-primary btn-sm" id="tKp">'+icon('i-book')+' Buat Kata Pengantar</button>');
-    // 8) Halaman persetujuan & pengesahan
-    cards+=toolCard('apv','Halaman Persetujuan & Pengesahan','Template halaman persetujuan pembimbing dan pengesahan penguji.',
-      '<button class="btn btn-primary btn-sm" id="tApv">'+icon('i-shield-check')+' Buat Halaman</button>');
-    // 9) Cek kata baku
-    cards+=toolCard('bk','Cek Kata Baku (KBBI)','Deteksi kata tidak baku dan saran bentuk bakunya.',
-      '<textarea id="bkIn" class="f-input" rows="4" style="width:100%;padding:10px" placeholder="Tempel teks untuk diperiksa…"></textarea>'+
-      '<div style="margin-top:8px"><button class="btn btn-primary btn-sm" id="tBk">Periksa</button></div>');
-    // 10) Ringkasan otomatis
+    // ── Literatur & Referensi ──
+    cards+=catHead('2 · Literatur & Referensi');
+    cards+=toolCard('mtx','Matriks Penelitian Terdahulu','Susun tabel penulis, tahun, judul, metode, temuan & perbedaan dari daftar pustaka proyek.',
+      '<button class="btn btn-primary btn-sm" id="tMtx">'+icon('i-list')+' Buat Matriks</button>');
     cards+=toolCard('rk','Ringkasan Otomatis','Ringkas teks panjang jadi beberapa kalimat inti (bantu tinjauan pustaka).',
       '<textarea id="rkIn" class="f-input" rows="5" style="width:100%;padding:10px" placeholder="Tempel abstrak/paragraf panjang…"></textarea>'+
       '<div style="margin-top:8px;display:flex;gap:8px;align-items:center"><label class="muted" style="font-size:13px">Jumlah kalimat <select id="rkN" class="f-select" style="padding:6px;margin-left:6px"><option>2</option><option selected>3</option><option>4</option><option>5</option></select></label><button class="btn btn-primary btn-sm" id="tRk">Ringkas</button></div>');
-    // 11) Pedoman wawancara
-    cards+=toolCard('iv','Pedoman Wawancara (Kualitatif)','Buat daftar pertanyaan wawancara semi-terstruktur per variabel.',
-      '<button class="btn btn-primary btn-sm" id="tIv">'+icon('i-list')+' Buat Pertanyaan</button>');
-    // 12) Daftar singkatan
+    cards+=toolCard('rc','Cek Kemutakhiran Referensi','Analisis apakah daftar pustaka proyek cukup mutakhir (≤5 tahun).',
+      '<button class="btn btn-primary btn-sm" id="tRc">Analisis Referensi</button>');
     cards+=toolCard('sg','Daftar Singkatan Otomatis','Deteksi singkatan (huruf kapital) dari teks untuk Daftar Singkatan.',
       '<textarea id="sgIn" class="f-input" rows="4" style="width:100%;padding:10px" placeholder="Tempel teks…"></textarea>'+
       '<div style="margin-top:8px"><button class="btn btn-primary btn-sm" id="tSg">Deteksi</button></div>');
-    // 13) Penghitung kata
+    // ── Metodologi ──
+    cards+=catHead('3 · Metodologi');
+    cards+=toolCard('smp','Kalkulator Ukuran Sampel (Slovin & Cochran)','Hitung jumlah sampel — rumus Slovin atau Cochran dengan koreksi populasi terbatas.',
+      '<div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">'+
+        '<label class="muted" style="font-size:13px">Rumus <select id="smpM" class="f-select" style="padding:8px;margin-left:6px"><option value="slovin" selected>Slovin</option><option value="cochran">Cochran</option></select></label>'+
+        '<label class="muted" style="font-size:13px">Populasi (N) <input id="smpN" type="number" min="1" value="100" class="f-input" style="width:110px;padding:8px;margin-left:6px"></label>'+
+        '<label class="muted" style="font-size:13px">Taraf kesalahan <select id="smpE" class="f-select" style="padding:8px;margin-left:6px"><option value="0.01">1%</option><option value="0.05" selected>5%</option><option value="0.1">10%</option></select></label>'+
+        '<button class="btn btn-primary btn-sm" id="tSmp">Hitung</button></div>'+
+        '<p class="muted" style="font-size:12px;margin-top:6px">Cochran memakai proporsi p=0,5 & Z=1,96 (95%). Slovin memerlukan N.</p>');
+    cards+=toolCard('stt','Pemilih Uji Statistik','Jawab beberapa pertanyaan → rekomendasi uji (t-test, ANOVA, Chi-Square, korelasi, regresi).',
+      '<div style="display:grid;gap:8px">'+
+        '<label class="muted" style="font-size:13px">Tujuan <select id="sttG" class="f-select" style="padding:8px;margin-left:6px"><option value="perbedaan">Menguji perbedaan antar kelompok</option><option value="hubungan">Menguji hubungan/korelasi</option><option value="pengaruh">Menguji pengaruh (sebab-akibat)</option><option value="deskripsi">Mendeskripsikan data</option></select></label>'+
+        '<label class="muted" style="font-size:13px">Skala data <select id="sttS" class="f-select" style="padding:8px;margin-left:6px"><option value="interval">Interval/Rasio (numerik)</option><option value="ordinal">Ordinal</option><option value="nominal">Nominal (kategori)</option></select></label>'+
+        '<label class="muted" style="font-size:13px">Jumlah kelompok <select id="sttGr" class="f-select" style="padding:8px;margin-left:6px"><option value="1">1</option><option value="2" selected>2</option><option value=">2">Lebih dari 2</option></select></label>'+
+        '<label class="muted" style="font-size:13px"><input type="checkbox" id="sttP"> Sampel berpasangan &nbsp; <input type="checkbox" id="sttN" checked> Data berdistribusi normal &nbsp; <input type="checkbox" id="sttMX"> >1 variabel bebas</label>'+
+        '<div><button class="btn btn-primary btn-sm" id="tStt">Rekomendasikan</button></div></div>');
+    cards+=toolCard('opv','Tabel Operasional Variabel','Susun tabel variabel → definisi operasional, indikator & skala pengukuran.',
+      '<button class="btn btn-primary btn-sm" id="tOpv">'+icon('i-list')+' Buat Tabel</button>');
+    // ── Instrumen ──
+    cards+=catHead('4 · Instrumen');
+    cards+=toolCard('kus','Generator Kuesioner (Skala Likert)','Buat kerangka item angket per variabel — siap disesuaikan dengan indikatormu.',
+      '<button class="btn btn-primary btn-sm" id="tKus">'+icon('i-list')+' Buat Kuesioner</button>');
+    cards+=toolCard('iv','Pedoman Wawancara (Kualitatif)','Buat daftar pertanyaan wawancara semi-terstruktur per variabel.',
+      '<button class="btn btn-primary btn-sm" id="tIv">'+icon('i-list')+' Buat Pertanyaan</button>');
+    // ── Data & Statistik ──
+    cards+=catHead('5 · Data & Statistik');
+    cards+=toolCard('ds','Statistik Deskriptif','Tempel deret angka → mean, median, modus, SD, varians, min/max, rentang.',
+      '<textarea id="dsIn" class="f-input" rows="3" style="width:100%;padding:10px" placeholder="Contoh: 80 75 90 85 70 85 95 (pisahkan spasi/koma/baris)"></textarea>'+
+      '<div style="margin-top:8px"><button class="btn btn-primary btn-sm" id="tDs">Hitung</button></div>');
+    // ── Penulisan ──
+    cards+=catHead('6 · Penulisan');
+    cards+=toolCard('prf','Parafrase & Humanize Teks','Tempel teks, dapatkan versi parafrasa untuk mengurangi duplikasi & pola AI.',
+      '<textarea id="prfIn" class="f-input" rows="5" style="width:100%;padding:10px" placeholder="Tempel kalimat/paragraf di sini…"></textarea>'+
+      '<div style="margin-top:8px"><button class="btn btn-primary btn-sm" id="tPrf">'+icon('i-refresh')+' Parafrase</button></div>');
+    cards+=toolCard('bk','Cek Kata Baku (KBBI)','Deteksi kata tidak baku dan saran bentuk bakunya.',
+      '<textarea id="bkIn" class="f-input" rows="4" style="width:100%;padding:10px" placeholder="Tempel teks untuk diperiksa…"></textarea>'+
+      '<div style="margin-top:8px"><button class="btn btn-primary btn-sm" id="tBk">Periksa</button></div>');
     cards+=toolCard('ct','Penghitung Kata & Estimasi Halaman','Hitung kata, karakter, kalimat, paragraf, dan perkiraan jumlah halaman.',
       '<textarea id="ctIn" class="f-input" rows="4" style="width:100%;padding:10px" placeholder="Tempel teks…"></textarea>'+
       '<div style="margin-top:8px"><button class="btn btn-primary btn-sm" id="tCt">Hitung</button></div>');
-    // 14) Kemutakhiran referensi
-    cards+=toolCard('rc','Cek Kemutakhiran Referensi','Analisis apakah daftar pustaka proyek cukup mutakhir (≤5 tahun).',
-      '<button class="btn btn-primary btn-sm" id="tRc">Analisis Referensi</button>');
+    cards+=toolCard('kp','Generator Kata Pengantar','Buat kata pengantar lengkap termasuk ucapan terima kasih.',
+      '<button class="btn btn-primary btn-sm" id="tKp">'+icon('i-book')+' Buat Kata Pengantar</button>');
+    cards+=toolCard('apv','Halaman Persetujuan & Pengesahan','Template halaman persetujuan pembimbing dan pengesahan penguji.',
+      '<button class="btn btn-primary btn-sm" id="tApv">'+icon('i-shield-check')+' Buat Halaman</button>');
+    // ── Sidang & Revisi ──
+    cards+=catHead('7 · Sidang & Revisi');
+    cards+=toolCard('csk','Checklist Kesiapan Skripsi','Audit otomatis BAB I–III, referensi & identitas sebelum menghadap dosen.',
+      '<button class="btn btn-primary btn-sm" id="tCsk">'+icon('i-shield-check')+' Audit Sekarang</button>');
+    cards+=toolCard('exq','Prediksi Pertanyaan Sidang','Perkiraan pertanyaan penguji + poin jawaban berdasarkan data penelitianmu.',
+      '<button class="btn btn-primary btn-sm" id="tExq">'+icon('i-brain')+' Buat Prediksi</button>');
+    cards+=toolCard('sld','Outline Slide Sidang','Susun kerangka slide presentasi sidang/seminar proposal.',
+      '<button class="btn btn-primary btn-sm" id="tSld">Buat Outline</button>');
+    cards+=toolCard('jdw','Jadwal Penelitian','Buat tabel jadwal (Gantt) penelitian selama 6 bulan.',
+      '<button class="btn btn-primary btn-sm" id="tJdw">Buat Jadwal</button>');
 
     shell(head+cards,'Alat Mahasiswa');
 
@@ -1367,9 +1390,11 @@
       byId('absDoc').addEventListener('click',function(){ download('abstrak.doc',docWrap('Abstrak','<h3>ABSTRAK</h3><p style="text-align:justify">'+esc(a.id)+'</p><p><b>Kata kunci:</b> '+esc(a.keywords.join('; '))+'</p><h3>ABSTRACT</h3><p style="text-align:justify;font-style:italic">'+esc(a.en)+'</p><p><i><b>Keywords:</b> '+esc(a.keywords.join('; '))+'</i></p>'),'application/msword'); toast('Abstrak diunduh.'); });
     });
     if((b=byId('tSmp'))) b.addEventListener('click',function(){
-      var N=byId('smpN').value, e=byId('smpE').value, r=THESIS.slovin(N,e);
-      if(!r){ toast('Isi populasi (N) yang valid.'); return; }
-      show('smp','<div class="ws-card"><p style="font-size:14px">Dari populasi <b class="num">'+r.N+'</b> pada taraf kesalahan <b>'+(r.e*100)+'%</b>, ukuran sampel minimal: <b class="num" style="font-size:20px;color:var(--primary)">'+r.n+'</b> responden.</p><p class="muted" style="font-size:12px;margin-top:6px">Rumus Slovin: n = N / (1 + N·e²).</p></div>');
+      var m=byId('smpM').value, N=byId('smpN').value, e=byId('smpE').value;
+      var r=THESIS.sampleSize({method:m,N:N,e:e,p:0.5,z:1.96});
+      if(!r){ toast('Slovin memerlukan populasi (N) yang valid.'); return; }
+      var extra=m==='cochran'?('<p class="muted" style="font-size:12px;margin-top:6px">Cochran: n₀ = Z²·p(1−p)/e² = <b>'+r.n0+'</b>. '+esc(r.note)+'</p>'):('<p class="muted" style="font-size:12px;margin-top:6px">Rumus Slovin: n = N / (1 + N·e²).</p>');
+      show('smp','<div class="ws-card"><p style="font-size:14px">Metode <b>'+esc(r.method)+'</b> · taraf kesalahan <b>'+(r.e*100)+'%</b> → ukuran sampel minimal: <b class="num" style="font-size:20px;color:var(--primary)">'+r.n+'</b> responden.</p>'+extra+'</div>');
     });
     if((b=byId('tKus'))) b.addEventListener('click',function(){
       var pr=needP(); if(!pr) return; var q=THESIS.generateQuestionnaire(pr);
@@ -1470,6 +1495,66 @@
       var pr=needP(); if(!pr) return; var r=THESIS.refRecency(pr);
       var col=r.pct5>=60?'var(--up)':r.pct5>=40?'var(--primary)':'var(--down)';
       show('rc','<div class="ws-card"><div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap"><b style="color:var(--on-dark)">Kemutakhiran Referensi</b><span class="badge" style="color:'+col+'">'+r.pct5+'% ≤5 thn</span></div><p class="muted" style="font-size:13px;margin-top:6px">'+esc(r.note)+'</p><p style="font-size:13.5px;margin-top:8px">Total: <b class="num">'+r.total+'</b> · ≤5 thn: <b class="num">'+r.within5+'</b> · ≤10 thn: <b class="num">'+r.within10+'</b>'+(r.oldest?' · rentang '+r.oldest+'–'+r.newest:'')+'</p></div>');
+    });
+    if((b=byId('tIdea'))) b.addEventListener('click',function(){
+      var pr=needP(); if(!pr) return; var k=THESIS.ideaKit(pr);
+      function ol(arr){ return '<ol style="margin:4px 0 0 18px;font-size:13.5px">'+(arr||[]).map(function(x){return '<li style="margin-bottom:3px">'+esc(x)+'</li>';}).join('')+'</ol>'; }
+      var h='<div class="ws-card">';
+      h+='<b style="color:var(--on-dark)">Judul Alternatif</b>'+ol(k.titles);
+      h+='<p style="margin-top:10px;color:var(--on-dark)"><b>Rumusan Masalah</b></p>'+ol(k.rumusan);
+      h+='<p style="margin-top:10px;color:var(--on-dark)"><b>Tujuan Penelitian</b></p>'+ol(k.tujuan);
+      h+='<p style="margin-top:10px;color:var(--on-dark)"><b>Variabel</b></p><p style="font-size:13.5px">X: '+esc((k.variables.x||[]).join(', ')||'—')+' · Y: '+esc((k.variables.y||[]).join(', ')||'—')+'</p>';
+      if(k.hipotesis&&k.hipotesis.length){ h+='<p style="margin-top:10px;color:var(--on-dark)"><b>Hipotesis</b></p>'+ol(k.hipotesis); }
+      h+='<p style="margin-top:10px;color:var(--on-dark)"><b>Kerangka Berpikir</b></p><p style="font-size:13.5px;text-align:justify">'+esc(k.kerangka)+'</p>';
+      h+='<p style="margin-top:10px;color:var(--on-dark)"><b>Manfaat</b></p><p style="font-size:13px"><i>Teoretis:</i> '+esc((k.manfaat.teoritis||[]).join('; '))+'<br><i>Praktis:</i> '+esc((k.manfaat.praktis||[]).join('; '))+'</p>';
+      h+='<p class="muted" style="font-size:12px;margin-top:10px">Sudah tersinkron dengan proyek. Perhalus di tab Rumusan & Metode bila perlu.</p></div>';
+      show('idea',h);
+    });
+    if((b=byId('tMtx'))) b.addEventListener('click',function(){
+      var pr=needP(); if(!pr) return; var rows=THESIS.matrixPriorResearch(pr);
+      if(!rows.length){ show('mtx','<div class="ws-card"><p class="muted" style="font-size:13px">Belum ada referensi. Tambah dari tab Sumber Ilmiah / Auto-Search dulu.</p></div>'); return; }
+      var t='<table style="width:100%;border-collapse:collapse;font-size:12.5px"><tr><th>No</th><th>Penulis</th><th>Thn</th><th>Judul</th><th>Metode</th><th>Temuan</th><th>Perbedaan</th></tr>';
+      for(var i=0;i<rows.length;i++){ var r=rows[i]; t+='<tr><td>'+r.no+'</td><td>'+esc(r.author)+'</td><td>'+esc(String(r.year))+'</td><td>'+esc(r.title)+'</td><td>'+esc(r.method)+'</td><td>'+esc(r.findings)+'</td><td>'+esc(r.difference)+'</td></tr>'; }
+      t+='</table>';
+      show('mtx','<div class="ws-card" style="overflow-x:auto"><b style="color:var(--on-dark)">Matriks Penelitian Terdahulu</b><div style="margin-top:10px">'+t.replace(/<th>/g,'<th style="border:1px solid var(--line);padding:5px;text-align:left">').replace(/<td>/g,'<td style="border:1px solid var(--line);padding:5px;vertical-align:top">')+'</div><div style="margin-top:10px"><button class="btn btn-ghost btn-sm" id="mtxDoc">Unduh (DOCX)</button></div></div>');
+      byId('mtxDoc').addEventListener('click',function(){ download('matriks-penelitian-terdahulu.doc',docWrap('Matriks Penelitian Terdahulu','<h3>Matriks Penelitian Terdahulu</h3>'+t),'application/msword'); toast('Matriks diunduh.'); });
+    });
+    if((b=byId('tStt'))) b.addEventListener('click',function(){
+      var res=THESIS.pickStatTest({goal:byId('sttG').value,scale:byId('sttS').value,groups:byId('sttGr').value,paired:byId('sttP').checked,normal:byId('sttN').checked,manyX:byId('sttMX').checked});
+      show('stt','<div class="ws-card"><b style="color:var(--on-dark)">Rekomendasi Uji</b><p style="margin-top:6px;font-size:18px;color:var(--primary)"><b>'+esc(res.test)+'</b></p><p class="muted" style="font-size:13px;margin-top:4px">'+esc(res.reason)+'</p><p class="muted" style="font-size:12px;margin-top:8px">Pastikan asumsi uji terpenuhi sebelum menyimpulkan.</p></div>');
+    });
+    if((b=byId('tOpv'))) b.addEventListener('click',function(){
+      var pr=needP(); if(!pr) return; var rows=THESIS.operationalTable(pr);
+      var t='<table style="width:100%;border-collapse:collapse;font-size:12.5px"><tr><th>Variabel</th><th>Definisi Operasional</th><th>Indikator</th><th>Skala</th></tr>';
+      for(var i=0;i<rows.length;i++){ var r=rows[i]; t+='<tr><td>'+esc(r.variable)+'</td><td>'+esc(r.definition)+'</td><td>'+esc(r.indicators)+'</td><td>'+esc(r.scale)+'</td></tr>'; }
+      t+='</table>';
+      show('opv','<div class="ws-card" style="overflow-x:auto"><b style="color:var(--on-dark)">Tabel Operasional Variabel</b><div style="margin-top:10px">'+t.replace(/<th>/g,'<th style="border:1px solid var(--line);padding:5px;text-align:left">').replace(/<td>/g,'<td style="border:1px solid var(--line);padding:5px;vertical-align:top">')+'</div><div style="margin-top:10px"><button class="btn btn-ghost btn-sm" id="opvDoc">Unduh (DOCX)</button></div></div>');
+      byId('opvDoc').addEventListener('click',function(){ download('operasional-variabel.doc',docWrap('Operasional Variabel','<h3>Tabel Operasional Variabel</h3>'+t),'application/msword'); toast('Tabel diunduh.'); });
+    });
+    if((b=byId('tDs'))) b.addEventListener('click',function(){
+      var d=THESIS.descriptiveStats(byId('dsIn').value);
+      if(!d){ toast('Masukkan deret angka yang valid.'); return; }
+      var cells=[['n',d.n],['Mean',d.mean],['Median',d.median],['Modus',d.mode],['SD',d.sd],['Varians',d.variance],['Min',d.min],['Max',d.max],['Rentang',d.range],['Jumlah',d.sum]];
+      show('ds','<div class="ws-card"><b style="color:var(--on-dark)">Statistik Deskriptif</b><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(90px,1fr));gap:8px;margin-top:10px">'+cells.map(function(c){return '<div style="background:var(--elevated);border-radius:6px;padding:8px;text-align:center"><div class="num" style="font-size:17px;color:var(--primary)">'+c[1]+'</div><div class="muted" style="font-size:11.5px">'+c[0]+'</div></div>';}).join('')+'</div></div>');
+    });
+    if((b=byId('tCsk'))) b.addEventListener('click',function(){
+      var pr=needP(); if(!pr) return; var c=THESIS.skripsiChecklist(pr);
+      var col=c.pct>=80?'var(--up)':c.pct>=50?'var(--primary)':'var(--down)';
+      var h='<div class="ws-card"><div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap"><b style="color:var(--on-dark)">Kesiapan Skripsi</b><span class="badge" style="color:'+col+'">'+c.done+'/'+c.total+' · '+c.pct+'%</span></div><div class="prop-bar" style="margin-top:10px"><span style="width:'+c.pct+'%"></span></div><div style="margin-top:12px">';
+      for(var i=0;i<c.items.length;i++){ h+='<div style="display:flex;gap:8px;align-items:center;font-size:13.5px;padding:4px 0"><span style="color:'+(c.items[i].done?'var(--up)':'var(--muted)')+'">'+(c.items[i].done?'✓':'○')+'</span> '+esc(c.items[i].label)+'</div>'; }
+      show('csk',h+'</div></div>');
+    });
+    if((b=byId('tExq'))) b.addEventListener('click',function(){
+      var pr=needP(); if(!pr) return; var qs=THESIS.generateExamQuestions(pr);
+      var h='<div class="ws-card"><b style="color:var(--on-dark)">Prediksi Pertanyaan Sidang</b>';
+      for(var i=0;i<qs.length;i++){ h+='<div style="border-left:3px solid var(--primary);padding:6px 10px;margin-top:8px;background:var(--elevated);border-radius:4px"><p style="font-size:13.5px;color:var(--on-dark)"><b>'+(i+1)+'. '+esc(qs[i].q)+'</b></p><p class="muted" style="font-size:13px;margin-top:3px">Poin jawaban: '+esc(qs[i].a)+'</p></div>'; }
+      h+='<div style="margin-top:12px"><button class="btn btn-ghost btn-sm" id="exqDoc">Unduh (DOCX)</button></div></div>';
+      show('exq',h);
+      byId('exqDoc').addEventListener('click',function(){
+        var inner='<h3>Prediksi Pertanyaan Sidang</h3>';
+        for(var i=0;i<qs.length;i++){ inner+='<p><b>'+(i+1)+'. '+esc(qs[i].q)+'</b><br><i>Poin jawaban:</i> '+esc(qs[i].a)+'</p>'; }
+        download('prediksi-pertanyaan-sidang.doc',docWrap('Prediksi Pertanyaan Sidang',inner),'application/msword'); toast('Prediksi diunduh.');
+      });
     });
   }
 
