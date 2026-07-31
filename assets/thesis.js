@@ -2072,6 +2072,141 @@
     return out;
   }
 
+  /* ---- 4d) Alat bantu mahasiswa (deterministik, gratis, sisi klien) ------ */
+  function _ctxOf(project) {
+    project = project || {};
+    var st = project.state || {};
+    var title = trim(project.title || st.topic || '');
+    var der = deriveFromTitle(title, {
+      objek: project.researchObject || '', lokasi: project.location || '',
+      pendekatan: methodApproach(st) || trim(project.methodPref || ''),
+      bidang: project.program || project.concentration || project.researchInterest || ''
+    });
+    var xs = der.variables.x, ys = der.variables.y;
+    var vars = uniq([].concat(xs, ys));
+    return {
+      title: title, der: der, xs: xs, ys: ys, vars: vars,
+      xStr: xs.join(', ') || 'variabel bebas',
+      yStr: ys.join(', ') || 'variabel terikat',
+      topik: vars.join(' dan ') || 'topik penelitian',
+      bidang: trim(project.researchInterest || project.program || '') || 'bidang terkait',
+      objek: der.objek || trim(project.researchObject) || '',
+      approach: methodApproach(st) || der.approach,
+      designShort: trim(String(der.design || '').replace(/^(kuantitatif|kualitatif)\s*/i, '')),
+      objectives: (st.objectives && st.objectives.length) ? textsOf(st.objectives) : textsOf(der.objectives)
+    };
+  }
+
+  // Abstrak (ID) + Abstract (EN) + kata kunci — draf dari data proyek.
+  function generateAbstract(project) {
+    var x = _ctxOf(project);
+    var ctx = x.objek ? ' di ' + x.objek : '';
+    var tuj = x.objectives.length ? lc1(x.objectives[0].replace(/^Untuk\s+/i, '').replace(/\.$/, '')) : ('menganalisis ' + x.topik + ctx);
+    var quant = x.approach === 'kuantitatif';
+    var design = x.designShort ? (' jenis ' + x.designShort) : '';
+    var id = 'Penelitian ini bertujuan untuk ' + tuj + '. ' +
+      'Penelitian menggunakan pendekatan ' + x.approach + design + '. ' +
+      (quant ? 'Data dikumpulkan melalui kuesioner dan dianalisis menggunakan teknik statistik yang sesuai. '
+             : 'Data dikumpulkan melalui wawancara mendalam, observasi, dan dokumentasi, kemudian dianalisis secara kualitatif. ') +
+      'Hasil penelitian diharapkan ' + (quant ? 'menunjukkan pengaruh ' + x.xStr + ' terhadap ' + x.yStr : 'memberikan gambaran mendalam mengenai ' + x.topik) + ctx + '. ' +
+      'Temuan penelitian diharapkan memberi manfaat teoretis maupun praktis bagi pengembangan ' + x.bidang + '.';
+    var en = 'This study aims to ' + (quant ? 'examine the effect of ' + x.xStr + ' on ' + x.yStr : 'explore ' + x.topik) + (x.objek ? ' at ' + x.objek : '') + '. ' +
+      'It employs a ' + (quant ? 'quantitative' : 'qualitative') + ' approach' + (x.designShort ? ' with a ' + x.designShort + ' design' : '') + '. ' +
+      (quant ? 'Data were collected through questionnaires and analyzed using appropriate statistical techniques. '
+             : 'Data were gathered through in-depth interviews, observation, and documentation, then analyzed qualitatively. ') +
+      'The findings are expected to contribute both theoretically and practically to the field of ' + x.bidang + '.';
+    var kw = uniq([].concat(x.vars, [x.bidang])).filter(function (s) { return trim(s); });
+    return { id: id, en: en, keywords: kw };
+  }
+
+  // Kalkulator ukuran sampel (Slovin).
+  function slovin(N, e) {
+    N = parseFloat(N); e = parseFloat(e);
+    if (!(N > 0)) return null;
+    if (!(e > 0)) e = 0.05;
+    var n = N / (1 + N * e * e);
+    return { N: N, e: e, n: Math.ceil(n) };
+  }
+
+  // Generator kuesioner (Likert) dari variabel — kerangka item siap sesuaikan.
+  function generateQuestionnaire(project) {
+    var x = _ctxOf(project);
+    var vars = x.vars.length ? x.vars : ['variabel penelitian'];
+    var groups = [];
+    for (var i = 0; i < vars.length; i++) {
+      var v = vars[i];
+      groups.push({
+        variable: v,
+        items: [
+          'Saya memahami pentingnya ' + lc1(v) + ' dalam konteks ' + (x.objek || x.bidang) + '.',
+          lc1(v) + ' yang saya alami/terapkan telah sesuai dengan harapan.',
+          'Saya konsisten dalam hal-hal yang berkaitan dengan ' + lc1(v) + '.',
+          'Lingkungan di sekitar saya mendukung ' + lc1(v) + ' secara memadai.',
+          'Secara keseluruhan, ' + lc1(v) + ' berjalan dengan baik.'
+        ]
+      });
+    }
+    return { scale: 'Skala Likert 1–5 (1=Sangat Tidak Setuju … 5=Sangat Setuju)', groups: groups };
+  }
+
+  // Jadwal penelitian (Gantt sederhana, 6 bulan).
+  function generateSchedule(project) {
+    return { months: 6, rows: [
+      { stage: 'Penyusunan proposal', from: 1, to: 2 },
+      { stage: 'Seminar proposal', from: 2, to: 2 },
+      { stage: 'Penyusunan & uji coba instrumen', from: 2, to: 3 },
+      { stage: 'Pengumpulan data', from: 3, to: 4 },
+      { stage: 'Analisis data', from: 4, to: 5 },
+      { stage: 'Penyusunan laporan & bimbingan', from: 5, to: 6 },
+      { stage: 'Sidang skripsi', from: 6, to: 6 }
+    ] };
+  }
+
+  // Outline slide sidang/seminar.
+  function generateDefenseOutline(project) {
+    var x = _ctxOf(project);
+    var ctx = x.objek ? ' di ' + x.objek : '';
+    var quant = x.approach === 'kuantitatif';
+    return [
+      { title: 'Halaman Judul', bullets: [x.title || 'Judul penelitian', 'Nama, NIM, Program Studi', 'Dosen Pembimbing'] },
+      { title: 'Latar Belakang', bullets: ['Fenomena & kesenjangan terkait ' + x.topik + ctx, 'Data/fakta pendukung', 'Alasan pemilihan topik'] },
+      { title: 'Rumusan & Tujuan', bullets: ['Rumusan masalah penelitian', 'Tujuan penelitian yang selaras'] },
+      { title: 'Manfaat Penelitian', bullets: ['Manfaat teoretis', 'Manfaat praktis'] },
+      { title: 'Kajian Teori', bullets: x.vars.map(function (v) { return 'Konsep ' + v; }).concat(['Penelitian terdahulu']) },
+      { title: quant ? 'Kerangka Berpikir & Hipotesis' : 'Kerangka Konseptual', bullets: [quant ? x.xStr + ' → ' + x.yStr : 'Alur berpikir ' + x.topik, quant ? 'Hipotesis penelitian' : 'Fokus penelitian'] },
+      { title: 'Metode Penelitian', bullets: ['Pendekatan ' + x.approach + (x.designShort ? ' — ' + x.designShort : ''), quant ? 'Populasi, sampel & instrumen' : 'Subjek, sumber data & instrumen', quant ? 'Teknik analisis statistik' : 'Analisis kualitatif (Miles & Huberman)'] },
+      { title: 'Hasil Penelitian', bullets: ['〔isi dengan hasil/temuan penelitian Anda〕', '〔tabel/gambar pendukung〕'] },
+      { title: 'Pembahasan', bullets: ['〔kaitkan temuan dengan teori & penelitian terdahulu〕'] },
+      { title: 'Simpulan & Saran', bullets: ['Simpulan menjawab rumusan masalah', 'Saran praktis & untuk penelitian lanjutan'] },
+      { title: 'Terima Kasih', bullets: ['Sesi tanya jawab'] }
+    ];
+  }
+
+  // Parafrase ringan (sinonim + humanize) untuk membantu menghindari duplikasi.
+  var _SYN = [
+    ['menggunakan', 'memakai'], ['memengaruhi', 'berdampak pada'], ['pengaruh', 'dampak'],
+    ['meningkatkan', 'menaikkan'], ['menunjukkan', 'memperlihatkan'], ['bertujuan', 'bermaksud'],
+    ['penting', 'krusial'], ['banyak', 'beragam'], ['masalah', 'persoalan'], ['hasil', 'temuan'],
+    ['penelitian', 'kajian'], ['metode', 'cara'], ['tujuan', 'sasaran'], ['faktor', 'unsur'],
+    ['kemampuan', 'kecakapan'], ['proses', 'tahapan'], ['sangat', 'amat'], ['memberikan', 'memberi'],
+    ['diperlukan', 'dibutuhkan'], ['berdasarkan', 'mengacu pada']
+  ];
+  function paraphrase(text) {
+    if (text == null) return text;
+    var s = String(text);
+    for (var i = 0; i < _SYN.length; i++) {
+      var a = _SYN[i][0], b = _SYN[i][1], hit = 0;
+      var re = new RegExp('\\b' + a + '\\b', 'gi');
+      s = s.replace(re, function (m) {
+        hit++;
+        if (hit % 2 === 0) return m; // ganti sebagian saja agar alami
+        // pertahankan kapitalisasi awal
+        return (m.charAt(0) === m.charAt(0).toUpperCase()) ? b.charAt(0).toUpperCase() + b.slice(1) : b;
+      });
+    }
+    return humanize(s);
+  }
+
   /* ---- 5) autoSearch: merge OpenAlex + Crossref, rank, annotate --------- */
   function typeLabelOf(t) {
     t = trim(t).toLowerCase();
@@ -2657,6 +2792,12 @@
     humanizeChapters: humanizeChapters,
     originalityCheck: originalityCheck,
     paraphraseGuide: paraphraseGuide,
+    generateAbstract: generateAbstract,
+    slovin: slovin,
+    generateQuestionnaire: generateQuestionnaire,
+    generateSchedule: generateSchedule,
+    generateDefenseOutline: generateDefenseOutline,
+    paraphrase: paraphrase,
     autoSearch: autoSearch,
     buildProposalHTML: buildProposalHTML,
     // meta

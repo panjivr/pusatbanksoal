@@ -232,6 +232,9 @@
       {id:'metode', label:'Metode', icon:'i-brain'},
       {id:'identitas', label:'Identitas & Kampus', icon:'i-user'},
       {id:'konsistensi', label:'Konsistensi', icon:'i-shield-check'}
+    ]},
+    {group:'Alat Bantu', items:[
+      {id:'alat', label:'Alat Mahasiswa', icon:'i-sparkles'}
     ]}
   ];
 
@@ -1266,6 +1269,127 @@
   }
 
   /* ---------- router ---------- */
+  /* ============================================================ ALAT MAHASISWA */
+  function copyText(txt){
+    if(navigator.clipboard&&navigator.clipboard.writeText){ navigator.clipboard.writeText(txt).then(function(){toast('Disalin ke clipboard.');},function(){toast('Gagal menyalin.');}); }
+    else { toast('Clipboard tidak didukung peramban ini.'); }
+  }
+  function docWrap(title,inner){
+    return '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40">'+
+      '<head><meta charset="utf-8"><title>'+esc(title)+'</title>'+
+      '<style>body{font-family:"Times New Roman",serif;font-size:12pt;line-height:1.5}h1,h2,h3{font-family:"Times New Roman",serif}table{border-collapse:collapse}td,th{border:1px solid #333;padding:4px 8px}</style>'+
+      '</head><body>'+inner+'</body></html>';
+  }
+  function toolCard(id,title,desc,inner){
+    return '<div class="ws-card" style="margin-bottom:14px">'+
+      '<div style="display:flex;gap:10px;align-items:flex-start;flex-wrap:wrap"><div style="color:var(--primary);font-size:20px">'+icon('i-sparkles')+'</div>'+
+      '<div style="min-width:0;flex:1"><h3 style="color:var(--on-dark);font-size:17px">'+esc(title)+'</h3>'+
+      '<p class="muted" style="font-size:13px;margin-top:3px">'+esc(desc)+'</p></div></div>'+
+      '<div style="margin-top:12px">'+inner+'</div>'+
+      '<div id="'+id+'Out" style="display:none;margin-top:12px"></div></div>';
+  }
+  function viewAlat(){
+    var p=THESIS.activeProject();
+    var pName=p?esc(p.title):'';
+    var needMsg=p?'':'<div class="finding info" style="margin-bottom:14px"><p style="font-size:14px">'+icon('i-search')+' Sebagian alat memakai data proyek aktif. Buat/aktifkan proyek dulu agar hasil lebih presisi. Kalkulator Sampel & Parafrase tetap bisa dipakai tanpa proyek.</p></div>';
+    var head='<h1 style="font-size:22px;color:var(--on-dark)">Alat Bantu Mahasiswa</h1>'+
+      '<p class="muted" style="margin-top:6px">Kumpulan alat gratis untuk mempercepat tugas skripsi'+(p?' · proyek: '+pName:'')+'.</p>'+
+      '<div style="margin-top:14px"></div>'+needMsg;
+
+    var cards='';
+    // 1) Abstrak
+    cards+=toolCard('abs','Generator Abstrak (ID + EN) & Kata Kunci','Buat draf abstrak Bahasa Indonesia dan Inggris beserta kata kunci dari data proyek.',
+      '<button class="btn btn-primary btn-sm" id="tAbs">'+icon('i-sparkles')+' Buat Abstrak</button>');
+    // 2) Kalkulator sampel
+    cards+=toolCard('smp','Kalkulator Ukuran Sampel (Slovin)','Hitung jumlah sampel dari populasi dengan rumus Slovin.',
+      '<div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">'+
+        '<label class="muted" style="font-size:13px">Populasi (N) <input id="smpN" type="number" min="1" value="100" class="f-input" style="width:120px;padding:8px;margin-left:6px"></label>'+
+        '<label class="muted" style="font-size:13px">Taraf kesalahan <select id="smpE" class="f-select" style="padding:8px;margin-left:6px"><option value="0.01">1%</option><option value="0.05" selected>5%</option><option value="0.1">10%</option></select></label>'+
+        '<button class="btn btn-primary btn-sm" id="tSmp">Hitung</button></div>');
+    // 3) Kuesioner
+    cards+=toolCard('kus','Generator Kuesioner (Skala Likert)','Buat kerangka item angket per variabel — siap disesuaikan dengan indikatormu.',
+      '<button class="btn btn-primary btn-sm" id="tKus">'+icon('i-list')+' Buat Kuesioner</button>');
+    // 4) Jadwal
+    cards+=toolCard('jdw','Jadwal Penelitian','Buat tabel jadwal (Gantt) penelitian selama 6 bulan.',
+      '<button class="btn btn-primary btn-sm" id="tJdw">Buat Jadwal</button>');
+    // 5) Outline sidang
+    cards+=toolCard('sld','Outline Slide Sidang','Susun kerangka slide presentasi sidang/seminar proposal.',
+      '<button class="btn btn-primary btn-sm" id="tSld">Buat Outline</button>');
+    // 6) Parafrase
+    cards+=toolCard('prf','Parafrase & Humanize Teks','Tempel teks, dapatkan versi parafrasa untuk mengurangi duplikasi & pola AI.',
+      '<textarea id="prfIn" class="f-input" rows="5" style="width:100%;padding:10px" placeholder="Tempel kalimat/paragraf di sini…"></textarea>'+
+      '<div style="margin-top:8px"><button class="btn btn-primary btn-sm" id="tPrf">'+icon('i-refresh')+' Parafrase</button></div>');
+
+    shell(head+cards,'Alat Mahasiswa');
+
+    // wiring
+    function needP(){ if(!THESIS.activeProject()){ toast('Aktifkan proyek dulu untuk alat ini.'); return null; } return THESIS.activeProject(); }
+    function show(id,html){ var o=byId(id+'Out'); o.style.display='block'; o.innerHTML=html; }
+    var b;
+    if((b=byId('tAbs'))) b.addEventListener('click',function(){
+      var pr=needP(); if(!pr) return; var a=THESIS.generateAbstract(pr);
+      var h='<div class="ws-card"><b style="color:var(--on-dark)">ABSTRAK</b><p style="margin-top:6px;font-size:14px;text-align:justify">'+esc(a.id)+'</p>'+
+        '<p style="margin-top:8px;font-size:13px"><b>Kata kunci:</b> '+esc(a.keywords.join('; '))+'</p>'+
+        '<hr style="border-color:var(--line);margin:12px 0"><b style="color:var(--on-dark)">ABSTRACT</b><p style="margin-top:6px;font-size:14px;font-style:italic;text-align:justify">'+esc(a.en)+'</p>'+
+        '<p style="margin-top:8px;font-size:13px"><b><i>Keywords:</i></b> <i>'+esc(a.keywords.join('; '))+'</i></p>'+
+        '<div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap"><button class="btn btn-ghost btn-sm" id="absCopy">Salin</button>'+
+        '<button class="btn btn-ghost btn-sm" id="absDoc">Unduh (DOCX)</button></div></div>';
+      show('abs',h);
+      byId('absCopy').addEventListener('click',function(){ copyText('ABSTRAK\n'+a.id+'\n\nKata kunci: '+a.keywords.join('; ')+'\n\nABSTRACT\n'+a.en+'\n\nKeywords: '+a.keywords.join('; ')); });
+      byId('absDoc').addEventListener('click',function(){ download('abstrak.doc',docWrap('Abstrak','<h3>ABSTRAK</h3><p style="text-align:justify">'+esc(a.id)+'</p><p><b>Kata kunci:</b> '+esc(a.keywords.join('; '))+'</p><h3>ABSTRACT</h3><p style="text-align:justify;font-style:italic">'+esc(a.en)+'</p><p><i><b>Keywords:</b> '+esc(a.keywords.join('; '))+'</i></p>'),'application/msword'); toast('Abstrak diunduh.'); });
+    });
+    if((b=byId('tSmp'))) b.addEventListener('click',function(){
+      var N=byId('smpN').value, e=byId('smpE').value, r=THESIS.slovin(N,e);
+      if(!r){ toast('Isi populasi (N) yang valid.'); return; }
+      show('smp','<div class="ws-card"><p style="font-size:14px">Dari populasi <b class="num">'+r.N+'</b> pada taraf kesalahan <b>'+(r.e*100)+'%</b>, ukuran sampel minimal: <b class="num" style="font-size:20px;color:var(--primary)">'+r.n+'</b> responden.</p><p class="muted" style="font-size:12px;margin-top:6px">Rumus Slovin: n = N / (1 + N·e²).</p></div>');
+    });
+    if((b=byId('tKus'))) b.addEventListener('click',function(){
+      var pr=needP(); if(!pr) return; var q=THESIS.generateQuestionnaire(pr);
+      var h='<div class="ws-card"><b style="color:var(--on-dark)">Kuesioner Penelitian</b><p class="muted" style="font-size:13px;margin-top:4px">'+esc(q.scale)+'</p>';
+      var no=1;
+      for(var i=0;i<q.groups.length;i++){ h+='<p style="margin-top:10px;color:var(--on-dark)"><b>Variabel: '+esc(q.groups[i].variable)+'</b></p>';
+        for(var j=0;j<q.groups[i].items.length;j++){ h+='<p style="font-size:13.5px;margin-top:4px">'+(no++)+'. '+esc(q.groups[i].items[j])+' <span class="muted">(STS·TS·N·S·SS)</span></p>'; } }
+      h+='<div style="margin-top:12px"><button class="btn btn-ghost btn-sm" id="kusDoc">Unduh (DOCX)</button></div></div>';
+      show('kus',h);
+      byId('kusDoc').addEventListener('click',function(){
+        var inner='<h3>Kuesioner Penelitian</h3><p>'+esc(q.scale)+'</p>'; var n2=1;
+        for(var i=0;i<q.groups.length;i++){ inner+='<p><b>Variabel: '+esc(q.groups[i].variable)+'</b></p><table><tr><th>No</th><th>Pernyataan</th><th>STS</th><th>TS</th><th>N</th><th>S</th><th>SS</th></tr>';
+          for(var j=0;j<q.groups[i].items.length;j++){ inner+='<tr><td>'+(n2++)+'</td><td>'+esc(q.groups[i].items[j])+'</td><td></td><td></td><td></td><td></td><td></td></tr>'; } inner+='</table>'; }
+        download('kuesioner.doc',docWrap('Kuesioner',inner),'application/msword'); toast('Kuesioner diunduh.');
+      });
+    });
+    if((b=byId('tJdw'))) b.addEventListener('click',function(){
+      var s=THESIS.generateSchedule(THESIS.activeProject()||{});
+      var head2='<tr><th>Kegiatan</th>'; for(var m=1;m<=s.months;m++) head2+='<th>Bln '+m+'</th>'; head2+='</tr>';
+      var body=''; for(var i=0;i<s.rows.length;i++){ var r=s.rows[i]; body+='<tr><td style="text-align:left">'+esc(r.stage)+'</td>';
+        for(var m2=1;m2<=s.months;m2++){ var on=(m2>=r.from&&m2<=r.to); body+='<td style="text-align:center;background:'+(on?'var(--primary)':'transparent')+';color:'+(on?'#fff':'inherit')+'">'+(on?'✓':'')+'</td>'; } body+='</tr>'; }
+      show('jdw','<div class="ws-card" style="overflow-x:auto"><b style="color:var(--on-dark)">Jadwal Penelitian</b><table style="width:100%;border-collapse:collapse;margin-top:10px;font-size:13px">'+head2+body+'</table><div style="margin-top:12px"><button class="btn btn-ghost btn-sm" id="jdwDoc">Unduh (DOCX)</button></div></div>');
+      byId('jdwDoc').addEventListener('click',function(){
+        var t='<table><tr><th>Kegiatan</th>'; for(var m=1;m<=s.months;m++) t+='<th>Bulan '+m+'</th>'; t+='</tr>';
+        for(var i=0;i<s.rows.length;i++){ var r=s.rows[i]; t+='<tr><td>'+esc(r.stage)+'</td>'; for(var m2=1;m2<=s.months;m2++){ t+='<td style="text-align:center">'+((m2>=r.from&&m2<=r.to)?'✓':'')+'</td>'; } t+='</tr>'; } t+='</table>';
+        download('jadwal-penelitian.doc',docWrap('Jadwal Penelitian','<h3>Jadwal Penelitian</h3>'+t),'application/msword'); toast('Jadwal diunduh.');
+      });
+    });
+    if((b=byId('tSld'))) b.addEventListener('click',function(){
+      var pr=needP(); if(!pr) return; var sl=THESIS.generateDefenseOutline(pr);
+      var h='<div class="ws-card"><b style="color:var(--on-dark)">Outline Slide Sidang</b>';
+      for(var i=0;i<sl.length;i++){ h+='<div style="border-left:3px solid var(--primary);padding:6px 10px;margin-top:8px;background:var(--elevated);border-radius:4px"><b style="font-size:13.5px">Slide '+(i+1)+': '+esc(sl[i].title)+'</b><ul style="margin:4px 0 0 18px;font-size:13px">'+sl[i].bullets.map(function(x){return '<li>'+esc(x)+'</li>';}).join('')+'</ul></div>'; }
+      h+='<div style="margin-top:12px"><button class="btn btn-ghost btn-sm" id="sldDoc">Unduh (DOCX)</button></div></div>';
+      show('sld',h);
+      byId('sldDoc').addEventListener('click',function(){
+        var inner='<h2>Outline Slide Sidang</h2>';
+        for(var i=0;i<sl.length;i++){ inner+='<h3>Slide '+(i+1)+': '+esc(sl[i].title)+'</h3><ul>'+sl[i].bullets.map(function(x){return '<li>'+esc(x)+'</li>';}).join('')+'</ul>'; }
+        download('outline-sidang.doc',docWrap('Outline Sidang',inner),'application/msword'); toast('Outline diunduh.');
+      });
+    });
+    if((b=byId('tPrf'))) b.addEventListener('click',function(){
+      var t=byId('prfIn').value; if(!t.trim()){ toast('Tempel teks dulu.'); return; }
+      var out=THESIS.paraphrase(t);
+      show('prf','<div class="ws-card"><b style="color:var(--on-dark)">Hasil Parafrase</b><p style="margin-top:6px;font-size:14px;text-align:justify">'+esc(out)+'</p><div style="margin-top:10px"><button class="btn btn-ghost btn-sm" id="prfCopy">Salin</button></div><p class="muted" style="font-size:12px;margin-top:8px">Tinjau kembali hasilnya agar makna tetap tepat sebelum dipakai.</p></div>');
+      byId('prfCopy').addEventListener('click',function(){ copyText(out); });
+    });
+  }
+
   function render(){
     switch(view){
       case 'proyek': return viewProyek();
@@ -1276,6 +1400,7 @@
       case 'metode': return viewMetode();
       case 'identitas': return viewIdentitas();
       case 'konsistensi': return viewKonsistensi();
+      case 'alat': return viewAlat();
       default: return viewProposal();
     }
   }
