@@ -2019,7 +2019,9 @@
       ['Dengan demikian,', ['Berdasarkan hal itu,', 'Karena itu,']],
       ['Pada dasarnya,', ['Secara mendasar,', 'Pada intinya,']],
       ['Perlu diketahui bahwa', ['Patut dicatat bahwa', 'Menariknya,']],
-      ['Sebagaimana diketahui,', ['Sebagaimana lazim dipahami,', 'Seperti umum dipahami,']]
+      ['Sebagaimana diketahui,', ['Sebagaimana lazim dipahami,', 'Seperti umum dipahami,']],
+      ['Lebih lanjut,', ['Selanjutnya,', 'Berikutnya,', 'Lebih jauh,']],
+      ['Di sisi lain,', ['Sebaliknya,', 'Sementara itu,', 'Adapun']]
     ];
     for (var i = 0; i < rot.length; i++) {
       var from = rot[i][0], alts = rot[i][1], hit = 0;
@@ -2040,7 +2042,19 @@
       [/\byang mana\b/gi, 'yang'],
       [/\bdi era sekarang ini\b/gi, 'kini'],
       [/\bsecara signifikan dan nyata\b/gi, 'secara nyata'],
-      [/\bberbagai macam\b/gi, 'berbagai']
+      [/\bberbagai macam\b/gi, 'berbagai'],
+      // --- checklist editorial (.md): frasa pengisi generik ---
+      [/\bdalam era yang semakin berkembang(?: ini)?\b,?\s*/gi, ''],
+      [/\bseiring (?:dengan )?(?:perkembangan zaman|berjalannya waktu|kemajuan teknologi)\b,?\s*/gi, ''],
+      [/\bhal ini menunjukkan betapa pentingnya\b/gi, 'hal ini menunjukkan pentingnya'],
+      [/\btidak dapat dipungkiri lagi bahwa\s*/gi, ''],
+      [/\bsudah menjadi rahasia umum bahwa\s*/gi, ''],
+      [/\bseperti yang kita ketahui bersama,?\s*/gi, ''],
+      [/\bsangat(?:lah)? sangat\b/gi, 'sangat'],
+      [/\bbenar-benar sangat\b/gi, 'sangat'],
+      [/\bmemainkan peran (?:yang )?(?:sangat )?(?:penting|krusial|vital)\b/gi, 'berperan'],
+      [/\bmemegang peranan penting\b/gi, 'berperan'],
+      [/\bsecara keseluruhan dapat disimpulkan bahwa\s*/gi, 'dapat disimpulkan bahwa']
     ];
     for (var j = 0; j < kill.length; j++) s = s.replace(kill[j][0], kill[j][1]);
     // 3) Rapikan spasi ganda akibat penghapusan.
@@ -2399,7 +2413,10 @@
       { label: 'Konektor formulaik berlebihan', re: /\b(selain itu|lebih lanjut|di sisi lain|dengan demikian|oleh karena itu|adapun|di samping itu)\b/g, advice: 'Kurangi konektor formulaik; variasikan transisi antarkalimat.' },
       { label: 'Frasa pengisi tanpa makna', re: /\b(penting untuk (dicatat|diketahui)|perlu (dicatat|diketahui) bahwa|secara keseluruhan|pada akhirnya|singkatnya|dapat disimpulkan bahwa)\b/g, advice: 'Hapus frasa pengisi yang tidak menambah informasi.' },
       { label: 'Diksi bombastis khas AI', re: /\b(menyelami|menggali lebih dalam|lanskap|holistik|multifaset|tak terbantahkan|sangat krusial|permadani|simfoni)\b/g, advice: 'Gunakan diksi akademik yang lugas dan spesifik.' },
-      { label: 'Intensifier berlebihan', re: /\b(sangat|sungguh|amat|begitu)\b/g, advice: 'Batasi kata penguat; biarkan data yang berbicara.' }
+      { label: 'Intensifier berlebihan', re: /\b(sangat|sungguh|amat|begitu)\b/g, advice: 'Batasi kata penguat; biarkan data yang berbicara.' },
+      { label: 'Frasa pengisi generik', re: /\b(dalam era yang semakin berkembang|tidak dapat dipungkiri|sudah menjadi rahasia umum|seperti yang kita ketahui bersama|seiring (?:dengan )?perkembangan zaman)\b/g, advice: 'Hapus kalimat pembuka klise; mulai langsung dari gagasan/data konkret.' },
+      { label: 'Klaim mutlak tanpa bukti', re: /\b(tak terbantahkan|pasti|selalu|tidak pernah|semua orang|seluruh masyarakat)\b/g, advice: 'Ganti klaim mutlak dengan pernyataan terukur dan bersumber; jangan menggeneralisasi berlebihan.' },
+      { label: 'Frasa penutup berulang', re: /\b(dapat disimpulkan bahwa|kesimpulannya|sebagai kesimpulan|secara keseluruhan)\b/g, advice: 'Kurangi kalimat simpulan berulang; tidak setiap paragraf perlu kalimat penutup.' }
     ];
     for (var i = 0; i < PATTERNS.length; i++) {
       var m = lc.match(PATTERNS[i].re);
