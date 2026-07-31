@@ -1,9 +1,8 @@
 /* PusatBankSoal.id — Premium Dark Design System (deep-navy + gold + indigo) */
 
-/* Defensive load for the display typeface so headings render premium
-   site-wide even before a page's <head> adds the full Google Fonts link.
-   (Body/Inter + IBM Plex Mono are linked per-page.) */
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@600;700;800&display=swap');
+/* Fonts (Inter, Plus Jakarta Sans, IBM Plex Mono) are loaded per-page via a
+   single <link> in each <head> — kept out of CSS to avoid a render-blocking
+   @import that would serialize the font request behind style.css. */
 
 :root{
   /* Brand accents */
