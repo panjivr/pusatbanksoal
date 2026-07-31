@@ -562,6 +562,8 @@
           '<button class="btn btn-ghost btn-sm" id="propCheck">'+icon('i-shield-check')+' Periksa Konsistensi</button>'+
           '<button class="btn btn-ghost btn-sm" id="propStyleChk">'+icon('i-sparkles')+' Cek Gaya (anti-AI)</button>'+
           '<button class="btn btn-ghost btn-sm" id="propPlagChk">'+icon('i-shield-check')+' Cek Plagiasi</button>'+
+          '<button class="btn btn-ghost btn-sm" id="propOrigChk">'+icon('i-search')+' Cek Orisinalitas</button>'+
+          '<button class="btn btn-ghost btn-sm" id="propParaphrase">'+icon('i-sparkles')+' Parafrase</button>'+
         '</div>'+
         '<div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap;align-items:center" class="no-print">'+
           '<button class="btn btn-primary btn-sm" id="propGenFull">'+icon('i-sparkles')+' Generate Penuh (Wikipedia + AI)</button>'+
@@ -632,6 +634,37 @@
       if(!res.duplicateCount) h+='<p style="margin-top:10px;color:var(--up);font-size:13px">Tidak ada kalimat yang sangat mirip antarbagian.</p>';
       else h+='<p class="muted" style="margin-top:10px;font-size:13px"><b class="num">'+res.duplicateCount+'</b> pasang kalimat mirip. Contoh:</p>'+res.duplicates.slice(0,6).map(function(d){ return '<div style="border-left:3px solid var(--primary);padding:6px 10px;margin-bottom:6px;background:var(--elevated);border-radius:4px;font-size:12.5px"><b>'+d.sim+'% mirip</b><br>• '+esc(d.a)+'…<br>• '+esc(d.b)+'…</div>'; }).join('');
       out.innerHTML=h+'</div>';
+    });
+    byId('propOrigChk').addEventListener('click',function(){
+      var res=THESIS.originalityCheck(THESIS.activeProject()); var out=byId('propCheckOut'); out.style.display='block';
+      var sc=res.originalityScore, col=sc>=85?'var(--up)':sc>=70?'var(--primary)':'var(--down)';
+      var h='<div class="ws-card"><div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap"><b style="color:var(--on-dark)">Cek Orisinalitas</b><span class="badge" style="color:'+col+'">Orisinalitas '+sc+'%</span></div>'+
+        '<p class="muted" style="font-size:12.5px;margin-top:6px">'+esc(res.note)+' ('+res.sourcesChecked+' sumber punya abstrak untuk dibandingkan)</p>';
+      if(!res.flaggedCount) h+='<p style="margin-top:10px;color:var(--up);font-size:13px">Tidak ada kalimat berisiko terdeteksi. Pastikan setiap kutipan tetap diberi sitasi.</p>';
+      else h+='<p class="muted" style="margin-top:10px;font-size:13px"><b class="num">'+res.flaggedCount+'</b> kalimat perlu ditinjau (beri sitasi atau tulis ulang):</p>'+
+        res.items.map(function(it){ var c=it.kind==='sumber'?'var(--down)':'var(--primary)';
+          return '<div style="border-left:3px solid '+c+';padding:8px 12px;margin-bottom:8px;background:var(--elevated);border-radius:6px;font-size:12.5px">'+
+            '<div style="display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap"><b>'+(it.kind==='sumber'?'Mirip sumber':'Pengulangan internal')+'</b><span class="muted">'+it.overlap+'% · '+esc(it.section)+'</span></div>'+
+            '<div style="margin-top:4px">“'+esc(it.text)+'…”</div>'+
+            '<div class="accent" style="margin-top:5px;font-size:12px">→ '+esc(it.suggestion)+'</div></div>'; }).join('');
+      out.innerHTML=h+'</div>';
+    });
+    byId('propParaphrase').addEventListener('click',function(){
+      var out=byId('propCheckOut'); out.style.display='block';
+      out.innerHTML='<div class="ws-card"><b style="color:var(--on-dark)">Asisten Parafrase (bahasamu sendiri)</b>'+
+        '<p class="muted" style="font-size:12.5px;margin-top:6px">Tempel satu paragraf/kalimat dari sumber, lalu tekan Panduan. Alat ini memandu kamu menulis ulang dengan kata-katamu sendiri — bukan menulis otomatis — dan mengingatkan agar tetap memberi sitasi.</p>'+
+        '<textarea id="paraIn" class="f-area" style="margin-top:10px" placeholder="Tempel teks yang ingin kamu parafrase di sini…"></textarea>'+
+        '<button class="btn btn-primary btn-sm" id="paraGo" style="margin-top:10px">'+icon('i-sparkles')+' Panduan Parafrase</button>'+
+        '<div id="paraOut" style="margin-top:12px"></div></div>';
+      byId('paraGo').addEventListener('click',function(){
+        var res=THESIS.paraphraseGuide(val('paraIn')); var po=byId('paraOut');
+        if(!res.count){ po.innerHTML='<p class="muted" style="font-size:13px">Tempel dulu teks yang ingin diparafrase.</p>'; return; }
+        po.innerHTML='<p class="muted" style="font-size:12.5px">'+esc(res.note)+'</p>'+
+          res.items.map(function(it,idx){ return '<div style="border-left:3px solid var(--accent2);padding:8px 12px;margin-top:8px;background:var(--elevated);border-radius:6px;font-size:12.5px">'+
+            '<div class="muted">Kalimat '+(idx+1)+' (asli):</div><div style="margin:3px 0 6px">“'+esc(it.original)+'”</div>'+
+            '<div><b>Langkah:</b><ul style="margin:4px 0 0 16px;padding:0">'+it.tips.map(function(t){return '<li>'+esc(t)+'</li>';}).join('')+'</ul></div>'+
+            '<div class="accent" style="margin-top:5px">Awali versimu: "'+esc(it.starter)+'…"</div></div>'; }).join('');
+      });
     });
     byId('propGenFull').addEventListener('click',function(){
       var btn=this, proj=THESIS.activeProject(); if(!proj) return;

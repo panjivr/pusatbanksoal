@@ -2458,6 +2458,86 @@
       note: 'Cek plagiasi INTERNAL: mengukur kemiripan/pengulangan antarbagian dokumenmu sendiri (bukan pembanding basis data web/Turnitin). Turunkan angka dengan memparafrase bagian yang mirip.' };
   }
 
+  // ---- Originality helpers (shared) ----
+  function _sentsOf(text) {
+    return String(text || '').replace(/〔[^〕]*〕/g, ' ')
+      .split(/[.!?]+\s+/).map(function (s) { return s.trim(); })
+      .filter(function (s) { return s.split(/\s+/).length >= 6; });
+  }
+  function _shin(s) {
+    var w = s.toLowerCase().replace(/[^a-z0-9\s]/g, '').split(/\s+/).filter(Boolean);
+    var sh = {}; for (var i = 0; i + 2 < w.length; i++) sh[w[i] + ' ' + w[i + 1] + ' ' + w[i + 2]] = 1; return sh;
+  }
+  function _jacc(a, b) {
+    var inter = 0, uni = 0, k;
+    for (k in a) uni++;
+    for (k in b) { if (a[k]) inter++; else uni++; }
+    return uni ? inter / uni : 0;
+  }
+
+  /* Originality self-check: flags sentences that overlap (a) abstracts of the
+     references you loaded, or (b) other sentences in your own document. This is
+     an INTEGRITY aid (cite or rewrite) — NOT a Turnitin/web database check and
+     NOT a way to evade detection. */
+  function originalityCheck(project) {
+    project = project || {}; var st = project.state || {};
+    var refs = isArray(st.references) ? st.references : [];
+    var srcs = [];
+    for (var r = 0; r < refs.length; r++) {
+      var ab = trim(refs[r].abstract || '');
+      if (ab.split(/\s+/).length >= 12) srcs.push({ title: refShort(refs[r]), sh: _shin(ab) });
+    }
+    var chapters = (st.chapters && st.chapters.length && hasNonEmptyContent(st.chapters)) ? st.chapters : scaffoldProposal(project);
+    var all = [];
+    for (var c = 0; c < chapters.length; c++) {
+      var secs = chapters[c].sections || [];
+      for (var s = 0; s < secs.length; s++) {
+        var ss = _sentsOf(secs[s].content);
+        for (var i = 0; i < ss.length; i++) all.push({ text: ss[i], sh: _shin(ss[i]), sec: chapters[c].code + ' — ' + secs[s].title });
+      }
+    }
+    var items = [], totalW = 0, flaggedW = 0;
+    for (var a = 0; a < all.length; a++) {
+      var wc = all[a].text.split(/\s+/).length; totalW += wc;
+      var bestSrc = 0, srcName = null;
+      for (var q = 0; q < srcs.length; q++) { var sm = _jacc(all[a].sh, srcs[q].sh); if (sm > bestSrc) { bestSrc = sm; srcName = srcs[q].title; } }
+      var bestInt = 0, intTxt = null;
+      for (var b = 0; b < all.length; b++) { if (b === a) continue; var si = _jacc(all[a].sh, all[b].sh); if (si > bestInt) { bestInt = si; intTxt = all[b].text; } }
+      if (bestSrc >= 0.28) {
+        items.push({ section: all[a].sec, text: all[a].text.slice(0, 180), kind: 'sumber', match: srcName, overlap: Math.round(bestSrc * 100),
+          suggestion: 'Mirip dengan sumber "' + srcName + '". Beri sitasi bila memang mengutip, atau tulis ulang dengan bahasamu sendiri.' });
+        flaggedW += wc;
+      } else if (bestInt >= 0.5) {
+        items.push({ section: all[a].sec, text: all[a].text.slice(0, 180), kind: 'internal', match: (intTxt || '').slice(0, 120), overlap: Math.round(bestInt * 100),
+          suggestion: 'Mirip dengan kalimat lain di dokumenmu. Gabungkan, hapus pengulangan, atau tulis ulang agar tidak berulang.' });
+        flaggedW += wc;
+      }
+    }
+    items.sort(function (x, y) { return y.overlap - x.overlap; });
+    return { originalityScore: totalW ? Math.round((1 - flaggedW / totalW) * 100) : 100,
+      flaggedCount: items.length, sentenceCount: all.length, sourcesChecked: srcs.length, items: items.slice(0, 40),
+      note: 'Membandingkan kalimatmu dengan abstrak referensi yang kamu muat dan kalimat lain di dokumenmu — BUKAN basis data global Turnitin. Perbaiki dengan sitasi yang benar atau menulis ulang gagasan dengan bahasamu sendiri.' };
+  }
+
+  /* Guided paraphrase assistant: helps you restate a passage in your OWN words
+     (with proper citation). It coaches, it does not auto-rewrite — genuine
+     paraphrase changes structure + wording and keeps the citation. */
+  function paraphraseGuide(text) {
+    var sents = _sentsOf(text);
+    var starters = ['Berdasarkan penjelasan tersebut, ', 'Dengan kata lain, ', 'Hal ini menunjukkan bahwa ', 'Inti dari pernyataan itu adalah ', 'Secara ringkas, '];
+    var out = [];
+    for (var i = 0; i < sents.length; i++) {
+      var s = sents[i], tips = [];
+      if (s.split(/\s+/).length > 25) tips.push('Kalimat ini panjang — pecah menjadi dua kalimat yang lebih ringkas.');
+      if (/\b(adalah|merupakan|yaitu)\b/i.test(s)) tips.push('Ubah pola definisi "X adalah ..."; mulai dari inti gagasannya.');
+      tips.push('Tutup sumbernya, tulis intinya dengan kata-katamu sendiri, lalu bandingkan.');
+      tips.push('Tetap cantumkan sitasi ke sumber asli — parafrase wajib disitasi.');
+      out.push({ original: s, tips: tips, starter: starters[i % starters.length] });
+    }
+    return { count: out.length, items: out,
+      note: 'Parafrase yang benar mengubah struktur dan pilihan kata (bukan sekadar ganti sinonim) DAN tetap mencantumkan sitasi. Alat ini memandu, bukan menulis ulang otomatis, agar hasilnya benar-benar bahasamu sendiri.' };
+  }
+
   var THESIS = {
     // projects
     uid: uid,
@@ -2498,6 +2578,8 @@
     generateFill: generateFill,
     humanize: humanize,
     humanizeChapters: humanizeChapters,
+    originalityCheck: originalityCheck,
+    paraphraseGuide: paraphraseGuide,
     autoSearch: autoSearch,
     buildProposalHTML: buildProposalHTML,
     // meta
