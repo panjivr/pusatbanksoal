@@ -1892,9 +1892,10 @@
         return defOf(xs[0], 'sebuah konsep yang berperan sebagai faktor pendorong dalam ' + bidang);
       if (/definisi.*variabel terikat|konsep variabel terikat/.test(k))
         return defOf(ys[0], 'kondisi atau capaian yang menjadi tolok ukur keberhasilan dalam ' + bidang);
-      var mDef = key.match(/lengkapi definisi\s+(.+?)\s+menurut ahli/i);
-      if (mDef) return defOf(mDef[1], mDef[1] + ' merupakan konsep penting yang relevan dengan ' + bidang) +
-                       ' (lihat pembahasan pada landasan teori)';
+      var mDef = key.match(/(?:lengkapi\s+)?definisi\s+(.+?)\s+menurut ahli/i);
+      if (mDef && !/variabel (bebas|terikat)/i.test(mDef[1]))
+        return defOf(mDef[1], mDef[1] + ' merupakan konsep penting yang relevan dengan ' + bidang) +
+               ' (lihat pembahasan pada landasan teori)';
       if (/dimensi\/indikator|dimensi\s*\/\s*indikator|sebutkan dimensi/.test(k))
         return 'sejumlah dimensi dan indikator yang lazim digunakan untuk mengukur konsep tersebut secara operasional';
       if (/teori.*kerangka teori|kerangka teori yang relevan/.test(k))
@@ -1983,6 +1984,74 @@
         if (val === '_isi_diff') return 'berbeda pada variabel, konteks, dan lokasi dengan penelitian ini';
         return val;
       }
+      // --- placeholder tambahan dari scaffold yang diperluas ---
+      if (/kebijakan\/regulasi\/program pemerintah/.test(k))
+        return 'berbagai kebijakan dan program pemerintah yang mendorong peningkatan mutu di ' + bidang;
+      if (/gambaran tren\/perkembangan data|sumber statistik|bps/.test(k))
+        return 'data dalam beberapa tahun terakhir memperlihatkan dinamika ' + topik + ' yang perlu dicermati';
+      var mPeran = key.match(/jelaskan peran dan kontribusi\s+(.+)/i);
+      if (mPeran) return lc1(mPeran[1]) + ' berperan penting dalam menunjang tercapainya ' + yStr + ' di ' + bidang;
+      var mFak = key.match(/faktor-faktor yang memengaruhi\s+(.+)/i);
+      if (mFak) return 'faktor internal (karakteristik individu) dan faktor eksternal (lingkungan serta organisasi)';
+      var mKons = key.match(/konsekuensi atau keterkaitan\s+(.+)/i);
+      if (mKons) return 'memiliki keterkaitan erat dengan pencapaian ' + yStr + ' serta mutu di ' + bidang;
+      if (/aspek yang temuannya belum konsisten/.test(k))
+        return 'besaran dan arah pengaruh antarvariabel yang masih bervariasi antarstudi';
+      if (/karakteristik khusus objek\/lokasi/.test(k))
+        return 'karakteristik ' + (objek || 'objek penelitian') + ' yang memiliki keunikan tersendiri';
+      if (/kendala\/keterbatasan upaya/.test(k))
+        return 'upaya yang telah dilakukan belum sepenuhnya optimal karena keterbatasan sumber daya';
+      if (/dampak lanjutan pada aspek sosial/.test(k))
+        return 'menurunnya produktivitas serta melemahnya kualitas layanan di ' + (objek || bidang);
+      if (/hasil observasi\/wawancara awal|data pendahuluan di lapangan/.test(k))
+        return 'observasi awal mengindikasikan adanya kesenjangan pada ' + yStr + (objek ? ' di ' + objek : '');
+      if (/angka\/persentase\/temuan awal/.test(k))
+        return 'sebagian indikator ' + yStr + ' masih berada di bawah target yang diharapkan';
+      if (/alasan representativeness\/keunikan\/akses data/.test(k))
+        return (objek || 'objek penelitian') + ' relevan dengan masalah, mudah diakses, dan menyediakan data yang memadai';
+      if (/lengkapi dengan penelitian terdahulu/.test(k))
+        return 'beberapa penelitian relevan dari perpustakaan referensi (lihat daftar pustaka)';
+      if (/jelaskan alasan pemilihan jenis\/desain/.test(k))
+        return 'desain ini sesuai dengan karakteristik masalah yang ' + (approach === 'kuantitatif' ? 'menguji pengaruh antarvariabel secara terukur' : 'menuntut pemahaman fenomena secara mendalam');
+      if (/alasan pemilihan lokasi/.test(k))
+        return (objek || 'lokasi penelitian') + ' relevan dengan fokus penelitian dan datanya terjangkau';
+      if (/sesuaikan jumlah bulan dan jadwal/.test(k))
+        return 'jadwal disesuaikan dengan rencana pelaksanaan penelitian';
+      if (/relatif besar\/terbatas/.test(k)) return 'cukup memadai untuk dianalisis';
+      if (/alasan kesesuaian teknik dengan karakteristik populasi/.test(k))
+        return 'teknik ini sesuai karena populasi relatif homogen dan dapat dijangkau';
+      if (/^mis\. 5%$/.test(k) || /taraf kesalahan.*5%|^mis\. 5%/.test(k)) return '5%';
+      if (/dokumen, laporan, atau arsip resmi|dokumen\/laporan/.test(k))
+        return 'dokumen, laporan, dan arsip resmi pada ' + (objek || 'objek penelitian');
+      if (/perizinan, penyebaran, hingga penarikan angket/.test(k))
+        return 'mulai dari perizinan, penyebaran, hingga penarikan angket';
+      if (/responden uji coba di luar sampel/.test(k))
+        return 'sejumlah responden uji coba di luar sampel penelitian';
+      if (/nilai ambang/.test(k)) return 'r-hitung > r-tabel dan Alpha ≥ 0,60';
+      if (/diperbaiki atau digugurkan/.test(k)) return 'diperbaiki atau digugurkan';
+      if (/tambahkan uji autokorelasi/.test(k))
+        return 'ditambahkan uji autokorelasi apabila menggunakan data runtut waktu';
+      if (/analisis regresi yang sesuai/.test(k)) return 'analisis regresi linear';
+      if (/\bt dan\/atau f\b/.test(k)) return 'uji t dan uji F';
+      if (/product moment|korelasi.*pearson/.test(k)) return 'korelasi product moment Pearson';
+      if (/ringkas temuan utama penelitian ini|temuan utama penelitian/.test(k))
+        return 'penelitian ini memberikan gambaran mengenai ' + topik + (objek ? ' di ' + objek : '');
+      // --- cabang kualitatif ---
+      if (/luaran yang diharapkan/.test(k)) return 'capaian yang diharapkan';
+      if (/kondisi\/fenomena awal/.test(k)) return 'kondisi awal ' + topik + (objek ? ' di ' + objek : '');
+      if (/konsep\/teori yang digunakan/.test(k)) return 'konsep dan teori yang relevan dengan ' + topik;
+      if (/pemahaman\/temuan yang diharapkan/.test(k)) return 'pemahaman mendalam mengenai ' + topik;
+      if (/^wawancara\/observasi$/.test(k) || /wawancara\/observasi/.test(k)) return 'wawancara dan observasi';
+      if (/dokumen, arsip, atau laporan resmi/.test(k)) return 'dokumen, arsip, dan laporan resmi';
+      if (/informasi\/pengalaman informan/.test(k)) return 'informasi dan pengalaman informan';
+      if (/perilaku, kegiatan, atau kondisi di lapangan/.test(k)) return 'perilaku, kegiatan, dan kondisi di lapangan';
+      if (/dokumen, foto, atau catatan pendukung/.test(k)) return 'dokumen, foto, dan catatan pendukung';
+      if (/lampirkan pedoman wawancara dan lembar observasi|pedoman wawancara dan lembar observasi/.test(k))
+        return 'disusun dan dilampirkan';
+      if (/sumber, teknik, dan waktu/.test(k)) return 'sumber, teknik, dan waktu';
+      if (/member checking, perpanjangan pengamatan/.test(k))
+        return 'member checking, perpanjangan pengamatan, dan diskusi dengan teman sejawat';
+      if (/uraian naratif, matriks, atau bagan/.test(k)) return 'uraian naratif yang didukung matriks dan bagan';
       return null; // biarkan placeholder bila tak dikenali
     }
 
