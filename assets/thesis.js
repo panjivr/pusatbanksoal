@@ -2595,6 +2595,154 @@
     return { items: items, done: done, total: items.length, pct: Math.round(done / items.length * 100) };
   }
 
+  /* ---- 4g) Skripsi Doctor: audit dokumen lengkap ------------------------- */
+  function auditDocument(text) {
+    text = String(text || '');
+    var findings = [];
+    function F(level, msg) { findings.push({ level: level, msg: msg }); }
+    var lower = text.toLowerCase();
+
+    // 1) Kehadiran bab
+    var babs = [['BAB I', /bab\s*i\b|pendahuluan/], ['BAB II', /bab\s*ii\b|tinjauan pustaka|landasan teori/],
+      ['BAB III', /bab\s*iii\b|metode penelitian/], ['BAB IV', /bab\s*iv\b|hasil dan pembahasan/],
+      ['BAB V', /bab\s*v\b|penutup|kesimpulan dan saran/]];
+    var present = {};
+    for (var i = 0; i < babs.length; i++) { present[babs[i][0]] = babs[i][1].test(lower); if (!present[babs[i][0]]) F('warning', babs[i][0] + ' tidak terdeteksi dalam dokumen.'); }
+    var hasBiblio = /daftar pustaka|referensi|references|bibliography/i.test(text);
+    if (!hasBiblio) F('critical', 'Bagian DAFTAR PUSTAKA tidak ditemukan.');
+
+    // 2) Sitasi dalam teks vs daftar pustaka
+    var bibStart = text.search(/daftar pustaka|references|bibliography/i);
+    var body = bibStart > 0 ? text.slice(0, bibStart) : text;
+    var biblio = bibStart > 0 ? text.slice(bibStart) : '';
+    var citeRe = /\(([A-Z][A-Za-z'’.\-]+(?:\s+(?:dkk\.?|et al\.?|&|dan)\s+[A-Z][A-Za-z'’.\-]+)?),?\s*(\d{4})[a-z]?\)/g;
+    var cites = {}, m, nCite = 0;
+    while ((m = citeRe.exec(body))) {
+      var surname = m[1].split(/\s+/)[0].toLowerCase().replace(/[^a-z’']/g, '');
+      var key = surname + '|' + m[2]; cites[key] = (cites[key] || 0) + 1; nCite++;
+    }
+    // sitasi naratif: "Nama (2020)" / "Nama dkk. (2020)"
+    var narrRe = /\b([A-Z][A-Za-z'’.\-]{2,})(?:\s+(?:dkk\.?|et al\.?))?\s+\((\d{4})[a-z]?\)/g;
+    var SKIP = { bab: 1, tabel: 1, gambar: 1, lampiran: 1, bagan: 1 };
+    while ((m = narrRe.exec(body))) {
+      var sn = m[1].toLowerCase().replace(/[^a-z’']/g, '');
+      if (SKIP[sn]) continue;
+      var nk = sn + '|' + m[2]; if (!cites[nk]) { cites[nk] = 1; nCite++; } else cites[nk]++;
+    }
+    // entri daftar pustaka -> surname|year
+    var bibKeys = {}, bibCount = 0;
+    if (biblio) {
+      var lines = biblio.split(/\n/);
+      for (var l = 1; l < lines.length; l++) {
+        var ln = trim(lines[l]); if (ln.length < 8) continue;
+        var ym = ln.match(/\(?((?:19|20)\d{2})[a-z]?\)?/);
+        var sm = ln.match(/^([A-Z][A-Za-z'’.\-]+)/);
+        if (ym && sm) { bibKeys[sm[1].toLowerCase().replace(/[^a-z’']/g, '') + '|' + ym[1]] = trim(ln.slice(0, 60)); bibCount++; }
+      }
+    }
+    var missingInBib = [], k;
+    for (k in cites) if (!bibKeys.hasOwnProperty(k)) missingInBib.push(k.replace('|', ', '));
+    if (missingInBib.length) F('critical', missingInBib.length + ' sitasi tidak ditemukan di daftar pustaka: ' + missingInBib.slice(0, 8).join('; ') + (missingInBib.length > 8 ? ' …' : ''));
+    var uncited = [];
+    for (k in bibKeys) if (!cites.hasOwnProperty(k)) uncited.push(bibKeys[k]);
+    if (uncited.length) F('warning', uncited.length + ' referensi ada di daftar pustaka tetapi tidak pernah disitasi: ' + uncited.slice(0, 6).join('; ') + (uncited.length > 6 ? ' …' : ''));
+
+    // 3) Konsistensi angka (responden/sampel/informan)
+    var numRe = /(\d{2,5})\s*(responden|sampel|informan|partisipan|subjek penelitian)/gi, byNoun = {};
+    while ((m = numRe.exec(text))) { var noun = m[2].toLowerCase(); (byNoun[noun] = byNoun[noun] || {})[m[1]] = 1; }
+    for (var noun2 in byNoun) {
+      var vals = Object.keys(byNoun[noun2]);
+      if (vals.length > 1) F('warning', 'Jumlah "' + noun2 + '" disebut tidak konsisten: ' + vals.join(' vs ') + '. Samakan di seluruh naskah.');
+    }
+
+    // 4) Kata baku & pola AI
+    var bk = bakuCheck(text);
+    if (bk.total) F('info', bk.total + ' kata tidak baku terdeteksi (mis. ' + bk.issues.slice(0, 4).map(function (x) { return x.found + '→' + x.suggestion; }).join(', ') + '). Buka alat "Cek Kata Baku".');
+    var aiHits = (lower.match(/\b(di era (globalisasi|modern|digital)|tidak dapat dipungkiri|dewasa ini|sangat krusial|holistik|multifaset)\b/g) || []).length;
+    if (aiHits >= 3) F('info', aiHits + ' frasa yang sering muncul pada tulisan AI terdeteksi. Pertimbangkan alat "Parafrase & Humanize".');
+
+    // 5) Statistik & skor
+    var stats = countText(text);
+    var score = 100;
+    for (var f = 0; f < findings.length; f++) score -= (findings[f].level === 'critical' ? 15 : findings[f].level === 'warning' ? 7 : 3);
+    if (score < 0) score = 0;
+    return { score: score, findings: findings, sections: present, hasBiblio: hasBiblio,
+      citations: nCite, references: bibCount, stats: stats,
+      note: 'Audit heuristik berbasis pola — bukan pengganti pemeriksaan dosen. Skor menurun seiring temuan.' };
+  }
+
+  /* ---- 4h) Simulasi Sidang (rubrik kata kunci) -------------------------- */
+  function examSim(project, persona) {
+    var x = _ctxOf(project), quant = x.approach === 'kuantitatif';
+    persona = persona || 'metodologi';
+    var base = [
+      { q: 'Apa latar belakang dan urgensi memilih topik ' + x.topik + '?', keywords: ['fenomena', 'kesenjangan', 'gap', 'data', 'urgensi', 'masalah'], hint: 'Sebut fenomena, data awal, gap, dan urgensi.' },
+      { q: 'Mengapa memilih pendekatan ' + x.approach + '?', keywords: quant ? ['mengukur', 'pengaruh', 'hubungan', 'variabel', 'statistik'] : ['memahami', 'makna', 'mendalam', 'fenomena', 'proses'], hint: quant ? 'Karena menguji variabel secara terukur.' : 'Karena memahami makna/proses mendalam.' },
+      { q: quant ? 'Bagaimana menentukan populasi dan sampel?' : 'Bagaimana memilih informan?', keywords: quant ? ['populasi', 'sampel', 'slovin', 'teknik', 'random', 'purposive'] : ['purposive', 'snowball', 'informan', 'kriteria', 'kunci'], hint: quant ? 'Jelaskan populasi, teknik sampling, rumus ukuran sampel.' : 'Jelaskan purposive/snowball & kriteria informan.' },
+      { q: quant ? 'Bagaimana uji validitas & reliabilitas instrumen?' : 'Bagaimana menjaga keabsahan data?', keywords: quant ? ['validitas', 'pearson', 'reliabilitas', 'cronbach', 'alpha'] : ['triangulasi', 'member', 'checking', 'keabsahan', 'sumber'], hint: quant ? 'Validitas Pearson, reliabilitas Cronbach Alpha.' : 'Triangulasi, member checking, perpanjangan pengamatan.' },
+      { q: 'Apa kebaruan penelitian Anda dibanding penelitian terdahulu?', keywords: ['kebaruan', 'novelty', 'perbedaan', 'variabel', 'konteks', 'objek'], hint: 'Tunjukkan perbedaan variabel/konteks/objek/metode.' }
+    ];
+    if (persona === 'killer') {
+      base.push({ q: 'Apa kelemahan terbesar penelitian Anda, dan mengapa tetap layak?', keywords: ['keterbatasan', 'kelemahan', 'lingkup', 'generalisasi', 'tetap', 'kontribusi'], hint: 'Akui keterbatasan lalu tegaskan kontribusinya.' });
+      base.push({ q: 'Jika penguji tidak setuju dengan teori utama Anda, bagaimana Anda mempertahankannya?', keywords: ['teori', 'argumen', 'bukti', 'penelitian terdahulu', 'data'], hint: 'Bela dengan bukti empiris & rujukan.' });
+    } else if (persona === 'santai') {
+      base = base.slice(0, 4);
+    }
+    return { persona: persona, questions: base,
+      note: persona === 'killer' ? 'Mode Penguji Killer: pertanyaan menekan, latih ketahanan.' : persona === 'santai' ? 'Mode Santai: pertanyaan dasar.' : 'Mode Metodologi: fokus pada rancangan penelitian.' };
+  }
+  function scoreExamAnswer(answer, item) {
+    var a = ' ' + String(answer || '').toLowerCase() + ' ', kws = (item && item.keywords) || [];
+    var hit = [], miss = [];
+    for (var i = 0; i < kws.length; i++) { (a.indexOf(kws[i].toLowerCase()) >= 0 ? hit : miss).push(kws[i]); }
+    var words = (String(answer || '').match(/\S+/g) || []).length;
+    var cover = kws.length ? hit.length / kws.length : 0;
+    var lenOk = Math.min(1, words / 25);
+    var score = Math.round((cover * 0.75 + lenOk * 0.25) * 100);
+    var verdict = score >= 80 ? 'Sangat baik' : score >= 60 ? 'Cukup baik' : score >= 40 ? 'Perlu diperkuat' : 'Kurang';
+    return { score: score, verdict: verdict, hit: hit, miss: miss,
+      feedback: miss.length ? 'Jawaban belum menyinggung: ' + miss.join(', ') + '. ' + (item.hint || '') : 'Poin-poin kunci sudah tercakup. ' + (item.hint || '') };
+  }
+
+  /* ---- 4i) Analisis Data (deteksi tipe + saran uji) --------------------- */
+  function analyzeDataset(headers, rows) {
+    headers = isArray(headers) ? headers : [];
+    rows = isArray(rows) ? rows : [];
+    var cols = [];
+    for (var c = 0; c < headers.length; c++) {
+      var vals = [], numeric = 0, nonEmpty = 0, distinct = {};
+      for (var r = 0; r < rows.length; r++) {
+        var v = rows[r][c]; if (v == null || String(v).trim() === '') continue;
+        nonEmpty++; vals.push(v); distinct[String(v)] = 1;
+        if (!isNaN(parseFloat(v)) && isFinite(v)) numeric++;
+      }
+      var nd = 0; for (var kk in distinct) nd++;
+      var type;
+      if (nonEmpty === 0) type = 'kosong';
+      else if (numeric / nonEmpty >= 0.85) type = (nd <= 7 ? 'numerik-diskret' : 'numerik');
+      else type = (nd <= 8 ? 'kategorik' : 'teks');
+      var col = { name: headers[c] || ('Kolom ' + (c + 1)), type: type, n: nonEmpty, distinct: nd };
+      if (type.indexOf('numerik') === 0) col.stats = descriptiveStats(vals.join(' '));
+      else if (type === 'kategorik') {
+        var freq = {}; for (var q = 0; q < vals.length; q++) freq[vals[q]] = (freq[vals[q]] || 0) + 1;
+        var arr = []; for (var g in freq) arr.push({ label: g, count: freq[g], pct: Math.round(freq[g] / nonEmpty * 100) });
+        arr.sort(function (a, b) { return b.count - a.count; });
+        col.freq = arr.slice(0, 10);
+      }
+      cols.push(col);
+    }
+    // saran analisis
+    var nums = cols.filter(function (c) { return c.type.indexOf('numerik') === 0; });
+    var cats = cols.filter(function (c) { return c.type === 'kategorik'; });
+    var sug = [];
+    if (nums.length >= 2) sug.push('Terdapat ≥2 variabel numerik → uji korelasi (Pearson bila normal, Spearman bila tidak) atau regresi untuk pengaruh.');
+    if (cats.length >= 1 && nums.length >= 1) sug.push('Ada variabel kategorik + numerik → uji beda rata-rata: t-test (2 kelompok) atau ANOVA (>2 kelompok).');
+    if (cats.length >= 2) sug.push('Terdapat ≥2 variabel kategorik → uji Chi-Square untuk asosiasi.');
+    if (!sug.length) sug.push('Sajikan statistik deskriptif; tambah variabel untuk analisis inferensial.');
+    sug.push('Lakukan uji asumsi (normalitas, homogenitas) sebelum uji parametrik. Alat ini membaca data apa adanya — tidak mengarang nilai.');
+    return { n: rows.length, columns: cols, suggestions: sug };
+  }
+
   /* ---- 5) autoSearch: merge OpenAlex + Crossref, rank, annotate --------- */
   function typeLabelOf(t) {
     t = trim(t).toLowerCase();
@@ -3202,6 +3350,10 @@
     pickStatTest: pickStatTest,
     generateExamQuestions: generateExamQuestions,
     skripsiChecklist: skripsiChecklist,
+    auditDocument: auditDocument,
+    examSim: examSim,
+    scoreExamAnswer: scoreExamAnswer,
+    analyzeDataset: analyzeDataset,
     autoSearch: autoSearch,
     buildProposalHTML: buildProposalHTML,
     // meta
