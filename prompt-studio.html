@@ -1,0 +1,336 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Prompt Studio Banner — Generator Prompt AI untuk Banner | PusatBankSoal.id</title>
+<meta name="description" content="Rakit prompt siap tempel untuk membuat banner dengan AI (Midjourney, DALL·E, Stable Diffusion, Ideogram). Pilih platform, gaya, warna, dan teks — prompt langsung jadi.">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<meta name="theme-color" content="#0a0e17">
+<link rel="canonical" href="https://pusatbanksoal.id/prompt-studio.html">
+<link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+<link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@600;700;800&family=IBM+Plex+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="PusatBankSoal.id">
+<meta property="og:locale" content="id_ID">
+<meta property="og:url" content="https://pusatbanksoal.id/prompt-studio.html">
+<meta property="og:title" content="Prompt Studio Banner — Generator Prompt AI untuk Banner">
+<meta property="og:description" content="Pilih platform, gaya, warna, dan teks — dapatkan prompt siap tempel untuk Midjourney, DALL·E, Stable Diffusion, dan Ideogram.">
+<meta property="og:image" content="https://pusatbanksoal.id/assets/og.png">
+<meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Prompt Studio Banner — Generator Prompt AI untuk Banner">
+<meta name="twitter:description" content="Rakit prompt siap tempel untuk membuat banner dengan AI. Pilih platform, gaya, warna, dan teks.">
+<meta name="twitter:image" content="https://pusatbanksoal.id/assets/og.png">
+<link rel="stylesheet" href="assets/style.css">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@graph":[
+ {"@type":"WebApplication","name":"Prompt Studio Banner","applicationCategory":"DesignApplication","operatingSystem":"Web","url":"https://pusatbanksoal.id/prompt-studio.html","description":"Generator prompt AI untuk membuat banner: pilih platform, gaya, warna, dan teks, lalu salin prompt yang sudah diformat sesuai tool (Midjourney, DALL·E, Stable Diffusion, Ideogram).","offers":{"@type":"Offer","price":"0","priceCurrency":"IDR"},"inLanguage":"id-ID"},
+ {"@type":"BreadcrumbList","itemListElement":[
+  {"@type":"ListItem","position":1,"name":"Beranda","item":"https://pusatbanksoal.id/"},
+  {"@type":"ListItem","position":2,"name":"Prompt Studio Banner","item":"https://pusatbanksoal.id/prompt-studio.html"}]}
+]}
+</script>
+<script src="assets/auth.js"></script>
+<style>
+.ps-shell{display:grid;grid-template-columns:1fr 460px;gap:24px;align-items:start;margin-top:24px}
+@media(max-width:960px){.ps-shell{grid-template-columns:1fr}}
+.ps-out{position:sticky;top:80px}
+.ps-field{margin-bottom:18px}
+.ps-label{display:block;font-weight:600;color:var(--on-dark);font-size:14px;margin-bottom:8px}
+.ps-hint{color:var(--muted);font-size:12.5px;margin-top:5px}
+.ps-input,.ps-select{width:100%;background:var(--elevated);border:1px solid var(--hair-dark);color:var(--body);border-radius:10px;padding:11px 13px;font-size:14px;font-family:inherit}
+.ps-input:focus,.ps-select:focus{outline:2px solid var(--info);outline-offset:1px;border-color:var(--info)}
+.ps-grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:520px){.ps-grid2{grid-template-columns:1fr}}
+.ps-chips{display:flex;flex-wrap:wrap;gap:8px}
+.ps-chip{background:var(--elevated);border:1px solid var(--hair-dark);color:var(--muted-strong);border-radius:999px;padding:8px 14px;font:inherit;font-size:13px;cursor:pointer;transition:border-color .15s,background .15s,color .15s}
+.ps-chip:hover{border-color:var(--muted)}
+.ps-chip.on{background:rgba(252,213,53,.14);border-color:var(--primary);color:var(--on-dark);font-weight:600}
+.ps-outcard{background:var(--grad-surface);border:1px solid var(--hair-dark);border-radius:16px;padding:18px;box-shadow:var(--sh-md)}
+.ps-pre{white-space:pre-wrap;word-break:break-word;background:var(--canvas);border:1px solid var(--hair-dark);border-radius:10px;padding:14px;font-family:var(--num);font-size:13px;line-height:1.6;color:var(--body);max-height:340px;overflow:auto}
+.ps-copy{cursor:pointer}
+.ps-dim{display:inline-flex;align-items:center;gap:6px;background:var(--elevated);border:1px solid var(--hair-dark);border-radius:8px;padding:5px 10px;font-family:var(--num);font-size:12.5px;color:var(--muted-strong)}
+.ps-tips li{margin:4px 0 4px 2px;color:var(--muted-strong);font-size:13px}
+</style>
+</head>
+<body>
+<nav class="nav"><div class="nav-in">
+<a class="brand" href="index.html"><span class="logo">P</span>Pusat<b>BankSoal</b></a>
+<div class="nav-links" id="navLinks">
+<a href="index.html">Beranda</a><a href="tryout.html">Tryout</a><a href="dashboard.html">Dashboard</a><a href="analisis.html">AI Analisis</a><a href="skripsi.html">Riset & Skripsi</a><a href="prompt-studio.html" class="active">Prompt Studio</a><a href="index.html#harga">Harga</a>
+</div>
+<div class="nav-right"><a href="auth.html" class="hide-sm" style="font-weight:600">Masuk</a><a href="auth.html" class="btn btn-primary btn-sm">Daftar Gratis</a>
+<button class="nav-toggle" data-nav-toggle aria-label="Buka menu" aria-expanded="false"><svg class="i"><use href="#i-menu"></use></svg></button></div>
+</div></nav>
+
+<main>
+<section class="section-sm"><div class="wrap">
+  <span class="section-eyebrow">Prompt Studio</span>
+  <h1 class="mt">Rakit <span class="gradient-text">prompt banner</span>, tinggal salin-tempel</h1>
+  <p class="lead mt">Pilih platform, gaya, warna, dan teks — studio menyusun prompt yang sudah diformat sesuai tool AI pilihanmu (Midjourney, DALL·E, Stable Diffusion, Ideogram). Outputnya satu: <b style="color:var(--on-dark)">prompt siap tempel</b>. Semua diproses di browser, tanpa akun.</p>
+
+  <div class="ps-chips mt-lg" id="presetChips" aria-label="Contoh cepat"></div>
+
+  <div class="ps-shell">
+    <!-- FORM -->
+    <div>
+      <div class="ps-field">
+        <label class="ps-label" for="fPlatform">Platform &amp; ukuran banner</label>
+        <select class="ps-select" id="fPlatform"></select>
+        <div class="ps-hint" id="dimHint"></div>
+      </div>
+
+      <div class="ps-field">
+        <label class="ps-label" for="fTopic">Topik / pesan utama</label>
+        <input class="ps-input" id="fTopic" placeholder="mis. promo diskon akhir tahun toko sepatu">
+      </div>
+
+      <div class="ps-grid2">
+        <div class="ps-field"><label class="ps-label" for="fHead">Teks judul (headline)</label><input class="ps-input" id="fHead" placeholder='mis. DISKON 50%'></div>
+        <div class="ps-field"><label class="ps-label" for="fCta">Teks tombol / CTA</label><input class="ps-input" id="fCta" placeholder="mis. Belanja Sekarang"></div>
+      </div>
+      <div class="ps-field"><label class="ps-label" for="fSub">Subteks (opsional)</label><input class="ps-input" id="fSub" placeholder="mis. berlaku 20–31 Desember"></div>
+
+      <div class="ps-field"><label class="ps-label">Gaya visual</label><div class="ps-chips" id="styleChips"></div></div>
+      <div class="ps-field"><label class="ps-label">Nuansa / mood</label><div class="ps-chips" id="moodChips"></div></div>
+
+      <div class="ps-field">
+        <label class="ps-label" for="fPalette">Palet warna</label>
+        <select class="ps-select" id="fPalette"></select>
+        <input class="ps-input" id="fColors" style="margin-top:8px;display:none" placeholder="Tulis warnamu, mis. biru navy, oranye, putih">
+      </div>
+
+      <div class="ps-field"><label class="ps-label">Elemen yang disertakan</label><div class="ps-chips" id="elemChips"></div></div>
+
+      <div class="ps-grid2">
+        <div class="ps-field"><label class="ps-label" for="fTool">Target tool AI</label><select class="ps-select" id="fTool"></select></div>
+        <div class="ps-field"><label class="ps-label" for="fLang">Bahasa prompt</label><select class="ps-select" id="fLang"><option value="en">English (disarankan)</option><option value="id">Indonesia</option></select></div>
+      </div>
+
+      <div class="ps-field"><label class="ps-label" for="fNotes">Catatan tambahan (opsional)</label><input class="ps-input" id="fNotes" placeholder="mis. sisakan ruang kosong di kanan untuk foto produk"></div>
+    </div>
+
+    <!-- OUTPUT -->
+    <div class="ps-out">
+      <div class="ps-outcard">
+        <div class="flex between items-center wrap-flex gap">
+          <b style="color:var(--on-dark)">Prompt</b>
+          <span class="ps-dim" id="outDim">—</span>
+        </div>
+        <pre class="ps-pre mt" id="outPrompt"></pre>
+        <div class="flex gap wrap-flex mt">
+          <button class="btn btn-primary btn-sm ps-copy" id="copyPrompt">Salin Prompt</button>
+          <button class="btn btn-ghost btn-sm ps-copy" id="copyBoth">Salin + Negatif</button>
+        </div>
+        <div id="negWrap" style="margin-top:16px">
+          <div class="flex between items-center"><b style="color:var(--on-dark);font-size:13px">Negative prompt</b>
+          <button class="btn btn-ghost btn-sm ps-copy" id="copyNeg">Salin</button></div>
+          <pre class="ps-pre mt" id="outNeg" style="max-height:120px"></pre>
+        </div>
+      </div>
+
+      <div class="ps-outcard mt-lg">
+        <b style="color:var(--on-dark)">Tips agar hasilnya bagus</b>
+        <ul class="ps-tips mt" style="padding-left:18px">
+          <li>Prompt dalam <b>bahasa Inggris</b> umumnya memberi hasil paling akurat pada model gambar.</li>
+          <li>Teks pada gambar sering meleset di sebagian model — untuk banner ber-teks, pakai <b>Ideogram</b> atau <b>DALL·E 3</b>, dan buat headline singkat.</li>
+          <li>Iterasi: hasilkan beberapa variasi, lalu perhalus warna/komposisi lewat catatan tambahan.</li>
+          <li>Sisakan <b>ruang kosong</b> bila kamu akan menambah teks/logo sendiri setelahnya.</li>
+        </ul>
+      </div>
+      <p class="ps-hint" style="margin-top:10px">Studio ini menyusun <b>teks prompt</b> — pembuatan gambar dilakukan di tool AI pilihanmu.</p>
+    </div>
+  </div>
+</div></section>
+</main>
+
+<footer class="footer"><div class="wrap"><div class="cols">
+<div><a class="brand" href="index.html" style="color:var(--ink)"><span class="logo">P</span>Pusat<b>BankSoal</b></a><p style="color:#5b6672;font-size:13px;margin-top:14px;max-width:34ch">AI Education Intelligence Platform. Tryout, bank soal, analisis nilai & rekomendasi kampus #1 di Indonesia.</p></div>
+<div><h5>Produk</h5><a href="tryout.html">Tryout CPNS</a><a href="tryout.html">Tryout SNBT</a><a href="pembahasan.html">Bank Soal & Pembahasan</a><a href="analisis.html">AI Analisis Nilai</a><a href="prompt-studio.html">Prompt Studio Banner</a></div>
+<div><h5>Kategori</h5><a href="tryout.html">CPNS & PPPK</a><a href="tryout.html">SNBT/UTBK</a><a href="tryout.html">Kedinasan</a><a href="tryout.html">BUMN</a><a href="tryout.html">TNI/POLRI</a></div>
+<div><h5>Perusahaan</h5><a href="#">Tentang Kami</a><a href="#">Blog</a><a href="#">Karier</a><a href="#">Kontak</a><a href="#">Afiliasi</a></div>
+<div><h5>Bantuan</h5><a href="#">Pusat Bantuan</a><a href="#">Syarat & Ketentuan</a><a href="#">Kebijakan Privasi</a><a href="admin.html">Admin</a></div>
+</div><div class="bottom"><span>© <span data-year>2026</span> PusatBankSoal.id — Seluruh hak cipta dilindungi.</span><span>Dibuat untuk pejuang ujian Indonesia 🇮🇩</span></div></div></footer>
+
+<script>
+(function(){
+  var PLATFORMS=[
+    {id:'ig-post',label:'Instagram Post (1:1)',ratio:'1:1',dims:'1080×1080 px'},
+    {id:'ig-story',label:'Instagram Story / Reels (9:16)',ratio:'9:16',dims:'1080×1920 px'},
+    {id:'fb-cover',label:'Facebook Cover',ratio:'205:78',dims:'1640×624 px'},
+    {id:'fb-post',label:'Facebook / Feed Post',ratio:'1.91:1',dims:'1200×628 px'},
+    {id:'yt-thumb',label:'YouTube Thumbnail (16:9)',ratio:'16:9',dims:'1280×720 px'},
+    {id:'yt-banner',label:'YouTube Channel Art',ratio:'16:9',dims:'2560×1440 px'},
+    {id:'x-header',label:'X / Twitter Header (3:1)',ratio:'3:1',dims:'1500×500 px'},
+    {id:'li-banner',label:'LinkedIn Banner (4:1)',ratio:'4:1',dims:'1584×396 px'},
+    {id:'web-hero',label:'Website Hero (16:9)',ratio:'16:9',dims:'1920×1080 px'},
+    {id:'gads-mr',label:'Google Ads — Medium Rectangle',ratio:'6:5',dims:'300×250 px'},
+    {id:'gads-lb',label:'Google Ads — Leaderboard',ratio:'728:90',dims:'728×90 px'},
+    {id:'gads-hp',label:'Google Ads — Half Page',ratio:'1:2',dims:'300×600 px'},
+    {id:'poster',label:'Poster A4 (cetak)',ratio:'210:297',dims:'2480×3508 px @300dpi'},
+    {id:'spanduk',label:'Spanduk / Banner cetak (3:1)',ratio:'3:1',dims:'mis. 300×100 cm @150dpi'}
+  ];
+  var STYLES=['Minimalis','Gradient modern','Tipografi tebal','Berbasis foto','Ilustrasi','Geometris','Retro / Vintage','Glassmorphism','3D render','Neon','Duotone','Editorial','Flat design','Korporat elegan','Playful','Mewah / Luxury'];
+  var STYLE_EN={'Minimalis':'clean minimalist','Gradient modern':'modern gradient','Tipografi tebal':'bold typography-led','Berbasis foto':'photographic','Ilustrasi':'vector illustration','Geometris':'geometric','Retro / Vintage':'retro vintage','Glassmorphism':'glassmorphism','3D render':'3D render','Neon':'neon glow','Duotone':'duotone','Editorial':'editorial magazine','Flat design':'flat design','Korporat elegan':'sleek corporate','Playful':'playful colorful','Mewah / Luxury':'luxury premium'};
+  var MOODS=['Profesional','Energik','Tenang & elegan','Ceria','Futuristik','Hangat','Berani / Bold','Terpercaya'];
+  var MOOD_EN={'Profesional':'professional','Energik':'energetic','Tenang & elegan':'calm and elegant','Ceria':'cheerful','Futuristik':'futuristic hi-tech','Hangat':'warm and friendly','Berani / Bold':'bold and striking','Terpercaya':'trustworthy'};
+  var PALETTES=[
+    {id:'brand',label:'Sesuai brand (isi warna sendiri)',colors:''},
+    {id:'corp',label:'Biru korporat',colors:'navy blue, bright blue, white'},
+    {id:'warm',label:'Hangat (oranye–merah)',colors:'orange, red, cream'},
+    {id:'fresh',label:'Segar (hijau–tosca)',colors:'emerald green, teal, white'},
+    {id:'luxury',label:'Mewah (hitam–emas)',colors:'black, gold'},
+    {id:'pastel',label:'Pastel lembut',colors:'soft pastel pink, lavender, mint'},
+    {id:'vibrant',label:'Cerah / vibrant',colors:'vibrant magenta, yellow, cyan'},
+    {id:'mono',label:'Monokrom',colors:'black, grey, white'}
+  ];
+  var ELEMENTS=['Logo','Tombol CTA','Mockup produk','Foto orang / model','Ikon','Pola latar','Bentuk abstrak','Ruang kosong untuk teks'];
+  var ELEM_EN={'Logo':'a placeholder logo area','Tombol CTA':'a clear call-to-action button','Mockup produk':'a product mockup','Foto orang / model':'a person/model subject','Ikon':'supporting icons','Pola latar':'a subtle background pattern','Bentuk abstrak':'abstract shapes','Ruang kosong untuk teks':'clean negative space for text'};
+  var TOOLS=[
+    {id:'midjourney',label:'Midjourney'},
+    {id:'dalle',label:'DALL·E 3 / ChatGPT'},
+    {id:'sd',label:'Stable Diffusion'},
+    {id:'ideogram',label:'Ideogram (teks tajam)'},
+    {id:'gemini',label:'Google Gemini / Imagen'},
+    {id:'leonardo',label:'Leonardo AI'},
+    {id:'generic',label:'Umum / lainnya'}
+  ];
+  var PRESETS=[
+    {label:'⚡ Flash Sale',v:{topic:'flash sale diskon besar toko online',head:'FLASH SALE',cta:'Belanja Sekarang',style:'Tipografi tebal',mood:'Energik',palette:'warm',plat:'ig-post',elem:['Tombol CTA','Ruang kosong untuk teks']}},
+    {label:'🎓 Webinar',v:{topic:'webinar / kelas online',head:'FREE WEBINAR',cta:'Daftar Gratis',style:'Gradient modern',mood:'Profesional',palette:'corp',plat:'ig-post',elem:['Foto orang / model','Tombol CTA']}},
+    {label:'📦 Produk Baru',v:{topic:'peluncuran produk baru',head:'NEW ARRIVAL',cta:'Lihat Koleksi',style:'Minimalis',mood:'Tenang & elegan',palette:'mono',plat:'ig-post',elem:['Mockup produk','Ruang kosong untuk teks']}},
+    {label:'🏢 Profil Perusahaan',v:{topic:'profil dan layanan perusahaan',head:'',cta:'',style:'Korporat elegan',mood:'Terpercaya',palette:'corp',plat:'li-banner',elem:['Logo','Bentuk abstrak']}},
+    {label:'🍔 Kuliner',v:{topic:'promo menu makanan',head:'PROMO SPESIAL',cta:'Pesan Sekarang',style:'Berbasis foto',mood:'Hangat',palette:'warm',plat:'ig-post',elem:['Foto orang / model','Tombol CTA']}},
+    {label:'💼 Lowongan Kerja',v:{topic:'lowongan kerja / we are hiring',head:'WE ARE HIRING',cta:'Lamar Sekarang',style:'Geometris',mood:'Profesional',palette:'corp',plat:'ig-post',elem:['Ikon','Ruang kosong untuk teks']}}
+  ];
+
+  var $=function(id){return document.getElementById(id);};
+  var state={plat:'ig-post',style:'Minimalis',mood:'Profesional',palette:'brand',elem:[],tool:'midjourney',lang:'en'};
+
+  // populate selects
+  $('fPlatform').innerHTML=PLATFORMS.map(function(p){return '<option value="'+p.id+'">'+p.label+'</option>';}).join('');
+  $('fPalette').innerHTML=PALETTES.map(function(p){return '<option value="'+p.id+'">'+p.label+'</option>';}).join('');
+  $('fTool').innerHTML=TOOLS.map(function(t){return '<option value="'+t.id+'">'+t.label+'</option>';}).join('');
+
+  function chipHTML(arr){return arr.map(function(x){return '<button type="button" class="ps-chip" data-v="'+x.replace(/"/g,'')+'">'+x+'</button>';}).join('');}
+  $('styleChips').innerHTML=chipHTML(STYLES);
+  $('moodChips').innerHTML=chipHTML(MOODS);
+  $('elemChips').innerHTML=chipHTML(ELEMENTS);
+  $('presetChips').innerHTML=PRESETS.map(function(p,i){return '<button type="button" class="ps-chip" data-preset="'+i+'">'+p.label+'</button>';}).join('');
+
+  function setSingle(container,val){
+    var btns=container.querySelectorAll('.ps-chip');
+    for(var i=0;i<btns.length;i++) btns[i].classList.toggle('on',btns[i].getAttribute('data-v')===val);
+  }
+  function syncElemChips(){
+    var btns=$('elemChips').querySelectorAll('.ps-chip');
+    for(var i=0;i<btns.length;i++) btns[i].classList.toggle('on',state.elem.indexOf(btns[i].getAttribute('data-v'))>-1);
+  }
+
+  // events
+  $('styleChips').addEventListener('click',function(e){var b=e.target.closest('.ps-chip');if(!b)return;state.style=b.getAttribute('data-v');setSingle(this,state.style);render();});
+  $('moodChips').addEventListener('click',function(e){var b=e.target.closest('.ps-chip');if(!b)return;state.mood=b.getAttribute('data-v');setSingle(this,state.mood);render();});
+  $('elemChips').addEventListener('click',function(e){var b=e.target.closest('.ps-chip');if(!b)return;var v=b.getAttribute('data-v');var k=state.elem.indexOf(v);if(k>-1)state.elem.splice(k,1);else state.elem.push(v);syncElemChips();render();});
+  $('fPlatform').addEventListener('change',function(){state.plat=this.value;render();});
+  $('fPalette').addEventListener('change',function(){state.palette=this.value;$('fColors').style.display=this.value==='brand'?'block':'none';render();});
+  $('fTool').addEventListener('change',function(){state.tool=this.value;render();});
+  $('fLang').addEventListener('change',function(){state.lang=this.value;render();});
+  ['fTopic','fHead','fSub','fCta','fColors','fNotes'].forEach(function(id){$(id).addEventListener('input',render);});
+  $('presetChips').addEventListener('click',function(e){
+    var b=e.target.closest('.ps-chip');if(!b)return;var p=PRESETS[+b.getAttribute('data-preset')].v;
+    $('fTopic').value=p.topic||'';$('fHead').value=p.head||'';$('fCta').value=p.cta||'';$('fSub').value='';
+    state.style=p.style;state.mood=p.mood;state.palette=p.palette;state.plat=p.plat;state.elem=(p.elem||[]).slice();
+    $('fPlatform').value=p.plat;$('fPalette').value=p.palette;$('fColors').style.display=p.palette==='brand'?'block':'none';
+    setSingle($('styleChips'),state.style);setSingle($('moodChips'),state.mood);syncElemChips();render();
+  });
+
+  function platObj(){for(var i=0;i<PLATFORMS.length;i++)if(PLATFORMS[i].id===state.plat)return PLATFORMS[i];return PLATFORMS[0];}
+  function paletteColors(){
+    if(state.palette==='brand') return ($('fColors').value||'').trim();
+    for(var i=0;i<PALETTES.length;i++)if(PALETTES[i].id===state.palette)return PALETTES[i].colors;
+    return '';
+  }
+  function tr(en,id){return state.lang==='en'?en:id;}
+
+  function build(){
+    var p=platObj();
+    var topic=($('fTopic').value||'').trim();
+    var head=($('fHead').value||'').trim();
+    var sub=($('fSub').value||'').trim();
+    var cta=($('fCta').value||'').trim();
+    var colors=paletteColors();
+    var notes=($('fNotes').value||'').trim();
+    var styleEn=state.lang==='en'?(STYLE_EN[state.style]||state.style):state.style;
+    var moodEn=state.lang==='en'?(MOOD_EN[state.mood]||state.mood):state.mood;
+    var elems=state.elem.map(function(x){return state.lang==='en'?(ELEM_EN[x]||x):x;});
+
+    // text instructions
+    var textParts=[];
+    if(head) textParts.push(tr('the headline text "'+head+'"','teks judul "'+head+'"'));
+    if(sub) textParts.push(tr('a small subtext "'+sub+'"','subteks kecil "'+sub+'"'));
+    if(cta) textParts.push(tr('a call-to-action button labeled "'+cta+'"','tombol ajakan bertuliskan "'+cta+'"'));
+    var textStr=textParts.length?(tr('Include ','Sertakan ')+textParts.join(', ')+tr(', all text legible and correctly spelled. ',', semua teks terbaca jelas dan ejaannya benar. ')):'';
+
+    var subject=tr(styleEn+' '+p.label.replace(/\s*\([^)]*\)/,'')+' banner design'+(topic?(' for '+topic):''), 'desain banner '+p.label.replace(/\s*\([^)]*\)/,'')+' bergaya '+styleEn+(topic?(' untuk '+topic):''));
+    var moodStr=tr(moodEn+' mood. ',' nuansa '+moodEn+'. ');
+    var colorStr=colors?tr('Color palette: '+colors+'. ','Palet warna: '+colors+'. '):'';
+    var elemStr=elems.length?tr('Include '+elems.join(', ')+'. ','Sertakan '+elems.join(', ')+'. '):'';
+    var comp=tr('Balanced composition with strong visual hierarchy, generous margins, professional graphic design, ultra-detailed, high resolution, crisp and sharp.',
+                'Komposisi seimbang dengan hierarki visual kuat, margin lega, desain grafis profesional, sangat detail, resolusi tinggi, tajam.');
+    var notesStr=notes?(' '+notes+'.'):'';
+    var neg='blurry, low resolution, distorted text, misspelled words, gibberish text, extra fingers, deformed, watermark, signature, jpeg artifacts, cluttered, busy background, ugly, pixelated';
+
+    var prompt='', dim=p.dims+'  ·  '+p.ratio, showNeg=true;
+
+    if(state.tool==='midjourney'){
+      prompt=[subject, styleEn+' style', moodEn+' mood', colors?('color palette '+colors):'', elems.join(', '), (head?('with headline text "'+head+'"'):''), 'professional banner layout, high-end graphic design, ultra detailed, 8k']
+        .filter(Boolean).join(', ')+notesStr+' --ar '+p.ratio+' --v 6 --style raw --quality 2 --no '+neg;
+      showNeg=false;
+    } else if(state.tool==='sd'){
+      prompt=[styleEn+' banner design', topic, styleEn+' style', moodEn, colors?('color palette '+colors):'', elems.join(', '), (head?('poster text "'+head+'"'):''), 'professional layout, clean, high detail, sharp focus, 4k, masterpiece']
+        .filter(Boolean).join(', ')+'\n\nNegative prompt: '+neg+'\n\nSteps: 30, CFG scale: 7, Sampler: DPM++ 2M Karras, Size: '+p.dims.replace(/\s*px.*/,'').replace('×','x');
+      showNeg=false;
+    } else if(state.tool==='ideogram'){
+      prompt=tr('A '+subject+'. '+styleEn+' style, '+moodEn+' mood. '+colorStr+elemStr+textStr+
+        'Render all typography crisply and legibly. '+comp+' Aspect ratio '+p.ratio+'.'+notesStr,
+        'Sebuah '+subject+'. Gaya '+styleEn+', nuansa '+moodEn+'. '+colorStr+elemStr+textStr+'Render semua tipografi dengan tajam dan terbaca. '+comp+' Rasio '+p.ratio+'.'+notesStr);
+    } else {
+      // dalle / gemini / leonardo / generic — natural language
+      prompt=tr('Create a '+p.label.replace(/\s*\([^)]*\)/,'')+' banner ('+p.dims+', aspect ratio '+p.ratio+'). '+
+        'Style: '+styleEn+'. Mood: '+moodEn+'. '+colorStr+elemStr+textStr+comp+notesStr,
+        'Buat banner '+p.label.replace(/\s*\([^)]*\)/,'')+' ('+p.dims+', rasio '+p.ratio+'). '+
+        'Gaya: '+styleEn+'. Nuansa: '+moodEn+'. '+colorStr+elemStr+textStr+comp+notesStr);
+    }
+    return {prompt:prompt.replace(/\s{2,}/g,' ').trim(), neg:neg, dim:dim, showNeg:showNeg};
+  }
+
+  function render(){
+    var r=build();
+    $('outPrompt').textContent=r.prompt;
+    $('outDim').textContent=r.dim;
+    $('dimHint').textContent='Ukuran disarankan: '+platObj().dims+'  ·  rasio '+platObj().ratio;
+    $('negWrap').style.display=r.showNeg?'block':'none';
+    $('outNeg').textContent=r.neg;
+  }
+
+  function copy(text,btn){
+    var done=function(){var o=btn.textContent;btn.textContent='Tersalin ✓';setTimeout(function(){btn.textContent=o;},1500);};
+    if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(text).then(done,function(){window.prompt('Salin:',text);});
+    else window.prompt('Salin:',text);
+  }
+  $('copyPrompt').addEventListener('click',function(){copy($('outPrompt').textContent,this);});
+  $('copyNeg').addEventListener('click',function(){copy($('outNeg').textContent,this);});
+  $('copyBoth').addEventListener('click',function(){var r=build();copy(r.prompt+(r.showNeg?('\n\nNegative prompt: '+r.neg):''),this);});
+
+  // init defaults
+  setSingle($('styleChips'),state.style);setSingle($('moodChips'),state.mood);
+  render();
+})();
+</script>
+<script src="assets/app.js" defer></script>
+</body>
+</html>
