@@ -81,6 +81,7 @@
       <div class="ps-field">
         <label class="ps-label" for="fPlatform">Platform &amp; ukuran banner</label>
         <select class="ps-select" id="fPlatform"></select>
+        <input class="ps-input" id="fCustomDim" style="margin-top:8px;display:none" placeholder="Ukuran/rasio custom, mis. 1200×628 px atau 5:4">
         <div class="ps-hint" id="dimHint"></div>
       </div>
 
@@ -105,6 +106,14 @@
       </div>
 
       <div class="ps-field"><label class="ps-label">Elemen yang disertakan</label><div class="ps-chips" id="elemChips"></div></div>
+
+      <div class="ps-field"><label class="ps-label">Pencahayaan</label><div class="ps-chips" id="lightChips"></div></div>
+
+      <div class="ps-grid2">
+        <div class="ps-field"><label class="ps-label" for="fLayout">Komposisi / tata letak</label><select class="ps-select" id="fLayout"></select></div>
+        <div class="ps-field"><label class="ps-label" for="fTypo">Gaya tipografi teks</label><select class="ps-select" id="fTypo"></select></div>
+      </div>
+      <div class="ps-field"><label class="ps-label" for="fDetail">Level detail</label><select class="ps-select" id="fDetail"></select></div>
 
       <div class="ps-grid2">
         <div class="ps-field"><label class="ps-label" for="fTool">Target tool AI</label><select class="ps-select" id="fTool"></select></div>
@@ -138,13 +147,15 @@
         </div>
         <pre class="ps-pre mt" id="outPrompt"></pre>
         <div class="flex gap wrap-flex mt">
-          <button class="btn btn-primary btn-sm ps-copy" id="copyPrompt">Salin Prompt</button>
+          <button class="btn btn-primary btn-sm ps-copy" id="copyPrompt">Salin</button>
           <button class="btn btn-ghost btn-sm ps-copy" id="copyBoth">Salin + Negatif</button>
+          <button class="btn btn-ghost btn-sm" id="dlBtn">Unduh</button>
+          <button class="btn btn-ghost btn-sm" id="rndBtn">🎲 Acak</button>
         </div>
         <div id="negWrap" style="margin-top:16px">
-          <div class="flex between items-center"><b style="color:var(--on-dark);font-size:13px">Negative prompt</b>
+          <div class="flex between items-center"><b style="color:var(--on-dark);font-size:13px">Negative prompt (bisa diedit)</b>
           <button class="btn btn-ghost btn-sm ps-copy" id="copyNeg">Salin</button></div>
-          <pre class="ps-pre mt" id="outNeg" style="max-height:120px"></pre>
+          <textarea class="ps-pre mt" id="fNeg" style="max-height:140px;width:100%;resize:vertical"></textarea>
         </div>
       </div>
 
@@ -187,10 +198,18 @@
     {id:'gads-lb',label:'Google Ads — Leaderboard',ratio:'728:90',dims:'728×90 px'},
     {id:'gads-hp',label:'Google Ads — Half Page',ratio:'1:2',dims:'300×600 px'},
     {id:'poster',label:'Poster A4 (cetak)',ratio:'210:297',dims:'2480×3508 px @300dpi'},
-    {id:'spanduk',label:'Spanduk / Banner cetak (3:1)',ratio:'3:1',dims:'mis. 300×100 cm @150dpi'}
+    {id:'spanduk',label:'Spanduk / Banner cetak (3:1)',ratio:'3:1',dims:'mis. 300×100 cm @150dpi'},
+    {id:'tiktok',label:'TikTok (9:16)',ratio:'9:16',dims:'1080×1920 px'},
+    {id:'pinterest',label:'Pinterest Pin (2:3)',ratio:'2:3',dims:'1000×1500 px'},
+    {id:'wa-status',label:'WhatsApp Status (9:16)',ratio:'9:16',dims:'1080×1920 px'},
+    {id:'ecom',label:'Banner Marketplace (mis. Shopee)',ratio:'2:1',dims:'1200×600 px'},
+    {id:'email',label:'Header Email',ratio:'3:1',dims:'1200×400 px'},
+    {id:'roll',label:'Roll / X-Banner (cetak)',ratio:'2:5',dims:'60×160 cm @150dpi'},
+    {id:'billboard',label:'Billboard / Baliho (cetak)',ratio:'4:3',dims:'mis. 4×3 m @72–100dpi'},
+    {id:'custom',label:'Ukuran custom',ratio:'—',dims:'tentukan sendiri'}
   ];
-  var STYLES=['Minimalis','Gradient modern','Tipografi tebal','Berbasis foto','Ilustrasi','Geometris','Retro / Vintage','Glassmorphism','3D render','Neon','Duotone','Editorial','Flat design','Korporat elegan','Playful','Mewah / Luxury'];
-  var STYLE_EN={'Minimalis':'clean minimalist','Gradient modern':'modern gradient','Tipografi tebal':'bold typography-led','Berbasis foto':'photographic','Ilustrasi':'vector illustration','Geometris':'geometric','Retro / Vintage':'retro vintage','Glassmorphism':'glassmorphism','3D render':'3D render','Neon':'neon glow','Duotone':'duotone','Editorial':'editorial magazine','Flat design':'flat design','Korporat elegan':'sleek corporate','Playful':'playful colorful','Mewah / Luxury':'luxury premium'};
+  var STYLES=['Minimalis','Gradient modern','Tipografi tebal','Berbasis foto','Ilustrasi','Geometris','Retro / Vintage','Glassmorphism','3D render','Neon','Duotone','Editorial','Flat design','Korporat elegan','Playful','Mewah / Luxury','Isometrik','Cat air','Papercut','Memphis','Cyberpunk','Y2K','Claymorphism','Kolase','Art Deco','Gambar tangan'];
+  var STYLE_EN={'Minimalis':'clean minimalist','Gradient modern':'modern gradient','Tipografi tebal':'bold typography-led','Berbasis foto':'photographic','Ilustrasi':'vector illustration','Geometris':'geometric','Retro / Vintage':'retro vintage','Glassmorphism':'glassmorphism','3D render':'3D render','Neon':'neon glow','Duotone':'duotone','Editorial':'editorial magazine','Flat design':'flat design','Korporat elegan':'sleek corporate','Playful':'playful colorful','Mewah / Luxury':'luxury premium','Isometrik':'isometric 3D','Cat air':'watercolor','Papercut':'layered papercut','Memphis':'80s Memphis','Cyberpunk':'cyberpunk','Y2K':'Y2K aesthetic','Claymorphism':'claymorphism 3D clay','Kolase':'mixed-media collage','Art Deco':'art deco','Gambar tangan':'hand-drawn'};
   var MOODS=['Profesional','Energik','Tenang & elegan','Ceria','Futuristik','Hangat','Berani / Bold','Terpercaya'];
   var MOOD_EN={'Profesional':'professional','Energik':'energetic','Tenang & elegan':'calm and elegant','Ceria':'cheerful','Futuristik':'futuristic hi-tech','Hangat':'warm and friendly','Berani / Bold':'bold and striking','Terpercaya':'trustworthy'};
   var PALETTES=[
@@ -212,30 +231,54 @@
     {id:'ideogram',label:'Ideogram (teks tajam)'},
     {id:'gemini',label:'Google Gemini / Imagen'},
     {id:'leonardo',label:'Leonardo AI'},
+    {id:'flux',label:'Flux'},
+    {id:'firefly',label:'Adobe Firefly'},
+    {id:'recraft',label:'Recraft (desain + teks)'},
+    {id:'canva',label:'Canva Magic Media'},
+    {id:'bing',label:'Bing / Copilot Image'},
     {id:'generic',label:'Umum / lainnya'}
   ];
+  var LIGHTING=['Otomatis','Studio','Cahaya lembut','Dramatis','Golden hour','Neon','Cahaya alami','Backlight'];
+  var LIGHT_EN={'Otomatis':'','Studio':'studio lighting','Cahaya lembut':'soft diffused lighting','Dramatis':'dramatic high-contrast lighting','Golden hour':'warm golden-hour light','Neon':'neon lighting','Cahaya alami':'natural light','Backlight':'rim backlight'};
+  var LAYOUTS=[{v:'',l:'Otomatis'},{v:'center',l:'Teks di tengah'},{v:'left',l:'Teks kiri, visual kanan'},{v:'right',l:'Teks kanan, visual kiri'},{v:'top',l:'Teks di atas'},{v:'bottom',l:'Teks di bawah'},{v:'thirds',l:'Rule of thirds'},{v:'sym',l:'Simetris terpusat'}];
+  var LAYOUT_EN={center:'headline centered composition',left:'text on the left, visual on the right',right:'text on the right, visual on the left',top:'headline across the top, visual below',bottom:'visual on top, headline along the bottom',thirds:'rule-of-thirds composition',sym:'symmetrical centered composition'};
+  var TYPO=[{v:'',l:'Otomatis'},{v:'sans-bold',l:'Sans-serif tebal'},{v:'serif',l:'Serif elegan'},{v:'script',l:'Script / handwriting'},{v:'display',l:'Display eksperimental'},{v:'mono',l:'Monospace / techy'},{v:'condensed',l:'Condensed / padat'}];
+  var TYPO_EN={'sans-bold':'bold clean sans-serif typography','serif':'elegant serif typography','script':'stylish script/handwritten typography','display':'expressive display typography','mono':'techy monospace typography','condensed':'bold condensed typography'};
+  var DETAIL=[{v:'std',l:'Standar'},{v:'high',l:'Detail tinggi'},{v:'ultra',l:'Ultra (8K, hyper-detail)'}];
+  var DETAIL_EN={std:'high quality, sharp',high:'highly detailed, crisp, 4k',ultra:'ultra-detailed, hyper-realistic textures, 8k, award-winning'};
   var PRESETS=[
     {label:'⚡ Flash Sale',v:{topic:'flash sale diskon besar toko online',head:'FLASH SALE',cta:'Belanja Sekarang',style:'Tipografi tebal',mood:'Energik',palette:'warm',plat:'ig-post',elem:['Tombol CTA','Ruang kosong untuk teks']}},
     {label:'🎓 Webinar',v:{topic:'webinar / kelas online',head:'FREE WEBINAR',cta:'Daftar Gratis',style:'Gradient modern',mood:'Profesional',palette:'corp',plat:'ig-post',elem:['Foto orang / model','Tombol CTA']}},
     {label:'📦 Produk Baru',v:{topic:'peluncuran produk baru',head:'NEW ARRIVAL',cta:'Lihat Koleksi',style:'Minimalis',mood:'Tenang & elegan',palette:'mono',plat:'ig-post',elem:['Mockup produk','Ruang kosong untuk teks']}},
     {label:'🏢 Profil Perusahaan',v:{topic:'profil dan layanan perusahaan',head:'',cta:'',style:'Korporat elegan',mood:'Terpercaya',palette:'corp',plat:'li-banner',elem:['Logo','Bentuk abstrak']}},
     {label:'🍔 Kuliner',v:{topic:'promo menu makanan',head:'PROMO SPESIAL',cta:'Pesan Sekarang',style:'Berbasis foto',mood:'Hangat',palette:'warm',plat:'ig-post',elem:['Foto orang / model','Tombol CTA']}},
-    {label:'💼 Lowongan Kerja',v:{topic:'lowongan kerja / we are hiring',head:'WE ARE HIRING',cta:'Lamar Sekarang',style:'Geometris',mood:'Profesional',palette:'corp',plat:'ig-post',elem:['Ikon','Ruang kosong untuk teks']}}
+    {label:'💼 Lowongan Kerja',v:{topic:'lowongan kerja / we are hiring',head:'WE ARE HIRING',cta:'Lamar Sekarang',style:'Geometris',mood:'Profesional',palette:'corp',plat:'ig-post',elem:['Ikon','Ruang kosong untuk teks']}},
+    {label:'🌙 Ucapan Idul Fitri',v:{topic:'ucapan selamat Idul Fitri / Ramadhan',head:'SELAMAT IDUL FITRI',cta:'',style:'Mewah / Luxury',mood:'Tenang & elegan',palette:'luxury',plat:'ig-post',elem:['Bentuk abstrak','Ruang kosong untuk teks']}},
+    {label:'🎁 Giveaway',v:{topic:'giveaway / kuis berhadiah',head:'GIVEAWAY',cta:'Ikut Sekarang',style:'Playful',mood:'Ceria',palette:'vibrant',plat:'ig-post',elem:['Ikon','Tombol CTA']}},
+    {label:'🎙️ Cover Podcast',v:{topic:'cover episode podcast',head:'EPISODE 01',cta:'',style:'Duotone',mood:'Berani / Bold',palette:'mono',plat:'ig-post',elem:['Foto orang / model']}},
+    {label:'🏠 Properti / Real Estate',v:{topic:'promosi properti dijual',head:'DIJUAL',cta:'Hubungi Kami',style:'Berbasis foto',mood:'Terpercaya',palette:'corp',plat:'ig-post',elem:['Mockup produk','Tombol CTA']}},
+    {label:'🛒 Grand Opening',v:{topic:'grand opening toko baru',head:'GRAND OPENING',cta:'Kunjungi Kami',style:'Gradient modern',mood:'Energik',palette:'warm',plat:'ig-post',elem:['Ruang kosong untuk teks']}}
   ];
+  var DEFAULT_NEG='blurry, low resolution, distorted text, misspelled words, gibberish text, extra fingers, deformed, watermark, signature, jpeg artifacts, cluttered, busy background, ugly, pixelated';
 
   var $=function(id){return document.getElementById(id);};
-  var state={plat:'ig-post',style:'Minimalis',mood:'Profesional',palette:'brand',elem:[],tool:'midjourney',lang:'en',fmt:'prompt',refRole:'',refImgs:[]};
+  var state={plat:'ig-post',style:'Minimalis',mood:'Profesional',palette:'brand',elem:[],tool:'midjourney',lang:'en',fmt:'prompt',refRole:'',refImgs:[],light:'Otomatis',layout:'',typo:'',detail:'std'};
   function toolLabel(){for(var i=0;i<TOOLS.length;i++)if(TOOLS[i].id===state.tool)return TOOLS[i].label;return state.tool;}
 
   // populate selects
   $('fPlatform').innerHTML=PLATFORMS.map(function(p){return '<option value="'+p.id+'">'+p.label+'</option>';}).join('');
   $('fPalette').innerHTML=PALETTES.map(function(p){return '<option value="'+p.id+'">'+p.label+'</option>';}).join('');
   $('fTool').innerHTML=TOOLS.map(function(t){return '<option value="'+t.id+'">'+t.label+'</option>';}).join('');
+  $('fLayout').innerHTML=LAYOUTS.map(function(o){return '<option value="'+o.v+'">'+o.l+'</option>';}).join('');
+  $('fTypo').innerHTML=TYPO.map(function(o){return '<option value="'+o.v+'">'+o.l+'</option>';}).join('');
+  $('fDetail').innerHTML=DETAIL.map(function(o){return '<option value="'+o.v+'"'+(o.v==='std'?' selected':'')+'>'+o.l+'</option>';}).join('');
+  $('fNeg').value=DEFAULT_NEG;
 
   function chipHTML(arr){return arr.map(function(x){return '<button type="button" class="ps-chip" data-v="'+x.replace(/"/g,'')+'">'+x+'</button>';}).join('');}
   $('styleChips').innerHTML=chipHTML(STYLES);
   $('moodChips').innerHTML=chipHTML(MOODS);
   $('elemChips').innerHTML=chipHTML(ELEMENTS);
+  $('lightChips').innerHTML=chipHTML(LIGHTING);
   $('presetChips').innerHTML=PRESETS.map(function(p,i){return '<button type="button" class="ps-chip" data-preset="'+i+'">'+p.label+'</button>';}).join('');
 
   function setSingle(container,val){
@@ -251,7 +294,12 @@
   $('styleChips').addEventListener('click',function(e){var b=e.target.closest('.ps-chip');if(!b)return;state.style=b.getAttribute('data-v');setSingle(this,state.style);render();});
   $('moodChips').addEventListener('click',function(e){var b=e.target.closest('.ps-chip');if(!b)return;state.mood=b.getAttribute('data-v');setSingle(this,state.mood);render();});
   $('elemChips').addEventListener('click',function(e){var b=e.target.closest('.ps-chip');if(!b)return;var v=b.getAttribute('data-v');var k=state.elem.indexOf(v);if(k>-1)state.elem.splice(k,1);else state.elem.push(v);syncElemChips();render();});
-  $('fPlatform').addEventListener('change',function(){state.plat=this.value;render();});
+  $('fPlatform').addEventListener('change',function(){state.plat=this.value;$('fCustomDim').style.display=this.value==='custom'?'block':'none';render();});
+  $('fCustomDim').addEventListener('input',render);
+  $('lightChips').addEventListener('click',function(e){var b=e.target.closest('.ps-chip');if(!b)return;state.light=b.getAttribute('data-v');setSingle(this,state.light);render();});
+  $('fLayout').addEventListener('change',function(){state.layout=this.value;render();});
+  $('fTypo').addEventListener('change',function(){state.typo=this.value;render();});
+  $('fDetail').addEventListener('change',function(){state.detail=this.value;render();});
   $('fPalette').addEventListener('change',function(){state.palette=this.value;$('fColors').style.display=this.value==='brand'?'block':'none';render();});
   $('fTool').addEventListener('change',function(){state.tool=this.value;render();});
   $('fLang').addEventListener('change',function(){state.lang=this.value;render();});
@@ -278,7 +326,13 @@
     setSingle($('styleChips'),state.style);setSingle($('moodChips'),state.mood);syncElemChips();render();
   });
 
-  function platObj(){for(var i=0;i<PLATFORMS.length;i++)if(PLATFORMS[i].id===state.plat)return PLATFORMS[i];return PLATFORMS[0];}
+  function platObj(){
+    var base=PLATFORMS[0];
+    for(var i=0;i<PLATFORMS.length;i++)if(PLATFORMS[i].id===state.plat){base=PLATFORMS[i];break;}
+    if(state.plat==='custom'){var cd=($('fCustomDim').value||'').trim();var m=cd.match(/\d+\s*:\s*\d+/);
+      return {id:'custom',label:'Banner custom',ratio:m?m[0].replace(/\s/g,''):'—',dims:cd||'custom'};}
+    return base;
+  }
   function paletteColors(){
     if(state.palette==='brand') return ($('fColors').value||'').trim();
     for(var i=0;i<PALETTES.length;i++)if(PALETTES[i].id===state.palette)return PALETTES[i].colors;
@@ -314,30 +368,38 @@
     var moodStr=tr(moodEn+' mood. ',' nuansa '+moodEn+'. ');
     var colorStr=colors?tr('Color palette: '+colors+'. ','Palet warna: '+colors+'. '):'';
     var elemStr=elems.length?tr('Include '+elems.join(', ')+'. ','Sertakan '+elems.join(', ')+'. '):'';
-    var comp=tr('Balanced composition with strong visual hierarchy, generous margins, professional graphic design, ultra-detailed, high resolution, crisp and sharp.',
-                'Komposisi seimbang dengan hierarki visual kuat, margin lega, desain grafis profesional, sangat detail, resolusi tinggi, tajam.');
+    var lightEn=(state.light&&state.light!=='Otomatis')?(LIGHT_EN[state.light]||''):'';
+    var layoutEn=state.layout?(LAYOUT_EN[state.layout]||''):'';
+    var typoEn=(state.typo&&(head||sub||cta))?(TYPO_EN[state.typo]||''):'';
+    var detailEn=DETAIL_EN[state.detail]||'high quality, sharp';
+    var extra=[lightEn,layoutEn,typoEn].filter(Boolean);
+    var extraStr=extra.length?(extra.join(', ')+'. '):'';
+    var comp=tr('Balanced composition with strong visual hierarchy and generous margins, professional graphic design. '+extraStr+detailEn+'.',
+                'Komposisi seimbang dengan hierarki visual kuat dan margin lega, desain grafis profesional. '+extraStr+detailEn+'.');
     var notesStr=notes?(' '+notes+'.'):'';
-    var neg='blurry, low resolution, distorted text, misspelled words, gibberish text, extra fingers, deformed, watermark, signature, jpeg artifacts, cluttered, busy background, ugly, pixelated';
+    var neg=(($('fNeg')&&$('fNeg').value)||'').trim()||DEFAULT_NEG;
+    var hasAr=(p.ratio&&p.ratio!=='—');
+    var arFlag=hasAr?(' --ar '+p.ratio):'';
 
     var prompt='', dim=p.dims+'  ·  '+p.ratio, showNeg=true;
 
     if(state.tool==='midjourney'){
-      prompt=[subject, styleEn+' style', moodEn+' mood', colors?('color palette '+colors):'', elems.join(', '), (head?('with headline text "'+head+'"'):''), 'professional banner layout, high-end graphic design, ultra detailed, 8k']
-        .filter(Boolean).join(', ')+notesStr+' --ar '+p.ratio+' --v 6 --style raw --quality 2 --no '+neg;
+      prompt=[subject, styleEn+' style', moodEn+' mood', colors?('color palette '+colors):'', elems.join(', '), extra.join(', '), (head?('with headline text "'+head+'"'):''), 'professional banner layout, high-end graphic design, '+detailEn]
+        .filter(Boolean).join(', ')+notesStr+arFlag+' --v 6 --style raw --quality 2 --no '+neg;
       showNeg=false;
     } else if(state.tool==='sd'){
-      prompt=[styleEn+' banner design', topic, styleEn+' style', moodEn, colors?('color palette '+colors):'', elems.join(', '), (head?('poster text "'+head+'"'):''), 'professional layout, clean, high detail, sharp focus, 4k, masterpiece']
+      prompt=[styleEn+' banner design', topic, moodEn, colors?('color palette '+colors):'', elems.join(', '), extra.join(', '), (head?('poster text "'+head+'"'):''), 'professional layout, clean, '+detailEn+', masterpiece']
         .filter(Boolean).join(', ')+'\n\nNegative prompt: '+neg+'\n\nSteps: 30, CFG scale: 7, Sampler: DPM++ 2M Karras, Size: '+p.dims.replace(/\s*px.*/,'').replace('×','x');
       showNeg=false;
     } else if(state.tool==='ideogram'){
       prompt=tr('A '+subject+'. '+styleEn+' style, '+moodEn+' mood. '+colorStr+elemStr+textStr+
-        'Render all typography crisply and legibly. '+comp+' Aspect ratio '+p.ratio+'.'+notesStr,
-        'Sebuah '+subject+'. Gaya '+styleEn+', nuansa '+moodEn+'. '+colorStr+elemStr+textStr+'Render semua tipografi dengan tajam dan terbaca. '+comp+' Rasio '+p.ratio+'.'+notesStr);
+        'Render all typography crisply and legibly. '+comp+(hasAr?(' Aspect ratio '+p.ratio+'.'):'')+notesStr,
+        'Sebuah '+subject+'. Gaya '+styleEn+', nuansa '+moodEn+'. '+colorStr+elemStr+textStr+'Render semua tipografi dengan tajam dan terbaca. '+comp+(hasAr?(' Rasio '+p.ratio+'.'):'')+notesStr);
     } else {
-      // dalle / gemini / leonardo / generic — natural language
-      prompt=tr('Create a '+p.label.replace(/\s*\([^)]*\)/,'')+' banner ('+p.dims+', aspect ratio '+p.ratio+'). '+
+      // dalle / gemini / leonardo / flux / firefly / recraft / canva / bing / generic
+      prompt=tr('Create a '+p.label.replace(/\s*\([^)]*\)/,'')+' banner ('+p.dims+(hasAr?(', aspect ratio '+p.ratio):'')+'). '+
         'Style: '+styleEn+'. Mood: '+moodEn+'. '+colorStr+elemStr+textStr+comp+notesStr,
-        'Buat banner '+p.label.replace(/\s*\([^)]*\)/,'')+' ('+p.dims+', rasio '+p.ratio+'). '+
+        'Buat banner '+p.label.replace(/\s*\([^)]*\)/,'')+' ('+p.dims+(hasAr?(', rasio '+p.ratio):'')+'). '+
         'Gaya: '+styleEn+'. Nuansa: '+moodEn+'. '+colorStr+elemStr+textStr+comp+notesStr);
     }
     // --- reference image incorporation ---
@@ -367,6 +429,7 @@
       platform:p.label, dimensions:p.dims, aspect_ratio:p.ratio,
       purpose:($('fTopic').value||'').trim()||undefined,
       style:styleEn, mood:moodEn,
+      lighting:lightEn||undefined, layout:layoutEn||undefined, typography:typoEn||undefined, detail_level:state.detail,
       colors:colors||undefined,
       elements:elems.length?elems:undefined,
       text:(head2||sub2||cta2)?textObj:undefined,
@@ -390,7 +453,6 @@
     } else {
       $('outPrompt').textContent=r.prompt;
       $('negWrap').style.display=r.showNeg?'block':'none';
-      $('outNeg').textContent=r.neg;
     }
   }
 
@@ -400,12 +462,26 @@
     else window.prompt('Salin:',text);
   }
   $('copyPrompt').addEventListener('click',function(){copy($('outPrompt').textContent,this);});
-  $('copyNeg').addEventListener('click',function(){copy($('outNeg').textContent,this);});
   $('copyBoth').addEventListener('click',function(){var r=build();
     copy(state.fmt==='json'?r.json:(r.prompt+(r.showNeg?('\n\nNegative prompt: '+r.neg):'')),this);});
+  $('copyNeg').addEventListener('click',function(){copy($('fNeg').value,this);});
+  function dl(name,text,mime){var b=new Blob([text],{type:mime||'text/plain'});var u=URL.createObjectURL(b);var a=document.createElement('a');a.href=u;a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(function(){URL.revokeObjectURL(u);},1000);}
+  $('dlBtn').addEventListener('click',function(){var r=build();if(state.fmt==='json')dl('banner-prompt.json',r.json,'application/json');else dl('banner-prompt.txt',r.prompt+(r.showNeg?('\n\nNegative prompt: '+r.neg):''),'text/plain');});
+  function pick(a){return a[Math.floor(Math.random()*a.length)];}
+  $('rndBtn').addEventListener('click',function(){
+    state.style=pick(STYLES);state.mood=pick(MOODS);state.light=pick(LIGHTING);
+    state.layout=pick(LAYOUTS).v;state.typo=pick(TYPO).v;state.detail=pick(DETAIL).v;
+    var pl=pick(PALETTES);state.palette=pl.id;$('fPalette').value=pl.id;$('fColors').style.display=pl.id==='brand'?'block':'none';
+    var pf=pick(PLATFORMS.filter(function(x){return x.id!=='custom';}));state.plat=pf.id;$('fPlatform').value=pf.id;$('fCustomDim').style.display='none';
+    var tl=pick(TOOLS);state.tool=tl.id;$('fTool').value=tl.id;
+    var pool=ELEMENTS.slice();state.elem=[];var k=1+Math.floor(Math.random()*2);for(var i=0;i<k&&pool.length;i++){state.elem.push(pool.splice(Math.floor(Math.random()*pool.length),1)[0]);}
+    $('fLayout').value=state.layout;$('fTypo').value=state.typo;$('fDetail').value=state.detail;
+    setSingle($('styleChips'),state.style);setSingle($('moodChips'),state.mood);setSingle($('lightChips'),state.light);syncElemChips();
+    render();
+  });
 
   // init defaults
-  setSingle($('styleChips'),state.style);setSingle($('moodChips'),state.mood);
+  setSingle($('styleChips'),state.style);setSingle($('moodChips'),state.mood);setSingle($('lightChips'),state.light);
   render();
 })();
 </script>
