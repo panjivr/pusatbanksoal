@@ -112,13 +112,28 @@
       </div>
 
       <div class="ps-field"><label class="ps-label" for="fNotes">Catatan tambahan (opsional)</label><input class="ps-input" id="fNotes" placeholder="mis. sisakan ruang kosong di kanan untuk foto produk"></div>
+
+      <div class="ps-field">
+        <label class="ps-label" for="fRefFiles">Foto / gambar referensi (opsional)</label>
+        <input type="file" id="fRefFiles" accept="image/*" multiple style="font-size:13px">
+        <div class="ps-chips" id="refThumbs" style="margin-top:8px"></div>
+        <input class="ps-input" id="fRefUrl" style="margin-top:8px" placeholder="atau tempel URL gambar referensi (untuk Midjourney)">
+        <select class="ps-select" id="fRefRole" style="margin-top:8px">
+          <option value="">Referensi dipakai sebagai… (opsional)</option>
+          <option value="style">Acuan gaya visual</option>
+          <option value="comp">Acuan komposisi / tata letak</option>
+          <option value="color">Acuan palet warna</option>
+          <option value="subject">Acuan subjek / objek</option>
+        </select>
+        <div class="ps-hint">Unggah untuk pratinjau &amp; panduanmu. Midjourney: tempel <b>URL</b> gambar (jadi <span class="num">--sref</span>/<span class="num">--cref</span>). DALL·E/ChatGPT: lampirkan gambarnya langsung di tool. Gambar tidak diunggah ke server mana pun.</div>
+      </div>
     </div>
 
     <!-- OUTPUT -->
     <div class="ps-out">
       <div class="ps-outcard">
         <div class="flex between items-center wrap-flex gap">
-          <b style="color:var(--on-dark)">Prompt</b>
+          <div class="ps-chips" id="fmtSeg"><button type="button" class="ps-chip on" data-fmt="prompt">Prompt</button><button type="button" class="ps-chip" data-fmt="json">JSON</button></div>
           <span class="ps-dim" id="outDim">—</span>
         </div>
         <pre class="ps-pre mt" id="outPrompt"></pre>
@@ -209,7 +224,8 @@
   ];
 
   var $=function(id){return document.getElementById(id);};
-  var state={plat:'ig-post',style:'Minimalis',mood:'Profesional',palette:'brand',elem:[],tool:'midjourney',lang:'en'};
+  var state={plat:'ig-post',style:'Minimalis',mood:'Profesional',palette:'brand',elem:[],tool:'midjourney',lang:'en',fmt:'prompt',refRole:'',refImgs:[]};
+  function toolLabel(){for(var i=0;i<TOOLS.length;i++)if(TOOLS[i].id===state.tool)return TOOLS[i].label;return state.tool;}
 
   // populate selects
   $('fPlatform').innerHTML=PLATFORMS.map(function(p){return '<option value="'+p.id+'">'+p.label+'</option>';}).join('');
@@ -239,7 +255,21 @@
   $('fPalette').addEventListener('change',function(){state.palette=this.value;$('fColors').style.display=this.value==='brand'?'block':'none';render();});
   $('fTool').addEventListener('change',function(){state.tool=this.value;render();});
   $('fLang').addEventListener('change',function(){state.lang=this.value;render();});
-  ['fTopic','fHead','fSub','fCta','fColors','fNotes'].forEach(function(id){$(id).addEventListener('input',render);});
+  ['fTopic','fHead','fSub','fCta','fColors','fNotes','fRefUrl'].forEach(function(id){$(id).addEventListener('input',render);});
+  $('fRefRole').addEventListener('change',function(){state.refRole=this.value;render();});
+  $('fRefFiles').addEventListener('change',function(e){
+    var files=e.target.files||[]; state.refImgs=[]; var box=$('refThumbs'); box.innerHTML='';
+    Array.prototype.slice.call(files).slice(0,6).forEach(function(f){
+      state.refImgs.push(f.name);
+      var rd=new FileReader();
+      rd.onload=function(){ var im=document.createElement('img'); im.src=rd.result; im.alt=f.name;
+        im.title=f.name; im.style.cssText='width:58px;height:58px;object-fit:cover;border-radius:8px;border:1px solid var(--hair-dark)'; box.appendChild(im); };
+      rd.readAsDataURL(f);
+    });
+    render();
+  });
+  $('fmtSeg').addEventListener('click',function(e){var b=e.target.closest('.ps-chip');if(!b)return;state.fmt=b.getAttribute('data-fmt');
+    var btns=this.querySelectorAll('.ps-chip');for(var i=0;i<btns.length;i++)btns[i].classList.toggle('on',btns[i]===b);render();});
   $('presetChips').addEventListener('click',function(e){
     var b=e.target.closest('.ps-chip');if(!b)return;var p=PRESETS[+b.getAttribute('data-preset')].v;
     $('fTopic').value=p.topic||'';$('fHead').value=p.head||'';$('fCta').value=p.cta||'';$('fSub').value='';
@@ -264,6 +294,11 @@
     var cta=($('fCta').value||'').trim();
     var colors=paletteColors();
     var notes=($('fNotes').value||'').trim();
+    var refUrl=($('fRefUrl').value||'').trim();
+    var ROLE_EN={style:'style reference',comp:'composition/layout reference',color:'color reference',subject:'subject reference'};
+    var ROLE_ID={style:'acuan gaya',comp:'acuan komposisi',color:'acuan warna',subject:'acuan subjek'};
+    var roleEn=ROLE_EN[state.refRole]||'', roleId=ROLE_ID[state.refRole]||'';
+    var hasRef=!!(refUrl||state.refRole||state.refImgs.length);
     var styleEn=state.lang==='en'?(STYLE_EN[state.style]||state.style):state.style;
     var moodEn=state.lang==='en'?(MOOD_EN[state.mood]||state.mood):state.mood;
     var elems=state.elem.map(function(x){return state.lang==='en'?(ELEM_EN[x]||x):x;});
@@ -305,16 +340,58 @@
         'Buat banner '+p.label.replace(/\s*\([^)]*\)/,'')+' ('+p.dims+', rasio '+p.ratio+'). '+
         'Gaya: '+styleEn+'. Nuansa: '+moodEn+'. '+colorStr+elemStr+textStr+comp+notesStr);
     }
-    return {prompt:prompt.replace(/\s{2,}/g,' ').trim(), neg:neg, dim:dim, showNeg:showNeg};
+    // --- reference image incorporation ---
+    if(hasRef){
+      if(state.tool==='midjourney' && refUrl){
+        if(state.refRole==='style') prompt+=' --sref '+refUrl;
+        else if(state.refRole==='subject') prompt+=' --cref '+refUrl;
+        else prompt=refUrl+' '+prompt;
+      } else if(state.tool==='sd'){
+        prompt+='\n\n(referensi: pakai via img2img/ControlNet'+(roleId?(' sebagai '+roleId):'')+(refUrl?(' — '+refUrl):'')+')';
+      } else {
+        prompt=prompt.replace(/\s+$/,'')+' '+tr(
+          'Use the provided reference image'+(state.refImgs.length>1?'s':'')+(roleEn?(' as a '+roleEn):'')+'.',
+          'Gunakan gambar referensi yang disediakan'+(roleId?(' sebagai '+roleId):'')+'.');
+        if(refUrl) prompt+=' ('+refUrl+')';
+      }
+    }
+    prompt=prompt.replace(/[ \t]{2,}/g,' ').trim();
+
+    // --- structured JSON (unambiguous, quoted) ---
+    var head2=($('fHead').value||'').trim(), sub2=($('fSub').value||'').trim(), cta2=($('fCta').value||'').trim();
+    var textObj={};
+    if(head2)textObj.headline=head2; if(sub2)textObj.subtext=sub2; if(cta2)textObj.cta=cta2;
+    var refObj;
+    if(hasRef){ refObj={}; if(refUrl)refObj.url=refUrl; if(roleEn)refObj.role=roleEn; if(state.refImgs.length)refObj.images=state.refImgs.slice(); }
+    var data={
+      platform:p.label, dimensions:p.dims, aspect_ratio:p.ratio,
+      purpose:($('fTopic').value||'').trim()||undefined,
+      style:styleEn, mood:moodEn,
+      colors:colors||undefined,
+      elements:elems.length?elems:undefined,
+      text:(head2||sub2||cta2)?textObj:undefined,
+      reference:refObj,
+      tool:toolLabel(), language:state.lang,
+      negative_prompt:neg,
+      notes:notes||undefined,
+      prompt:prompt
+    };
+    var json=JSON.stringify(data,null,2);
+    return {prompt:prompt, neg:neg, dim:dim, showNeg:showNeg, json:json};
   }
 
   function render(){
     var r=build();
-    $('outPrompt').textContent=r.prompt;
     $('outDim').textContent=r.dim;
     $('dimHint').textContent='Ukuran disarankan: '+platObj().dims+'  ·  rasio '+platObj().ratio;
-    $('negWrap').style.display=r.showNeg?'block':'none';
-    $('outNeg').textContent=r.neg;
+    if(state.fmt==='json'){
+      $('outPrompt').textContent=r.json;
+      $('negWrap').style.display='none';
+    } else {
+      $('outPrompt').textContent=r.prompt;
+      $('negWrap').style.display=r.showNeg?'block':'none';
+      $('outNeg').textContent=r.neg;
+    }
   }
 
   function copy(text,btn){
@@ -324,7 +401,8 @@
   }
   $('copyPrompt').addEventListener('click',function(){copy($('outPrompt').textContent,this);});
   $('copyNeg').addEventListener('click',function(){copy($('outNeg').textContent,this);});
-  $('copyBoth').addEventListener('click',function(){var r=build();copy(r.prompt+(r.showNeg?('\n\nNegative prompt: '+r.neg):''),this);});
+  $('copyBoth').addEventListener('click',function(){var r=build();
+    copy(state.fmt==='json'?r.json:(r.prompt+(r.showNeg?('\n\nNegative prompt: '+r.neg):'')),this);});
 
   // init defaults
   setSingle($('styleChips'),state.style);setSingle($('moodChips'),state.mood);
