@@ -364,43 +364,63 @@
     if(cta) textParts.push(tr('a call-to-action button labeled "'+cta+'"','tombol ajakan bertuliskan "'+cta+'"'));
     var textStr=textParts.length?(tr('Include ','Sertakan ')+textParts.join(', ')+tr(', all text legible and correctly spelled. ',', semua teks terbaca jelas dan ejaannya benar. ')):'';
 
-    var subject=tr(styleEn+' '+p.label.replace(/\s*\([^)]*\)/,'')+' banner design'+(topic?(' for '+topic):''), 'desain banner '+p.label.replace(/\s*\([^)]*\)/,'')+' bergaya '+styleEn+(topic?(' untuk '+topic):''));
-    var moodStr=tr(moodEn+' mood. ',' nuansa '+moodEn+'. ');
-    var colorStr=colors?tr('Color palette: '+colors+'. ','Palet warna: '+colors+'. '):'';
-    var elemStr=elems.length?tr('Include '+elems.join(', ')+'. ','Sertakan '+elems.join(', ')+'. '):'';
+    var plabel=p.label.replace(/\s*\([^)]*\)/,'');
+    var isPrint=/poster|spanduk|roll|billboard/.test(state.plat);
     var lightEn=(state.light&&state.light!=='Otomatis')?(LIGHT_EN[state.light]||''):'';
     var layoutEn=state.layout?(LAYOUT_EN[state.layout]||''):'';
     var typoEn=(state.typo&&(head||sub||cta))?(TYPO_EN[state.typo]||''):'';
     var detailEn=DETAIL_EN[state.detail]||'high quality, sharp';
     var extra=[lightEn,layoutEn,typoEn].filter(Boolean);
-    var extraStr=extra.length?(extra.join(', ')+'. '):'';
-    var comp=tr('Balanced composition with strong visual hierarchy and generous margins, professional graphic design. '+extraStr+detailEn+'.',
-                'Komposisi seimbang dengan hierarki visual kuat dan margin lega, desain grafis profesional. '+extraStr+detailEn+'.');
     var notesStr=notes?(' '+notes+'.'):'';
     var neg=(($('fNeg')&&$('fNeg').value)||'').trim()||DEFAULT_NEG;
     var hasAr=(p.ratio&&p.ratio!=='—');
     var arFlag=hasAr?(' --ar '+p.ratio):'';
+    var subject=tr(styleEn+' '+plabel+' banner design'+(topic?(' for '+topic):''), 'desain banner '+plabel+' bergaya '+styleEn+(topic?(' untuk '+topic):''));
+    var colorStr=colors?tr('Color palette: '+colors+', with clear contrast between background, foreground, and accent colors. ','Palet warna: '+colors+', dengan kontras jelas antara latar, elemen utama, dan aksen. '):'';
+    var elemStr=elems.length?tr('Include '+elems.join(', ')+'. ','Sertakan '+elems.join(', ')+'. '):'';
+    var layoutPhrase=layoutEn||tr('a balanced layout with one clear focal point','tata letak seimbang dengan satu titik fokus yang jelas');
+    var lightStr=lightEn?tr('Lighting: '+lightEn+'. ',''):'';
+    var typoStr=typoEn?tr('Typography: '+typoEn+', headline as the dominant element and secondary text clearly subordinate. ',''):'';
+    var printStr=tr(isPrint?'Prepare it print-ready: CMYK-friendly colors, high resolution, with a small bleed and safe margin. ':'Optimize it for crisp on-screen display at the exact target size. ',
+                    isPrint?'Siapkan siap-cetak: warna ramah CMYK, resolusi tinggi, dengan bleed dan safe margin. ':'Optimalkan agar tajam di layar pada ukuran target. ');
+
+    // Rich professional design brief (natural-language tools)
+    var brief=tr(
+      'Design a professional '+plabel+' banner at '+p.dims+(hasAr?(', aspect ratio '+p.ratio):'')+'. '+
+      (topic?('The banner promotes '+topic+'. '):'')+
+      'Visual style: '+styleEn+'. Overall mood: '+moodEn+'. '+colorStr+lightStr+
+      'Composition: '+layoutPhrase+', with a strong visual hierarchy and generous safe margins so nothing important is cropped. '+
+      typoStr+elemStr+textStr+
+      'Keep every piece of text crisp, correctly spelled, and inside the safe area. Use a clean, uncluttered background that keeps attention on the message. '+
+      printStr+'Finish: '+detailEn+', polished, high-end graphic design.'+notesStr,
+
+      'Rancang banner '+plabel+' profesional berukuran '+p.dims+(hasAr?(', rasio '+p.ratio):'')+'. '+
+      (topic?('Banner ini mempromosikan '+topic+'. '):'')+
+      'Gaya visual: '+styleEn+'. Nuansa: '+moodEn+'. '+colorStr+lightStr+
+      'Komposisi: '+layoutPhrase+', dengan hierarki visual kuat dan margin aman yang lega agar bagian penting tidak terpotong. '+
+      typoStr+elemStr+textStr+
+      'Pastikan semua teks tajam, ejaannya benar, dan berada di dalam safe area. Gunakan latar yang bersih dan tidak berantakan agar fokus tetap pada pesan. '+
+      printStr+'Finishing: '+detailEn+', rapi, desain grafis kelas atas.'+notesStr);
 
     var prompt='', dim=p.dims+'  ·  '+p.ratio, showNeg=true;
 
     if(state.tool==='midjourney'){
-      prompt=[subject, styleEn+' style', moodEn+' mood', colors?('color palette '+colors):'', elems.join(', '), extra.join(', '), (head?('with headline text "'+head+'"'):''), 'professional banner layout, high-end graphic design, '+detailEn]
+      prompt=[subject, styleEn+' style', moodEn+' mood', colors?('color palette '+colors):'', elems.join(', '), extra.join(', '),
+        (head?('with headline text "'+head+'"'):''), 'clear focal point', 'strong visual hierarchy', 'clean uncluttered background', 'balanced negative space',
+        (isPrint?'print-ready poster design':'high-end advertising banner design'), detailEn]
         .filter(Boolean).join(', ')+notesStr+arFlag+' --v 6 --style raw --quality 2 --no '+neg;
       showNeg=false;
     } else if(state.tool==='sd'){
-      prompt=[styleEn+' banner design', topic, moodEn, colors?('color palette '+colors):'', elems.join(', '), extra.join(', '), (head?('poster text "'+head+'"'):''), 'professional layout, clean, '+detailEn+', masterpiece']
+      prompt=[styleEn+' banner design', topic, moodEn, colors?('color palette '+colors):'', elems.join(', '), extra.join(', '),
+        (head?('poster text "'+head+'"'):''), 'clear focal point, strong visual hierarchy, clean background, balanced composition',
+        'professional advertising design, '+detailEn+', masterpiece, best quality']
         .filter(Boolean).join(', ')+'\n\nNegative prompt: '+neg+'\n\nSteps: 30, CFG scale: 7, Sampler: DPM++ 2M Karras, Size: '+p.dims.replace(/\s*px.*/,'').replace('×','x');
       showNeg=false;
     } else if(state.tool==='ideogram'){
-      prompt=tr('A '+subject+'. '+styleEn+' style, '+moodEn+' mood. '+colorStr+elemStr+textStr+
-        'Render all typography crisply and legibly. '+comp+(hasAr?(' Aspect ratio '+p.ratio+'.'):'')+notesStr,
-        'Sebuah '+subject+'. Gaya '+styleEn+', nuansa '+moodEn+'. '+colorStr+elemStr+textStr+'Render semua tipografi dengan tajam dan terbaca. '+comp+(hasAr?(' Rasio '+p.ratio+'.'):'')+notesStr);
+      prompt=brief+tr(' Render all typography crisply and legibly, exactly as written.',' Render seluruh tipografi dengan tajam dan terbaca, persis seperti tertulis.');
     } else {
       // dalle / gemini / leonardo / flux / firefly / recraft / canva / bing / generic
-      prompt=tr('Create a '+p.label.replace(/\s*\([^)]*\)/,'')+' banner ('+p.dims+(hasAr?(', aspect ratio '+p.ratio):'')+'). '+
-        'Style: '+styleEn+'. Mood: '+moodEn+'. '+colorStr+elemStr+textStr+comp+notesStr,
-        'Buat banner '+p.label.replace(/\s*\([^)]*\)/,'')+' ('+p.dims+(hasAr?(', rasio '+p.ratio):'')+'). '+
-        'Gaya: '+styleEn+'. Nuansa: '+moodEn+'. '+colorStr+elemStr+textStr+comp+notesStr);
+      prompt=brief;
     }
     // --- reference image incorporation ---
     if(hasRef){
