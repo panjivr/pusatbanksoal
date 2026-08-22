@@ -89,12 +89,34 @@
 .bz-bp ul{margin:6px 0 0 18px} .bz-bp li{margin:3px 0;color:var(--muted-strong);font-size:13.5px}
 #bzReport .bz-row b{color:var(--on-dark)}
 @media print{
-  .nav,.footer,.bz-sub,.no-print{display:none!important}
+  .nav,.footer,.bz-sub,.bz-subcap,.bz-gloss,.no-print{display:none!important}
   body{background:#fff;color:#111}
   .bz-card,.bz-res{border:1px solid #ccc;box-shadow:none;background:#fff;color:#111}
-  .bz-big{color:#111}
+  .bz-big,.bz-callout .lead-num{color:#111}
   #bzReport,#bzReport *{color:#111!important}
 }
+/* ===== Palet profesional bisnis — khusus halaman Studio Bisnis (trust blue + profit green) ===== */
+:root{
+  --primary:#2f6bed; --primary-active:#2457c9; --primary-dis:#1b2740;
+  --primary-soft:rgba(47,107,237,.14); --accent-ink:#6f9bff; --info:#2f6bed;
+  --accent2:#0ea5a4; --accent2-active:#0b8887; --accent2-soft:rgba(14,165,164,.14);
+  --sh-glow:0 10px 34px -12px rgba(47,107,237,.42);
+}
+:root[data-theme="light"]{
+  --primary:#1d4ed8; --primary-active:#1a44bd; --primary-soft:rgba(29,78,216,.10);
+  --accent-ink:#1d4ed8; --info:#1d4ed8;
+}
+.btn-primary{background:linear-gradient(180deg,#4f86ff 0%,#2f6bed 48%,#2457c9 100%);color:#fff;box-shadow:0 6px 18px -8px rgba(47,107,237,.6),inset 0 1px 0 rgba(255,255,255,.25)}
+.btn-primary:hover{background:linear-gradient(180deg,#5f92ff 0%,#3b74f0 48%,#2457c9 100%)}
+.gradient-text{background:linear-gradient(120deg,#2f6bed 0%,#0ea5a4 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
+.section-eyebrow::before{background:linear-gradient(90deg,#2f6bed,#0ea5a4)}
+.badge-y{background:var(--primary-soft);color:var(--accent-ink);border-color:rgba(47,107,237,.28)}
+/* Verdict / ringkasan eksekutif */
+.bz-verdict{display:flex;align-items:center;gap:12px;flex-wrap:wrap;background:var(--card);border:1px solid var(--hair-dark);border-left:4px solid var(--primary);border-radius:12px;padding:14px 16px;margin-top:12px}
+.bz-verdict .vb{font-family:var(--display);font-weight:800;font-size:16px;color:var(--on-dark)}
+.bz-verdict.ok{border-left-color:var(--up)} .bz-verdict.warn{border-left-color:#f5a623} .bz-verdict.bad{border-left-color:var(--down)}
+.bz-verdict .score{font-family:var(--num);font-weight:700;font-size:22px;margin-left:auto;color:var(--primary)}
+.bz-rpe{display:block;color:var(--accent-ink);font-size:11.5px;font-weight:600;margin-top:4px;min-height:14px;font-family:var(--num)}
 </style>
 </head>
 <body>
@@ -525,9 +547,11 @@
     var cm=P-V, cmPct=P>0?cm/P*100:NaN;
     var bepU=cm>0?F/cm:NaN, bepRp=isFinite(bepU)?bepU*P:NaN;
     var profit=cm*Q-F, marginPct=(P*Q)>0?profit/(P*Q)*100:NaN;
+    var mos=(Q>0&&isFinite(bepU))?(Q-bepU)/Q*100:NaN;
     var r=[['Margin kontribusi / unit',rp(cm)+' ('+pct(cmPct)+')'],
       ['BEP (unit / bulan)',isFinite(bepU)?Math.ceil(bepU).toLocaleString('id-ID')+' unit':'—'],
       ['BEP (omzet / bulan)',rp(bepRp)],
+      ['Margin aman (jarak target di atas BEP)',isFinite(mos)?pct(mos):'—'],
       ['Laba operasi pada target',rp(profit)],
       ['Margin laba',pct(marginPct)]];
     $('pfOut').innerHTML='<div class="bz-big">'+rp(profit)+'<span style="font-size:13px;color:var(--muted);font-weight:400"> / bulan (estimasi laba)</span></div>'+rows(r)+
@@ -714,6 +738,39 @@
   }
   ['sgYears','sgDays','sgTicket'].forEach(function(id){$(id).addEventListener('input',calcSaran);}); $('sgUnit').addEventListener('change',calcSaran);
 
+  // ---- Ringkasan eksekutif otomatis (verdict kelayakan) ----
+  function execSummary(){
+    var P=n('pfPrice'),V=n('pfVar'),F=n('pfFix'),Q=n('pfQty'),cm=P-V;
+    var profit=(P>0)?cm*Q-F:NaN, marginPct=(P*Q>0)?profit/(P*Q)*100:NaN, bepU=cm>0?F/cm:NaN, mos=(Q>0&&isFinite(bepU))?(Q-bepU)/Q*100:NaN;
+    var inv=n('roInv'),net=n('roNet'),roi=(inv>0&&net>0)?net*12/inv*100:NaN, pay=(inv>0&&net>0)?inv/net:NaN;
+    var ebRev=n('ebRev'),ebM=(ebRev>0)?(ebRev-n('ebCogs')-n('ebOpex'))/ebRev*100:NaN;
+    var score=0,max=0,pts=[],recs=[],s;
+    if(isFinite(marginPct)){max+=25;s=marginPct>=20?25:marginPct>=10?18:marginPct>=0?10:0;score+=s;
+      pts.push([marginPct>=10,'Margin laba '+pct(marginPct)+(marginPct>=10?' — sehat':' — tergolong tipis')]);
+      if(marginPct<10)recs.push('Perbaiki margin: naikkan harga jual atau tekan biaya per barang.');}
+    if(isFinite(mos)){max+=15;s=mos>=40?15:mos>=20?11:mos>=0?6:0;score+=s;
+      pts.push([mos>=20,'Margin aman '+pct(mos)+' di atas titik impas'+(mos<20?' — rawan bila penjualan turun':'')]);
+      if(mos<20&&mos>=0)recs.push('Margin aman tipis; kejar volume di atas BEP atau kurangi biaya tetap.');}
+    if(isFinite(roi)){max+=25;s=roi>=30?25:roi>=15?18:roi>=0?10:0;score+=s;
+      pts.push([roi>=15,'ROI '+pct(roi)+'/tahun'+(isFinite(pay)?', balik modal ±'+Math.round(pay)+' bulan':'')]);
+      if(roi<15&&roi>=0)recs.push('ROI di bawah 15%/tahun; tinjau harga, biaya, atau skala usaha.');}
+    if(isFinite(ebM)){max+=15;s=ebM>=15?15:ebM>=5?10:ebM>=0?5:0;score+=s;
+      pts.push([ebM>=10,'Margin EBITDA '+pct(ebM)]);}
+    var cfRev=n('cfRev');
+    if(cfRev>0){max+=20;var kas=n('cfStart'),g=n('cfGrow')/100,vr=n('cfVar')/100,fx=n('cfFix'),rr=cfRev,neg=0;
+      for(var mm=1;mm<=12;mm++){kas+=rr-(rr*vr+fx);if(kas<0&&!neg)neg=mm;rr=rr*(1+g);}
+      s=neg?(neg>=6?12:5):20;score+=s;
+      pts.push([!neg,'Arus kas 12 bln '+(neg?'berpotensi negatif mulai bulan '+neg:'tetap positif')]);
+      if(neg)recs.push('Siapkan modal cadangan (runway) untuk menutup kas negatif di sekitar bulan '+neg+'.');}
+    if(max===0)return '';
+    var ps=Math.round(score/max*100);
+    var vd=ps>=70?['ok','Layak dijalankan']:ps>=45?['warn','Layak dengan catatan']:['bad','Perlu diperbaiki dulu'];
+    var html='<div class="bz-verdict '+vd[0]+'"><div><div class="vb">'+vd[1]+'</div><div class="bz-note">Skor kelayakan indikatif dari angka yang kamu isi — bukan jaminan.</div></div><div class="score">'+ps+'<span style="font-size:12px;color:var(--muted)">/100</span></div></div>';
+    html+='<div class="bz-res"><b class="bz-hl">Temuan utama</b>'+pts.map(function(x){return '<div class="bz-row"><span>'+(x[0]?'✓ ':'• ')+esc(x[1])+'</span></div>';}).join('')+'</div>';
+    if(recs.length)html+='<div class="bz-res"><b class="bz-hl">Rekomendasi konsultan</b>'+recs.map(function(x){return '<div class="bz-row"><span>→ '+esc(x)+'</span></div>';}).join('')+'</div>';
+    return html;
+  }
+
   // ---- Laporan ----
   function buildReport(){
     var pNm=($('prName').value||'').trim(), pOw=($('prOwner').value||'').trim(), pCi=($('prCity').value||'').trim(), pPh=$('prPhase').value, pDt=$('prDate').value;
@@ -726,6 +783,7 @@
     var h='<h2 style="color:var(--on-dark)">'+esc(title)+'</h2>'+
       (sub?'<p class="bz-hl">'+esc(sub)+'</p>':'')+
       '<p class="bz-note">'+esc(by)+' · dibuat dengan Studio Bisnis PusatBankSoal.id. Angka bersifat estimasi dari input pengguna.</p>';
+    var ex=execSummary(); if(ex)h+='<h3 style="margin-top:16px">Ringkasan Eksekutif</h3>'+ex;
     var any=false;
     order.forEach(function(o){var d=o[1];if(!d)return;any=true;
       h+='<div class="bz-res"><b class="bz-hl">'+esc(d.title)+'</b>'+(d.rows?rows(d.rows):(d.html||''))+'</div>';
@@ -762,6 +820,12 @@
       if(ty){$('bzHType').style.display='';$('bzHType').textContent=ty;}else $('bzHType').style.display='none';
     } else $('bzHeader').style.display='none';
   }
+  // Tampilkan nominal terformat di bawah field uang agar mudah dibaca
+  var MONEY=['pfPrice','pfVar','pfFix','hpBahan','hpOh','roInv','roNet','ebRev','ebCogs','ebOpex','ebDep','ebInt','lnAmt','ivTotal','ivInv','ivProfit','cfStart','cfRev','cfFix','vlEbitda','vlRev','pjOmzet','tgProfit','tgFix','tgPrice','tgVar','sgTicket'];
+  var MONEYSET={}; MONEY.forEach(function(id){MONEYSET[id]=1;});
+  function fmtMoney(id){var el=$(id);if(!el)return;var e=el.parentNode.querySelector('.bz-rpe');
+    if(!e){e=document.createElement('small');e.className='bz-rpe';el.parentNode.insertBefore(e,el.nextSibling);}
+    var v=parseFloat(el.value);e.textContent=(isFinite(v)&&el.value!=='')?('= '+rp(v)):'';}
   var K_IN='pbs_bisnis_inputs';
   function fields(){return document.querySelectorAll('.bz-in,.bz-sel,.bz-area');}
   function saveInputs(){try{var o={};Array.prototype.forEach.call(fields(),function(el){if(el.id)o[el.id]=el.value;});localStorage.setItem(K_IN,JSON.stringify(o));$('prSaved').textContent='Tersimpan otomatis di perangkat ✓';}catch(e){}}
@@ -780,11 +844,12 @@
   if(!$('sgYears').value)$('sgYears').value=5;
   if(!$('sgDays').value)$('sgDays').value=26;
   recomputeAll();
-  document.addEventListener('input',function(e){var el=e.target;if(el&&el.classList&&(el.classList.contains('bz-in')||el.classList.contains('bz-area'))){if(el.id&&syncPeers(el.id))recomputeAll();saveInputs();renderKPI();updateHeader();}});
+  MONEY.forEach(fmtMoney);
+  document.addEventListener('input',function(e){var el=e.target;if(el&&el.classList&&(el.classList.contains('bz-in')||el.classList.contains('bz-area'))){if(el.id&&MONEYSET[el.id])fmtMoney(el.id);if(el.id&&syncPeers(el.id)){recomputeAll();MONEY.forEach(fmtMoney);}saveInputs();renderKPI();updateHeader();}});
   document.addEventListener('change',function(e){var el=e.target;if(el&&el.classList&&(el.classList.contains('bz-in')||el.classList.contains('bz-sel')||el.classList.contains('bz-area'))){if(el.id&&syncPeers(el.id))recomputeAll();saveInputs();renderKPI();updateHeader();}});
   $('hpUse').addEventListener('click',function(){
     if(!HPP_PRICE){calcHarga();} if(!HPP_PRICE)return;
-    $('pfPrice').value=Math.round(HPP_PRICE); syncPeers('pfPrice'); recomputeAll(); saveInputs();
+    $('pfPrice').value=Math.round(HPP_PRICE); syncPeers('pfPrice'); recomputeAll(); saveInputs(); MONEY.forEach(fmtMoney);
     showCat('untung');
     var el=$('pfPrice'); if(el&&el.scrollIntoView)el.scrollIntoView({behavior:'smooth',block:'center'});
   });
