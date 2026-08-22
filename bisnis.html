@@ -105,7 +105,21 @@
 :root[data-theme="light"]{
   --primary:#1d4ed8; --primary-active:#1a44bd; --primary-soft:rgba(29,78,216,.10);
   --accent-ink:#1d4ed8; --info:#1d4ed8;
+  --canvas:#e9edf6;                 /* sedikit lebih dalam agar kartu putih menonjol */
 }
+/* ---- Penyempurnaan visual mode terang (khusus halaman Studio Bisnis) ---- */
+:root[data-theme="light"] .bz-in,:root[data-theme="light"] .bz-sel,:root[data-theme="light"] .bz-area{background:#fff;border-color:#d4dcea}
+:root[data-theme="light"] .bz-in:hover,:root[data-theme="light"] .bz-sel:hover,:root[data-theme="light"] .bz-area:hover{border-color:#aebdd6}
+:root[data-theme="light"] .bz-card{border-color:#e0e7f2;box-shadow:0 2px 12px -5px rgba(20,40,80,.14)}
+:root[data-theme="light"] .bz-res{background:#f7f9fd;border-color:#e6ecf6}
+:root[data-theme="light"] .bz-kpi{border-color:#e0e7f2;box-shadow:0 1px 5px rgba(20,40,80,.06)}
+:root[data-theme="light"] .bz-tab{background:#fff;border-color:#d9e1ee}
+:root[data-theme="light"] .bz-tab:hover{border-color:#2f6bed;color:#1d4ed8}
+:root[data-theme="light"] .bz-sub{border-bottom:1px solid #e2e8f2}
+:root[data-theme="light"] .bz-profile{background:linear-gradient(180deg,#f2f7ff 0%,#e7f0ff 100%);border-color:#cfe0fb;box-shadow:0 2px 12px -6px rgba(29,78,216,.18)}
+:root[data-theme="light"] .bz-callout{background:#eff5ff;border-color:#1d4ed8}
+:root[data-theme="light"] .bz-verdict{background:#fff}
+:root[data-theme="light"] .bz-gloss{background:#f7f9fd;border-color:#e6ecf6}
 .btn-primary{background:linear-gradient(180deg,#4f86ff 0%,#2f6bed 48%,#2457c9 100%);color:#fff;box-shadow:0 6px 18px -8px rgba(47,107,237,.6),inset 0 1px 0 rgba(255,255,255,.25)}
 .btn-primary:hover{background:linear-gradient(180deg,#5f92ff 0%,#3b74f0 48%,#2457c9 100%)}
 .gradient-text{background:linear-gradient(120deg,#2f6bed 0%,#0ea5a4 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
