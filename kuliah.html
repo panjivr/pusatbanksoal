@@ -213,7 +213,12 @@
     NTU_TW:['National Taiwan University','Taipei','Taiwan','Luar Negeri'],ETH:['ETH Zurich','Zurich','Swiss','Luar Negeri'],
     TUD:['Delft University of Technology','Delft','Belanda','Luar Negeri'],WAGENINGEN:['Wageningen University & Research','Wageningen','Belanda','Luar Negeri'],
     LEIDEN:['Leiden University','Leiden','Belanda','Luar Negeri'],TUM:['Technical University of Munich','Munich','Jerman','Luar Negeri'],
-    SORBONNE:['Sorbonne University','Paris','Prancis','Luar Negeri'],ALAZHAR:['Al-Azhar University','Kairo','Mesir','Luar Negeri']
+    SORBONNE:['Sorbonne University','Paris','Prancis','Luar Negeri'],ALAZHAR:['Al-Azhar University','Kairo','Mesir','Luar Negeri'],
+    /* ==== Kampus dengan kelas online / PJJ ==== */
+    UNPAM:['Universitas Pamulang','Tangerang Selatan','Banten','PTS'],NUSAMANDIRI:['Universitas Nusa Mandiri','Jakarta','DKI Jakarta','PTS'],
+    LONDON_ON:['University of London (Online)','London','Inggris','Luar Negeri'],OPENUNI:['The Open University','Milton Keynes','Inggris','Luar Negeri'],
+    GATECH:['Georgia Institute of Technology','Atlanta (GA)','Amerika Serikat','Luar Negeri'],ASU:['Arizona State University','Arizona','Amerika Serikat','Luar Negeri'],
+    UOPEOPLE:['University of the People','Pasadena (CA)','Amerika Serikat','Luar Negeri']
   };
   // Program: [prodi, jenjang, kodeKampus, mode]  (mode: R=Reguler/offline, O=Online/PJJ, K=Kelas Karyawan/Prosus)
   var DATA=[
@@ -323,7 +328,29 @@
     ['International Relations (Hubungan Internasional)','S1','ANU','R'],['Psychology (Psikologi)','S1','UCL','R'],['Pharmacy (Farmasi)','S1','MONASH_AU','R'],
     ['Agriculture (Pertanian)','S1','WAGENINGEN','R'],['Environmental Science (Ilmu Lingkungan)','S1','WAGENINGEN','R'],
     ['Syariah (Hukum Islam)','S1','ALAZHAR','R'],['Ushuluddin','S1','ALAZHAR','R'],['Bahasa Arab','S1','ALAZHAR','R'],
-    ['Computer Science (Ilmu Komputer)','S1','UTM_MY','R'],['Engineering (Teknik)','S1','UKM_MY','R'],['Medicine (Kedokteran)','S1','UM_MY','R']
+    ['Computer Science (Ilmu Komputer)','S1','UTM_MY','R'],['Engineering (Teknik)','S1','UKM_MY','R'],['Medicine (Kedokteran)','S1','UM_MY','R'],
+    // ==== Kuliah ONLINE / PJJ (Indonesia) ====
+    ['Manajemen','S1','UT','O'],['Ilmu Administrasi Negara','S1','UT','O'],['Ilmu Administrasi Bisnis','S1','UT','O'],
+    ['Ilmu Pemerintahan','S1','UT','O'],['Sosiologi','S1','UT','O'],['Ilmu Perpustakaan','S1','UT','O'],['Sastra Inggris','S1','UT','O'],
+    ['Statistika','S1','UT','O'],['Matematika','S1','UT','O'],['Biologi','S1','UT','O'],['Agribisnis','S1','UT','O'],
+    ['Teknologi Pangan','S1','UT','O'],['Perencanaan Wilayah dan Kota','S1','UT','O'],['Ekonomi Pembangunan','S1','UT','O'],
+    ['Ekonomi Syariah','S1','UT','O'],['Pendidikan Bahasa Inggris','S1','UT','O'],['Pendidikan Matematika','S1','UT','O'],
+    ['PGPAUD','S1','UT','O'],['Pendidikan Ekonomi','S1','UT','O'],['Magister Manajemen','S2','UT','O'],['Magister Administrasi Publik','S2','UT','O'],['Magister Pendidikan Dasar','S2','UT','O'],
+    ['Sistem Informasi','S1','BINUS','O'],['Teknik Informatika','S1','BINUS','O'],['Manajemen','S1','BINUS','O'],
+    ['Akuntansi','S1','BINUS','O'],['Ilmu Komunikasi','S1','BINUS','O'],['Sains Data','S1','BINUS','O'],['Magister Manajemen','S2','BINUS','O'],
+    ['Ilmu Komunikasi','S1','UNSIA','O'],['Akuntansi','S1','UNSIA','O'],['Bisnis Digital','S1','UNSIA','O'],
+    ['Sistem Informasi','S1','MERCU','O'],['Manajemen','S1','MERCU','O'],['Akuntansi','S1','MERCU','O'],
+    ['Teknik Industri','S1','MERCU','O'],['Ilmu Komunikasi','S1','MERCU','O'],['Teknik Informatika','S1','MERCU','O'],
+    ['Teknik Informatika','S1','UNPAM','O'],['Manajemen','S1','UNPAM','O'],['Akuntansi','S1','UNPAM','O'],['Sistem Informasi','S1','UNPAM','O'],
+    ['Sistem Informasi','S1','NUSAMANDIRI','O'],['Teknik Informatika','S1','NUSAMANDIRI','O'],['Sistem Informasi Akuntansi','S1','NUSAMANDIRI','O'],
+    ['Teknologi Pendidikan','S1','UNJ','O'],['Pendidikan Guru Sekolah Dasar','S1','UPI','O'],
+    // ==== Kuliah ONLINE / PJJ (Luar negeri) ====
+    ['Computer Science (Ilmu Komputer)','S1','LONDON_ON','O'],['Business Administration (Manajemen)','S1','LONDON_ON','O'],
+    ['Data Science (Sains Data)','S2','LONDON_ON','O'],['Finance (Keuangan)','S1','LONDON_ON','O'],
+    ['Business Management (Manajemen)','S1','OPENUNI','O'],['Computing & IT (Informatika)','S1','OPENUNI','O'],['Psychology (Psikologi)','S1','OPENUNI','O'],
+    ['Computer Science (Ilmu Komputer)','S2','GATECH','O'],['Analytics (Analitika Data)','S2','GATECH','O'],
+    ['Computer Science (Ilmu Komputer)','S1','ASU','O'],['Business (Manajemen)','S1','ASU','O'],['Business Administration (MBA/Manajemen)','S2','ASU','O'],
+    ['Computer Science (Ilmu Komputer)','S1','UOPEOPLE','O'],['Business Administration (Manajemen)','S1','UOPEOPLE','O'],['Health Science (Ilmu Kesehatan)','S1','UOPEOPLE','O']
   ];
   var LEVELS=['D3','D4','S1','Profesi','S2','S3'];
   var MODES=[['R','Reguler / Offline'],['O','Online / PJJ'],['K','Kelas Karyawan / Prosus']];
