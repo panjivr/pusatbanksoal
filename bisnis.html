@@ -1,0 +1,459 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Studio Bisnis — Kalkulator Profit, ROI, EBITDA, SWOT & Blueprint | PusatBankSoal.id</title>
+<meta name="description" content="Hitung profit, BEP, harga jual, ROI, payback, EBITDA, cicilan pinjaman bank, bagi hasil investor, dan SWOT. Plus blueprint usaha (F&B, hotel, rental, printing, dll) — laporan siap cetak/PDF.">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<meta name="theme-color" content="#0a0e17">
+<link rel="canonical" href="https://pusatbanksoal.id/bisnis.html">
+<link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+<link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@600;700;800&family=IBM+Plex+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="PusatBankSoal.id">
+<meta property="og:locale" content="id_ID">
+<meta property="og:url" content="https://pusatbanksoal.id/bisnis.html">
+<meta property="og:title" content="Studio Bisnis — Kalkulator Profit, ROI, EBITDA, SWOT & Blueprint">
+<meta property="og:description" content="Hitung profit, BEP, ROI, EBITDA, cicilan bank, bagi hasil investor, SWOT, dan blueprint usaha. Laporan siap cetak/PDF.">
+<meta property="og:image" content="https://pusatbanksoal.id/assets/og.png">
+<meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Studio Bisnis — Kalkulator Bisnis Lengkap">
+<meta name="twitter:description" content="Profit, BEP, ROI, EBITDA, pendanaan, SWOT, dan blueprint usaha dengan laporan PDF.">
+<meta name="twitter:image" content="https://pusatbanksoal.id/assets/og.png">
+<link rel="stylesheet" href="assets/style.css">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@graph":[
+ {"@type":"WebApplication","name":"Studio Bisnis PusatBankSoal.id","applicationCategory":"BusinessApplication","operatingSystem":"Web","url":"https://pusatbanksoal.id/bisnis.html","description":"Kalkulator bisnis: profit & BEP, harga/HPP, ROI & payback, EBITDA, cicilan pinjaman bank, bagi hasil investor, analisis SWOT, dan blueprint usaha, dengan laporan yang bisa dicetak/diekspor PDF.","offers":{"@type":"Offer","price":"0","priceCurrency":"IDR"},"inLanguage":"id-ID"},
+ {"@type":"BreadcrumbList","itemListElement":[
+  {"@type":"ListItem","position":1,"name":"Beranda","item":"https://pusatbanksoal.id/"},
+  {"@type":"ListItem","position":2,"name":"Studio Bisnis","item":"https://pusatbanksoal.id/bisnis.html"}]}
+]}
+</script>
+<script src="assets/auth.js"></script>
+<style>
+.bz-sub{display:flex;flex-wrap:wrap;gap:6px;margin:22px 0 8px;position:sticky;top:64px;background:var(--canvas);padding:10px 0;z-index:20}
+.bz-tab{background:var(--elevated);border:1px solid var(--hair-dark);color:var(--muted-strong);border-radius:999px;padding:8px 15px;font:inherit;font-size:13px;font-weight:600;cursor:pointer;transition:.15s}
+.bz-tab:hover{border-color:var(--muted)}
+.bz-tab.on{background:var(--primary);border-color:var(--primary);color:var(--on-primary)}
+.bz-panel{display:none}
+.bz-panel.on{display:block}
+.bz-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:640px){.bz-grid{grid-template-columns:1fr}}
+.bz-field{margin-bottom:12px}
+.bz-label{display:block;color:var(--muted);font-size:13px;margin-bottom:6px}
+.bz-in,.bz-sel,.bz-area{width:100%;background:var(--elevated);border:1px solid var(--hair-dark);color:var(--body);border-radius:9px;padding:11px 13px;font-size:14px;font-family:inherit}
+.bz-in:focus,.bz-sel:focus,.bz-area:focus{outline:2px solid var(--info);outline-offset:1px;border-color:var(--info)}
+.bz-area{min-height:96px;resize:vertical;line-height:1.55}
+.bz-card{background:var(--grad-surface);border:1px solid var(--hair-dark);border-radius:16px;padding:20px;box-shadow:var(--sh-md)}
+.bz-card+.bz-card{margin-top:16px}
+.bz-res{background:var(--card);border:1px solid var(--hair-dark);border-radius:12px;padding:16px;margin-top:14px}
+.bz-row{display:flex;justify-content:space-between;gap:12px;padding:8px 0;border-bottom:1px solid var(--hair-soft);font-size:14px}
+.bz-row:last-child{border-bottom:none}
+.bz-row b{color:var(--on-dark);font-family:var(--num)}
+.bz-big{font-family:var(--num);font-weight:700;font-size:clamp(20px,3vw,26px);color:var(--primary)}
+.bz-note{color:var(--muted);font-size:12.5px;margin-top:8px}
+.bz-hl{color:var(--on-dark);font-weight:600}
+.bz-swot{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:640px){.bz-swot{grid-template-columns:1fr}}
+.bz-bp h4{color:var(--on-dark);margin-top:14px;font-size:15px}
+.bz-bp ul{margin:6px 0 0 18px} .bz-bp li{margin:3px 0;color:var(--muted-strong);font-size:13.5px}
+#bzReport .bz-row b{color:var(--on-dark)}
+@media print{
+  .nav,.footer,.bz-sub,.no-print{display:none!important}
+  body{background:#fff;color:#111}
+  .bz-card,.bz-res{border:1px solid #ccc;box-shadow:none;background:#fff;color:#111}
+  .bz-big{color:#111}
+  #bzReport,#bzReport *{color:#111!important}
+}
+</style>
+</head>
+<body>
+<nav class="nav"><div class="nav-in">
+<a class="brand" href="index.html"><span class="logo">P</span>Pusat<b>BankSoal</b></a>
+<div class="nav-links" id="navLinks">
+<a href="index.html">Beranda</a><a href="tryout.html">Tryout</a><a href="dashboard.html">Dashboard</a><a href="analisis.html">AI Analisis</a><a href="skripsi.html">Riset & Skripsi</a><a href="prompt-studio.html">Prompt Studio</a><a href="bisnis.html" class="active">Studio Bisnis</a><a href="index.html#harga">Harga</a>
+</div>
+<div class="nav-right"><a href="auth.html" class="hide-sm" style="font-weight:600">Masuk</a><a href="auth.html" class="btn btn-primary btn-sm">Daftar Gratis</a>
+<button class="nav-toggle" data-nav-toggle aria-label="Buka menu" aria-expanded="false"><svg class="i"><use href="#i-menu"></use></svg></button></div>
+</div></nav>
+
+<main>
+<section class="section-sm"><div class="wrap">
+  <span class="section-eyebrow">Studio Bisnis</span>
+  <h1 class="mt">Hitung <span class="gradient-text">kelayakan usahamu</span> seperti konsultan</h1>
+  <p class="lead mt">Profit, titik impas (BEP), harga jual, ROI, EBITDA, cicilan pinjaman bank, bagi hasil investor, sampai analisis SWOT — plus blueprint usaha per bidang. Semua dihitung di perangkatmu, dan bisa disusun jadi <b style="color:var(--on-dark)">laporan siap cetak/PDF</b>. Angka yang kamu masukkan adalah milikmu; alat ini memandu keputusan, bukan menggantikan pertimbanganmu.</p>
+
+  <nav class="bz-sub" id="bzSub" aria-label="Alat bisnis">
+    <button class="bz-tab on" data-tool="blueprint">Blueprint Usaha</button>
+    <button class="bz-tab" data-tool="profit">Profit & BEP</button>
+    <button class="bz-tab" data-tool="harga">Harga & HPP</button>
+    <button class="bz-tab" data-tool="roi">ROI & Payback</button>
+    <button class="bz-tab" data-tool="ebitda">EBITDA & Laba</button>
+    <button class="bz-tab" data-tool="dana">Pendanaan</button>
+    <button class="bz-tab" data-tool="swot">SWOT</button>
+    <button class="bz-tab" data-tool="laporan">Laporan</button>
+  </nav>
+
+  <!-- BLUEPRINT -->
+  <section class="bz-panel on" data-panel="blueprint">
+    <div class="bz-card">
+      <div class="bz-field"><label class="bz-label" for="bpType">Jenis usaha</label><select class="bz-sel" id="bpType"></select></div>
+      <div class="bz-bp" id="bpOut"></div>
+    </div>
+  </section>
+
+  <!-- PROFIT & BEP -->
+  <section class="bz-panel" data-panel="profit">
+    <div class="bz-card">
+      <h3>Profit &amp; Titik Impas (BEP)</h3>
+      <div class="bz-grid mt">
+        <div class="bz-field"><label class="bz-label" for="pfPrice">Harga jual / unit (Rp)</label><input class="bz-in" id="pfPrice" type="number" placeholder="25000"></div>
+        <div class="bz-field"><label class="bz-label" for="pfVar">Biaya variabel / unit (Rp)</label><input class="bz-in" id="pfVar" type="number" placeholder="10000"></div>
+        <div class="bz-field"><label class="bz-label" for="pfFix">Biaya tetap / bulan (Rp)</label><input class="bz-in" id="pfFix" type="number" placeholder="8000000"></div>
+        <div class="bz-field"><label class="bz-label" for="pfQty">Target terjual / bulan (unit)</label><input class="bz-in" id="pfQty" type="number" placeholder="1500"></div>
+      </div>
+      <div class="bz-res" id="pfOut"></div>
+    </div>
+  </section>
+
+  <!-- HARGA & HPP -->
+  <section class="bz-panel" data-panel="harga">
+    <div class="bz-card">
+      <h3>Harga Pokok (HPP) &amp; Harga Jual</h3>
+      <div class="bz-grid mt">
+        <div class="bz-field"><label class="bz-label" for="hpBahan">Biaya bahan / unit (Rp)</label><input class="bz-in" id="hpBahan" type="number" placeholder="7000"></div>
+        <div class="bz-field"><label class="bz-label" for="hpOh">Tenaga + overhead / unit (Rp)</label><input class="bz-in" id="hpOh" type="number" placeholder="3000"></div>
+        <div class="bz-field"><label class="bz-label" for="hpMode">Metode</label><select class="bz-sel" id="hpMode"><option value="margin">Target margin (%)</option><option value="markup">Markup dari HPP (%)</option></select></div>
+        <div class="bz-field"><label class="bz-label" for="hpPct">Nilai (%)</label><input class="bz-in" id="hpPct" type="number" placeholder="60"></div>
+      </div>
+      <div class="bz-res" id="hpOut"></div>
+    </div>
+  </section>
+
+  <!-- ROI -->
+  <section class="bz-panel" data-panel="roi">
+    <div class="bz-card">
+      <h3>ROI &amp; Payback Period</h3>
+      <div class="bz-grid mt">
+        <div class="bz-field"><label class="bz-label" for="roInv">Total investasi awal (Rp)</label><input class="bz-in" id="roInv" type="number" placeholder="150000000"></div>
+        <div class="bz-field"><label class="bz-label" for="roNet">Laba bersih / bulan (Rp)</label><input class="bz-in" id="roNet" type="number" placeholder="6000000"></div>
+      </div>
+      <div class="bz-res" id="roOut"></div>
+    </div>
+  </section>
+
+  <!-- EBITDA -->
+  <section class="bz-panel" data-panel="ebitda">
+    <div class="bz-card">
+      <h3>EBITDA &amp; Laba Bersih</h3>
+      <div class="bz-grid mt">
+        <div class="bz-field"><label class="bz-label" for="ebRev">Pendapatan / bulan (Rp)</label><input class="bz-in" id="ebRev" type="number" placeholder="80000000"></div>
+        <div class="bz-field"><label class="bz-label" for="ebCogs">HPP / COGS (Rp)</label><input class="bz-in" id="ebCogs" type="number" placeholder="32000000"></div>
+        <div class="bz-field"><label class="bz-label" for="ebOpex">Biaya operasional (tanpa penyusutan) (Rp)</label><input class="bz-in" id="ebOpex" type="number" placeholder="28000000"></div>
+        <div class="bz-field"><label class="bz-label" for="ebDep">Penyusutan &amp; amortisasi (Rp)</label><input class="bz-in" id="ebDep" type="number" placeholder="3000000"></div>
+        <div class="bz-field"><label class="bz-label" for="ebInt">Bunga pinjaman (Rp)</label><input class="bz-in" id="ebInt" type="number" placeholder="2000000"></div>
+        <div class="bz-field"><label class="bz-label" for="ebTax">Pajak (%)</label><input class="bz-in" id="ebTax" type="number" placeholder="0.5"></div>
+      </div>
+      <div class="bz-res" id="ebOut"></div>
+    </div>
+  </section>
+
+  <!-- PENDANAAN -->
+  <section class="bz-panel" data-panel="dana">
+    <div class="bz-card">
+      <h3>Pinjaman Bank</h3>
+      <div class="bz-grid mt">
+        <div class="bz-field"><label class="bz-label" for="lnAmt">Jumlah pinjaman (Rp)</label><input class="bz-in" id="lnAmt" type="number" placeholder="200000000"></div>
+        <div class="bz-field"><label class="bz-label" for="lnRate">Bunga / tahun (%)</label><input class="bz-in" id="lnRate" type="number" placeholder="12"></div>
+        <div class="bz-field"><label class="bz-label" for="lnTenor">Tenor (bulan)</label><input class="bz-in" id="lnTenor" type="number" placeholder="36"></div>
+        <div class="bz-field"><label class="bz-label" for="lnType">Jenis bunga</label><select class="bz-sel" id="lnType"><option value="anuitas">Anuitas (efektif)</option><option value="flat">Flat</option></select></div>
+      </div>
+      <div class="bz-res" id="lnOut"></div>
+    </div>
+    <div class="bz-card">
+      <h3>Bagi Hasil Investor</h3>
+      <div class="bz-grid mt">
+        <div class="bz-field"><label class="bz-label" for="ivTotal">Total modal dibutuhkan (Rp)</label><input class="bz-in" id="ivTotal" type="number" placeholder="300000000"></div>
+        <div class="bz-field"><label class="bz-label" for="ivInv">Kontribusi investor (Rp)</label><input class="bz-in" id="ivInv" type="number" placeholder="180000000"></div>
+        <div class="bz-field"><label class="bz-label" for="ivShare">Porsi bagi hasil untuk investor (%)</label><input class="bz-in" id="ivShare" type="number" placeholder="40"></div>
+        <div class="bz-field"><label class="bz-label" for="ivProfit">Proyeksi laba bersih / bulan (Rp)</label><input class="bz-in" id="ivProfit" type="number" placeholder="15000000"></div>
+      </div>
+      <div class="bz-res" id="ivOut"></div>
+      <p class="bz-note">Ekuitas dihitung dari proporsi modal; porsi bagi hasil bisa berbeda dari ekuitas sesuai kesepakatan. Tuangkan dalam perjanjian tertulis.</p>
+    </div>
+  </section>
+
+  <!-- SWOT -->
+  <section class="bz-panel" data-panel="swot">
+    <div class="bz-card">
+      <h3>Analisis SWOT &amp; Strategi TOWS</h3>
+      <div class="bz-swot mt">
+        <div class="bz-field"><label class="bz-label" for="swS">Kekuatan (Strengths)</label><textarea class="bz-area" id="swS" placeholder="Satu poin per baris"></textarea></div>
+        <div class="bz-field"><label class="bz-label" for="swW">Kelemahan (Weaknesses)</label><textarea class="bz-area" id="swW" placeholder="Satu poin per baris"></textarea></div>
+        <div class="bz-field"><label class="bz-label" for="swO">Peluang (Opportunities)</label><textarea class="bz-area" id="swO" placeholder="Satu poin per baris"></textarea></div>
+        <div class="bz-field"><label class="bz-label" for="swT">Ancaman (Threats)</label><textarea class="bz-area" id="swT" placeholder="Satu poin per baris"></textarea></div>
+      </div>
+      <button class="btn btn-primary btn-sm" id="swGo">Susun Strategi TOWS</button>
+      <div class="bz-res" id="swOut" style="display:none"></div>
+    </div>
+  </section>
+
+  <!-- LAPORAN -->
+  <section class="bz-panel" data-panel="laporan">
+    <div class="bz-card">
+      <div class="flex between items-center wrap-flex gap">
+        <h3>Laporan Analisis Bisnis</h3>
+        <div class="flex gap wrap-flex no-print">
+          <button class="btn btn-secondary btn-sm" id="rpBuild">Susun Ulang</button>
+          <button class="btn btn-primary btn-sm" id="rpPrint">Cetak / PDF</button>
+          <button class="btn btn-ghost btn-sm" id="rpDoc">Ekspor Word</button>
+        </div>
+      </div>
+      <div class="bz-field mt"><label class="bz-label" for="rpName">Nama usaha / penyusun (opsional)</label><input class="bz-in" id="rpName" placeholder="mis. Kopi Senja — disusun oleh Budi"></div>
+      <div id="bzReport" class="mt"></div>
+    </div>
+  </section>
+
+</div></section>
+</main>
+
+<footer class="footer"><div class="wrap"><div class="cols">
+<div><a class="brand" href="index.html" style="color:var(--ink)"><span class="logo">P</span>Pusat<b>BankSoal</b></a><p style="color:#5b6672;font-size:13px;margin-top:14px;max-width:34ch">AI Education Intelligence Platform. Tryout, bank soal, analisis nilai & rekomendasi kampus #1 di Indonesia.</p></div>
+<div><h5>Produk</h5><a href="tryout.html">Tryout CPNS</a><a href="pembahasan.html">Bank Soal & Pembahasan</a><a href="skripsi.html">Riset & Skripsi</a><a href="prompt-studio.html">Prompt Studio</a><a href="bisnis.html">Studio Bisnis</a></div>
+<div><h5>Kategori</h5><a href="tryout.html">CPNS & PPPK</a><a href="tryout.html">SNBT/UTBK</a><a href="tryout.html">Kedinasan</a><a href="tryout.html">BUMN</a><a href="tryout.html">TNI/POLRI</a></div>
+<div><h5>Perusahaan</h5><a href="#">Tentang Kami</a><a href="#">Blog</a><a href="#">Karier</a><a href="#">Kontak</a><a href="#">Afiliasi</a></div>
+<div><h5>Bantuan</h5><a href="#">Pusat Bantuan</a><a href="#">Syarat & Ketentuan</a><a href="#">Kebijakan Privasi</a><a href="admin.html">Admin</a></div>
+</div><div class="bottom"><span>© <span data-year>2026</span> PusatBankSoal.id — Seluruh hak cipta dilindungi.</span><span>Dibuat untuk pejuang ujian Indonesia 🇮🇩</span></div></div></footer>
+
+<script>
+(function(){
+  var $=function(id){return document.getElementById(id);};
+  function n(id){var v=parseFloat(($(id)&&$(id).value)||'');return isFinite(v)?v:0;}
+  function rp(x){if(!isFinite(x))return '—';var s=Math.round(x).toLocaleString('id-ID');return 'Rp '+s;}
+  function pct(x){return isFinite(x)?(Math.round(x*10)/10)+'%':'—';}
+  function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+  function rows(arr){return arr.map(function(r){return '<div class="bz-row"><span>'+esc(r[0])+'</span><b>'+esc(r[1])+'</b></div>';}).join('');}
+  var REPORT={};
+
+  // ---- sub-nav ----
+  $('bzSub').addEventListener('click',function(e){var b=e.target.closest('.bz-tab');if(!b)return;
+    var t=b.getAttribute('data-tool');
+    var tabs=this.querySelectorAll('.bz-tab');for(var i=0;i<tabs.length;i++)tabs[i].classList.toggle('on',tabs[i]===b);
+    var pans=document.querySelectorAll('.bz-panel');for(var j=0;j<pans.length;j++)pans[j].classList.toggle('on',pans[j].getAttribute('data-panel')===t);
+    if(t==='laporan') buildReport();
+  });
+
+  // ---- Blueprint ----
+  var BP={
+    fnb:{name:'F&B — Warung / Kafe / Resto',model:'Pendapatan dari penjualan makanan/minuman per porsi; tingkatkan lewat rata-rata transaksi, dine-in + online (GoFood/GrabFood), dan jam sibuk.',
+      modal:['Sewa tempat + deposit','Renovasi & interior','Peralatan dapur & kompor','Meja-kursi & perlengkapan','Perizinan (NIB, SLHS/PIRT)','Stok bahan awal','Kasir/POS & branding'],
+      opex:['Bahan baku (food cost)','Gaji & bonus staf','Sewa','Listrik-air-gas','Kemasan','Marketing & komisi ojol','Pemeliharaan'],
+      kpi:['Food cost % (ideal 28–35%)','Rata-rata transaksi (average check)','Jumlah transaksi/hari','Prime cost (bahan+tenaga) < 60%','Waktu sajian'],
+      harga:'Tetapkan harga dari food cost: harga = biaya bahan ÷ 30%. Jaga food cost 28–35% dan biaya tenaga 20–25%.',
+      risiko:['Bahan mudah rusak/waste','Ketergantungan lokasi & traffic','Persaingan & tren cepat berubah','Kualitas tidak konsisten'],
+      tips:['Uji menu dengan modal kecil sebelum skala','Kunci resep & takaran (standar porsi)','Kelola waste harian','Bangun pelanggan setia via loyalti'],
+      funding:'Cocok bootstrapping/pinjaman kecil untuk 1 outlet. Ekspansi multi-outlet baru pertimbangkan investor.'},
+    hotel:{name:'Penginapan / Hotel / Homestay',model:'Pendapatan dari tarif kamar × malam; kunci di occupancy rate, ADR (tarif rata-rata), dan RevPAR.',
+      modal:['Bangunan/sewa jangka panjang','Interior & furnitur kamar','Sistem booking & channel manager','Perizinan usaha akomodasi','Linen & amenities','Genset/AC/utilitas'],
+      opex:['Gaji staf & housekeeping','Listrik-air','Laundry & amenities','Komisi OTA (Traveloka/Booking, 15–20%)','Pemeliharaan','Marketing'],
+      kpi:['Occupancy rate','ADR (Average Daily Rate)','RevPAR = ADR × occupancy','Biaya per kamar terjual','Rating & ulasan'],
+      harga:'Dynamic pricing: naikkan tarif saat high season/weekend, turunkan saat sepi untuk jaga occupancy.',
+      risiko:['Modal besar & balik modal lama','Musiman','Ketergantungan OTA & komisinya','Standar kebersihan/pelayanan'],
+      tips:['Mulai dari homestay/guesthouse kecil','Optimalkan ulasan & foto','Kelola bauran channel (langsung vs OTA)','Jaga biaya tetap seramping mungkin'],
+      funding:'Padat modal — umumnya perlu pinjaman berjaminan aset atau investor ekuitas; siapkan proyeksi 3–5 tahun.'},
+    rental:{name:'Persewaan (rental mobil/alat/properti)',model:'Pendapatan dari tarif sewa × unit × tingkat pemakaian (utilisasi); aset menghasilkan berulang.',
+      modal:['Pembelian aset (kendaraan/alat)','Asuransi & balik nama','Sistem booking & GPS','Tempat penyimpanan','Perizinan'],
+      opex:['Perawatan & servis','Asuransi','Penyusutan aset','Gaji sopir/operator','Marketing'],
+      kpi:['Tingkat utilisasi aset (%)','Pendapatan per unit','Biaya perawatan per unit','Umur & nilai sisa aset'],
+      harga:'Tarif harus menutup penyusutan + perawatan + target margin. Hitung titik impas utilisasi per unit.',
+      risiko:['Kerusakan & penyalahgunaan aset','Penurunan nilai aset','Utilisasi rendah = rugi','Risiko kredit macet penyewa'],
+      tips:['Mulai dari sedikit unit, ukur utilisasi','Kontrak & deposit jelas','Rawat aset agar nilai jual terjaga','Manfaatkan sistem tracking'],
+      funding:'Cocok leasing/kredit kendaraan; ekspansi armada bisa lewat investor bagi hasil per unit.'},
+    creative:{name:'Creative / Agency / Jasa Desain',model:'Pendapatan dari proyek/retainer; kunci di tarif per jam, utilisasi tim, dan klien berulang.',
+      modal:['Peralatan (komputer/kamera)','Software berlangganan','Portofolio & branding','Ruang kerja (bisa remote)','Modal kerja awal'],
+      opex:['Gaji/fee talent','Software','Marketing & akuisisi klien','Operasional kantor'],
+      kpi:['Tarif efektif per jam','Utilisasi tim (billable %)','Nilai kontrak rata-rata','Retensi klien / retainer'],
+      harga:'Hargai berdasarkan nilai (value-based), bukan sekadar jam. Retainer bulanan menstabilkan arus kas.',
+      risiko:['Arus kas tidak rata (proyek)','Ketergantungan pada 1–2 klien besar','Scope creep','Rekrutmen talenta'],
+      tips:['Bangun portofolio & studi kasus','Buat paket & retainer','Kontrak dengan termin & DP','Kelola scope dengan ketat'],
+      funding:'Modal ringan — umumnya bootstrapping dari arus kas proyek; jarang perlu utang besar.'},
+    printing:{name:'Percetakan / Printing',model:'Pendapatan dari volume cetak (satuan/lembar/meter) + jasa desain; kunci di utilisasi mesin & harga bahan.',
+      modal:['Mesin cetak (digital/offset)','Finishing (laminating, potong)','Stok bahan (kertas/tinta/banner)','Komputer & software','Tempat & perizinan'],
+      opex:['Bahan (kertas, tinta, banner)','Perawatan mesin','Listrik','Gaji operator','Marketing'],
+      kpi:['Utilisasi mesin','Margin per jenis produk','Biaya bahan per pesanan','Waktu pengerjaan (turnaround)'],
+      harga:'Hitung biaya bahan + listrik + penyusutan mesin per unit, tambahkan margin. Paket B2B untuk volume.',
+      risiko:['Mesin rusak = berhenti produksi','Harga bahan fluktuatif','Persaingan harga','Piutang klien korporat'],
+      tips:['Rawat mesin & stok sparepart','Fokus segmen (sablon/banner/undangan)','Bundling desain + cetak','Kelola piutang ketat'],
+      funding:'Mesin bisa via kredit/leasing; hitung cicilan agar tertutup dari margin produksi.'},
+    retail:{name:'Retail / Toko / Online Shop',model:'Pendapatan dari margin penjualan barang; kunci di perputaran stok, margin, dan biaya akuisisi pelanggan.',
+      modal:['Stok awal (inventory)','Etalase/tempat atau toko online','Sistem kasir/POS','Branding & foto produk'],
+      opex:['Pembelian stok (HPP)','Sewa/biaya platform','Iklan & komisi marketplace','Gaji','Pengemasan & ongkir'],
+      kpi:['Perputaran stok (inventory turnover)','Gross margin %','Biaya akuisisi pelanggan (CAC)','Nilai transaksi rata-rata'],
+      harga:'Jaga margin kotor sehat (retail umum 30–50%). Kelola stok mati agar tidak mengunci modal.',
+      risiko:['Stok mati/kedaluwarsa','Perang harga marketplace','Ketergantungan iklan','Retur'],
+      tips:['Mulai dari produk terlaris (uji cepat)','Kelola stok berbasis data','Diversifikasi channel','Bangun brand & repeat order'],
+      funding:'Modal kerja untuk stok — bisa bootstrapping/pinjaman modal kerja; hindari over-stock.'},
+    laundry:{name:'Laundry / Jasa Kiloan',model:'Pendapatan dari kg/satuan × volume; kunci di kapasitas mesin, utilisasi, dan pelanggan langganan.',
+      modal:['Mesin cuci & pengering','Setrika & meja','Tempat + air','Timbangan & POS','Deterjen awal'],
+      opex:['Air-listrik-gas','Deterjen & parfum','Gaji','Sewa','Plastik & hanger'],
+      kpi:['Kg per hari','Biaya per kg','Utilisasi mesin','Pelanggan langganan'],
+      harga:'Harga per kg harus menutup air-listrik-deterjen-tenaga + margin. Paket langganan menstabilkan volume.',
+      risiko:['Mesin rusak','Biaya utilitas naik','Persaingan lokal','Kehilangan/klaim pakaian'],
+      tips:['Lokasi dekat kos/apartemen','Layanan antar-jemput','Langganan bulanan','Jaga kualitas & ketepatan waktu'],
+      funding:'Modal menengah; mesin bisa dicicil. Ekspansi cabang setelah 1 unit stabil.'},
+    jasa:{name:'Jasa Umum (bengkel, barbershop, klinik kecil, dll)',model:'Pendapatan dari layanan × pelanggan; kunci di kapasitas layanan, tarif, dan pelanggan berulang.',
+      modal:['Peralatan sesuai bidang','Tempat & interior','Perizinan/sertifikasi','Branding','Stok bahan awal'],
+      opex:['Gaji/komisi teknisi','Bahan habis pakai','Sewa','Utilitas','Marketing'],
+      kpi:['Jumlah layanan/hari','Tarif rata-rata','Tingkat pelanggan kembali','Utilisasi teknisi'],
+      harga:'Tarif menutup bahan + waktu teknisi + overhead + margin. Paket/membership untuk retensi.',
+      risiko:['Ketergantungan pada tenaga ahli','Musiman','Kepuasan & reputasi','Kapasitas terbatas'],
+      tips:['Standarkan kualitas layanan','Sistem booking & antrean','Program membership','Minta ulasan pelanggan'],
+      funding:'Umumnya modal ringan-menengah; bootstrapping atau pinjaman kecil.'}
+  };
+  (function(){
+    var opts=''; for(var k in BP) opts+='<option value="'+k+'">'+esc(BP[k].name)+'</option>';
+    $('bpType').innerHTML=opts;
+    $('bpType').addEventListener('change',renderBP); renderBP();
+  })();
+  function ul(a){return '<ul>'+a.map(function(x){return '<li>'+esc(x)+'</li>';}).join('')+'</ul>';}
+  function renderBP(){
+    var b=BP[$('bpType').value]; if(!b)return;
+    $('bpOut').innerHTML='<p class="bz-note" style="margin-top:12px;font-size:14px"><span class="bz-hl">Model pendapatan.</span> '+esc(b.model)+'</p>'+
+      '<h4>Rincian modal awal</h4>'+ul(b.modal)+
+      '<h4>Biaya operasional bulanan</h4>'+ul(b.opex)+
+      '<h4>KPI yang wajib dipantau</h4>'+ul(b.kpi)+
+      '<h4>Strategi harga</h4><p class="bz-note" style="font-size:13.5px">'+esc(b.harga)+'</p>'+
+      '<h4>Risiko utama</h4>'+ul(b.risiko)+
+      '<h4>Tips konsultan</h4>'+ul(b.tips)+
+      '<h4>Rekomendasi pendanaan</h4><p class="bz-note" style="font-size:13.5px">'+esc(b.funding)+'</p>';
+    REPORT.blueprint={title:'Blueprint — '+b.name, html:$('bpOut').innerHTML};
+  }
+
+  // ---- Profit & BEP ----
+  function calcProfit(){
+    var P=n('pfPrice'),V=n('pfVar'),F=n('pfFix'),Q=n('pfQty');
+    var cm=P-V, cmPct=P>0?cm/P*100:NaN;
+    var bepU=cm>0?F/cm:NaN, bepRp=isFinite(bepU)?bepU*P:NaN;
+    var profit=cm*Q-F, marginPct=(P*Q)>0?profit/(P*Q)*100:NaN;
+    var r=[['Margin kontribusi / unit',rp(cm)+' ('+pct(cmPct)+')'],
+      ['BEP (unit / bulan)',isFinite(bepU)?Math.ceil(bepU).toLocaleString('id-ID')+' unit':'—'],
+      ['BEP (omzet / bulan)',rp(bepRp)],
+      ['Laba operasi pada target',rp(profit)],
+      ['Margin laba',pct(marginPct)]];
+    $('pfOut').innerHTML='<div class="bz-big">'+rp(profit)+'<span style="font-size:13px;color:var(--muted);font-weight:400"> / bulan (estimasi laba)</span></div>'+rows(r)+
+      (cm<=0?'<p class="bz-note" style="color:var(--down)">Harga jual harus di atas biaya variabel agar usaha bisa impas.</p>':'');
+    REPORT.profit={title:'Profit & BEP',rows:r};
+  }
+  ['pfPrice','pfVar','pfFix','pfQty'].forEach(function(id){$(id).addEventListener('input',calcProfit);});
+
+  // ---- Harga & HPP ----
+  function calcHarga(){
+    var hpp=n('hpBahan')+n('hpOh'), mode=$('hpMode').value, x=n('hpPct')/100, price;
+    if(mode==='margin') price=(x<1&&x>0)?hpp/(1-x):NaN; else price=hpp*(1+x);
+    var laba=isFinite(price)?price-hpp:NaN, foodcost=isFinite(price)&&price>0?hpp/price*100:NaN;
+    var r=[['HPP / unit',rp(hpp)],['Harga jual disarankan',rp(price)],['Laba kotor / unit',rp(laba)],['Rasio HPP thd harga (food cost %)',pct(foodcost)]];
+    $('hpOut').innerHTML='<div class="bz-big">'+rp(price)+'<span style="font-size:13px;color:var(--muted);font-weight:400"> / unit (harga disarankan)</span></div>'+rows(r)+
+      (mode==='margin'&&x>=1?'<p class="bz-note" style="color:var(--down)">Margin harus di bawah 100%.</p>':'');
+    REPORT.harga={title:'Harga & HPP',rows:r};
+  }
+  ['hpBahan','hpOh','hpMode','hpPct'].forEach(function(id){$(id).addEventListener('input',calcHarga);$(id).addEventListener('change',calcHarga);});
+
+  // ---- ROI ----
+  function calcRoi(){
+    var inv=n('roInv'),net=n('roNet'),yr=net*12;
+    var roi=inv>0?yr/inv*100:NaN, pay=net>0?inv/net:NaN, r5=yr*5-inv;
+    var r=[['Investasi awal',rp(inv)],['Laba bersih / tahun',rp(yr)],['ROI / tahun',pct(roi)],
+      ['Payback period',isFinite(pay)?(Math.round(pay*10)/10)+' bulan ('+(Math.round(pay/12*10)/10)+' tahun)':'—'],
+      ['Estimasi laba bersih 5 tahun (di atas modal)',rp(r5)]];
+    $('roOut').innerHTML='<div class="bz-big">'+pct(roi)+'<span style="font-size:13px;color:var(--muted);font-weight:400"> ROI / tahun</span></div>'+rows(r);
+    REPORT.roi={title:'ROI & Payback',rows:r};
+  }
+  ['roInv','roNet'].forEach(function(id){$(id).addEventListener('input',calcRoi);});
+
+  // ---- EBITDA ----
+  function calcEbitda(){
+    var rev=n('ebRev'),cogs=n('ebCogs'),opex=n('ebOpex'),dep=n('ebDep'),intr=n('ebInt'),tax=n('ebTax')/100;
+    var gross=rev-cogs, ebitda=gross-opex, ebit=ebitda-dep, ebt=ebit-intr, net=ebt-(ebt>0?ebt*tax:0);
+    var m=function(v){return rev>0?pct(v/rev*100):'—';};
+    var r=[['Laba kotor',rp(gross)+' ('+m(gross)+')'],['EBITDA',rp(ebitda)+' ('+m(ebitda)+')'],
+      ['EBIT (laba operasi)',rp(ebit)],['Laba sebelum pajak',rp(ebt)],['Laba bersih',rp(net)+' ('+m(net)+')']];
+    $('ebOut').innerHTML='<div class="bz-big">'+rp(ebitda)+'<span style="font-size:13px;color:var(--muted);font-weight:400"> EBITDA ('+m(ebitda)+')</span></div>'+rows(r);
+    REPORT.ebitda={title:'EBITDA & Laba',rows:r};
+  }
+  ['ebRev','ebCogs','ebOpex','ebDep','ebInt','ebTax'].forEach(function(id){$(id).addEventListener('input',calcEbitda);});
+
+  // ---- Pinjaman Bank ----
+  function calcLoan(){
+    var L=n('lnAmt'),ra=n('lnRate')/100,nn=n('lnTenor'),type=$('lnType').value,ins,tot,intTot;
+    if(nn<=0||L<=0){$('lnOut').innerHTML='<p class="bz-note">Isi jumlah pinjaman & tenor.</p>';return;}
+    if(type==='flat'){ intTot=L*ra*(nn/12); tot=L+intTot; ins=tot/nn; }
+    else { var i=ra/12; ins=i>0?L*i/(1-Math.pow(1+i,-nn)):L/nn; tot=ins*nn; intTot=tot-L; }
+    var r=[['Angsuran / bulan',rp(ins)],['Total bunga',rp(intTot)],['Total yang dibayar',rp(tot)],['Bunga efektif thd pokok',pct(intTot/L*100)]];
+    $('lnOut').innerHTML='<div class="bz-big">'+rp(ins)+'<span style="font-size:13px;color:var(--muted);font-weight:400"> / bulan ('+(type==='flat'?'flat':'anuitas')+')</span></div>'+rows(r)+
+      '<p class="bz-note">Bunga flat terlihat kecil tapi bunga efektifnya bisa hampir 2× lipat dari angka flat. Bandingkan keduanya sebelum tanda tangan.</p>';
+    REPORT.loan={title:'Pinjaman Bank ('+(type==='flat'?'flat':'anuitas')+')',rows:r};
+  }
+  ['lnAmt','lnRate','lnTenor','lnType'].forEach(function(id){$(id).addEventListener('input',calcLoan);$(id).addEventListener('change',calcLoan);});
+
+  // ---- Investor ----
+  function calcInv(){
+    var tot=n('ivTotal'),inv=n('ivInv'),share=n('ivShare')/100,profit=n('ivProfit');
+    var eqInv=tot>0?inv/tot*100:NaN, eqOwn=100-eqInv;
+    var invGet=profit*share, ownGet=profit*(1-share), pay=invGet>0?inv/invGet:NaN;
+    var r=[['Ekuitas investor (dari modal)',pct(eqInv)],['Ekuitas kamu',pct(eqOwn)],
+      ['Bagian investor / bulan',rp(invGet)+' ('+pct(share*100)+')'],['Bagianmu / bulan',rp(ownGet)],
+      ['Payback investor',isFinite(pay)?(Math.round(pay)+' bulan ('+(Math.round(pay/12*10)/10)+' tahun)'):'—']];
+    $('ivOut').innerHTML='<div class="bz-big">'+pct(eqInv)+'<span style="font-size:13px;color:var(--muted);font-weight:400"> ekuitas investor</span></div>'+rows(r);
+    REPORT.invest={title:'Bagi Hasil Investor',rows:r};
+  }
+  ['ivTotal','ivInv','ivShare','ivProfit'].forEach(function(id){$(id).addEventListener('input',calcInv);});
+
+  // ---- SWOT / TOWS ----
+  function lines(id){return (($(id)&&$(id).value)||'').split(/\n/).map(function(s){return s.trim();}).filter(Boolean);}
+  $('swGo').addEventListener('click',function(){
+    var S=lines('swS'),W=lines('swW'),O=lines('swO'),T=lines('swT');
+    function j(a){return a.length?a.join('; '):'〔lengkapi〕';}
+    var html='<div class="bz-swot">'+
+      '<div class="bz-res"><b class="bz-hl">SO — Agresif (kekuatan × peluang)</b><p class="bz-note" style="font-size:13px">Manfaatkan <b>'+esc(j(S))+'</b> untuk merebut <b>'+esc(j(O))+'</b>.</p></div>'+
+      '<div class="bz-res"><b class="bz-hl">WO — Perbaikan (kelemahan × peluang)</b><p class="bz-note" style="font-size:13px">Atasi <b>'+esc(j(W))+'</b> agar bisa menangkap <b>'+esc(j(O))+'</b>.</p></div>'+
+      '<div class="bz-res"><b class="bz-hl">ST — Diversifikasi (kekuatan × ancaman)</b><p class="bz-note" style="font-size:13px">Gunakan <b>'+esc(j(S))+'</b> untuk meredam <b>'+esc(j(T))+'</b>.</p></div>'+
+      '<div class="bz-res"><b class="bz-hl">WT — Bertahan (kelemahan × ancaman)</b><p class="bz-note" style="font-size:13px">Minimalkan <b>'+esc(j(W))+'</b> dan lindungi diri dari <b>'+esc(j(T))+'</b>.</p></div></div>';
+    $('swOut').style.display='block'; $('swOut').innerHTML=html;
+    REPORT.swot={title:'SWOT & Strategi TOWS',html:html};
+  });
+
+  // ---- Laporan ----
+  function buildReport(){
+    var name=($('rpName').value||'').trim();
+    var order=[['blueprint',REPORT.blueprint],['profit',REPORT.profit],['harga',REPORT.harga],['roi',REPORT.roi],['ebitda',REPORT.ebitda],['loan',REPORT.loan],['invest',REPORT.invest],['swot',REPORT.swot]];
+    var h='<h2 style="color:var(--on-dark)">Laporan Analisis Bisnis</h2>'+
+      (name?'<p class="bz-hl">'+esc(name)+'</p>':'')+
+      '<p class="bz-note">Disusun dengan Studio Bisnis PusatBankSoal.id — '+new Date().toLocaleDateString('id-ID',{day:'numeric',month:'long',year:'numeric'})+'. Angka bersifat estimasi dari input pengguna.</p>';
+    var any=false;
+    order.forEach(function(o){var d=o[1];if(!d)return;any=true;
+      h+='<div class="bz-res"><b class="bz-hl">'+esc(d.title)+'</b>'+(d.rows?rows(d.rows):(d.html||''))+'</div>';
+    });
+    if(!any) h+='<p class="bz-note">Isi kalkulator di tab lain, lalu kembali ke sini untuk menyusun laporan.</p>';
+    $('bzReport').innerHTML=h;
+  }
+  $('rpBuild').addEventListener('click',buildReport);
+  $('rpName').addEventListener('input',buildReport);
+  $('rpPrint').addEventListener('click',function(){buildReport();window.print();});
+  $('rpDoc').addEventListener('click',function(){
+    buildReport();
+    var html='<html><head><meta charset="utf-8"><style>body{font-family:Arial,sans-serif;color:#111;max-width:720px;margin:auto}h2{margin-bottom:4px}.bz-row{display:flex;justify-content:space-between;border-bottom:1px solid #ddd;padding:5px 0}.bz-res{border:1px solid #ccc;border-radius:8px;padding:12px;margin:10px 0}ul{margin:4px 0 0 18px}</style></head><body>'+$('bzReport').innerHTML+'</body></html>';
+    var b=new Blob([html],{type:'application/msword'});var u=URL.createObjectURL(b);var a=document.createElement('a');a.href=u;a.download='laporan-bisnis.doc';document.body.appendChild(a);a.click();a.remove();setTimeout(function(){URL.revokeObjectURL(u);},1000);
+  });
+
+  // init compute (so defaults/placeholders don't error)
+  calcProfit();calcHarga();calcRoi();calcEbitda();calcLoan();calcInv();
+})();
+</script>
+<script src="assets/app.js" defer></script>
+</body>
+</html>
