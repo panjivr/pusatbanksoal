@@ -143,7 +143,11 @@ input[type=range]{accent-color:var(--primary);height:6px}
 .lc-box{background:var(--card);border:1px solid var(--hair-dark);border-radius:10px;padding:12px}
 .lc-box h5{color:var(--primary);font-size:11px;letter-spacing:.4px;text-transform:uppercase;margin-bottom:6px;font-family:var(--display)}
 .lc-box ul{margin:0 0 0 15px} .lc-box li{font-size:12.5px;color:var(--muted-strong);margin:2px 0;line-height:1.4}
-.lc-box p{font-size:12.5px;color:var(--muted-strong);margin:0;line-height:1.45}
+.lc-box p{font-size:12.5px;color:var(--muted-strong);margin:0;line-height:1.45;white-space:pre-wrap}
+.lc-edit{width:100%;background:transparent;border:none;color:var(--body);font:inherit;font-size:12.5px;line-height:1.45;resize:vertical;min-height:56px;padding:4px 6px;margin:-2px -4px;border-radius:6px;outline:none;display:block}
+.lc-edit:hover{background:var(--elevated)}
+.lc-edit:focus{background:var(--elevated);outline:1px solid var(--primary)}
+.lc-edit::placeholder{color:var(--muted);font-style:italic}
 .lg-item{display:flex;gap:10px;align-items:flex-start;padding:9px 0;border-bottom:1px solid var(--hair-soft)}
 .lg-item input{margin-top:2px;width:17px;height:17px;flex:none;accent-color:var(--primary);cursor:pointer}
 .lg-item .t{font-size:13.5px;color:var(--body)} .lg-item .d{font-size:12px;color:var(--muted);margin-top:1px}
@@ -1052,20 +1056,27 @@ input[type=range]{accent-color:var(--primary);height:6px}
     REPORT.benchmark={title:'Benchmark Rasio Industri',rows:[['HPP/COGS',pct(cogsP)],['Opex',pct(opexP)],['Prime cost',pct(primeP)],['Margin EBITDA',pct(ebM)],['Margin laba bersih',pct(netM)]]};
   }
 
-  // ---- Lean Canvas ----
-  function buildCanvas(){
-    var el=$('lcOut');if(!el)return;var b=BP[$('prType').value||$('bpType').value];
-    var nm=($('prName').value||'').trim()||'Usaha',ci=($('prCity').value||'').trim(),ph='<p>〔lengkapi sendiri〕</p>';
-    function box(t,i){return '<div class="lc-box"><h5>'+t+'</h5>'+i+'</div>';}
-    function ul2(a){return '<ul>'+a.map(function(x){return '<li>'+esc(x)+'</li>';}).join('')+'</ul>';}
-    var cv='<div class="lc-grid">'+box('Masalah',ph)+box('Solusi',b?'<p>'+esc(b.model)+'</p>':ph)+box('Proposisi Nilai Unik',ph)+
-      box('Segmen Pelanggan',ci?'<p>Pelanggan di '+esc(ci)+' &amp; sekitarnya. 〔perjelas〕</p>':ph)+box('Metrik Kunci',b?ul2(b.kpi):ph)+box('Keunggulan Tak Adil',ph)+
-      box('Saluran','<p>〔pilih〕 langsung, media sosial'+(($('prType').value||$('bpType').value)==='fnb'?', ojek online (GoFood/GrabFood)':'')+'</p>')+
-      box('Sumber Pendapatan',b?'<p>'+esc(b.model)+'</p>':ph)+box('Struktur Biaya',b?ul2(b.opex.slice(0,5)):ph)+'</div>';
-    el.innerHTML='<p class="bz-note" style="margin-bottom:8px">Lean Canvas — <b class="bz-hl">'+esc(nm)+'</b></p>'+cv;
-    REPORT.canvas={title:'Lean Canvas — '+nm,html:cv};
+  // ---- Lean Canvas (bisa diketik & tersimpan) ----
+  var K_CANVAS='pbs_bisnis_canvas';
+  function canvasStore(){try{return JSON.parse(localStorage.getItem(K_CANVAS)||'{}');}catch(e){return{};}}
+  var LC_BOXES=[['masalah','Masalah'],['solusi','Solusi'],['nilai','Proposisi Nilai Unik'],['segmen','Segmen Pelanggan'],['metrik','Metrik Kunci'],['keunggulan','Keunggulan Tak Adil'],['saluran','Saluran'],['pendapatan','Sumber Pendapatan'],['biaya','Struktur Biaya']];
+  function canvasDefaults(){
+    var type=$('prType').value||$('bpType').value,b=BP[type],ci=($('prCity').value||'').trim();
+    return {masalah:'',solusi:b?b.model:'',nilai:'',segmen:ci?('Pelanggan di '+ci+' & sekitarnya.'):'',
+      metrik:b?b.kpi.join('\n'):'',keunggulan:'',saluran:'langsung, media sosial'+(type==='fnb'?', ojek online (GoFood/GrabFood)':''),
+      pendapatan:b?b.model:'',biaya:b?b.opex.slice(0,6).join('\n'):''};
   }
-  $('lcBuild').addEventListener('click',buildCanvas);
+  function canvasVal(k){var st=canvasStore(),def=canvasDefaults();return (st[k]!=null&&st[k]!=='')?st[k]:def[k];}
+  function buildCanvas(){
+    var el=$('lcOut');if(!el)return;var nm=($('prName').value||'').trim()||'Usaha';
+    if(document.activeElement&&document.activeElement.classList&&document.activeElement.classList.contains('lc-edit'))return; // jangan re-render saat sedang mengetik
+    function box(k,t){return '<div class="lc-box"><h5>'+t+'</h5><textarea class="lc-edit" data-lc="'+k+'" rows="3" placeholder="〔lengkapi sendiri〕">'+esc(canvasVal(k))+'</textarea></div>';}
+    el.innerHTML='<p class="bz-note" style="margin-bottom:8px">Lean Canvas — <b class="bz-hl">'+esc(nm)+'</b> · klik tiap kotak untuk mengetik/mengubah, tersimpan otomatis.</p><div class="lc-grid">'+LC_BOXES.map(function(x){return box(x[0],x[1]);}).join('')+'</div>';
+    var rep='<div class="lc-grid">'+LC_BOXES.map(function(x){var v=canvasVal(x[0]);return '<div class="lc-box"><h5>'+x[1]+'</h5><p>'+(v?esc(v):'〔belum diisi〕')+'</p></div>';}).join('')+'</div>';
+    REPORT.canvas={title:'Lean Canvas — '+nm,html:rep};
+  }
+  $('lcOut').addEventListener('input',function(e){var t=e.target;if(t&&t.classList&&t.classList.contains('lc-edit')){var st=canvasStore();st[t.getAttribute('data-lc')]=t.value;try{localStorage.setItem(K_CANVAS,JSON.stringify(st));}catch(e2){}}});
+  $('lcBuild').addEventListener('click',function(){if(window.confirm('Susun ulang dari data blueprint? Isian yang kamu ketik akan dikosongkan.')){try{localStorage.removeItem(K_CANVAS);}catch(e){}buildCanvas();}});
 
   // ---- Checklist Legalitas ----
   var LEGAL_COMMON=[['nib','NIB (Nomor Induk Berusaha)','Daftar gratis via OSS (oss.go.id)'],['npwp','NPWP usaha','Untuk pajak & pengajuan modal'],['domisili','Izin lokasi / domisili usaha','Sesuai zonasi daerah'],['rek','Rekening bank usaha terpisah','Pisahkan uang pribadi & usaha'],['buku','Pembukuan rutin','Catat semua transaksi']];
@@ -1196,6 +1207,7 @@ input[type=range]{accent-color:var(--primary);height:6px}
 
   // ---- Laporan ----
   function buildReport(){
+    if(typeof buildCanvas==='function')buildCanvas(); if(typeof buildLegalitas==='function')buildLegalitas();
     var pNm=($('prName').value||'').trim(), pOw=($('prOwner').value||'').trim(), pCi=($('prCity').value||'').trim(), pPh=$('prPhase').value, pDt=$('prDate').value;
     var pTy=BP[$('prType').value]?BP[$('prType').value].name:'';
     var name=($('rpName').value||'').trim();
@@ -1232,7 +1244,7 @@ input[type=range]{accent-color:var(--primary);height:6px}
     var t=[],P=n('pfPrice'),V=n('pfVar'),F=n('pfFix'),Q=n('pfQty'),cm=P-V;
     if(P>0){t.push(['Laba / bulan',rp(cm*Q-F)]);t.push(['BEP / bulan',cm>0?Math.ceil(F/cm).toLocaleString('id-ID')+' unit':'—']);}
     var inv=n('roInv'),net=n('roNet');
-    if(inv>0&&net>0){t.push(['ROI / tahun',pct(net*12/inv*100)]);t.push(['Payback',Math.round(inv/net)+' bln']);}
+    if(inv>0&&net>0){t.push(['ROI / tahun',pct(net*12/inv*100)]);var pm=inv/net;t.push(['Payback',pm>24?((Math.round(pm/12*10)/10)+' thn'):(Math.round(pm)+' bln')]);}
     if(n('ebRev')>0){t.push(['EBITDA',rp(n('ebRev')-n('ebCogs')-n('ebOpex'))]);}
     $('bzKpis').innerHTML=t.map(function(x){return kpiTile(x[0],x[1]);}).join('');
   }
@@ -1258,7 +1270,7 @@ input[type=range]{accent-color:var(--primary);height:6px}
   function fields(){return document.querySelectorAll('.bz-in,.bz-sel,.bz-area');}
   function saveInputs(){try{var o={};Array.prototype.forEach.call(fields(),function(el){if(el.id)o[el.id]=el.value;});localStorage.setItem(K_IN,JSON.stringify(o));$('prSaved').textContent='Tersimpan otomatis di perangkat ✓';}catch(e){}}
   function restoreInputs(){try{var o=JSON.parse(localStorage.getItem(K_IN)||'{}');Array.prototype.forEach.call(fields(),function(el){if(el.id&&o[el.id]!=null&&o[el.id]!=='')el.value=o[el.id];});return o;}catch(e){return {};}}
-  function recomputeAll(){renderBP();calcModalEst();calcProfit();calcHarga();calcRoi();calcEbitda();calcLoan();calcInv();calcCash();calcVal();calcTax();calcTarget();calcSaran();calcDiskon();calcSensitivity();calcPnL();calcBenchmark();buildCanvas();buildLegalitas();updateHeader();renderKPI();}
+  function recomputeAll(){renderBP();calcModalEst();calcProfit();calcHarga();calcRoi();calcEbitda();calcLoan();calcInv();calcCash();calcVal();calcTax();calcTarget();calcSaran();calcDiskon();calcSensitivity();calcPnL();calcBenchmark();updateHeader();renderKPI();}
 
   if(!$('prDate').value){var _d=new Date();$('prDate').value=_d.getFullYear()+'-'+('0'+(_d.getMonth()+1)).slice(-2)+'-'+('0'+_d.getDate()).slice(-2);}
   var _saved=restoreInputs();
@@ -1284,7 +1296,7 @@ input[type=range]{accent-color:var(--primary);height:6px}
     var el=$('pfPrice'); if(el&&el.scrollIntoView)el.scrollIntoView({behavior:'smooth',block:'center'});
   });
   $('prNext').addEventListener('click',function(){var t=document.querySelector('.bz-tab[data-tool="blueprint"]');if(t)t.click();});
-  $('prReset').addEventListener('click',function(){if(window.confirm('Hapus semua data analisis di perangkat ini?')){try{localStorage.removeItem(K_IN);}catch(e){}location.reload();}});
+  $('prReset').addEventListener('click',function(){if(window.confirm('Hapus semua data analisis di perangkat ini? (Proyek tersimpan tetap aman.)')){try{localStorage.removeItem(K_IN);localStorage.removeItem('pbs_bisnis_canvas');localStorage.removeItem('pbs_bisnis_legal');}catch(e){}location.reload();}});
 
   // ---- Manajer Proyek (simpan/muat beberapa analisis) ----
   var K_PROJ='pbs_bisnis_projects';
