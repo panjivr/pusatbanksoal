@@ -170,6 +170,17 @@
         <button class="btn btn-ghost btn-sm" id="prReset">Reset semua data</button>
       </div>
       <p class="bz-note" id="prSaved" style="margin-top:10px"></p>
+      <div class="bz-res" style="margin-top:14px">
+        <b class="bz-hl">Proyek Tersimpan</b>
+        <p class="bz-note">Simpan beberapa analisis usaha di perangkat ini dan buka kembali kapan saja.</p>
+        <div class="flex gap wrap-flex mt items-center">
+          <select class="bz-sel" id="pjList" style="max-width:240px"><option value="">— pilih proyek —</option></select>
+          <button class="btn btn-secondary btn-sm" id="pjLoad">Buka</button>
+          <button class="btn btn-primary btn-sm" id="pjSave">Simpan proyek ini</button>
+          <button class="btn btn-ghost btn-sm" id="pjDel">Hapus</button>
+        </div>
+        <p class="bz-note" id="pjMsg" style="margin-top:8px"></p>
+      </div>
     </div>
   </section>
 
@@ -193,6 +204,19 @@
         <div class="bz-field"><label class="bz-label" for="pfQty">Perkiraan terjual per bulan (unit)</label><input class="bz-in" id="pfQty" type="number" placeholder="1500"><small class="bz-help">Kira-kira berapa banyak terjual dalam sebulan.</small></div>
       </div>
       <div class="bz-res" id="pfOut"></div>
+      <div class="bz-res">
+        <b class="bz-hl">Grafik Titik Impas (BEP)</b>
+        <div id="pfChart" class="mt" style="overflow-x:auto"></div>
+      </div>
+      <div class="bz-res">
+        <div class="flex between items-center wrap-flex gap"><b class="bz-hl">3 Skenario Penjualan</b>
+          <div class="flex gap wrap-flex" style="font-size:12.5px;color:var(--muted)">
+            <span>Pesimis −<input class="bz-in" id="scDown" type="number" value="25" style="width:64px;display:inline-block;padding:5px 8px">%</span>
+            <span>Optimis +<input class="bz-in" id="scUp" type="number" value="25" style="width:64px;display:inline-block;padding:5px 8px">%</span>
+          </div>
+        </div>
+        <div class="scroll-x mt"><table class="tbl" id="scTable" style="min-width:440px"></table></div>
+      </div>
     </div>
   </section>
 
@@ -209,6 +233,26 @@
       </div>
       <div class="bz-res" id="hpOut"></div>
       <button class="btn btn-secondary btn-sm mt no-print" id="hpUse">Pakai harga ini di kalkulator Untung &amp; Balik Modal →</button>
+    </div>
+  </section>
+
+  <!-- ESTIMATOR MODAL AWAL -->
+  <section class="bz-panel" data-panel="modalest">
+    <div class="bz-card">
+      <h3>Estimator Modal Awal</h3>
+      <p class="bz-subt">Rinci kebutuhan dana di awal — totalnya otomatis dijumlah dan bisa langsung dipakai sebagai <b>Modal awal</b> di ROI &amp; Saran.</p>
+      <div class="bz-grid mt">
+        <div class="bz-field"><label class="bz-label" for="seSewa">Sewa tempat + deposit (Rp)</label><input class="bz-in" id="seSewa" type="number" placeholder="30000000"></div>
+        <div class="bz-field"><label class="bz-label" for="seReno">Renovasi &amp; interior (Rp)</label><input class="bz-in" id="seReno" type="number" placeholder="40000000"></div>
+        <div class="bz-field"><label class="bz-label" for="seAlat">Peralatan &amp; mesin (Rp)</label><input class="bz-in" id="seAlat" type="number" placeholder="35000000"></div>
+        <div class="bz-field"><label class="bz-label" for="sePerleng">Perlengkapan &amp; furnitur (Rp)</label><input class="bz-in" id="sePerleng" type="number" placeholder="12000000"></div>
+        <div class="bz-field"><label class="bz-label" for="seIzin">Perizinan &amp; legalitas (Rp)</label><input class="bz-in" id="seIzin" type="number" placeholder="5000000"></div>
+        <div class="bz-field"><label class="bz-label" for="seStok">Stok / bahan awal (Rp)</label><input class="bz-in" id="seStok" type="number" placeholder="15000000"></div>
+        <div class="bz-field"><label class="bz-label" for="seBrand">Branding &amp; promosi awal (Rp)</label><input class="bz-in" id="seBrand" type="number" placeholder="8000000"></div>
+        <div class="bz-field"><label class="bz-label" for="seLain">Modal kerja / cadangan (Rp)</label><input class="bz-in" id="seLain" type="number" placeholder="20000000"><small class="bz-help">Dana untuk menutup biaya beberapa bulan pertama.</small></div>
+      </div>
+      <div class="bz-res" id="seOut"></div>
+      <button class="btn btn-primary btn-sm mt no-print" id="seUse">Pakai sebagai Modal awal →</button>
     </div>
   </section>
 
@@ -314,6 +358,7 @@
         <div class="bz-field"><label class="bz-label" for="cfFix">Biaya rutin per bulan (Rp)</label><input class="bz-in" id="cfFix" type="number" placeholder="18000000"><small class="bz-help">Sewa, gaji, langganan. <span class="bz-syncf">↔ Untung &amp; Target</span></small></div>
       </div>
       <div class="scroll-x mt"><table class="tbl" id="cfTable" style="min-width:520px"></table></div>
+      <div id="cfChart" class="mt" style="overflow-x:auto"></div>
       <div class="bz-res" id="cfOut"></div>
     </div>
   </section>
@@ -438,7 +483,7 @@
     blueprint:{cap:'Model bisnis, modal, biaya, KPI, risiko & tips per bidang usaha.',panels:['blueprint']},
     untung:{cap:'<b>Untung &amp; Balik Modal (BEP)</b> · <b>Modal &amp; Harga (HPP)</b> · <b>Target Jualan</b>',panels:['profit','harga','target']},
     keuangan:{cap:'<b>Kesehatan Laba (EBITDA)</b> · <b>Arus Kas 12 Bulan</b> · <b>Pajak UMKM</b>',panels:['ebitda','cashflow','pajak']},
-    modal:{cap:'<b>Balik Modal (ROI)</b> · <b>Saran Target Balik Modal</b> · <b>Pendanaan (bank &amp; investor)</b> · <b>Nilai Usaha</b>',panels:['roi','saran','dana','valuasi']},
+    modal:{cap:'<b>Estimator Modal Awal</b> · <b>Balik Modal (ROI)</b> · <b>Saran Target Balik Modal</b> · <b>Pendanaan</b> · <b>Nilai Usaha</b>',panels:['modalest','roi','saran','dana','valuasi']},
     swot:{cap:'Petakan Kekuatan/Kelemahan/Peluang/Ancaman jadi strategi aksi.',panels:['swot']},
     laporan:{cap:'Gabungan semua hitungan jadi laporan siap cetak/PDF/Word.',panels:['laporan']}
   };
@@ -557,8 +602,41 @@
     $('pfOut').innerHTML='<div class="bz-big">'+rp(profit)+'<span style="font-size:13px;color:var(--muted);font-weight:400"> / bulan (estimasi laba)</span></div>'+rows(r)+
       (cm<=0?'<p class="bz-note" style="color:var(--down)">Harga jual harus di atas biaya variabel agar usaha bisa impas.</p>':'');
     REPORT.profit={title:'Profit & BEP',rows:r};
+    renderScenario(P,V,F,Q); renderBEP(P,V,F,bepU,Q);
   }
-  ['pfPrice','pfVar','pfFix','pfQty'].forEach(function(id){$(id).addEventListener('input',calcProfit);});
+  ['pfPrice','pfVar','pfFix','pfQty','scDown','scUp'].forEach(function(id){$(id).addEventListener('input',calcProfit);});
+  function renderScenario(P,V,F,Q){
+    var el=$('scTable'); if(!el)return; var cm=P-V;
+    if(!(P>0&&Q>0)){el.innerHTML='<tbody><tr><td class="bz-note">Isi harga, biaya, dan target terjual dulu.</td></tr></tbody>';REPORT.scenario=null;return;}
+    var d=n('scDown')/100,u=n('scUp')/100; if(!isFinite(d))d=0; if(!isFinite(u))u=0;
+    var sc=[['Pesimis (−'+Math.round(d*100)+'%)',Q*(1-d)],['Realistis',Q],['Optimis (+'+Math.round(u*100)+'%)',Q*(1+u)]];
+    var h='<thead><tr><th>Skenario</th><th>Unit/bln</th><th>Omzet</th><th>Laba</th><th>Margin</th></tr></thead><tbody>';
+    sc.forEach(function(x){var q=x[1],om=q*P,lb=cm*q-F,mg=om>0?lb/om*100:NaN;
+      h+='<tr><td>'+esc(x[0])+'</td><td class="num">'+Math.round(q).toLocaleString('id-ID')+'</td><td class="num">'+rp(om)+'</td><td class="num" style="color:'+(lb>=0?'var(--up)':'var(--down)')+'">'+rp(lb)+'</td><td class="num">'+pct(mg)+'</td></tr>';});
+    h+='</tbody>'; el.innerHTML=h;
+    REPORT.scenario={title:'3 Skenario Penjualan',html:'<div class="scroll-x"><table class="tbl">'+h+'</table></div>'};
+  }
+  function renderBEP(P,V,F,bepU,Q){
+    var el=$('pfChart'); if(!el)return;
+    if(!(P>0&&(P-V)>0)){el.innerHTML='<p class="bz-note">Isi harga &amp; biaya (harga di atas biaya) untuk melihat grafik.</p>';return;}
+    var maxX=Math.max(Q||0,bepU||0,1)*1.5; if(!isFinite(maxX)||maxX<=0)maxX=10;
+    var maxY=Math.max(P*maxX,F+V*maxX,1);
+    var W=520,H=210,pl=40,pb=30,pt=14,pr=14,iw=W-pl-pr,ih=H-pt-pb;
+    var X=function(x){return pl+(x/maxX)*iw;},Y=function(y){return pt+ih-(y/maxY)*ih;};
+    var s='<svg viewBox="0 0 '+W+' '+H+'" width="100%" style="max-width:560px;font-family:var(--num);font-size:10px" role="img" aria-label="Grafik titik impas: pendapatan memotong total biaya di BEP">';
+    s+='<line x1="'+pl+'" y1="'+pt+'" x2="'+pl+'" y2="'+(pt+ih)+'" style="stroke:var(--hair-dark)"/>';
+    s+='<line x1="'+pl+'" y1="'+(pt+ih)+'" x2="'+(pl+iw)+'" y2="'+(pt+ih)+'" style="stroke:var(--hair-dark)"/>';
+    s+='<line x1="'+X(0)+'" y1="'+Y(F)+'" x2="'+X(maxX)+'" y2="'+Y(F+V*maxX)+'" style="stroke:var(--down);stroke-width:2"/>';
+    s+='<line x1="'+X(0)+'" y1="'+Y(0)+'" x2="'+X(maxX)+'" y2="'+Y(P*maxX)+'" style="stroke:var(--up);stroke-width:2"/>';
+    if(isFinite(bepU)&&bepU<=maxX){var bx=X(bepU),by=Y(P*bepU);
+      s+='<line x1="'+bx+'" y1="'+(pt+ih)+'" x2="'+bx+'" y2="'+by+'" style="stroke:var(--primary);stroke-dasharray:4 3"/>';
+      s+='<circle cx="'+bx+'" cy="'+by+'" r="4" style="fill:var(--primary)"/>';
+      s+='<text x="'+bx+'" y="'+(by-8)+'" text-anchor="middle" style="fill:var(--on-dark)">BEP '+Math.ceil(bepU).toLocaleString('id-ID')+'</text>';}
+    if(Q>0&&Q<=maxX){var qx=X(Q);s+='<line x1="'+qx+'" y1="'+(pt+ih)+'" x2="'+qx+'" y2="'+pt+'" style="stroke:var(--muted);stroke-dasharray:2 3"/><text x="'+qx+'" y="'+(pt+ih+18)+'" text-anchor="middle" style="fill:var(--muted)">target</text>';}
+    s+='<text x="'+(pl+iw)+'" y="'+(pt+ih+18)+'" text-anchor="end" style="fill:var(--muted)">unit →</text></svg>';
+    s+='<div class="flex gap wrap-flex" style="font-size:11.5px;color:var(--muted);margin-top:4px"><span style="color:var(--up)">■ Pendapatan</span><span style="color:var(--down)">■ Total biaya</span><span style="color:var(--primary)">■ Titik impas</span></div>';
+    el.innerHTML=s;
+  }
 
   // ---- Harga & HPP ----
   function calcHarga(){
@@ -599,8 +677,10 @@
     if(ve&&!vlTouch.e&&ebitda>0){ve.value=Math.round(ebitda*12);filled=true;}
     if(vr2&&!vlTouch.r&&rev>0){vr2.value=Math.round(rev*12);filled=true;}
     if(filled)calcVal();
+    // Isi otomatis laba bersih/bulan ke ROI & Saran selama belum diketik manual
+    if(!rnTouch&&net>0&&$('roNet')){$('roNet').value=Math.round(net);syncPeers('roNet');calcRoi();calcInv();calcSaran();if(typeof MONEY!=='undefined')MONEY.forEach(fmtMoney);}
   }
-  var vlTouch={};
+  var vlTouch={},rnTouch=false;
   ['ebRev','ebCogs','ebOpex','ebDep','ebInt','ebTax'].forEach(function(id){$(id).addEventListener('input',calcEbitda);});
 
   // ---- Pinjaman Bank ----
@@ -647,19 +727,33 @@
   function calcCash(){
     var kas=n('cfStart'),rev=n('cfRev'),g=n('cfGrow')/100,vr=n('cfVar')/100,fix=n('cfFix');
     var html='<thead><tr><th>Bln</th><th>Pendapatan</th><th>Biaya</th><th>Laba</th><th>Kas akhir</th></tr></thead><tbody>';
-    var negMonth=0,r=rev,k=kas,totProfit=0;
+    var negMonth=0,r=rev,k=kas,totProfit=0,cells=[];
     for(var m=1;m<=12;m++){
-      var biaya=r*vr+fix,laba=r-biaya; k+=laba; totProfit+=laba;
+      var biaya=r*vr+fix,laba=r-biaya; k+=laba; totProfit+=laba; cells.push(k);
       if(k<0&&!negMonth)negMonth=m;
       html+='<tr><td>'+m+'</td><td class="num">'+rp(r)+'</td><td class="num">'+rp(biaya)+'</td><td class="num" style="color:'+(laba>=0?'var(--up)':'var(--down)')+'">'+rp(laba)+'</td><td class="num">'+rp(k)+'</td></tr>';
       r=r*(1+g);
     }
     $('cfTable').innerHTML=html+'</tbody>';
+    renderCF((rev>0)?cells:[]);
     var r2=[['Total laba 12 bulan',rp(totProfit)],['Kas akhir tahun',rp(k)],['Kas negatif mulai',negMonth?('Bulan '+negMonth):'Tidak (kas positif)']];
     $('cfOut').innerHTML=rows(r2)+(negMonth?'<p class="bz-note" style="color:var(--down)">Kas berpotensi negatif di bulan '+negMonth+' — siapkan modal cadangan/runway.</p>':'');
     REPORT.cashflow={title:'Proyeksi Arus Kas 12 Bulan',rows:r2};
   }
   ['cfStart','cfRev','cfGrow','cfVar','cfFix'].forEach(function(id){$(id).addEventListener('input',calcCash);});
+  function renderCF(cells){
+    var el=$('cfChart'); if(!el)return; if(!cells||!cells.length){el.innerHTML='';return;}
+    var W=520,H=180,pl=44,pb=24,pt=12,pr=12,iw=W-pl-pr,ih=H-pt-pb;
+    var mn=Math.min.apply(null,cells.concat(0)),mx=Math.max.apply(null,cells.concat(0)),rng=(mx-mn)||1;
+    var gap=iw/cells.length,bw=gap*0.66,zeroY=pt+ih-((0-mn)/rng)*ih;
+    var s='<svg viewBox="0 0 '+W+' '+H+'" width="100%" style="max-width:560px;font-family:var(--num);font-size:10px" role="img" aria-label="Grafik kas akhir 12 bulan">';
+    s+='<line x1="'+pl+'" y1="'+zeroY+'" x2="'+(pl+iw)+'" y2="'+zeroY+'" style="stroke:var(--hair-dark)"/>';
+    cells.forEach(function(v,i){var x=pl+i*gap+(gap-bw)/2,vy=pt+ih-((v-mn)/rng)*ih,top=Math.min(vy,zeroY),hh=Math.max(Math.abs(vy-zeroY),1);
+      s+='<rect x="'+x.toFixed(1)+'" y="'+top.toFixed(1)+'" width="'+bw.toFixed(1)+'" height="'+hh.toFixed(1)+'" rx="2" style="fill:'+(v>=0?'var(--up)':'var(--down)')+'"/>';
+      s+='<text x="'+(x+bw/2).toFixed(1)+'" y="'+(pt+ih+15)+'" text-anchor="middle" style="fill:var(--muted)">'+(i+1)+'</text>';});
+    s+='</svg><p class="bz-note" style="margin-top:2px">Kas akhir tiap bulan (hijau positif, merah negatif).</p>';
+    el.innerHTML=s;
+  }
 
   // ---- Valuasi ----
   function calcVal(){
@@ -738,6 +832,22 @@
   }
   ['sgYears','sgDays','sgTicket'].forEach(function(id){$(id).addEventListener('input',calcSaran);}); $('sgUnit').addEventListener('change',calcSaran);
 
+  // ---- Estimator Modal Awal ----
+  var SE_IDS=['seSewa','seReno','seAlat','sePerleng','seIzin','seStok','seBrand','seLain'];
+  function calcModalEst(){
+    var tot=0; SE_IDS.forEach(function(id){tot+=n(id);});
+    window._seTotal=tot;
+    $('seOut').innerHTML='<div class="bz-big">'+rp(tot)+'<span style="font-size:13px;color:var(--muted);font-weight:400"> total modal awal</span></div>'+
+      (tot>0?'<p class="bz-note">Klik tombol di bawah untuk memakainya sebagai Modal awal di ROI, Saran &amp; Pendanaan.</p>':'<p class="bz-note">Isi rincian kebutuhan dana di atas — totalnya dijumlah otomatis.</p>');
+    REPORT.modalest=tot>0?{title:'Rincian Modal Awal',rows:[['Total modal awal',rp(tot)]]}:null;
+  }
+  SE_IDS.forEach(function(id){$(id).addEventListener('input',calcModalEst);});
+  $('seUse').addEventListener('click',function(){var t=window._seTotal||0;if(t<=0){calcModalEst();t=window._seTotal||0;}if(t<=0)return;
+    $('roInv').value=Math.round(t); syncPeers('roInv'); recomputeAll(); saveInputs(); MONEY.forEach(fmtMoney);
+    var el=$('roInv'); if(el&&el.scrollIntoView)el.scrollIntoView({behavior:'smooth',block:'center'});
+  });
+  $('roNet').addEventListener('input',function(){rnTouch=true;});
+
   // ---- Ringkasan eksekutif otomatis (verdict kelayakan) ----
   function execSummary(){
     var P=n('pfPrice'),V=n('pfVar'),F=n('pfFix'),Q=n('pfQty'),cm=P-V;
@@ -776,7 +886,7 @@
     var pNm=($('prName').value||'').trim(), pOw=($('prOwner').value||'').trim(), pCi=($('prCity').value||'').trim(), pPh=$('prPhase').value, pDt=$('prDate').value;
     var pTy=BP[$('prType').value]?BP[$('prType').value].name:'';
     var name=($('rpName').value||'').trim();
-    var order=[['blueprint',REPORT.blueprint],['profit',REPORT.profit],['harga',REPORT.harga],['roi',REPORT.roi],['saran',REPORT.saran],['ebitda',REPORT.ebitda],['loan',REPORT.loan],['invest',REPORT.invest],['cashflow',REPORT.cashflow],['valuasi',REPORT.valuasi],['pajak',REPORT.pajak],['target',REPORT.target],['swot',REPORT.swot]];
+    var order=[['blueprint',REPORT.blueprint],['profit',REPORT.profit],['scenario',REPORT.scenario],['harga',REPORT.harga],['modalest',REPORT.modalest],['roi',REPORT.roi],['saran',REPORT.saran],['ebitda',REPORT.ebitda],['loan',REPORT.loan],['invest',REPORT.invest],['cashflow',REPORT.cashflow],['valuasi',REPORT.valuasi],['pajak',REPORT.pajak],['target',REPORT.target],['swot',REPORT.swot]];
     var title=pNm||name||'Laporan Analisis Bisnis';
     var sub=[pTy&&pTy.split('—')[0].trim(), pCi, pPh].filter(Boolean).join(' · ');
     var by=[pOw&&('Disusun oleh '+pOw), (pDt?new Date(pDt).toLocaleDateString('id-ID',{day:'numeric',month:'long',year:'numeric'}):new Date().toLocaleDateString('id-ID',{day:'numeric',month:'long',year:'numeric'}))].filter(Boolean).join(' · ');
@@ -821,7 +931,7 @@
     } else $('bzHeader').style.display='none';
   }
   // Tampilkan nominal terformat di bawah field uang agar mudah dibaca
-  var MONEY=['pfPrice','pfVar','pfFix','hpBahan','hpOh','roInv','roNet','ebRev','ebCogs','ebOpex','ebDep','ebInt','lnAmt','ivTotal','ivInv','ivProfit','cfStart','cfRev','cfFix','vlEbitda','vlRev','pjOmzet','tgProfit','tgFix','tgPrice','tgVar','sgTicket'];
+  var MONEY=['pfPrice','pfVar','pfFix','hpBahan','hpOh','roInv','roNet','ebRev','ebCogs','ebOpex','ebDep','ebInt','lnAmt','ivTotal','ivInv','ivProfit','cfStart','cfRev','cfFix','vlEbitda','vlRev','pjOmzet','tgProfit','tgFix','tgPrice','tgVar','sgTicket','seSewa','seReno','seAlat','sePerleng','seIzin','seStok','seBrand','seLain'];
   var MONEYSET={}; MONEY.forEach(function(id){MONEYSET[id]=1;});
   function fmtMoney(id){var el=$(id);if(!el)return;var e=el.parentNode.querySelector('.bz-rpe');
     if(!e){e=document.createElement('small');e.className='bz-rpe';el.parentNode.insertBefore(e,el.nextSibling);}
@@ -830,7 +940,7 @@
   function fields(){return document.querySelectorAll('.bz-in,.bz-sel,.bz-area');}
   function saveInputs(){try{var o={};Array.prototype.forEach.call(fields(),function(el){if(el.id)o[el.id]=el.value;});localStorage.setItem(K_IN,JSON.stringify(o));$('prSaved').textContent='Tersimpan otomatis di perangkat ✓';}catch(e){}}
   function restoreInputs(){try{var o=JSON.parse(localStorage.getItem(K_IN)||'{}');Array.prototype.forEach.call(fields(),function(el){if(el.id&&o[el.id]!=null&&o[el.id]!=='')el.value=o[el.id];});return o;}catch(e){return {};}}
-  function recomputeAll(){renderBP();calcProfit();calcHarga();calcRoi();calcEbitda();calcLoan();calcInv();calcCash();calcVal();calcTax();calcTarget();calcSaran();updateHeader();renderKPI();}
+  function recomputeAll(){renderBP();calcModalEst();calcProfit();calcHarga();calcRoi();calcEbitda();calcLoan();calcInv();calcCash();calcVal();calcTax();calcTarget();calcSaran();updateHeader();renderKPI();}
 
   if(!$('prDate').value){var _d=new Date();$('prDate').value=_d.getFullYear()+'-'+('0'+(_d.getMonth()+1)).slice(-2)+'-'+('0'+_d.getDate()).slice(-2);}
   var _saved=restoreInputs();
@@ -838,7 +948,9 @@
   // Bila nilai Valuasi tersimpan berbeda dari turunan EBITDA, anggap diketik manual → jangan ditimpa
   (function(){var de=(n('ebRev')-n('ebCogs')-n('ebOpex'))*12,dr=n('ebRev')*12;
     if($('vlEbitda').value!==''&&Math.round(+$('vlEbitda').value)!==Math.round(de))vlTouch.e=true;
-    if($('vlRev').value!==''&&Math.round(+$('vlRev').value)!==Math.round(dr))vlTouch.r=true;})();
+    if($('vlRev').value!==''&&Math.round(+$('vlRev').value)!==Math.round(dr))vlTouch.r=true;
+    var eb=n('ebRev')-n('ebCogs')-n('ebOpex'),ebt=eb-n('ebDep')-n('ebInt'),net=ebt-(ebt>0?ebt*n('ebTax')/100:0);
+    if($('roNet').value!==''&&Math.round(+$('roNet').value)!==Math.round(net))rnTouch=true;})();
   $('vlEbitda').addEventListener('input',function(){vlTouch.e=true;});
   $('vlRev').addEventListener('input',function(){vlTouch.r=true;});
   if(!$('sgYears').value)$('sgYears').value=5;
@@ -855,6 +967,30 @@
   });
   $('prNext').addEventListener('click',function(){var t=document.querySelector('.bz-tab[data-tool="blueprint"]');if(t)t.click();});
   $('prReset').addEventListener('click',function(){if(window.confirm('Hapus semua data analisis di perangkat ini?')){try{localStorage.removeItem(K_IN);}catch(e){}location.reload();}});
+
+  // ---- Manajer Proyek (simpan/muat beberapa analisis) ----
+  var K_PROJ='pbs_bisnis_projects';
+  function projGet(){try{return JSON.parse(localStorage.getItem(K_PROJ)||'{}');}catch(e){return{};}}
+  function projSet(o){try{localStorage.setItem(K_PROJ,JSON.stringify(o));}catch(e){}}
+  function projRefresh(sel){var o=projGet(),s='<option value="">— pilih proyek —</option>';
+    Object.keys(o).sort().forEach(function(nm){s+='<option value="'+esc(nm)+'"'+(nm===sel?' selected':'')+'>'+esc(nm)+'</option>';});$('pjList').innerHTML=s;}
+  function projSnapshot(){var o={};Array.prototype.forEach.call(fields(),function(el){if(el.id)o[el.id]=el.value;});return o;}
+  function projApply(snap){
+    Array.prototype.forEach.call(fields(),function(el){if(el.id&&snap[el.id]!=null)el.value=snap[el.id];});
+    if(snap.bpType)$('bpType').value=snap.bpType; if(snap.prType)$('bpType').value=snap.prType;
+    vlTouch={e:true,r:true}; rnTouch=true; // hormati nilai proyek yang dimuat
+    recomputeAll(); MONEY.forEach(fmtMoney); saveInputs(); updateHeader(); renderKPI();
+  }
+  $('pjSave').addEventListener('click',function(){var nm=($('prName').value||'').trim();
+    if(!nm){nm=(window.prompt('Beri nama proyek:','Usaha '+(Object.keys(projGet()).length+1))||'').trim(); if(nm){$('prName').value=nm;updateHeader();saveInputs();}}
+    if(!nm){$('pjMsg').textContent='Isi nama usaha dulu untuk menyimpan.';return;}
+    var o=projGet(); o[nm]=projSnapshot(); projSet(o); projRefresh(nm); $('pjMsg').textContent='Proyek "'+nm+'" tersimpan ✓';});
+  $('pjLoad').addEventListener('click',function(){var nm=$('pjList').value; if(!nm)return; var o=projGet(); if(!o[nm])return;
+    projApply(o[nm]); $('pjMsg').textContent='Proyek "'+nm+'" dibuka ✓';});
+  $('pjDel').addEventListener('click',function(){var nm=$('pjList').value; if(!nm)return;
+    if(!window.confirm('Hapus proyek "'+nm+'"?'))return; var o=projGet(); delete o[nm]; projSet(o); projRefresh(''); $('pjMsg').textContent='Proyek "'+nm+'" dihapus';});
+  projRefresh('');
+
   showCat('profil');
 })();
 </script>
