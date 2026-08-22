@@ -48,6 +48,11 @@
 .bz-kpi .v{font-family:var(--num);font-weight:700;font-size:19px;color:var(--primary);margin-top:4px}
 .bz-tab:hover{border-color:var(--muted)}
 .bz-tab.on{background:var(--primary);border-color:var(--primary);color:var(--on-primary)}
+.bz-subcap{color:var(--muted);font-size:12.5px;margin:2px 0 10px;line-height:1.4}
+.bz-subcap b{color:var(--muted-strong);font-weight:600}
+.bz-callout{background:var(--card);border:1px solid var(--primary);border-radius:12px;padding:16px;margin-top:14px}
+.bz-callout .lead-num{font-family:var(--num);font-weight:800;font-size:clamp(22px,4vw,30px);color:var(--primary);line-height:1.1}
+.bz-callout p{color:var(--muted-strong);font-size:13.5px;line-height:1.55;margin-top:8px}
 .bz-panel{display:none}
 .bz-panel.on{display:block}
 .bz-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
@@ -114,21 +119,16 @@
   </div>
   <div class="bz-kpis" id="bzKpis" aria-label="Ringkasan angka kunci"></div>
 
-  <nav class="bz-sub" id="bzSub" aria-label="Alat bisnis">
-    <button class="bz-tab on" data-tool="profil">1. Profil</button>
-    <button class="bz-tab" data-tool="blueprint">Blueprint</button>
-    <button class="bz-tab" data-tool="profit">Untung &amp; Balik Modal</button>
-    <button class="bz-tab" data-tool="harga">Modal &amp; Harga</button>
-    <button class="bz-tab" data-tool="roi">Balik Modal (ROI)</button>
-    <button class="bz-tab" data-tool="ebitda">Kesehatan Laba</button>
-    <button class="bz-tab" data-tool="dana">Pendanaan</button>
-    <button class="bz-tab" data-tool="swot">SWOT</button>
-    <button class="bz-tab" data-tool="cashflow">Arus Kas 12 Bln</button>
-    <button class="bz-tab" data-tool="valuasi">Nilai Usaha</button>
-    <button class="bz-tab" data-tool="pajak">Pajak UMKM</button>
-    <button class="bz-tab" data-tool="target">Target Jualan</button>
-    <button class="bz-tab" data-tool="laporan">Laporan</button>
+  <nav class="bz-sub" id="bzSub" role="tablist" aria-label="Alat bisnis">
+    <button class="bz-tab on" data-tool="profil" role="tab" aria-selected="true">Profil</button>
+    <button class="bz-tab" data-tool="blueprint" role="tab" aria-selected="false">Blueprint</button>
+    <button class="bz-tab" data-tool="untung" role="tab" aria-selected="false">Untung &amp; Harga</button>
+    <button class="bz-tab" data-tool="keuangan" role="tab" aria-selected="false">Keuangan</button>
+    <button class="bz-tab" data-tool="modal" role="tab" aria-selected="false">Modal &amp; Investasi</button>
+    <button class="bz-tab" data-tool="swot" role="tab" aria-selected="false">SWOT</button>
+    <button class="bz-tab" data-tool="laporan" role="tab" aria-selected="false">Laporan</button>
   </nav>
+  <p class="bz-subcap" id="bzSubCap"></p>
 
   <!-- PROFIL -->
   <section class="bz-panel on" data-panel="profil">
@@ -200,6 +200,23 @@
         <div class="bz-field"><label class="bz-label" for="roNet">Untung bersih per bulan (Rp)</label><input class="bz-in" id="roNet" type="number" placeholder="6000000"><small class="bz-help">Sisa untung tiap bulan setelah semua biaya. <span class="bz-syncf">↔ Investor</span></small></div>
       </div>
       <div class="bz-res" id="roOut"></div>
+    </div>
+  </section>
+
+  <!-- SARAN BALIK MODAL -->
+  <section class="bz-panel" data-panel="saran">
+    <div class="bz-card">
+      <h3>Saran Target Balik Modal</h3>
+      <p class="bz-subt">Tulis dalam berapa lama kamu ingin modal kembali — sistem menghitung berapa yang harus terjual &amp; didapat <b>per bulan, per hari, dan per transaksi</b>.</p>
+      <div class="bz-grid mt">
+        <div class="bz-field"><label class="bz-label" for="sgYears">Ingin balik modal dalam</label><input class="bz-in" id="sgYears" type="number" placeholder="5"><small class="bz-help">Isi angka, lalu pilih satuannya di sebelah.</small></div>
+        <div class="bz-field"><label class="bz-label" for="sgUnit">Satuan waktu</label><select class="bz-sel" id="sgUnit"><option value="tahun">Tahun</option><option value="bulan">Bulan</option></select></div>
+        <div class="bz-field"><label class="bz-label" for="sgDays">Hari buka per bulan</label><input class="bz-in" id="sgDays" type="number" placeholder="26"><small class="bz-help">Berapa hari kamu berjualan tiap bulan.</small></div>
+        <div class="bz-field"><label class="bz-label" for="sgTicket">Rata-rata belanja per pembeli (Rp) — opsional</label><input class="bz-in" id="sgTicket" type="number" placeholder="35000"><small class="bz-help">Rata-rata uang sekali transaksi, untuk saran per transaksi.</small></div>
+      </div>
+      <div class="bz-res" id="sgAssume"></div>
+      <div id="sgOut"></div>
+      <p class="bz-note">Angka diambil otomatis dari tab <b>Untung &amp; Harga</b> (harga, biaya) dan <b>ROI</b> (modal). Perhitungan mengabaikan bunga &amp; nilai waktu uang — sebagai panduan arah, bukan jaminan.</p>
     </div>
   </section>
 
@@ -393,13 +410,27 @@
   function syncPeers(id){var g=SYNC[id];if(!g||!$(id))return false;var v=$(id).value,changed=false;
     g.forEach(function(o){if(o!==id&&$(o)&&$(o).value!==v){$(o).value=v;changed=true;}});return changed;}
 
-  // ---- sub-nav ----
-  $('bzSub').addEventListener('click',function(e){var b=e.target.closest('.bz-tab');if(!b)return;
-    var t=b.getAttribute('data-tool');
-    var tabs=this.querySelectorAll('.bz-tab');for(var i=0;i<tabs.length;i++)tabs[i].classList.toggle('on',tabs[i]===b);
-    var pans=document.querySelectorAll('.bz-panel');for(var j=0;j<pans.length;j++)pans[j].classList.toggle('on',pans[j].getAttribute('data-panel')===t);
-    if(t==='laporan') buildReport();
-  });
+  // ---- sub-nav (kategori sederhana; tiap kategori menampilkan beberapa alat) ----
+  var CAT={
+    profil:{cap:'Identitas usaha — mengalir ke Blueprint & Laporan.',panels:['profil']},
+    blueprint:{cap:'Model bisnis, modal, biaya, KPI, risiko & tips per bidang usaha.',panels:['blueprint']},
+    untung:{cap:'<b>Untung &amp; Balik Modal (BEP)</b> · <b>Modal &amp; Harga (HPP)</b> · <b>Target Jualan</b>',panels:['profit','harga','target']},
+    keuangan:{cap:'<b>Kesehatan Laba (EBITDA)</b> · <b>Arus Kas 12 Bulan</b> · <b>Pajak UMKM</b>',panels:['ebitda','cashflow','pajak']},
+    modal:{cap:'<b>Balik Modal (ROI)</b> · <b>Saran Target Balik Modal</b> · <b>Pendanaan (bank &amp; investor)</b> · <b>Nilai Usaha</b>',panels:['roi','saran','dana','valuasi']},
+    swot:{cap:'Petakan Kekuatan/Kelemahan/Peluang/Ancaman jadi strategi aksi.',panels:['swot']},
+    laporan:{cap:'Gabungan semua hitungan jadi laporan siap cetak/PDF/Word.',panels:['laporan']}
+  };
+  function showCat(t){
+    var c=CAT[t]||CAT.profil;
+    var tabs=$('bzSub').querySelectorAll('.bz-tab');
+    for(var i=0;i<tabs.length;i++){var on=tabs[i].getAttribute('data-tool')===t;tabs[i].classList.toggle('on',on);tabs[i].setAttribute('aria-selected',on?'true':'false');}
+    var pans=document.querySelectorAll('.bz-panel');
+    for(var j=0;j<pans.length;j++)pans[j].classList.toggle('on',c.panels.indexOf(pans[j].getAttribute('data-panel'))>=0);
+    $('bzSubCap').innerHTML=c.cap;
+    if(t==='modal')calcSaran();
+    if(t==='laporan')buildReport();
+  }
+  $('bzSub').addEventListener('click',function(e){var b=e.target.closest('.bz-tab');if(!b)return;showCat(b.getAttribute('data-tool'));});
 
   // ---- Blueprint ----
   var BP={
@@ -641,12 +672,54 @@
   }
   ['tgProfit','tgFix','tgPrice','tgVar'].forEach(function(id){$(id).addEventListener('input',calcTarget);});
 
+  // ---- Saran Target Balik Modal ----
+  function calcSaran(){
+    var modal=n('roInv')||n('ivTotal');
+    var price=n('pfPrice'),varc=n('pfVar'),fix=n('pfFix'),cm=price-varc;
+    var tv=n('sgYears'),unit=$('sgUnit').value,months=unit==='tahun'?tv*12:tv;
+    var days=n('sgDays')||26,ticket=n('sgTicket');
+    // Ringkasan asumsi (diambil dari tab lain)
+    var aRows=[['Modal awal (dari ROI)',modal>0?rp(modal):'— belum diisi'],
+      ['Target balik modal',tv>0?(tv+' '+unit+' ('+months+' bulan)'):'— belum diisi'],
+      ['Harga jual / barang (Untung & Harga)',price>0?rp(price):'— belum diisi'],
+      ['Untung per barang (harga − biaya)',cm>0?rp(cm):'—'],
+      ['Biaya rutin / bulan',rp(fix)],['Hari buka / bulan',days+' hari']];
+    $('sgAssume').innerHTML='<b class="bz-hl">Asumsi (dari input tab lain)</b>'+rows(aRows);
+    // Validasi ramah
+    var miss=[];
+    if(modal<=0)miss.push('Modal awal di tab <b>Balik Modal (ROI)</b>');
+    if(price<=0||cm<=0)miss.push('Harga jual &amp; biaya per barang di tab <b>Untung &amp; Harga</b> (harga harus di atas biaya)');
+    if(months<=0)miss.push('Target waktu balik modal di atas');
+    if(miss.length){$('sgOut').innerHTML='<div class="bz-res"><p class="bz-note">Lengkapi dulu: '+miss.join('; ')+'.</p></div>';REPORT.saran=null;return;}
+    var needNet=modal/months, needContrib=fix+needNet;
+    var uM=needContrib/cm, uD=uM/days, revM=uM*price, revD=revM/days;
+    var txD=ticket>0?revD/ticket:NaN;
+    var uMc=Math.ceil(uM),uDc=Math.ceil(uD);
+    var rRows=[['Untung bersih minimal / bulan',rp(needNet)],
+      ['Margin kontribusi dibutuhkan / bulan',rp(needContrib)+' (menutup biaya tetap + cicil modal)'],
+      ['Harus terjual / bulan',uMc.toLocaleString('id-ID')+' unit'],
+      ['Harus terjual / hari',uDc.toLocaleString('id-ID')+' unit'],
+      ['Omzet target / bulan',rp(revM)],['Omzet target / hari',rp(revD)]];
+    if(ticket>0)rRows.push(['Transaksi / hari (rata-rata '+rp(ticket)+')',Math.ceil(txD).toLocaleString('id-ID')+' transaksi']);
+    var narr='Agar modal <b>'+rp(modal)+'</b> kembali dalam <b>'+tv+' '+unit+'</b> ('+months+' bulan), usahamu perlu untung bersih ±<b>'+rp(needNet)+'</b>/bulan. Dengan untung <b>'+rp(cm)+'</b> per barang dan biaya tetap '+rp(fix)+'/bulan, artinya menjual ±<b>'+uMc.toLocaleString('id-ID')+' unit/bulan</b> — sekitar <b>'+uDc.toLocaleString('id-ID')+' unit/hari</b> (buka '+days+' hari), atau omzet ±<b>'+rp(revD)+'/hari</b>.'+
+      (ticket>0?' Dengan rata-rata '+rp(ticket)+'/transaksi, perlu ±<b>'+Math.ceil(txD).toLocaleString('id-ID')+' transaksi/hari</b>.':'');
+    // Kelayakan vs rencana penjualan
+    var plan=n('pfQty'),feas='';
+    if(plan>0){ feas = plan>=uM
+      ? '<p class="bz-note" style="color:var(--up)">✓ Realistis — rencana penjualanmu ('+Math.round(plan).toLocaleString('id-ID')+'/bln) sudah di atas kebutuhan ('+uMc.toLocaleString('id-ID')+'/bln).</p>'
+      : '<p class="bz-note" style="color:var(--down)">⚠ Perlu usaha ekstra — kebutuhan ('+uMc.toLocaleString('id-ID')+'/bln) di atas rencanamu ('+Math.round(plan).toLocaleString('id-ID')+'/bln). Naikkan harga, tekan biaya, atau perpanjang target waktu.</p>'; }
+    $('sgOut').innerHTML='<div class="bz-callout"><div class="lead-num">'+uDc.toLocaleString('id-ID')+' unit / hari</div><p>'+narr+'</p></div>'+
+      '<div class="bz-res">'+rows(rRows)+feas+'</div>';
+    REPORT.saran={title:'Saran Target Balik Modal ('+tv+' '+unit+')',rows:rRows};
+  }
+  ['sgYears','sgDays','sgTicket'].forEach(function(id){$(id).addEventListener('input',calcSaran);}); $('sgUnit').addEventListener('change',calcSaran);
+
   // ---- Laporan ----
   function buildReport(){
     var pNm=($('prName').value||'').trim(), pOw=($('prOwner').value||'').trim(), pCi=($('prCity').value||'').trim(), pPh=$('prPhase').value, pDt=$('prDate').value;
     var pTy=BP[$('prType').value]?BP[$('prType').value].name:'';
     var name=($('rpName').value||'').trim();
-    var order=[['blueprint',REPORT.blueprint],['profit',REPORT.profit],['harga',REPORT.harga],['roi',REPORT.roi],['ebitda',REPORT.ebitda],['loan',REPORT.loan],['invest',REPORT.invest],['cashflow',REPORT.cashflow],['valuasi',REPORT.valuasi],['pajak',REPORT.pajak],['target',REPORT.target],['swot',REPORT.swot]];
+    var order=[['blueprint',REPORT.blueprint],['profit',REPORT.profit],['harga',REPORT.harga],['roi',REPORT.roi],['saran',REPORT.saran],['ebitda',REPORT.ebitda],['loan',REPORT.loan],['invest',REPORT.invest],['cashflow',REPORT.cashflow],['valuasi',REPORT.valuasi],['pajak',REPORT.pajak],['target',REPORT.target],['swot',REPORT.swot]];
     var title=pNm||name||'Laporan Analisis Bisnis';
     var sub=[pTy&&pTy.split('—')[0].trim(), pCi, pPh].filter(Boolean).join(' · ');
     var by=[pOw&&('Disusun oleh '+pOw), (pDt?new Date(pDt).toLocaleDateString('id-ID',{day:'numeric',month:'long',year:'numeric'}):new Date().toLocaleDateString('id-ID',{day:'numeric',month:'long',year:'numeric'}))].filter(Boolean).join(' · ');
@@ -693,7 +766,7 @@
   function fields(){return document.querySelectorAll('.bz-in,.bz-sel,.bz-area');}
   function saveInputs(){try{var o={};Array.prototype.forEach.call(fields(),function(el){if(el.id)o[el.id]=el.value;});localStorage.setItem(K_IN,JSON.stringify(o));$('prSaved').textContent='Tersimpan otomatis di perangkat ✓';}catch(e){}}
   function restoreInputs(){try{var o=JSON.parse(localStorage.getItem(K_IN)||'{}');Array.prototype.forEach.call(fields(),function(el){if(el.id&&o[el.id]!=null&&o[el.id]!=='')el.value=o[el.id];});return o;}catch(e){return {};}}
-  function recomputeAll(){renderBP();calcProfit();calcHarga();calcRoi();calcEbitda();calcLoan();calcInv();calcCash();calcVal();calcTax();calcTarget();updateHeader();renderKPI();}
+  function recomputeAll(){renderBP();calcProfit();calcHarga();calcRoi();calcEbitda();calcLoan();calcInv();calcCash();calcVal();calcTax();calcTarget();calcSaran();updateHeader();renderKPI();}
 
   if(!$('prDate').value){var _d=new Date();$('prDate').value=_d.getFullYear()+'-'+('0'+(_d.getMonth()+1)).slice(-2)+'-'+('0'+_d.getDate()).slice(-2);}
   var _saved=restoreInputs();
@@ -704,16 +777,20 @@
     if($('vlRev').value!==''&&Math.round(+$('vlRev').value)!==Math.round(dr))vlTouch.r=true;})();
   $('vlEbitda').addEventListener('input',function(){vlTouch.e=true;});
   $('vlRev').addEventListener('input',function(){vlTouch.r=true;});
+  if(!$('sgYears').value)$('sgYears').value=5;
+  if(!$('sgDays').value)$('sgDays').value=26;
   recomputeAll();
   document.addEventListener('input',function(e){var el=e.target;if(el&&el.classList&&(el.classList.contains('bz-in')||el.classList.contains('bz-area'))){if(el.id&&syncPeers(el.id))recomputeAll();saveInputs();renderKPI();updateHeader();}});
   document.addEventListener('change',function(e){var el=e.target;if(el&&el.classList&&(el.classList.contains('bz-in')||el.classList.contains('bz-sel')||el.classList.contains('bz-area'))){if(el.id&&syncPeers(el.id))recomputeAll();saveInputs();renderKPI();updateHeader();}});
   $('hpUse').addEventListener('click',function(){
     if(!HPP_PRICE){calcHarga();} if(!HPP_PRICE)return;
     $('pfPrice').value=Math.round(HPP_PRICE); syncPeers('pfPrice'); recomputeAll(); saveInputs();
-    var t=document.querySelector('.bz-tab[data-tool="profit"]'); if(t)t.click();
+    showCat('untung');
+    var el=$('pfPrice'); if(el&&el.scrollIntoView)el.scrollIntoView({behavior:'smooth',block:'center'});
   });
   $('prNext').addEventListener('click',function(){var t=document.querySelector('.bz-tab[data-tool="blueprint"]');if(t)t.click();});
   $('prReset').addEventListener('click',function(){if(window.confirm('Hapus semua data analisis di perangkat ini?')){try{localStorage.removeItem(K_IN);}catch(e){}location.reload();}});
+  showCat('profil');
 })();
 </script>
 <script src="assets/app.js" defer></script>
