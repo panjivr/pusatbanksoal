@@ -43,7 +43,8 @@
 .bz-profile .nm{font-family:var(--display);font-weight:800;font-size:18px;color:var(--on-dark);letter-spacing:-.3px}
 .bz-profile .meta{color:var(--muted);font-size:12.5px;margin-top:2px}
 .bz-kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(148px,1fr));gap:12px;margin-top:14px}
-.bz-kpi{background:var(--card);border:1px solid var(--hair-dark);border-radius:12px;padding:14px;position:relative}
+.bz-kpi{background:var(--card);border:1px solid var(--hair-dark);border-radius:12px;padding:14px;position:relative;transition:transform .15s ease,border-color .15s ease}
+.bz-kpi:hover{transform:translateY(-2px);border-color:var(--primary)}
 [data-tip]{cursor:help}
 [data-tip]:hover::after{content:attr(data-tip);position:absolute;left:12px;bottom:calc(100% - 4px);background:#0b1020;color:#fff;padding:7px 10px;border-radius:7px;font-size:11.5px;font-weight:400;width:max-content;max-width:230px;line-height:1.45;box-shadow:0 8px 24px -8px rgba(0,0,0,.55);z-index:60;pointer-events:none}
 .bm-row{position:relative}
@@ -57,7 +58,15 @@
 .bz-callout .lead-num{font-family:var(--num);font-weight:800;font-size:clamp(22px,4vw,30px);color:var(--primary);line-height:1.1}
 .bz-callout p{color:var(--muted-strong);font-size:13.5px;line-height:1.55;margin-top:8px}
 .bz-panel{display:none}
-.bz-panel.on{display:block}
+.bz-panel.on{display:block;animation:bzFade .28s ease}
+@keyframes bzFade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+@media(prefers-reduced-motion:reduce){.bz-panel.on{animation:none}}
+.bz-tab.on{box-shadow:0 4px 14px -6px var(--primary)}
+.bz-progress{margin-top:14px}
+.bz-progress .lbl{display:flex;justify-content:space-between;font-size:12px;color:var(--muted);margin-bottom:6px}
+.bz-progress .lbl b{color:var(--on-dark)}
+.bz-progress .bar{height:8px;background:var(--elevated);border-radius:99px;overflow:hidden;border:1px solid var(--hair-dark)}
+.bz-progress .fill{height:100%;background:linear-gradient(90deg,var(--primary),var(--accent2));border-radius:99px;transition:width .4s ease;width:0}
 .bz-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
 @media(max-width:640px){.bz-grid{grid-template-columns:1fr}}
 .bz-field{margin-bottom:12px}
@@ -192,6 +201,10 @@ input[type=range]{accent-color:var(--primary);height:6px}
     <span class="badge badge-y" id="bzHType" style="display:none"></span>
   </div>
   <div class="bz-kpis" id="bzKpis" aria-label="Ringkasan angka kunci"></div>
+  <div class="bz-progress" id="bzProgress" style="display:none">
+    <div class="lbl"><span>Kelengkapan analisis</span><b><span id="bzPct">0</span>%</b></div>
+    <div class="bar"><div class="fill" id="bzFill"></div></div>
+  </div>
 
   <nav class="bz-sub" id="bzSub" role="tablist" aria-label="Alat bisnis">
     <button class="bz-tab on" data-tool="profil" role="tab" aria-selected="true">Profil</button>
@@ -221,6 +234,7 @@ input[type=range]{accent-color:var(--primary);height:6px}
       </div>
       <div class="flex gap wrap-flex mt">
         <button class="btn btn-primary btn-sm" id="prNext">Lanjut ke Blueprint →</button>
+        <button class="btn btn-secondary btn-sm" id="prDemo">Isi contoh</button>
         <button class="btn btn-ghost btn-sm" id="prReset">Reset semua data</button>
       </div>
       <p class="bz-note" id="prSaved" style="margin-top:10px"></p>
@@ -1403,6 +1417,11 @@ input[type=range]{accent-color:var(--primary);height:6px}
       (sub?'<p class="bz-hl">'+esc(sub)+'</p>':'')+
       '<p class="bz-note">'+esc(by)+' · dibuat dengan Studio Bisnis PusatBankSoal.id. Angka bersifat estimasi dari input pengguna.</p>';
     var ex=execSummary(); if(ex)h+='<h3 style="margin-top:16px">Ringkasan Eksekutif</h3>'+ex;
+    var pc=(typeof progressChecks==='function')?progressChecks():[],miss=pc.filter(function(x){return !x[1];}).map(function(x){return x[0];}),steps=[];
+    if(miss.length)steps.push('Lengkapi bagian yang belum terisi: '+miss.join(', ')+'.');
+    steps.push('Uji beberapa kemungkinan di Analisis Sensitivitas &amp; Arus Kas sebelum memutuskan.');
+    steps.push('Simpan sebagai proyek, lalu bandingkan dengan alternatif usaha lain.');
+    if(steps.length)h+='<h3 style="margin-top:16px">Langkah Selanjutnya</h3><div class="bz-res">'+steps.map(function(s){return '<div class="bz-row"><span>→ '+s+'</span></div>';}).join('')+'</div>';
     var any=false;
     order.forEach(function(o){var d=o[1];if(!d)return;any=true;
       h+='<div class="bz-res"><b class="bz-hl">'+esc(d.title)+'</b>'+(d.rows?rows(d.rows):(d.html||''))+'</div>';
@@ -1436,6 +1455,28 @@ input[type=range]{accent-color:var(--primary);height:6px}
     if(n('ebRev')>0){t.push(['EBITDA',rp(n('ebRev')-n('ebCogs')-n('ebOpex')),'Laba operasi sebelum bunga, pajak & penyusutan.']);}
     $('bzKpis').innerHTML=t.map(function(x){return kpiTile(x[0],x[1],x[2]);}).join('');
   }
+  function progressChecks(){
+    function jl(id){try{return Object.keys(JSON.parse(localStorage.getItem(id)||'{}')).some(function(k){var o=JSON.parse(localStorage.getItem(id));return o[k];});}catch(e){return false;}}
+    return [
+      ['Profil usaha',!!($('prName').value.trim())],
+      ['Untung & BEP',n('pfPrice')>0&&n('pfQty')>0],
+      ['Harga & HPP',n('hpBahan')>0||n('hpOh')>0],
+      ['ROI & modal',n('roInv')>0&&n('roNet')>0],
+      ['Kesehatan laba',n('ebRev')>0],
+      ['Arus kas',n('cfRev')>0],
+      ['Pendanaan',n('lnAmt')>0||n('ivTotal')>0],
+      ['SWOT',(typeof lines==='function')&&(lines('swS').length>0||lines('swO').length>0)],
+      ['Kalkulator+',n('mkPrice')>0||(typeof MP!=='undefined'&&MP.some(function(r){return digits(r.p)>0;}))],
+      ['Nilai usaha',n('vlEbitda')>0||n('vlRev')>0],
+      ['Lean Canvas',jl('pbs_bisnis_canvas')],
+      ['Legalitas',jl('pbs_bisnis_legal')]
+    ];
+  }
+  function computeProgress(){
+    var c=progressChecks(),done=c.filter(function(x){return x[1];}).length,pct=Math.round(done/c.length*100);
+    if($('bzPct'))$('bzPct').textContent=pct; if($('bzFill'))$('bzFill').style.width=pct+'%';
+    if($('bzProgress'))$('bzProgress').style.display=done>0?'block':'none';
+  }
   function updateHeader(){
     var nm=($('prName').value||'').trim(),ow=($('prOwner').value||'').trim(),ci=($('prCity').value||'').trim(),dt=$('prDate').value,ph=$('prPhase').value;
     var ty=BP[$('prType').value]?BP[$('prType').value].name.split('—')[0].trim():'';
@@ -1458,7 +1499,7 @@ input[type=range]{accent-color:var(--primary);height:6px}
   function fields(){return document.querySelectorAll('.bz-in,.bz-sel,.bz-area');}
   function saveInputs(){try{var o={};Array.prototype.forEach.call(fields(),function(el){if(el.id)o[el.id]=el.value;});localStorage.setItem(K_IN,JSON.stringify(o));$('prSaved').textContent='Tersimpan otomatis di perangkat ✓';}catch(e){}}
   function restoreInputs(){try{var o=JSON.parse(localStorage.getItem(K_IN)||'{}');Array.prototype.forEach.call(fields(),function(el){if(el.id&&o[el.id]!=null&&o[el.id]!=='')el.value=o[el.id];});return o;}catch(e){return {};}}
-  function recomputeAll(){renderBP();calcModalEst();calcProfit();calcHarga();calcRoi();calcEbitda();calcLoan();calcInv();calcCash();calcVal();calcTax();calcTarget();calcSaran();calcDiskon();calcSensitivity();calcPnL();calcBenchmark();calcMulti();calcMarketplace();calcGaji();calcPromo();updateHeader();renderKPI();}
+  function recomputeAll(){renderBP();calcModalEst();calcProfit();calcHarga();calcRoi();calcEbitda();calcLoan();calcInv();calcCash();calcVal();calcTax();calcTarget();calcSaran();calcDiskon();calcSensitivity();calcPnL();calcBenchmark();calcMulti();calcMarketplace();calcGaji();calcPromo();updateHeader();renderKPI();computeProgress();}
 
   if(!$('prDate').value){var _d=new Date();$('prDate').value=_d.getFullYear()+'-'+('0'+(_d.getMonth()+1)).slice(-2)+'-'+('0'+_d.getDate()).slice(-2);}
   var _saved=restoreInputs();
@@ -1486,6 +1527,27 @@ input[type=range]{accent-color:var(--primary);height:6px}
   });
   $('prNext').addEventListener('click',function(){var t=document.querySelector('.bz-tab[data-tool="blueprint"]');if(t)t.click();});
   $('prReset').addEventListener('click',function(){if(window.confirm('Hapus semua data analisis di perangkat ini? (Proyek tersimpan tetap aman.)')){try{['pbs_bisnis_inputs','pbs_bisnis_canvas','pbs_bisnis_legal','pbs_bisnis_tows','pbs_bisnis_mp','pbs_bisnis_gj'].forEach(function(k){localStorage.removeItem(k);});}catch(e){}location.reload();}});
+
+  // ---- Isi data contoh (onboarding) ----
+  $('prDemo').addEventListener('click',function(){
+    var has=false;try{has=Object.keys(JSON.parse(localStorage.getItem(K_IN)||'{}')).length>0;}catch(e){}
+    if(has&&!window.confirm('Isi data contoh? Ini akan menimpa isian yang ada (proyek tersimpan tetap aman).'))return;
+    var D={prName:'Kopi Senja',prOwner:'Budi Santoso',prCity:'Malang',prType:'fnb',
+      pfPrice:'25000',pfVar:'10000',pfFix:'12000000',pfQty:'1800',hpBahan:'7000',hpOh:'3000',hpPct:'60',
+      roInv:'180000000',ebRev:'90000000',ebCogs:'32000000',ebOpex:'34000000',ebDep:'3000000',ebInt:'2000000',ebTax:'0.5',
+      cfStart:'25000000',cfRev:'60000000',cfGrow:'5',cfVar:'42',cfFix:'20000000',
+      lnAmt:'100000000',lnRate:'12',lnTenor:'36',ivTotal:'180000000',ivInv:'100000000',ivShare:'40',ivProfit:'15000000',
+      vlMult:'4',vlRmult:'1',pjOmzet:'90000000',sgYears:'4',sgDays:'26',sgTicket:'35000',
+      mkPrice:'45000',mkCost:'20000',mkComm:'8',mkAdmin:'2',mkShip:'0',mkAds:'5',epBudget:'5000000',epCm:'15000',epPrice:'25000',
+      mpFix:'12000000',scDown:'25',scUp:'25',dkPct:'20',dkPrice:'25000',dkVar:'10000',plGrow:'20',plCostGrow:'12',
+      swS:'Lokasi dekat kampus\nKopi khas & konsisten',swW:'Modal terbatas',swO:'Tren nongkrong naik',swT:'Banyak pesaing baru'};
+    for(var id in D){var el=$(id);if(el)el.value=D[id];}
+    if($('bpType'))$('bpType').value='fnb';
+    rnTouch=false; vlTouch={};
+    recomputeAll(); MONEY.forEach(fmtMoney); saveInputs(); updateHeader(); renderKPI(); computeProgress();
+    if($('prSaved'))$('prSaved').textContent='Data contoh dimuat ✓ — jelajahi tiap tab.';
+    var t=document.querySelector('.bz-tab[data-tool="untung"]');if(t)t.click();
+  });
 
   // ---- Manajer Proyek (simpan/muat beberapa analisis) ----
   var K_PROJ='pbs_bisnis_projects';
