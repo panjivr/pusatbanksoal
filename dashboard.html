@@ -202,11 +202,11 @@ Data statistikmu tersimpan lokal di perangkat ini — privat, tidak diunggah ke 
 <div id="heatmap" class="mt-lg" role="img" aria-label="Heatmap konsistensi belajar 140 hari terakhir, warna lebih terang menandakan aktivitas belajar lebih banyak" style="display:grid;grid-template-columns:repeat(20,13px);grid-auto-rows:13px;gap:3px"></div>
 <div class="flex items-center gap mt" style="font-size:12px">
 <span class="muted">Kurang</span>
-<span style="width:13px;height:13px;border-radius:3px;background:#2b3139;display:inline-block"></span>
-<span style="width:13px;height:13px;border-radius:3px;background:#5f5a38;display:inline-block"></span>
-<span style="width:13px;height:13px;border-radius:3px;background:#948337;display:inline-block"></span>
-<span style="width:13px;height:13px;border-radius:3px;background:#c8ac36;display:inline-block"></span>
-<span style="width:13px;height:13px;border-radius:3px;background:#fcd535;display:inline-block"></span>
+<span style="width:13px;height:13px;border-radius:3px;background:#1e2636;display:inline-block"></span>
+<span style="width:13px;height:13px;border-radius:3px;background:#243a63;display:inline-block"></span>
+<span style="width:13px;height:13px;border-radius:3px;background:#2c5aa8;display:inline-block"></span>
+<span style="width:13px;height:13px;border-radius:3px;background:#2f6bed;display:inline-block"></span>
+<span style="width:13px;height:13px;border-radius:3px;background:#5f92ff;display:inline-block"></span>
 <span class="muted">Lebih</span>
 </div>
 </div>
@@ -353,7 +353,7 @@ Data statistikmu tersimpan lokal di perangkat ini — privat, tidak diunggah ke 
   // ---- Real consistency heatmap from activity log ----
   (function(){
     var box=$('heatmap'); if(!box) return;
-    var act=PBS.activity(), colors=['#2b3139','#3f4a2e','#7a6c2e','#c8ac36','#fcd535'];
+    var act=PBS.activity(), colors=['#1e2636','#243a63','#2c5aa8','#2f6bed','#5f92ff'];
     var days=140, html='', d=new Date(); d.setDate(d.getDate()-(days-1));
     for(var i=0;i<days;i++){
       var key=d.toISOString().slice(0,10), c=act[key]||0;
