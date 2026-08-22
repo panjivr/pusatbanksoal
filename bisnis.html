@@ -96,6 +96,10 @@
     <button class="bz-tab" data-tool="ebitda">EBITDA & Laba</button>
     <button class="bz-tab" data-tool="dana">Pendanaan</button>
     <button class="bz-tab" data-tool="swot">SWOT</button>
+    <button class="bz-tab" data-tool="cashflow">Arus Kas 12 Bln</button>
+    <button class="bz-tab" data-tool="valuasi">Valuasi</button>
+    <button class="bz-tab" data-tool="pajak">Pajak UMKM</button>
+    <button class="bz-tab" data-tool="target">Target Penjualan</button>
     <button class="bz-tab" data-tool="laporan">Laporan</button>
   </nav>
 
@@ -200,6 +204,64 @@
       </div>
       <button class="btn btn-primary btn-sm" id="swGo">Susun Strategi TOWS</button>
       <div class="bz-res" id="swOut" style="display:none"></div>
+    </div>
+  </section>
+
+  <!-- ARUS KAS 12 BULAN -->
+  <section class="bz-panel" data-panel="cashflow">
+    <div class="bz-card">
+      <h3>Proyeksi Arus Kas 12 Bulan</h3>
+      <div class="bz-grid mt">
+        <div class="bz-field"><label class="bz-label" for="cfStart">Kas awal (Rp)</label><input class="bz-in" id="cfStart" type="number" placeholder="20000000"></div>
+        <div class="bz-field"><label class="bz-label" for="cfRev">Pendapatan bulan 1 (Rp)</label><input class="bz-in" id="cfRev" type="number" placeholder="40000000"></div>
+        <div class="bz-field"><label class="bz-label" for="cfGrow">Pertumbuhan pendapatan / bulan (%)</label><input class="bz-in" id="cfGrow" type="number" placeholder="5"></div>
+        <div class="bz-field"><label class="bz-label" for="cfVar">Biaya variabel (% dari pendapatan)</label><input class="bz-in" id="cfVar" type="number" placeholder="45"></div>
+        <div class="bz-field"><label class="bz-label" for="cfFix">Biaya tetap / bulan (Rp)</label><input class="bz-in" id="cfFix" type="number" placeholder="18000000"></div>
+      </div>
+      <div class="scroll-x mt"><table class="tbl" id="cfTable" style="min-width:520px"></table></div>
+      <div class="bz-res" id="cfOut"></div>
+    </div>
+  </section>
+
+  <!-- VALUASI -->
+  <section class="bz-panel" data-panel="valuasi">
+    <div class="bz-card">
+      <h3>Estimasi Valuasi Usaha</h3>
+      <div class="bz-grid mt">
+        <div class="bz-field"><label class="bz-label" for="vlEbitda">EBITDA / tahun (Rp)</label><input class="bz-in" id="vlEbitda" type="number" placeholder="240000000"></div>
+        <div class="bz-field"><label class="bz-label" for="vlMult">Multiple EBITDA (x)</label><input class="bz-in" id="vlMult" type="number" placeholder="4"></div>
+        <div class="bz-field"><label class="bz-label" for="vlRev">Pendapatan / tahun (Rp)</label><input class="bz-in" id="vlRev" type="number" placeholder="960000000"></div>
+        <div class="bz-field"><label class="bz-label" for="vlRmult">Multiple pendapatan (x)</label><input class="bz-in" id="vlRmult" type="number" placeholder="1"></div>
+      </div>
+      <div class="bz-res" id="vlOut"></div>
+      <p class="bz-note">Multiple bergantung industri, pertumbuhan, dan risiko. UMKM umumnya 2–5× EBITDA atau 0,5–2× pendapatan. Angka ini panduan awal, bukan valuasi resmi.</p>
+    </div>
+  </section>
+
+  <!-- PAJAK UMKM -->
+  <section class="bz-panel" data-panel="pajak">
+    <div class="bz-card">
+      <h3>Pajak UMKM Final 0,5% (PP 55/2022)</h3>
+      <div class="bz-grid mt">
+        <div class="bz-field"><label class="bz-label" for="pjOmzet">Omzet / bulan (Rp)</label><input class="bz-in" id="pjOmzet" type="number" placeholder="50000000"></div>
+        <div class="bz-field"><label class="bz-label" for="pjWp">Jenis WP</label><select class="bz-sel" id="pjWp"><option value="op">Orang Pribadi (bebas Rp500 jt pertama)</option><option value="badan">Badan (tanpa batas bebas)</option></select></div>
+      </div>
+      <div class="bz-res" id="pjOut"></div>
+      <p class="bz-note">Skema final 0,5% berlaku untuk omzet ≤ Rp4,8 miliar/tahun. WP Orang Pribadi mendapat pembebasan atas Rp500 juta omzet pertama per tahun. Untuk kepastian, cek aturan terbaru/DJP atau konsultan pajak.</p>
+    </div>
+  </section>
+
+  <!-- TARGET PENJUALAN -->
+  <section class="bz-panel" data-panel="target">
+    <div class="bz-card">
+      <h3>Target Penjualan untuk Laba Tertentu</h3>
+      <div class="bz-grid mt">
+        <div class="bz-field"><label class="bz-label" for="tgProfit">Laba bersih diinginkan / bulan (Rp)</label><input class="bz-in" id="tgProfit" type="number" placeholder="20000000"></div>
+        <div class="bz-field"><label class="bz-label" for="tgFix">Biaya tetap / bulan (Rp)</label><input class="bz-in" id="tgFix" type="number" placeholder="18000000"></div>
+        <div class="bz-field"><label class="bz-label" for="tgPrice">Harga jual / unit (Rp)</label><input class="bz-in" id="tgPrice" type="number" placeholder="25000"></div>
+        <div class="bz-field"><label class="bz-label" for="tgVar">Biaya variabel / unit (Rp)</label><input class="bz-in" id="tgVar" type="number" placeholder="11000"></div>
+      </div>
+      <div class="bz-res" id="tgOut"></div>
     </div>
   </section>
 
@@ -427,10 +489,63 @@
     REPORT.swot={title:'SWOT & Strategi TOWS',html:html};
   });
 
+  // ---- Arus Kas 12 Bulan ----
+  function calcCash(){
+    var kas=n('cfStart'),rev=n('cfRev'),g=n('cfGrow')/100,vr=n('cfVar')/100,fix=n('cfFix');
+    var html='<thead><tr><th>Bln</th><th>Pendapatan</th><th>Biaya</th><th>Laba</th><th>Kas akhir</th></tr></thead><tbody>';
+    var negMonth=0,r=rev,k=kas,totProfit=0;
+    for(var m=1;m<=12;m++){
+      var biaya=r*vr+fix,laba=r-biaya; k+=laba; totProfit+=laba;
+      if(k<0&&!negMonth)negMonth=m;
+      html+='<tr><td>'+m+'</td><td class="num">'+rp(r)+'</td><td class="num">'+rp(biaya)+'</td><td class="num" style="color:'+(laba>=0?'var(--up)':'var(--down)')+'">'+rp(laba)+'</td><td class="num">'+rp(k)+'</td></tr>';
+      r=r*(1+g);
+    }
+    $('cfTable').innerHTML=html+'</tbody>';
+    var r2=[['Total laba 12 bulan',rp(totProfit)],['Kas akhir tahun',rp(k)],['Kas negatif mulai',negMonth?('Bulan '+negMonth):'Tidak (kas positif)']];
+    $('cfOut').innerHTML=rows(r2)+(negMonth?'<p class="bz-note" style="color:var(--down)">Kas berpotensi negatif di bulan '+negMonth+' — siapkan modal cadangan/runway.</p>':'');
+    REPORT.cashflow={title:'Proyeksi Arus Kas 12 Bulan',rows:r2};
+  }
+  ['cfStart','cfRev','cfGrow','cfVar','cfFix'].forEach(function(id){$(id).addEventListener('input',calcCash);});
+
+  // ---- Valuasi ----
+  function calcVal(){
+    var eb=n('vlEbitda'),m=n('vlMult'),rev=n('vlRev'),rm=n('vlRmult');
+    var vE=eb*m,vR=rev*rm,mid=(vE&&vR)?((vE+vR)/2):(vE||vR);
+    var r2=[['Valuasi (EBITDA × multiple)',rp(vE)],['Valuasi (Pendapatan × multiple)',rp(vR)],['Titik tengah',rp(mid)]];
+    $('vlOut').innerHTML='<div class="bz-big">'+rp(mid)+'<span style="font-size:13px;color:var(--muted);font-weight:400"> estimasi nilai usaha</span></div>'+rows(r2);
+    REPORT.valuasi={title:'Estimasi Valuasi Usaha',rows:r2};
+  }
+  ['vlEbitda','vlMult','vlRev','vlRmult'].forEach(function(id){$(id).addEventListener('input',calcVal);});
+
+  // ---- Pajak UMKM ----
+  function calcTax(){
+    var omM=n('pjOmzet'),wp=$('pjWp').value,omY=omM*12,base=omY,freed=0;
+    if(wp==='op'){freed=Math.min(omY,500000000);base=Math.max(0,omY-500000000);}
+    var taxY=base*0.005,taxM=taxY/12;
+    var r2=[['Omzet / tahun',rp(omY)]];
+    if(wp==='op')r2.push(['Dibebaskan (Rp500 jt pertama)',rp(freed)]);
+    r2.push(['Dasar pengenaan',rp(base)],['Pajak final / tahun (0,5%)',rp(taxY)],['Pajak final / bulan',rp(taxM)]);
+    $('pjOut').innerHTML='<div class="bz-big">'+rp(taxM)+'<span style="font-size:13px;color:var(--muted);font-weight:400"> / bulan (final 0,5%)</span></div>'+rows(r2)+
+      (omY>4800000000?'<p class="bz-note" style="color:var(--down)">Omzet melebihi Rp4,8 M/tahun — skema final 0,5% tidak berlaku; gunakan tarif normal.</p>':'');
+    REPORT.pajak={title:'Pajak UMKM Final 0,5%',rows:r2};
+  }
+  ['pjOmzet'].forEach(function(id){$(id).addEventListener('input',calcTax);}); $('pjWp').addEventListener('change',calcTax);
+
+  // ---- Target Penjualan ----
+  function calcTarget(){
+    var pf=n('tgProfit'),fx=n('tgFix'),P=n('tgPrice'),V=n('tgVar');
+    var cm=P-V,unit=cm>0?(fx+pf)/cm:NaN,omzet=isFinite(unit)?unit*P:NaN;
+    var r2=[['Margin kontribusi / unit',rp(cm)],['Unit terjual / bulan',isFinite(unit)?Math.ceil(unit).toLocaleString('id-ID')+' unit':'—'],['≈ per hari (30 hari)',isFinite(unit)?Math.ceil(unit/30).toLocaleString('id-ID')+' unit':'—'],['Omzet target / bulan',rp(omzet)]];
+    $('tgOut').innerHTML='<div class="bz-big">'+(isFinite(unit)?Math.ceil(unit).toLocaleString('id-ID')+' unit':'—')+'<span style="font-size:13px;color:var(--muted);font-weight:400"> / bulan</span></div>'+rows(r2)+
+      (cm<=0?'<p class="bz-note" style="color:var(--down)">Harga jual harus di atas biaya variabel.</p>':'');
+    REPORT.target={title:'Target Penjualan',rows:r2};
+  }
+  ['tgProfit','tgFix','tgPrice','tgVar'].forEach(function(id){$(id).addEventListener('input',calcTarget);});
+
   // ---- Laporan ----
   function buildReport(){
     var name=($('rpName').value||'').trim();
-    var order=[['blueprint',REPORT.blueprint],['profit',REPORT.profit],['harga',REPORT.harga],['roi',REPORT.roi],['ebitda',REPORT.ebitda],['loan',REPORT.loan],['invest',REPORT.invest],['swot',REPORT.swot]];
+    var order=[['blueprint',REPORT.blueprint],['profit',REPORT.profit],['harga',REPORT.harga],['roi',REPORT.roi],['ebitda',REPORT.ebitda],['loan',REPORT.loan],['invest',REPORT.invest],['cashflow',REPORT.cashflow],['valuasi',REPORT.valuasi],['pajak',REPORT.pajak],['target',REPORT.target],['swot',REPORT.swot]];
     var h='<h2 style="color:var(--on-dark)">Laporan Analisis Bisnis</h2>'+
       (name?'<p class="bz-hl">'+esc(name)+'</p>':'')+
       '<p class="bz-note">Disusun dengan Studio Bisnis PusatBankSoal.id — '+new Date().toLocaleDateString('id-ID',{day:'numeric',month:'long',year:'numeric'})+'. Angka bersifat estimasi dari input pengguna.</p>';
@@ -451,7 +566,7 @@
   });
 
   // init compute (so defaults/placeholders don't error)
-  calcProfit();calcHarga();calcRoi();calcEbitda();calcLoan();calcInv();
+  calcProfit();calcHarga();calcRoi();calcEbitda();calcLoan();calcInv();calcCash();calcVal();calcTax();calcTarget();
 })();
 </script>
 <script src="assets/app.js" defer></script>
