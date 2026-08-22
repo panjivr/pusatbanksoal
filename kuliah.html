@@ -62,6 +62,7 @@
 .ku-tag.j{background:var(--primary-soft);color:var(--accent-ink);border-color:rgba(47,107,237,.3)}
 .ku-tag.m-online{background:rgba(14,165,164,.14);color:var(--accent2);border-color:rgba(14,165,164,.3)}
 .ku-tag.m-karyawan{background:rgba(245,166,35,.16);color:#c77f0a;border-color:rgba(245,166,35,.3)}
+.ku-tag.m-iup{background:rgba(139,92,246,.16);color:#a78bfa;border-color:rgba(139,92,246,.34)}
 .ku-star{background:none;border:none;color:var(--muted);cursor:pointer;font-size:18px;flex:none;line-height:1;padding:2px}
 .ku-star.on{color:var(--primary)}
 .ku-empty{text-align:center;color:var(--muted);padding:40px 16px}
@@ -77,7 +78,7 @@
 <nav class="nav"><div class="nav-in">
 <a class="brand" href="index.html"><span class="logo">P</span>Pusat<b>BankSoal</b></a>
 <div class="nav-links" id="navLinks">
-<a href="index.html">Beranda</a><a href="tryout.html">Tryout</a><a href="dashboard.html">Dashboard</a><a href="analisis.html">AI Analisis</a><a href="kuliah.html" class="active">Kuliah</a><a href="skripsi.html">Riset & Skripsi</a><a href="prompt-studio.html">Prompt Studio</a><a href="bisnis.html">Studio Bisnis</a>
+<a href="index.html">Beranda</a><a href="tryout.html">Tryout</a><a href="dashboard.html">Dashboard</a><a href="analisis.html">AI Analisis</a><a href="kuliah.html" class="active">Kuliah</a><a href="beasiswa.html">Beasiswa</a><a href="skripsi.html">Riset & Skripsi</a><a href="prompt-studio.html">Prompt Studio</a><a href="bisnis.html">Studio Bisnis</a>
 </div>
 <div class="nav-right"><a href="auth.html" class="hide-sm" style="font-weight:600">Masuk</a><a href="auth.html" class="btn btn-primary btn-sm">Daftar Gratis</a>
 <button class="nav-toggle" data-nav-toggle aria-label="Buka menu" aria-expanded="false"><svg class="i"><use href="#i-menu"></use></svg></button></div>
@@ -87,7 +88,7 @@
 <section class="section-sm"><div class="wrap">
   <span class="section-eyebrow">Kuliah &amp; Kampus</span>
   <h1 class="mt">Cari <span class="gradient-text">jurusan &amp; kampus</span> di Indonesia &amp; luar negeri</h1>
-  <p class="lead mt">Ketik nama jurusan (mis. <b style="color:var(--on-dark)">Teknologi Pangan</b>) untuk melihat kampus mana saja yang membukanya — di dalam maupun <b style="color:var(--on-dark)">luar negeri</b> — atau cari nama kampus. Saring berdasarkan <b style="color:var(--on-dark)">jenjang</b> (D3–S3), <b style="color:var(--on-dark)">mode kuliah</b> (reguler/offline, online/PJJ, kelas karyawan/prosus), wilayah/negara, dan jenis kampus (PTN/PTS/PTKIN/Luar Negeri).</p>
+  <p class="lead mt">Ketik nama jurusan (mis. <b style="color:var(--on-dark)">Teknologi Pangan</b>) untuk melihat kampus mana saja yang membukanya — di dalam maupun <b style="color:var(--on-dark)">luar negeri</b> — atau cari nama kampus. Saring berdasarkan <b style="color:var(--on-dark)">jenjang</b> (D3–S3), <b style="color:var(--on-dark)">mode kuliah</b> (reguler/offline, online/PJJ, kelas karyawan/prosus, kelas internasional/IUP), wilayah/negara, dan jenis kampus (PTN/PTS/PTKIN/Luar Negeri).</p>
 
   <div class="ku-search">
     <input id="kuQ" type="search" placeholder="Cari jurusan atau kampus… mis. Teknologi Pangan, Kedokteran, UGM" aria-label="Cari jurusan atau kampus">
@@ -135,7 +136,7 @@
 
 <footer class="footer"><div class="wrap"><div class="cols">
 <div><a class="brand" href="index.html" style="color:var(--ink)"><span class="logo">P</span>Pusat<b>BankSoal</b></a><p style="color:#5b6672;font-size:13px;margin-top:14px;max-width:34ch">AI Education Intelligence Platform. Tryout, bank soal, direktori kuliah & analisis nilai #1 di Indonesia.</p></div>
-<div><h5>Produk</h5><a href="tryout.html">Tryout CPNS</a><a href="pembahasan.html">Bank Soal & Pembahasan</a><a href="kuliah.html">Kuliah & Kampus</a><a href="skripsi.html">Riset & Skripsi</a><a href="bisnis.html">Studio Bisnis</a></div>
+<div><h5>Produk</h5><a href="tryout.html">Tryout CPNS</a><a href="pembahasan.html">Bank Soal & Pembahasan</a><a href="kuliah.html">Kuliah & Kampus</a><a href="beasiswa.html">Beasiswa</a><a href="skripsi.html">Riset & Skripsi</a><a href="bisnis.html">Studio Bisnis</a></div>
 <div><h5>Kategori</h5><a href="tryout.html">CPNS & PPPK</a><a href="tryout.html">SNBT/UTBK</a><a href="tryout.html">Kedinasan</a><a href="tryout.html">BUMN</a><a href="tryout.html">TNI/POLRI</a></div>
 <div><h5>Perusahaan</h5><a href="#">Tentang Kami</a><a href="#">Blog</a><a href="#">Karier</a><a href="#">Kontak</a><a href="#">Afiliasi</a></div>
 <div><h5>Bantuan</h5><a href="#">Pusat Bantuan</a><a href="#">Syarat & Ketentuan</a><a href="#">Kebijakan Privasi</a><a href="admin.html">Admin</a></div>
@@ -350,12 +351,31 @@
     ['Business Management (Manajemen)','S1','OPENUNI','O'],['Computing & IT (Informatika)','S1','OPENUNI','O'],['Psychology (Psikologi)','S1','OPENUNI','O'],
     ['Computer Science (Ilmu Komputer)','S2','GATECH','O'],['Analytics (Analitika Data)','S2','GATECH','O'],
     ['Computer Science (Ilmu Komputer)','S1','ASU','O'],['Business (Manajemen)','S1','ASU','O'],['Business Administration (MBA/Manajemen)','S2','ASU','O'],
-    ['Computer Science (Ilmu Komputer)','S1','UOPEOPLE','O'],['Business Administration (Manajemen)','S1','UOPEOPLE','O'],['Health Science (Ilmu Kesehatan)','S1','UOPEOPLE','O']
+    ['Computer Science (Ilmu Komputer)','S1','UOPEOPLE','O'],['Business Administration (Manajemen)','S1','UOPEOPLE','O'],['Health Science (Ilmu Kesehatan)','S1','UOPEOPLE','O'],
+    // ==== Kelas Internasional / IUP (International Undergraduate Program) ====
+    // Pengantar bahasa Inggris, banyak berpeluang gelar ganda (double degree) dengan kampus mitra luar negeri.
+    ['Manajemen (IUP)','S1','UI','I'],['Akuntansi (IUP)','S1','UI','I'],['Ilmu Ekonomi (IUP)','S1','UI','I'],
+    ['Teknik Sipil (IUP)','S1','UI','I'],['Teknik Mesin (IUP)','S1','UI','I'],['Teknik Elektro (IUP)','S1','UI','I'],['Teknik Industri (IUP)','S1','UI','I'],
+    ['Teknik Kimia (IUP)','S1','UI','I'],['Pendidikan Dokter (KKI/IUP)','S1','UI','I'],['Ilmu Hukum (IUP)','S1','UI','I'],['Ilmu Komputer (IUP)','S1','UI','I'],
+    ['Manajemen (IUP)','S1','UGM','I'],['Akuntansi (IUP)','S1','UGM','I'],['Ilmu Ekonomi (IUP)','S1','UGM','I'],
+    ['Kedokteran (IUP)','S1','UGM','I'],['Teknik Mesin (IUP)','S1','UGM','I'],['Teknik Elektro (IUP)','S1','UGM','I'],['Teknik Kimia (IUP)','S1','UGM','I'],
+    ['Hubungan Internasional (IUP)','S1','UGM','I'],['Farmasi (IUP)','S1','UGM','I'],['Kimia (IUP)','S1','UGM','I'],['Psikologi (IUP)','S1','UGM','I'],
+    ['Manajemen (IUP)','S1','UNAIR','I'],['Akuntansi (IUP)','S1','UNAIR','I'],['Ekonomi Islam (IUP)','S1','UNAIR','I'],
+    ['Kedokteran (IUP)','S1','UNAIR','I'],['Kedokteran Gigi (IUP)','S1','UNAIR','I'],['Ilmu Hukum (IUP)','S1','UNAIR','I'],['Hubungan Internasional (IUP)','S1','UNAIR','I'],
+    ['Manajemen (IUP)','S1','UB','I'],['Akuntansi (IUP)','S1','UB','I'],['Ilmu Ekonomi (IUP)','S1','UB','I'],['Hubungan Internasional (IUP)','S1','UB','I'],
+    ['Teknik Sipil (IUP)','S1','UB','I'],['Ilmu Komunikasi (IUP)','S1','UB','I'],
+    ['Manajemen (IUP)','S1','UNDIP','I'],['Akuntansi (IUP)','S1','UNDIP','I'],['Ilmu Ekonomi (IUP)','S1','UNDIP','I'],['Hubungan Internasional (IUP)','S1','UNDIP','I'],
+    ['Bisnis (IUP)','S1','IPB','I'],['Manajemen (IUP)','S1','IPB','I'],['Ilmu Komputer (IUP)','S1','IPB','I'],['Teknologi Pangan (IUP)','S1','IPB','I'],
+    ['Global Engineering — Teknik Mesin (IUP)','S1','ITS','I'],['Global Engineering — Teknik Sipil (IUP)','S1','ITS','I'],['Global Engineering — Teknik Industri (IUP)','S1','ITS','I'],
+    ['Manajemen (IUP)','S1','UNPAD','I'],['Akuntansi (IUP)','S1','UNPAD','I'],['Hubungan Internasional (IUP)','S1','UNPAD','I'],
+    ['Manajemen (IUP)','S1','UNS','I'],['Ilmu Hukum (IUP)','S1','UNS','I'],
+    ['Business (International Program)','S1','BINUS','I'],['Computer Science (International Program)','S1','BINUS','I'],['Communication (International Program)','S1','BINUS','I'],
+    ['International Business (Kelas Internasional)','S1','PRESUNIV','I'],['Business (Kelas Internasional)','S1','PRASMUL','I'],['Manajemen (Kelas Internasional)','S1','UMY','I']
   ];
   var LEVELS=['D3','D4','S1','Profesi','S2','S3'];
-  var MODES=[['R','Reguler / Offline'],['O','Online / PJJ'],['K','Kelas Karyawan / Prosus']];
+  var MODES=[['R','Reguler / Offline'],['O','Online / PJJ'],['K','Kelas Karyawan / Prosus'],['I','Kelas Internasional / IUP']];
   var TIPES=['PTN','PTS','PTKIN','Luar Negeri'];
-  var MODEL={R:'Reguler / Offline',O:'Online / PJJ',K:'Kelas Karyawan / Prosus'};
+  var MODEL={R:'Reguler / Offline',O:'Online / PJJ',K:'Kelas Karyawan / Prosus',I:'Kelas Internasional / IUP'};
 
   var K_FAV='pbs_kuliah_fav';
   function favGet(){try{return JSON.parse(localStorage.getItem(K_FAV)||'[]');}catch(e){return[];}}
@@ -394,7 +414,7 @@
     var camps={};res.forEach(function(d){camps[d[2]]=1;});
     $('kuCount').innerHTML='Menampilkan <b>'+res.length+'</b> program di <b>'+Object.keys(camps).length+'</b> kampus'+(state.q?(' untuk “'+esc(state.q)+'”'):'')+'.';
     if(!res.length){$('kuResults').innerHTML='<div class="ku-empty"><p>Tidak ada hasil untuk filter ini.</p><p style="font-size:13px;margin-top:6px">Coba kata kunci lain, kurangi filter, atau cek data resmi di PDDikti.</p></div>';return;}
-    $('kuResults').innerHTML=res.map(function(d){var c=CAMP[d[2]],on=favs.indexOf(favKey(d))>=0,mc=d[3]==='O'?' m-online':d[3]==='K'?' m-karyawan':'';
+    $('kuResults').innerHTML=res.map(function(d){var c=CAMP[d[2]],on=favs.indexOf(favKey(d))>=0,mc=d[3]==='O'?' m-online':d[3]==='K'?' m-karyawan':d[3]==='I'?' m-iup':'';
       return '<div class="ku-card"><div><div class="p">'+esc(d[0])+'</div><div class="u">'+esc(c[0])+' · '+esc(c[1])+', '+esc(c[2])+'</div>'+
         '<div class="meta"><span class="ku-tag j">'+esc(d[1])+'</span><span class="ku-tag'+mc+'">'+esc(MODEL[d[3]])+'</span><span class="ku-tag">'+esc(c[3])+'</span></div></div>'+
         '<button class="ku-star'+(on?' on':'')+'" data-fav="'+esc(favKey(d))+'" aria-label="Simpan">'+(on?'★':'☆')+'</button></div>';
@@ -423,7 +443,7 @@
       arr.forEach(function(row){
         if(Array.isArray(row)&&row.length>=3){if(!CAMP[row[2]])return;DATA.push([String(row[0]),String(row[1]),row[2],row[3]||'R']);added++;}
         else if(row&&row.p&&row.u){var code='X'+(Object.keys(CAMP).length);CAMP[code]=[String(row.u),String(row.kota||'-'),String(row.prov||'-'),String(row.tipe||'PTS')];
-          DATA.push([String(row.p),String(row.j||'S1'),code,({Reguler:'R',Offline:'R',Online:'O','Kelas Karyawan':'K'})[row.mode]||'R']);added++;}
+          DATA.push([String(row.p),String(row.j||'S1'),code,({Reguler:'R',Offline:'R',Online:'O','Kelas Karyawan':'K','Kelas Internasional':'I',IUP:'I',Internasional:'I'})[row.mode]||'R']);added++;}
       });
       // refresh province list
       var pv={};for(var k in CAMP)pv[CAMP[k][2]]=1;$('kuProv').innerHTML='<option value="">Semua wilayah</option>'+Object.keys(pv).sort().map(function(p){return '<option>'+esc(p)+'</option>';}).join('');
