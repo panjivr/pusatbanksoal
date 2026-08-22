@@ -155,6 +155,9 @@ input[type=range]{accent-color:var(--primary);height:6px}
 .bm-ok{background:rgba(34,197,94,.15);color:var(--up)} .bm-warn{background:rgba(245,166,35,.18);color:#c77f0a} .bm-bad{background:rgba(246,70,93,.15);color:var(--down)}
 :root[data-theme="light"] .bm-warn{color:#a86608}
 @media print{.lc-box{border:1px solid #ccc}}
+.bz-share-banner{position:fixed;left:50%;transform:translateX(-50%);bottom:18px;z-index:1000;max-width:min(560px,92vw);display:flex;gap:14px;align-items:center;justify-content:space-between;flex-wrap:wrap;background:var(--card);border:1px solid var(--primary);border-radius:14px;padding:12px 16px;box-shadow:var(--sh-lg);font-size:13.5px;color:var(--body)}
+.bz-share-banner .acts{display:flex;gap:8px;flex:none}
+@media print{.bz-share-banner{display:none!important}}
 </style>
 </head>
 <body>
@@ -1307,7 +1310,15 @@ input[type=range]{accent-color:var(--primary);height:6px}
   projRefresh('');
 
   // Muat analisis dari link yang dibagikan (#d=...) — otomatis, tanpa dialog
-  function loadFromHash(){var m=(location.hash||'').match(/#d=(.+)$/);if(!m)return;try{var snap=JSON.parse(decodeURIComponent(escape(atob(m[1]))));if(snap&&typeof snap==='object'){projApply(snap);if($('pjMsg'))$('pjMsg').textContent='Analisis dari link yang dibagikan telah dimuat ✓';}}catch(e){}}
+  function loadFromHash(){var m=(location.hash||'').match(/#d=(.+)$/);if(!m)return;var snap;
+    try{snap=JSON.parse(decodeURIComponent(escape(atob(m[1]))));}catch(e){return;}
+    if(!snap||typeof snap!=='object'||$('bzShareBanner'))return;
+    var bar=document.createElement('div');bar.id='bzShareBanner';bar.className='bz-share-banner';
+    bar.innerHTML='<span>Ada analisis dari link yang dibagikan. Buka dan tampilkan? Data di layar saat ini akan diganti.</span><span class="acts"><button class="btn btn-primary btn-sm" id="bzShareYes">Buka</button><button class="btn btn-ghost btn-sm" id="bzShareNo">Abaikan</button></span>';
+    document.body.appendChild(bar);
+    $('bzShareYes').addEventListener('click',function(){projApply(snap);if($('pjMsg'))$('pjMsg').textContent='Analisis dari link dimuat ✓';bar.remove();});
+    $('bzShareNo').addEventListener('click',function(){bar.remove();});
+  }
   setTimeout(loadFromHash,0); window.addEventListener('hashchange',loadFromHash);
 
   showCat('profil');
