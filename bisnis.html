@@ -66,6 +66,18 @@
 .bz-big{font-family:var(--num);font-weight:700;font-size:clamp(20px,3vw,26px);color:var(--primary)}
 .bz-note{color:var(--muted);font-size:12.5px;margin-top:8px}
 .bz-hl{color:var(--on-dark);font-weight:600}
+.bz-subt{color:var(--muted-strong);font-size:13.5px;margin:4px 0 2px;line-height:1.5}
+.bz-help{display:block;color:var(--muted);font-size:12px;margin-top:5px;line-height:1.45}
+.bz-syncf{color:var(--info);font-weight:600}
+.bz-gloss{background:var(--grad-surface);border:1px solid var(--hair-dark);border-radius:14px;padding:16px 18px;margin-top:22px}
+.bz-gloss>summary{cursor:pointer;font-family:var(--display);font-weight:700;color:var(--on-dark);font-size:15px;list-style:none}
+.bz-gloss>summary::-webkit-details-marker{display:none}
+.bz-gloss>summary::before{content:"▸ ";color:var(--primary)}
+.bz-gloss[open]>summary::before{content:"▾ "}
+.bz-gloss dl{margin:12px 0 0;columns:2;column-gap:26px}
+@media(max-width:640px){.bz-gloss dl{columns:1}}
+.bz-gloss dt{color:var(--on-dark);font-weight:600;font-size:13.5px;margin-top:10px;break-inside:avoid}
+.bz-gloss dd{color:var(--muted-strong);font-size:13px;margin:2px 0 0;line-height:1.5;break-inside:avoid}
 .bz-swot{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 @media(max-width:640px){.bz-swot{grid-template-columns:1fr}}
 .bz-bp h4{color:var(--on-dark);margin-top:14px;font-size:15px}
@@ -105,16 +117,16 @@
   <nav class="bz-sub" id="bzSub" aria-label="Alat bisnis">
     <button class="bz-tab on" data-tool="profil">1. Profil</button>
     <button class="bz-tab" data-tool="blueprint">Blueprint</button>
-    <button class="bz-tab" data-tool="profit">Profit & BEP</button>
-    <button class="bz-tab" data-tool="harga">Harga & HPP</button>
-    <button class="bz-tab" data-tool="roi">ROI & Payback</button>
-    <button class="bz-tab" data-tool="ebitda">EBITDA & Laba</button>
+    <button class="bz-tab" data-tool="profit">Untung &amp; Balik Modal</button>
+    <button class="bz-tab" data-tool="harga">Modal &amp; Harga</button>
+    <button class="bz-tab" data-tool="roi">Balik Modal (ROI)</button>
+    <button class="bz-tab" data-tool="ebitda">Kesehatan Laba</button>
     <button class="bz-tab" data-tool="dana">Pendanaan</button>
     <button class="bz-tab" data-tool="swot">SWOT</button>
     <button class="bz-tab" data-tool="cashflow">Arus Kas 12 Bln</button>
-    <button class="bz-tab" data-tool="valuasi">Valuasi</button>
+    <button class="bz-tab" data-tool="valuasi">Nilai Usaha</button>
     <button class="bz-tab" data-tool="pajak">Pajak UMKM</button>
-    <button class="bz-tab" data-tool="target">Target Penjualan</button>
+    <button class="bz-tab" data-tool="target">Target Jualan</button>
     <button class="bz-tab" data-tool="laporan">Laporan</button>
   </nav>
 
@@ -150,12 +162,13 @@
   <!-- PROFIT & BEP -->
   <section class="bz-panel" data-panel="profit">
     <div class="bz-card">
-      <h3>Profit &amp; Titik Impas (BEP)</h3>
+      <h3>Untung &amp; Balik Modal (Profit &amp; BEP)</h3>
+      <p class="bz-subt">Cari tahu untung per bulan dan berapa minimal harus terjual biar tidak rugi (titik impas / BEP).</p>
       <div class="bz-grid mt">
-        <div class="bz-field"><label class="bz-label" for="pfPrice">Harga jual / unit (Rp)</label><input class="bz-in" id="pfPrice" type="number" placeholder="25000"></div>
-        <div class="bz-field"><label class="bz-label" for="pfVar">Biaya variabel / unit (Rp)</label><input class="bz-in" id="pfVar" type="number" placeholder="10000"></div>
-        <div class="bz-field"><label class="bz-label" for="pfFix">Biaya tetap / bulan (Rp)</label><input class="bz-in" id="pfFix" type="number" placeholder="8000000"></div>
-        <div class="bz-field"><label class="bz-label" for="pfQty">Target terjual / bulan (unit)</label><input class="bz-in" id="pfQty" type="number" placeholder="1500"></div>
+        <div class="bz-field"><label class="bz-label" for="pfPrice">Harga jual per barang (Rp)</label><input class="bz-in" id="pfPrice" type="number" placeholder="25000"><small class="bz-help">Harga satu porsi/barang yang dibayar pembeli. <span class="bz-syncf">↔ otomatis dipakai di Target Penjualan</span></small></div>
+        <div class="bz-field"><label class="bz-label" for="pfVar">Biaya per barang (Rp)</label><input class="bz-in" id="pfVar" type="number" placeholder="10000"><small class="bz-help">Biaya yang ikut naik tiap jual 1 unit: bahan, kemasan, komisi. <span class="bz-syncf">↔ Target Penjualan</span></small></div>
+        <div class="bz-field"><label class="bz-label" for="pfFix">Biaya rutin per bulan (Rp)</label><input class="bz-in" id="pfFix" type="number" placeholder="8000000"><small class="bz-help">Keluar tiap bulan walau sepi: sewa, gaji, internet, langganan. <span class="bz-syncf">↔ Arus Kas &amp; Target</span></small></div>
+        <div class="bz-field"><label class="bz-label" for="pfQty">Perkiraan terjual per bulan (unit)</label><input class="bz-in" id="pfQty" type="number" placeholder="1500"><small class="bz-help">Kira-kira berapa banyak terjual dalam sebulan.</small></div>
       </div>
       <div class="bz-res" id="pfOut"></div>
     </div>
@@ -164,24 +177,27 @@
   <!-- HARGA & HPP -->
   <section class="bz-panel" data-panel="harga">
     <div class="bz-card">
-      <h3>Harga Pokok (HPP) &amp; Harga Jual</h3>
+      <h3>Modal per Barang (HPP) &amp; Harga Jual</h3>
+      <p class="bz-subt">Hitung modal untuk membuat 1 barang (HPP), lalu harga jual yang pas sesuai untung yang kamu mau.</p>
       <div class="bz-grid mt">
-        <div class="bz-field"><label class="bz-label" for="hpBahan">Biaya bahan / unit (Rp)</label><input class="bz-in" id="hpBahan" type="number" placeholder="7000"></div>
-        <div class="bz-field"><label class="bz-label" for="hpOh">Tenaga + overhead / unit (Rp)</label><input class="bz-in" id="hpOh" type="number" placeholder="3000"></div>
-        <div class="bz-field"><label class="bz-label" for="hpMode">Metode</label><select class="bz-sel" id="hpMode"><option value="margin">Target margin (%)</option><option value="markup">Markup dari HPP (%)</option></select></div>
-        <div class="bz-field"><label class="bz-label" for="hpPct">Nilai (%)</label><input class="bz-in" id="hpPct" type="number" placeholder="60"></div>
+        <div class="bz-field"><label class="bz-label" for="hpBahan">Biaya bahan per barang (Rp)</label><input class="bz-in" id="hpBahan" type="number" placeholder="7000"><small class="bz-help">Bahan langsung untuk membuat 1 unit.</small></div>
+        <div class="bz-field"><label class="bz-label" for="hpOh">Ongkos tenaga &amp; lain-lain per barang (Rp)</label><input class="bz-in" id="hpOh" type="number" placeholder="3000"><small class="bz-help">Upah, listrik, kemasan yang menempel ke 1 unit (overhead).</small></div>
+        <div class="bz-field"><label class="bz-label" for="hpMode">Cara ambil untung</label><select class="bz-sel" id="hpMode"><option value="margin">Untung dihitung dari harga jual (margin %)</option><option value="markup">Untung ditambah dari modal (markup %)</option></select><small class="bz-help">Margin: untung sekian % dari harga jual. Markup: modal + sekian %.</small></div>
+        <div class="bz-field"><label class="bz-label" for="hpPct">Persen untung (%)</label><input class="bz-in" id="hpPct" type="number" placeholder="60"><small class="bz-help">Contoh 60 = ingin untung 60%.</small></div>
       </div>
       <div class="bz-res" id="hpOut"></div>
+      <button class="btn btn-secondary btn-sm mt no-print" id="hpUse">Pakai harga ini di kalkulator Untung &amp; Balik Modal →</button>
     </div>
   </section>
 
   <!-- ROI -->
   <section class="bz-panel" data-panel="roi">
     <div class="bz-card">
-      <h3>ROI &amp; Payback Period</h3>
+      <h3>Balik Modal &amp; Untung dari Modal (ROI &amp; Payback)</h3>
+      <p class="bz-subt">Seberapa cepat modal kembali, dan berapa persen untung dari modal tiap tahun.</p>
       <div class="bz-grid mt">
-        <div class="bz-field"><label class="bz-label" for="roInv">Total investasi awal (Rp)</label><input class="bz-in" id="roInv" type="number" placeholder="150000000"></div>
-        <div class="bz-field"><label class="bz-label" for="roNet">Laba bersih / bulan (Rp)</label><input class="bz-in" id="roNet" type="number" placeholder="6000000"></div>
+        <div class="bz-field"><label class="bz-label" for="roInv">Modal awal total (Rp)</label><input class="bz-in" id="roInv" type="number" placeholder="150000000"><small class="bz-help">Semua uang di awal: renovasi, alat, stok, izin. <span class="bz-syncf">↔ otomatis dipakai di Pendanaan Investor</span></small></div>
+        <div class="bz-field"><label class="bz-label" for="roNet">Untung bersih per bulan (Rp)</label><input class="bz-in" id="roNet" type="number" placeholder="6000000"><small class="bz-help">Sisa untung tiap bulan setelah semua biaya. <span class="bz-syncf">↔ Investor</span></small></div>
       </div>
       <div class="bz-res" id="roOut"></div>
     </div>
@@ -190,14 +206,15 @@
   <!-- EBITDA -->
   <section class="bz-panel" data-panel="ebitda">
     <div class="bz-card">
-      <h3>EBITDA &amp; Laba Bersih</h3>
+      <h3>Kesehatan Laba (EBITDA &amp; Laba Bersih)</h3>
+      <p class="bz-subt">EBITDA = untung dari operasi sebelum dipotong bunga, pajak, dan penyusutan alat. Dipakai untuk menilai sehat-tidaknya bisnis dan menghitung valuasi.</p>
       <div class="bz-grid mt">
-        <div class="bz-field"><label class="bz-label" for="ebRev">Pendapatan / bulan (Rp)</label><input class="bz-in" id="ebRev" type="number" placeholder="80000000"></div>
-        <div class="bz-field"><label class="bz-label" for="ebCogs">HPP / COGS (Rp)</label><input class="bz-in" id="ebCogs" type="number" placeholder="32000000"></div>
-        <div class="bz-field"><label class="bz-label" for="ebOpex">Biaya operasional (tanpa penyusutan) (Rp)</label><input class="bz-in" id="ebOpex" type="number" placeholder="28000000"></div>
-        <div class="bz-field"><label class="bz-label" for="ebDep">Penyusutan &amp; amortisasi (Rp)</label><input class="bz-in" id="ebDep" type="number" placeholder="3000000"></div>
-        <div class="bz-field"><label class="bz-label" for="ebInt">Bunga pinjaman (Rp)</label><input class="bz-in" id="ebInt" type="number" placeholder="2000000"></div>
-        <div class="bz-field"><label class="bz-label" for="ebTax">Pajak (%)</label><input class="bz-in" id="ebTax" type="number" placeholder="0.5"></div>
+        <div class="bz-field"><label class="bz-label" for="ebRev">Uang masuk per bulan (Rp)</label><input class="bz-in" id="ebRev" type="number" placeholder="80000000"><small class="bz-help">Total pendapatan penjualan sebulan (omzet). <span class="bz-syncf">↔ Arus Kas &amp; Pajak</span></small></div>
+        <div class="bz-field"><label class="bz-label" for="ebCogs">Modal barang terjual / HPP (Rp)</label><input class="bz-in" id="ebCogs" type="number" placeholder="32000000"><small class="bz-help">Biaya langsung barang/jasa yang laku (HPP/COGS).</small></div>
+        <div class="bz-field"><label class="bz-label" for="ebOpex">Biaya operasional / bulan (Rp)</label><input class="bz-in" id="ebOpex" type="number" placeholder="28000000"><small class="bz-help">Gaji, sewa, listrik, marketing — belum termasuk penyusutan.</small></div>
+        <div class="bz-field"><label class="bz-label" for="ebDep">Penyusutan alat / bulan (Rp)</label><input class="bz-in" id="ebDep" type="number" placeholder="3000000"><small class="bz-help">Nilai alat/aset yang menyusut tiap bulan — bukan uang keluar (penyusutan &amp; amortisasi).</small></div>
+        <div class="bz-field"><label class="bz-label" for="ebInt">Bunga cicilan / bulan (Rp)</label><input class="bz-in" id="ebInt" type="number" placeholder="2000000"><small class="bz-help">Bunga pinjaman yang dibayar tiap bulan.</small></div>
+        <div class="bz-field"><label class="bz-label" for="ebTax">Tarif pajak (%)</label><input class="bz-in" id="ebTax" type="number" placeholder="0.5"><small class="bz-help">Pajak atas laba. UMKM final biasanya 0,5%.</small></div>
       </div>
       <div class="bz-res" id="ebOut"></div>
     </div>
@@ -206,22 +223,24 @@
   <!-- PENDANAAN -->
   <section class="bz-panel" data-panel="dana">
     <div class="bz-card">
-      <h3>Pinjaman Bank</h3>
+      <h3>Cicilan Pinjaman Bank</h3>
+      <p class="bz-subt">Hitung angsuran bulanan dan total bunga sebelum ambil pinjaman.</p>
       <div class="bz-grid mt">
-        <div class="bz-field"><label class="bz-label" for="lnAmt">Jumlah pinjaman (Rp)</label><input class="bz-in" id="lnAmt" type="number" placeholder="200000000"></div>
-        <div class="bz-field"><label class="bz-label" for="lnRate">Bunga / tahun (%)</label><input class="bz-in" id="lnRate" type="number" placeholder="12"></div>
-        <div class="bz-field"><label class="bz-label" for="lnTenor">Tenor (bulan)</label><input class="bz-in" id="lnTenor" type="number" placeholder="36"></div>
-        <div class="bz-field"><label class="bz-label" for="lnType">Jenis bunga</label><select class="bz-sel" id="lnType"><option value="anuitas">Anuitas (efektif)</option><option value="flat">Flat</option></select></div>
+        <div class="bz-field"><label class="bz-label" for="lnAmt">Jumlah pinjaman (Rp)</label><input class="bz-in" id="lnAmt" type="number" placeholder="200000000"><small class="bz-help">Pokok uang yang dipinjam.</small></div>
+        <div class="bz-field"><label class="bz-label" for="lnRate">Bunga per tahun (%)</label><input class="bz-in" id="lnRate" type="number" placeholder="12"><small class="bz-help">Suku bunga tahunan dari bank.</small></div>
+        <div class="bz-field"><label class="bz-label" for="lnTenor">Lama cicilan (bulan)</label><input class="bz-in" id="lnTenor" type="number" placeholder="36"><small class="bz-help">Jangka waktu pelunasan (tenor). Mis. 36 = 3 tahun.</small></div>
+        <div class="bz-field"><label class="bz-label" for="lnType">Cara hitung bunga</label><select class="bz-sel" id="lnType"><option value="anuitas">Anuitas — dari sisa pokok (umum di bank)</option><option value="flat">Flat — dari pokok awal (terlihat murah)</option></select><small class="bz-help">Bunga flat terlihat kecil tapi efektifnya bisa hampir 2× anuitas. Bandingkan dulu.</small></div>
       </div>
       <div class="bz-res" id="lnOut"></div>
     </div>
     <div class="bz-card">
-      <h3>Bagi Hasil Investor</h3>
+      <h3>Bagi Hasil dengan Investor</h3>
+      <p class="bz-subt">Hitung porsi kepemilikan (ekuitas) dan pembagian untung bila usaha didanai investor.</p>
       <div class="bz-grid mt">
-        <div class="bz-field"><label class="bz-label" for="ivTotal">Total modal dibutuhkan (Rp)</label><input class="bz-in" id="ivTotal" type="number" placeholder="300000000"></div>
-        <div class="bz-field"><label class="bz-label" for="ivInv">Kontribusi investor (Rp)</label><input class="bz-in" id="ivInv" type="number" placeholder="180000000"></div>
-        <div class="bz-field"><label class="bz-label" for="ivShare">Porsi bagi hasil untuk investor (%)</label><input class="bz-in" id="ivShare" type="number" placeholder="40"></div>
-        <div class="bz-field"><label class="bz-label" for="ivProfit">Proyeksi laba bersih / bulan (Rp)</label><input class="bz-in" id="ivProfit" type="number" placeholder="15000000"></div>
+        <div class="bz-field"><label class="bz-label" for="ivTotal">Total modal dibutuhkan (Rp)</label><input class="bz-in" id="ivTotal" type="number" placeholder="300000000"><small class="bz-help">Seluruh modal yang diperlukan untuk mulai/ekspansi.</small></div>
+        <div class="bz-field"><label class="bz-label" for="ivInv">Uang dari investor (Rp)</label><input class="bz-in" id="ivInv" type="number" placeholder="180000000"><small class="bz-help">Bagian modal yang disetor investor.</small></div>
+        <div class="bz-field"><label class="bz-label" for="ivShare">Jatah untung untuk investor (%)</label><input class="bz-in" id="ivShare" type="number" placeholder="40"><small class="bz-help">Persen pembagian laba yang disepakati untuk investor.</small></div>
+        <div class="bz-field"><label class="bz-label" for="ivProfit">Perkiraan untung bersih / bulan (Rp)</label><input class="bz-in" id="ivProfit" type="number" placeholder="15000000"><small class="bz-help">Untung bersih bulanan yang akan dibagi.</small></div>
       </div>
       <div class="bz-res" id="ivOut"></div>
       <p class="bz-note">Ekuitas dihitung dari proporsi modal; porsi bagi hasil bisa berbeda dari ekuitas sesuai kesepakatan. Tuangkan dalam perjanjian tertulis.</p>
@@ -246,13 +265,14 @@
   <!-- ARUS KAS 12 BULAN -->
   <section class="bz-panel" data-panel="cashflow">
     <div class="bz-card">
-      <h3>Proyeksi Arus Kas 12 Bulan</h3>
+      <h3>Proyeksi Uang Kas 12 Bulan</h3>
+      <p class="bz-subt">Lihat perkiraan saldo kas tiap bulan supaya tahu kapan uang bisa menipis dan perlu modal cadangan.</p>
       <div class="bz-grid mt">
-        <div class="bz-field"><label class="bz-label" for="cfStart">Kas awal (Rp)</label><input class="bz-in" id="cfStart" type="number" placeholder="20000000"></div>
-        <div class="bz-field"><label class="bz-label" for="cfRev">Pendapatan bulan 1 (Rp)</label><input class="bz-in" id="cfRev" type="number" placeholder="40000000"></div>
-        <div class="bz-field"><label class="bz-label" for="cfGrow">Pertumbuhan pendapatan / bulan (%)</label><input class="bz-in" id="cfGrow" type="number" placeholder="5"></div>
-        <div class="bz-field"><label class="bz-label" for="cfVar">Biaya variabel (% dari pendapatan)</label><input class="bz-in" id="cfVar" type="number" placeholder="45"></div>
-        <div class="bz-field"><label class="bz-label" for="cfFix">Biaya tetap / bulan (Rp)</label><input class="bz-in" id="cfFix" type="number" placeholder="18000000"></div>
+        <div class="bz-field"><label class="bz-label" for="cfStart">Uang kas saat mulai (Rp)</label><input class="bz-in" id="cfStart" type="number" placeholder="20000000"><small class="bz-help">Saldo kas yang kamu punya di awal.</small></div>
+        <div class="bz-field"><label class="bz-label" for="cfRev">Uang masuk bulan pertama (Rp)</label><input class="bz-in" id="cfRev" type="number" placeholder="40000000"><small class="bz-help">Perkiraan pendapatan di bulan ke-1. <span class="bz-syncf">↔ EBITDA &amp; Pajak</span></small></div>
+        <div class="bz-field"><label class="bz-label" for="cfGrow">Kenaikan pendapatan tiap bulan (%)</label><input class="bz-in" id="cfGrow" type="number" placeholder="5"><small class="bz-help">Perkiraan pertumbuhan penjualan per bulan. 0 bila datar.</small></div>
+        <div class="bz-field"><label class="bz-label" for="cfVar">Biaya ikut penjualan (% dari pendapatan)</label><input class="bz-in" id="cfVar" type="number" placeholder="45"><small class="bz-help">Bahan, kemasan, komisi — kira-kira berapa persen dari omzet.</small></div>
+        <div class="bz-field"><label class="bz-label" for="cfFix">Biaya rutin per bulan (Rp)</label><input class="bz-in" id="cfFix" type="number" placeholder="18000000"><small class="bz-help">Sewa, gaji, langganan. <span class="bz-syncf">↔ Untung &amp; Target</span></small></div>
       </div>
       <div class="scroll-x mt"><table class="tbl" id="cfTable" style="min-width:520px"></table></div>
       <div class="bz-res" id="cfOut"></div>
@@ -262,12 +282,13 @@
   <!-- VALUASI -->
   <section class="bz-panel" data-panel="valuasi">
     <div class="bz-card">
-      <h3>Estimasi Valuasi Usaha</h3>
+      <h3>Perkiraan Harga Jual Usaha (Valuasi)</h3>
+      <p class="bz-subt">Perkiraan kasar berapa nilai/harga usahamu bila dijual atau dilirik investor.</p>
       <div class="bz-grid mt">
-        <div class="bz-field"><label class="bz-label" for="vlEbitda">EBITDA / tahun (Rp)</label><input class="bz-in" id="vlEbitda" type="number" placeholder="240000000"></div>
-        <div class="bz-field"><label class="bz-label" for="vlMult">Multiple EBITDA (x)</label><input class="bz-in" id="vlMult" type="number" placeholder="4"></div>
-        <div class="bz-field"><label class="bz-label" for="vlRev">Pendapatan / tahun (Rp)</label><input class="bz-in" id="vlRev" type="number" placeholder="960000000"></div>
-        <div class="bz-field"><label class="bz-label" for="vlRmult">Multiple pendapatan (x)</label><input class="bz-in" id="vlRmult" type="number" placeholder="1"></div>
+        <div class="bz-field"><label class="bz-label" for="vlEbitda">EBITDA per tahun (Rp)</label><input class="bz-in" id="vlEbitda" type="number" placeholder="240000000"><small class="bz-help">Untung operasi setahun (EBITDA × 12). <span class="bz-syncf">↦ terisi otomatis dari tab EBITDA</span></small></div>
+        <div class="bz-field"><label class="bz-label" for="vlMult">Pengali EBITDA (×)</label><input class="bz-in" id="vlMult" type="number" placeholder="4"><small class="bz-help">Faktor pengali. UMKM umumnya 2–5×.</small></div>
+        <div class="bz-field"><label class="bz-label" for="vlRev">Pendapatan per tahun (Rp)</label><input class="bz-in" id="vlRev" type="number" placeholder="960000000"><small class="bz-help">Omzet setahun. <span class="bz-syncf">↦ terisi otomatis dari tab EBITDA</span></small></div>
+        <div class="bz-field"><label class="bz-label" for="vlRmult">Pengali pendapatan (×)</label><input class="bz-in" id="vlRmult" type="number" placeholder="1"><small class="bz-help">Faktor pengali omzet. UMKM umumnya 0,5–2×.</small></div>
       </div>
       <div class="bz-res" id="vlOut"></div>
       <p class="bz-note">Multiple bergantung industri, pertumbuhan, dan risiko. UMKM umumnya 2–5× EBITDA atau 0,5–2× pendapatan. Angka ini panduan awal, bukan valuasi resmi.</p>
@@ -279,7 +300,7 @@
     <div class="bz-card">
       <h3>Pajak UMKM Final 0,5% (PP 55/2022)</h3>
       <div class="bz-grid mt">
-        <div class="bz-field"><label class="bz-label" for="pjOmzet">Omzet / bulan (Rp)</label><input class="bz-in" id="pjOmzet" type="number" placeholder="50000000"></div>
+        <div class="bz-field"><label class="bz-label" for="pjOmzet">Omzet (uang masuk) / bulan (Rp)</label><input class="bz-in" id="pjOmzet" type="number" placeholder="50000000"><small class="bz-help">Total penjualan kotor sebulan, sebelum dikurangi biaya. <span class="bz-syncf">↔ EBITDA &amp; Arus Kas</span></small></div>
         <div class="bz-field"><label class="bz-label" for="pjWp">Jenis WP</label><select class="bz-sel" id="pjWp"><option value="op">Orang Pribadi (bebas Rp500 jt pertama)</option><option value="badan">Badan (tanpa batas bebas)</option></select></div>
       </div>
       <div class="bz-res" id="pjOut"></div>
@@ -290,12 +311,13 @@
   <!-- TARGET PENJUALAN -->
   <section class="bz-panel" data-panel="target">
     <div class="bz-card">
-      <h3>Target Penjualan untuk Laba Tertentu</h3>
+      <h3>Berapa Harus Terjual untuk Untung Target</h3>
+      <p class="bz-subt">Tentukan untung yang kamu mau, lalu lihat berapa unit &amp; omzet yang harus dicapai.</p>
       <div class="bz-grid mt">
-        <div class="bz-field"><label class="bz-label" for="tgProfit">Laba bersih diinginkan / bulan (Rp)</label><input class="bz-in" id="tgProfit" type="number" placeholder="20000000"></div>
-        <div class="bz-field"><label class="bz-label" for="tgFix">Biaya tetap / bulan (Rp)</label><input class="bz-in" id="tgFix" type="number" placeholder="18000000"></div>
-        <div class="bz-field"><label class="bz-label" for="tgPrice">Harga jual / unit (Rp)</label><input class="bz-in" id="tgPrice" type="number" placeholder="25000"></div>
-        <div class="bz-field"><label class="bz-label" for="tgVar">Biaya variabel / unit (Rp)</label><input class="bz-in" id="tgVar" type="number" placeholder="11000"></div>
+        <div class="bz-field"><label class="bz-label" for="tgProfit">Untung bersih yang diincar / bulan (Rp)</label><input class="bz-in" id="tgProfit" type="number" placeholder="20000000"><small class="bz-help">Target laba bersih bulananmu.</small></div>
+        <div class="bz-field"><label class="bz-label" for="tgFix">Biaya rutin per bulan (Rp)</label><input class="bz-in" id="tgFix" type="number" placeholder="18000000"><small class="bz-help">Sewa, gaji, langganan. <span class="bz-syncf">↔ Untung &amp; Arus Kas</span></small></div>
+        <div class="bz-field"><label class="bz-label" for="tgPrice">Harga jual per barang (Rp)</label><input class="bz-in" id="tgPrice" type="number" placeholder="25000"><small class="bz-help"><span class="bz-syncf">↔ Untung &amp; Balik Modal</span></small></div>
+        <div class="bz-field"><label class="bz-label" for="tgVar">Biaya per barang (Rp)</label><input class="bz-in" id="tgVar" type="number" placeholder="11000"><small class="bz-help"><span class="bz-syncf">↔ Untung &amp; Balik Modal</span></small></div>
       </div>
       <div class="bz-res" id="tgOut"></div>
     </div>
@@ -317,6 +339,32 @@
     </div>
   </section>
 
+  <details class="bz-gloss">
+    <summary>Kamus istilah bisnis — bahasa sederhana</summary>
+    <dl>
+      <dt>BEP (Break-Even Point / Titik Impas)</dt><dd>Jumlah penjualan agar tidak untung tidak rugi. Di atasnya baru mulai untung.</dd>
+      <dt>Margin kontribusi</dt><dd>Harga jual dikurangi biaya per barang. Sisa ini dipakai menutup biaya rutin, lalu jadi untung.</dd>
+      <dt>HPP / COGS</dt><dd>Harga Pokok Penjualan — biaya langsung membuat/mengadakan barang yang terjual.</dd>
+      <dt>Overhead</dt><dd>Biaya pendukung yang menempel ke produk: listrik, kemasan, sewa dapur, dsb.</dd>
+      <dt>EBITDA</dt><dd>Untung dari operasi sebelum dipotong bunga, pajak, dan penyusutan. Menggambarkan kekuatan operasi murni.</dd>
+      <dt>EBIT</dt><dd>Untung operasi setelah penyusutan, sebelum bunga &amp; pajak.</dd>
+      <dt>Penyusutan &amp; amortisasi</dt><dd>Nilai alat/aset yang berkurang tiap tahun. Dicatat sebagai biaya walau bukan uang keluar.</dd>
+      <dt>ROI</dt><dd>Return on Investment — persen untung dibanding modal yang ditanam.</dd>
+      <dt>Payback period</dt><dd>Perkiraan lama waktu sampai modal awal kembali.</dd>
+      <dt>Bunga flat vs anuitas</dt><dd>Flat: bunga tetap dari pokok awal (terlihat murah). Anuitas: bunga dihitung dari sisa pokok (umum di bank, lebih adil).</dd>
+      <dt>Ekuitas</dt><dd>Porsi kepemilikan usaha, biasanya sebanding dengan modal yang disetor.</dd>
+      <dt>Arus kas (cash flow)</dt><dd>Uang yang benar-benar masuk dan keluar. Bisa untung di atas kertas tapi kas menipis.</dd>
+      <dt>Valuasi &amp; multiple</dt><dd>Perkiraan nilai usaha. Multiple = angka pengali (mis. 4× EBITDA) sesuai industri, pertumbuhan, dan risiko.</dd>
+      <dt>Omzet</dt><dd>Total penjualan kotor sebelum dikurangi biaya apa pun.</dd>
+      <dt>Food cost</dt><dd>Rasio biaya bahan terhadap harga jual (khusus F&amp;B). Ideal 28–35%.</dd>
+      <dt>Occupancy rate</dt><dd>Persen kamar terisi dibanding total kamar (penginapan/hotel).</dd>
+      <dt>ADR &amp; RevPAR</dt><dd>ADR = tarif kamar rata-rata. RevPAR = ADR × occupancy, ukuran pendapatan per kamar tersedia.</dd>
+      <dt>Utilisasi aset</dt><dd>Seberapa sering aset (mobil/mesin) terpakai menghasilkan uang. Makin tinggi makin efisien.</dd>
+      <dt>CAC</dt><dd>Biaya rata-rata untuk mendapatkan satu pelanggan baru (iklan, promo).</dd>
+      <dt>SWOT &amp; TOWS</dt><dd>SWOT memetakan Kekuatan/Kelemahan/Peluang/Ancaman. TOWS mengubahnya jadi strategi aksi.</dd>
+    </dl>
+  </details>
+
 </div></section>
 </main>
 
@@ -337,6 +385,13 @@
   function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
   function rows(arr){return arr.map(function(r){return '<div class="bz-row"><span>'+esc(r[0])+'</span><b>'+esc(r[1])+'</b></div>';}).join('');}
   var REPORT={};
+  var HPP_PRICE=0;
+  // Field yang mewakili angka yang sama → cukup diisi sekali, otomatis tersalin ke tab lain
+  var SYNC={};
+  [['pfPrice','tgPrice'],['pfVar','tgVar'],['pfFix','cfFix','tgFix'],['roNet','ivProfit'],['roInv','ivTotal'],['ebRev','cfRev','pjOmzet']]
+    .forEach(function(g){g.forEach(function(id){SYNC[id]=g;});});
+  function syncPeers(id){var g=SYNC[id];if(!g||!$(id))return false;var v=$(id).value,changed=false;
+    g.forEach(function(o){if(o!==id&&$(o)&&$(o).value!==v){$(o).value=v;changed=true;}});return changed;}
 
   // ---- sub-nav ----
   $('bzSub').addEventListener('click',function(e){var b=e.target.closest('.bz-tab');if(!b)return;
@@ -454,6 +509,7 @@
   function calcHarga(){
     var hpp=n('hpBahan')+n('hpOh'), mode=$('hpMode').value, x=n('hpPct')/100, price;
     if(mode==='margin') price=(x<1&&x>0)?hpp/(1-x):NaN; else price=hpp*(1+x);
+    HPP_PRICE=isFinite(price)?price:0;
     var laba=isFinite(price)?price-hpp:NaN, foodcost=isFinite(price)&&price>0?hpp/price*100:NaN;
     var r=[['HPP / unit',rp(hpp)],['Harga jual disarankan',rp(price)],['Laba kotor / unit',rp(laba)],['Rasio HPP thd harga (food cost %)',pct(foodcost)]];
     $('hpOut').innerHTML='<div class="bz-big">'+rp(price)+'<span style="font-size:13px;color:var(--muted);font-weight:400"> / unit (harga disarankan)</span></div>'+rows(r)+
@@ -483,7 +539,13 @@
       ['EBIT (laba operasi)',rp(ebit)],['Laba sebelum pajak',rp(ebt)],['Laba bersih',rp(net)+' ('+m(net)+')']];
     $('ebOut').innerHTML='<div class="bz-big">'+rp(ebitda)+'<span style="font-size:13px;color:var(--muted);font-weight:400"> EBITDA ('+m(ebitda)+')</span></div>'+rows(r);
     REPORT.ebitda={title:'EBITDA & Laba',rows:r};
+    // Isi otomatis kalkulator Valuasi (live) selama pengguna belum mengetik manual di sana
+    var ve=$('vlEbitda'),vr2=$('vlRev'),filled=false;
+    if(ve&&!vlTouch.e&&ebitda>0){ve.value=Math.round(ebitda*12);filled=true;}
+    if(vr2&&!vlTouch.r&&rev>0){vr2.value=Math.round(rev*12);filled=true;}
+    if(filled)calcVal();
   }
+  var vlTouch={};
   ['ebRev','ebCogs','ebOpex','ebDep','ebInt','ebTax'].forEach(function(id){$(id).addEventListener('input',calcEbitda);});
 
   // ---- Pinjaman Bank ----
@@ -636,9 +698,20 @@
   if(!$('prDate').value){var _d=new Date();$('prDate').value=_d.getFullYear()+'-'+('0'+(_d.getMonth()+1)).slice(-2)+'-'+('0'+_d.getDate()).slice(-2);}
   var _saved=restoreInputs();
   if(_saved.prType){$('bpType').value=_saved.prType;} else if($('bpType').value){$('prType').value=$('bpType').value;}
+  // Bila nilai Valuasi tersimpan berbeda dari turunan EBITDA, anggap diketik manual → jangan ditimpa
+  (function(){var de=(n('ebRev')-n('ebCogs')-n('ebOpex'))*12,dr=n('ebRev')*12;
+    if($('vlEbitda').value!==''&&Math.round(+$('vlEbitda').value)!==Math.round(de))vlTouch.e=true;
+    if($('vlRev').value!==''&&Math.round(+$('vlRev').value)!==Math.round(dr))vlTouch.r=true;})();
+  $('vlEbitda').addEventListener('input',function(){vlTouch.e=true;});
+  $('vlRev').addEventListener('input',function(){vlTouch.r=true;});
   recomputeAll();
-  document.addEventListener('input',function(e){var el=e.target;if(el&&el.classList&&(el.classList.contains('bz-in')||el.classList.contains('bz-area'))){saveInputs();renderKPI();updateHeader();}});
-  document.addEventListener('change',function(e){var el=e.target;if(el&&el.classList&&(el.classList.contains('bz-in')||el.classList.contains('bz-sel')||el.classList.contains('bz-area'))){saveInputs();renderKPI();updateHeader();}});
+  document.addEventListener('input',function(e){var el=e.target;if(el&&el.classList&&(el.classList.contains('bz-in')||el.classList.contains('bz-area'))){if(el.id&&syncPeers(el.id))recomputeAll();saveInputs();renderKPI();updateHeader();}});
+  document.addEventListener('change',function(e){var el=e.target;if(el&&el.classList&&(el.classList.contains('bz-in')||el.classList.contains('bz-sel')||el.classList.contains('bz-area'))){if(el.id&&syncPeers(el.id))recomputeAll();saveInputs();renderKPI();updateHeader();}});
+  $('hpUse').addEventListener('click',function(){
+    if(!HPP_PRICE){calcHarga();} if(!HPP_PRICE)return;
+    $('pfPrice').value=Math.round(HPP_PRICE); syncPeers('pfPrice'); recomputeAll(); saveInputs();
+    var t=document.querySelector('.bz-tab[data-tool="profit"]'); if(t)t.click();
+  });
   $('prNext').addEventListener('click',function(){var t=document.querySelector('.bz-tab[data-tool="blueprint"]');if(t)t.click();});
   $('prReset').addEventListener('click',function(){if(window.confirm('Hapus semua data analisis di perangkat ini?')){try{localStorage.removeItem(K_IN);}catch(e){}location.reload();}});
 })();
