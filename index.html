@@ -334,6 +334,91 @@
 </div>
 </div></section>
 
+<hr class="divider-glow">
+
+<style>
+/* ===== Ekosistem showcase (scoped) ===== */
+#ekosistem .eco-head{max-width:720px}
+#ekosistem .eco-kpis{display:flex;flex-wrap:wrap;gap:12px;margin-top:26px}
+#ekosistem .eco-kpi{flex:1 1 150px;background:var(--card);border:1px solid var(--hair-dark);border-radius:14px;padding:16px 14px;text-align:center}
+#ekosistem .eco-kpi b{font-family:var(--num);font-weight:700;font-size:23px;color:var(--primary);display:block;line-height:1;letter-spacing:-.4px}
+#ekosistem .eco-kpi span{font-size:12px;color:var(--muted);margin-top:6px;display:block}
+#ekosistem .eco-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(288px,1fr));gap:16px;margin-top:26px}
+#ekosistem .eco-card{display:block;text-decoration:none;color:inherit;border:1px solid var(--hair-dark);border-radius:20px;padding:24px;background:var(--card);transition:transform .2s ease,box-shadow .2s ease,border-color .2s ease}
+#ekosistem .eco-card:hover{transform:translateY(-5px);border-color:var(--primary);box-shadow:0 20px 46px -24px rgba(47,107,237,.55)}
+#ekosistem .eco-ic{width:50px;height:50px;border-radius:14px;display:grid;place-items:center;color:#fff;box-shadow:0 8px 22px -10px rgba(0,0,0,.5)}
+#ekosistem .eco-ic svg{width:25px;height:25px}
+#ekosistem .eco-top{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:16px}
+#ekosistem .eco-top h4{font-size:18px;color:var(--on-dark)}
+#ekosistem .eco-stat{font-size:11px;font-weight:800;letter-spacing:.3px;padding:4px 10px;border-radius:999px;background:var(--primary-soft);color:var(--accent-ink);white-space:nowrap}
+#ekosistem .eco-card p{margin-top:9px;font-size:13.5px;color:var(--muted);line-height:1.6}
+#ekosistem .eco-chips{display:flex;flex-wrap:wrap;gap:7px;margin-top:14px}
+#ekosistem .eco-chips span{font-size:11.5px;font-weight:600;color:var(--muted-strong);border:1px solid var(--hair-dark);border-radius:999px;padding:4px 11px}
+#ekosistem .eco-go{display:inline-flex;align-items:center;gap:6px;margin-top:16px;font-size:13px;font-weight:700;color:var(--accent-ink)}
+#ekosistem .eco-go svg{width:16px;height:16px;transition:transform .18s ease}
+#ekosistem .eco-card:hover .eco-go svg{transform:translateX(4px)}
+</style>
+<section class="section" id="ekosistem" aria-labelledby="eko-h"><div class="wrap">
+<div class="eco-head">
+<span class="section-eyebrow reveal">Satu platform, semua kebutuhan</span>
+<h2 id="eko-h" class="reveal">Bukan cuma tryout — <span class="gradient-text">ekosistem lengkap</span> perjalananmu</h2>
+<p class="lead mt reveal">Dari memilih kampus, mengejar beasiswa, menyusun skripsi, sampai berkarya dan berpenghasilan. Semua alat yang kamu butuhkan ada di satu tempat — gratis dan langsung di browser.</p>
+</div>
+
+<div class="eco-kpis reveal">
+<div class="eco-kpi"><b>1.161</b><span>prodi di 290 kampus</span></div>
+<div class="eco-kpi"><b>90</b><span>beasiswa S1–S3</span></div>
+<div class="eco-kpi"><b>69+</b><span>lowongan kerja remote</span></div>
+<div class="eco-kpi"><b>9+</b><span>kalkulator bisnis</span></div>
+<div class="eco-kpi"><b>100%</b><span>di browser, gratis</span></div>
+</div>
+
+<div class="eco-grid">
+<a href="kuliah.html" class="eco-card reveal d1">
+<span class="eco-ic" style="background:linear-gradient(135deg,#2f6bed,#0ea5a4)"><svg class="i" aria-hidden="true"><use href="#i-grad"></use></svg></span>
+<div class="eco-top"><h4>Kuliah</h4><span class="eco-stat">1.161 prodi</span></div>
+<p>Temukan jurusan &amp; kampus yang pas — dalam maupun luar negeri, lengkap dengan mode kuliah yang sesuai gaya hidupmu.</p>
+<div class="eco-chips"><span>Reguler</span><span>Online / PJJ</span><span>Kelas Karyawan</span><span>Internasional</span></div>
+<span class="eco-go">Jelajahi kampus <svg class="i" aria-hidden="true"><use href="#i-arrow-right"></use></svg></span>
+</a>
+<a href="beasiswa.html" class="eco-card reveal d2">
+<span class="eco-ic" style="background:linear-gradient(135deg,#f59e0b,#ef4444)"><svg class="i" aria-hidden="true"><use href="#i-money"></use></svg></span>
+<div class="eco-top"><h4>Beasiswa</h4><span class="eco-stat">90 program</span></div>
+<p>Danai kuliahmu tanpa beban. Kurasi beasiswa S1–S3 dalam &amp; luar negeri dengan periode indikatif dan tautan resmi.</p>
+<div class="eco-chips"><span>LPDP</span><span>KIP Kuliah</span><span>Chevening</span><span>Fulbright</span></div>
+<span class="eco-go">Cari beasiswa <svg class="i" aria-hidden="true"><use href="#i-arrow-right"></use></svg></span>
+</a>
+<a href="kerja-remote.html" class="eco-card reveal d3">
+<span class="eco-ic" style="background:linear-gradient(135deg,#0ea5a4,#2f6bed)"><svg class="i" aria-hidden="true"><use href="#i-globe"></use></svg></span>
+<div class="eco-top"><h4>Kerja Remote</h4><span class="eco-stat">69+ posisi</span></div>
+<p>Kerja dari mana saja untuk perusahaan lokal &amp; global. Katalog posisi lengkap dengan skill, tugas, dan platform tempat melamar.</p>
+<div class="eco-chips"><span>Skill &amp; tugas</span><span>Perusahaan hiring</span><span>Vibe coding</span><span>Crypto</span></div>
+<span class="eco-go">Lihat lowongan <svg class="i" aria-hidden="true"><use href="#i-arrow-right"></use></svg></span>
+</a>
+<a href="bisnis.html" class="eco-card reveal d1">
+<span class="eco-ic" style="background:linear-gradient(135deg,#22c55e,#0ea5a4)"><svg class="i" aria-hidden="true"><use href="#i-chart"></use></svg></span>
+<div class="eco-top"><h4>Studio Bisnis</h4><span class="eco-stat">9+ kalkulator</span></div>
+<p>Ubah ide jadi cuan. Hitung kelayakan usahamu dengan kalkulator finansial siap pakai — dari margin sampai valuasi.</p>
+<div class="eco-chips"><span>Profit &amp; Margin</span><span>ROI · EBITDA</span><span>SWOT</span><span>Break-even</span><span>Blueprint</span></div>
+<span class="eco-go">Buka studio <svg class="i" aria-hidden="true"><use href="#i-arrow-right"></use></svg></span>
+</a>
+<a href="prompt-studio.html" class="eco-card reveal d2">
+<span class="eco-ic" style="background:linear-gradient(135deg,#8b5cf6,#2f6bed)"><svg class="i" aria-hidden="true"><use href="#i-sparkles"></use></svg></span>
+<div class="eco-top"><h4>Prompt Studio</h4><span class="eco-stat">generator AI</span></div>
+<p>Rakit prompt AI berkualitas dalam hitungan detik — untuk belajar, menulis, dan berkarya lebih cepat tanpa bingung memulai.</p>
+<div class="eco-chips"><span>Banner &amp; visual</span><span>11 gaya</span><span>Template siap pakai</span></div>
+<span class="eco-go">Rakit prompt <svg class="i" aria-hidden="true"><use href="#i-arrow-right"></use></svg></span>
+</a>
+<a href="verifikasi.html" class="eco-card reveal d3">
+<span class="eco-ic" style="background:linear-gradient(135deg,#2dbdb6,#2f6bed)"><svg class="i" aria-hidden="true"><use href="#i-shield-check"></use></svg></span>
+<div class="eco-top"><h4>Verifikasi Sertifikat</h4><span class="eco-stat">anti-palsu</span></div>
+<p>Cek keaslian sertifikat penyelesaian yang diterbitkan PusatBankSoal.id — transparan dan bisa dibagikan.</p>
+<div class="eco-chips"><span>QR scannable</span><span>Terverifikasi</span></div>
+<span class="eco-go">Verifikasi sekarang <svg class="i" aria-hidden="true"><use href="#i-arrow-right"></use></svg></span>
+</a>
+</div>
+</div></section>
+
 <section class="section" aria-labelledby="testi-h"><div class="wrap">
 <span class="section-eyebrow reveal">Cerita pengguna</span>
 <h2 id="testi-h" class="reveal">Dibuat untuk <span class="gradient-text">pejuang seleksi</span></h2>
