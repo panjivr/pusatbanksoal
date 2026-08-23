@@ -95,13 +95,47 @@
     els.forEach(function(e){ io.observe(e); });
   }
 
-  // ---- Mobile nav toggle (replaces inline onclick) ----
+  // ---- Nav: mobile toggle + grouped dropdown menus ----
   function initNav(){
     var t = document.querySelector('[data-nav-toggle]');
     var links = document.getElementById('navLinks');
     if (t && links) t.addEventListener('click', function(){
       var open = links.classList.toggle('open');
       t.setAttribute('aria-expanded', open ? 'true' : 'false');
+    });
+
+    // Dropdown groups (accordion on mobile, click-to-pin on desktop; hover handled by CSS)
+    var groups = Array.prototype.slice.call(document.querySelectorAll('.nav-group'));
+    function closeGroups(except){
+      groups.forEach(function(g){
+        if (g === except) return;
+        g.classList.remove('open');
+        var b = g.querySelector('.nav-group-btn');
+        if (b) b.setAttribute('aria-expanded', 'false');
+      });
+    }
+    groups.forEach(function(g){
+      var btn = g.querySelector('.nav-group-btn');
+      if (!btn) return;
+      btn.addEventListener('click', function(e){
+        e.stopPropagation();
+        var open = g.classList.toggle('open');
+        btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+        if (open) closeGroups(g);
+      });
+    });
+    // Close any pinned dropdown on outside click or Escape
+    document.addEventListener('click', function(e){
+      if (!e.target.closest('.nav-group')) closeGroups(null);
+    });
+    document.addEventListener('keydown', function(e){
+      if (e.key === 'Escape') {
+        closeGroups(null);
+        if (links && links.classList.contains('open')) {
+          links.classList.remove('open');
+          if (t) { t.setAttribute('aria-expanded', 'false'); t.focus(); }
+        }
+      }
     });
   }
 
