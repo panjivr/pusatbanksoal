@@ -90,8 +90,8 @@
 <div class="nav-group active">
 <button type="button" class="nav-group-btn" aria-expanded="false" aria-haspopup="true" aria-controls="menu-kampus">Kampus &amp; Karier<svg class="i nav-caret" aria-hidden="true"><use href="#i-chevron-down"></use></svg></button>
 <div class="nav-menu" id="menu-kampus" role="menu">
-<a href="kuliah.html" class="nav-menu-item active" role="menuitem" aria-current="page"><span class="nav-menu-ic"><svg class="i" aria-hidden="true"><use href="#i-grad"></use></svg></span><span class="nav-menu-tx"><b>Kuliah</b><small>436 prodi di 107 kampus</small></span></a>
-<a href="beasiswa.html" class="nav-menu-item" role="menuitem"><span class="nav-menu-ic"><svg class="i" aria-hidden="true"><use href="#i-money"></use></svg></span><span class="nav-menu-tx"><b>Beasiswa</b><small>38 beasiswa dalam &amp; luar negeri</small></span></a>
+<a href="kuliah.html" class="nav-menu-item active" role="menuitem" aria-current="page"><span class="nav-menu-ic"><svg class="i" aria-hidden="true"><use href="#i-grad"></use></svg></span><span class="nav-menu-tx"><b>Kuliah</b><small>699 prodi di 185 kampus</small></span></a>
+<a href="beasiswa.html" class="nav-menu-item" role="menuitem"><span class="nav-menu-ic"><svg class="i" aria-hidden="true"><use href="#i-money"></use></svg></span><span class="nav-menu-tx"><b>Beasiswa</b><small>64 beasiswa dalam &amp; luar negeri</small></span></a>
 <a href="skripsi.html" class="nav-menu-item" role="menuitem"><span class="nav-menu-ic"><svg class="i" aria-hidden="true"><use href="#i-doc"></use></svg></span><span class="nav-menu-tx"><b>Riset &amp; Skripsi</b><small>Asisten riset &amp; penulisan</small></span></a>
 </div></div>
 <div class="nav-group">
@@ -240,7 +240,46 @@
     UNPAM:['Universitas Pamulang','Tangerang Selatan','Banten','PTS'],NUSAMANDIRI:['Universitas Nusa Mandiri','Jakarta','DKI Jakarta','PTS'],
     LONDON_ON:['University of London (Online)','London','Inggris','Luar Negeri'],OPENUNI:['The Open University','Milton Keynes','Inggris','Luar Negeri'],
     GATECH:['Georgia Institute of Technology','Atlanta (GA)','Amerika Serikat','Luar Negeri'],ASU:['Arizona State University','Arizona','Amerika Serikat','Luar Negeri'],
-    UOPEOPLE:['University of the People','Pasadena (CA)','Amerika Serikat','Luar Negeri']
+    UOPEOPLE:['University of the People','Pasadena (CA)','Amerika Serikat','Luar Negeri'],
+    /* ==== Perluasan kampus domestik — cakupan provinsi lebih luas ==== */
+    UNTIRTA:['Universitas Sultan Ageng Tirtayasa','Serang','Banten','PTN'],UNSIL:['Universitas Siliwangi','Tasikmalaya','Jawa Barat','PTN'],
+    UNTIDAR:['Universitas Tidar','Magelang','Jawa Tengah','PTN'],UMRAH:['Universitas Maritim Raja Ali Haji','Tanjungpinang','Kepulauan Riau','PTN'],
+    UBB:['Universitas Bangka Belitung','Pangkalpinang','Kepulauan Bangka Belitung','PTN'],UPR:['Universitas Palangka Raya','Palangka Raya','Kalimantan Tengah','PTN'],
+    UBT:['Universitas Borneo Tarakan','Tarakan','Kalimantan Utara','PTN'],UNG:['Universitas Negeri Gorontalo','Gorontalo','Gorontalo','PTN'],
+    UNSULBAR:['Universitas Sulawesi Barat','Majene','Sulawesi Barat','PTN'],UNKHAIR:['Universitas Khairun','Ternate','Maluku Utara','PTN'],
+    UNMUS:['Universitas Musamus','Merauke','Papua Selatan','PTN'],POLINEMA:['Politeknik Negeri Malang','Malang','Jawa Timur','PTN'],
+    POLSRI:['Politeknik Negeri Sriwijaya','Palembang','Sumatera Selatan','PTN'],PPNS:['Politeknik Perkapalan Negeri Surabaya','Surabaya','Jawa Timur','PTN'],
+    UINSA:['UIN Sunan Ampel Surabaya','Surabaya','Jawa Timur','PTKIN'],UINSU:['UIN Sumatera Utara','Medan','Sumatera Utara','PTKIN'],
+    UINAR:['UIN Ar-Raniry','Banda Aceh','Aceh','PTKIN'],UINWS:['UIN Walisongo Semarang','Semarang','Jawa Tengah','PTKIN'],
+    UMSU:['Universitas Muhammadiyah Sumatera Utara','Medan','Sumatera Utara','PTS'],UMJ:['Universitas Muhammadiyah Jakarta','Jakarta','DKI Jakarta','PTS'],
+    UPH:['Universitas Pelita Harapan','Tangerang','Banten','PTS'],UAI:['Universitas Al Azhar Indonesia','Jakarta','DKI Jakarta','PTS'],
+    UNJANI:['Universitas Jenderal Achmad Yani','Cimahi','Jawa Barat','PTS'],UNIKOM:['Universitas Komputer Indonesia','Bandung','Jawa Barat','PTS'],
+    WIDYATAMA:['Universitas Widyatama','Bandung','Jawa Barat','PTS'],UNISSULA:['Universitas Islam Sultan Agung','Semarang','Jawa Tengah','PTS'],
+    UNTAG:['Universitas 17 Agustus 1945 Surabaya','Surabaya','Jawa Timur','PTS'],DINUS:['Universitas Dian Nuswantoro','Semarang','Jawa Tengah','PTS'],
+    AMIKOM:['Universitas Amikom Yogyakarta','Yogyakarta','DI Yogyakarta','PTS'],UNVPANCA:['Universitas Pancasila','Jakarta','DKI Jakarta','PTS'],
+    UHAMKA:['Universitas Muhammadiyah Prof. Dr. Hamka','Jakarta','DKI Jakarta','PTS'],
+    /* ==== Perluasan kampus luar negeri (kurasi) ==== */
+    YALE:['Yale University','New Haven (CT)','Amerika Serikat','Luar Negeri'],PRIN:['Princeton University','Princeton (NJ)','Amerika Serikat','Luar Negeri'],
+    UPENN:['University of Pennsylvania','Philadelphia (PA)','Amerika Serikat','Luar Negeri'],CALTECH:['California Institute of Technology','Pasadena (CA)','Amerika Serikat','Luar Negeri'],
+    UCLA:['University of California, Los Angeles','Los Angeles (CA)','Amerika Serikat','Luar Negeri'],UMICH:['University of Michigan','Ann Arbor (MI)','Amerika Serikat','Luar Negeri'],
+    CORNELL:['Cornell University','Ithaca (NY)','Amerika Serikat','Luar Negeri'],KCL:['King\'s College London','London','Inggris','Luar Negeri'],
+    LSE:['London School of Economics','London','Inggris','Luar Negeri'],WARWICK:['University of Warwick','Coventry','Inggris','Luar Negeri'],
+    GLASGOW:['University of Glasgow','Glasgow','Inggris','Luar Negeri'],OSAKA:['Osaka University','Osaka','Jepang','Luar Negeri'],
+    NAGOYA:['Nagoya University','Nagoya','Jepang','Luar Negeri'],TOHOKU:['Tohoku University','Sendai','Jepang','Luar Negeri'],
+    WASEDA:['Waseda University','Tokyo','Jepang','Luar Negeri'],YONSEI:['Yonsei University','Seoul','Korea Selatan','Luar Negeri'],
+    KOREAU:['Korea University','Seoul','Korea Selatan','Luar Negeri'],FUDAN:['Fudan University','Shanghai','Tiongkok','Luar Negeri'],
+    SJTU:['Shanghai Jiao Tong University','Shanghai','Tiongkok','Luar Negeri'],ZJU:['Zhejiang University','Hangzhou','Tiongkok','Luar Negeri'],
+    HKUST:['Hong Kong University of Science and Technology','Hong Kong','Hong Kong','Luar Negeri'],CUHK:['Chinese University of Hong Kong','Hong Kong','Hong Kong','Luar Negeri'],
+    UVA:['University of Amsterdam','Amsterdam','Belanda','Luar Negeri'],UTRECHT:['Utrecht University','Utrecht','Belanda','Luar Negeri'],
+    GRONINGEN:['University of Groningen','Groningen','Belanda','Luar Negeri'],KULEUVEN:['KU Leuven','Leuven','Belgia','Luar Negeri'],
+    EPFL:['EPFL Lausanne','Lausanne','Swiss','Luar Negeri'],HEIDELBERG:['Heidelberg University','Heidelberg','Jerman','Luar Negeri'],
+    LMU:['LMU Munich','Munich','Jerman','Luar Negeri'],RWTH:['RWTH Aachen University','Aachen','Jerman','Luar Negeri'],
+    KTH:['KTH Royal Institute of Technology','Stockholm','Swedia','Luar Negeri'],LUND:['Lund University','Lund','Swedia','Luar Negeri'],
+    UCPH:['University of Copenhagen','Kopenhagen','Denmark','Luar Negeri'],AUCKLAND:['University of Auckland','Auckland','Selandia Baru','Luar Negeri'],
+    USM_MY:['Universiti Sains Malaysia','Penang','Malaysia','Luar Negeri'],UPM_MY:['Universiti Putra Malaysia','Selangor','Malaysia','Luar Negeri'],
+    IIUM:['International Islamic University Malaysia','Kuala Lumpur','Malaysia','Luar Negeri'],CHULA:['Chulalongkorn University','Bangkok','Thailand','Luar Negeri'],
+    MAHIDOL:['Mahidol University','Bangkok','Thailand','Luar Negeri'],MADINAH:['Islamic University of Madinah','Madinah','Arab Saudi','Luar Negeri'],
+    QATAR_HBKU:['Hamad Bin Khalifa University','Doha','Qatar','Luar Negeri']
   };
   // Program: [prodi, jenjang, kodeKampus, mode]  (mode: R=Reguler/offline, O=Online/PJJ, K=Kelas Karyawan/Prosus)
   var DATA=[
@@ -391,7 +430,90 @@
     ['Manajemen (IUP)','S1','UNPAD','I'],['Akuntansi (IUP)','S1','UNPAD','I'],['Hubungan Internasional (IUP)','S1','UNPAD','I'],
     ['Manajemen (IUP)','S1','UNS','I'],['Ilmu Hukum (IUP)','S1','UNS','I'],
     ['Business (International Program)','S1','BINUS','I'],['Computer Science (International Program)','S1','BINUS','I'],['Communication (International Program)','S1','BINUS','I'],
-    ['International Business (Kelas Internasional)','S1','PRESUNIV','I'],['Business (Kelas Internasional)','S1','PRASMUL','I'],['Manajemen (Kelas Internasional)','S1','UMY','I']
+    ['International Business (Kelas Internasional)','S1','PRESUNIV','I'],['Business (Kelas Internasional)','S1','PRASMUL','I'],['Manajemen (Kelas Internasional)','S1','UMY','I'],
+    // ==== Perluasan prodi domestik — kampus & provinsi baru (offline/reguler) ====
+    ['Teknik Kimia','S1','UNTIRTA','R'],['Teknik Metalurgi','S1','UNTIRTA','R'],['Ilmu Hukum','S1','UNTIRTA','R'],['Manajemen','S1','UNTIRTA','R'],['Pendidikan Guru Sekolah Dasar','S1','UNTIRTA','R'],
+    ['Agroteknologi','S1','UNSIL','R'],['Manajemen','S1','UNSIL','R'],['Pendidikan Biologi','S1','UNSIL','R'],['Teknik Sipil','S1','UNSIL','R'],
+    ['Teknik Sipil','S1','UNTIDAR','R'],['Agroteknologi','S1','UNTIDAR','R'],['Manajemen','S1','UNTIDAR','R'],['Teknik Mesin','S1','UNTIDAR','R'],
+    ['Ilmu Kelautan','S1','UMRAH','R'],['Teknik Perkapalan','S1','UMRAH','R'],['Akuakultur','S1','UMRAH','R'],['Manajemen','S1','UMRAH','R'],['Sosiologi','S1','UMRAH','R'],
+    ['Teknik Pertambangan','S1','UBB','R'],['Biologi','S1','UBB','R'],['Manajemen','S1','UBB','R'],['Kimia','S1','UBB','R'],
+    ['Kehutanan','S1','UPR','R'],['Teknik Sipil','S1','UPR','R'],['Agribisnis','S1','UPR','R'],['Pendidikan Bahasa Inggris','S1','UPR','R'],
+    ['Manajemen','S1','UBT','R'],['Akuakultur','S1','UBT','R'],['Teknik Sipil','S1','UBT','R'],['Ilmu Hukum','S1','UBT','R'],
+    ['Pendidikan Guru Sekolah Dasar','S1','UNG','R'],['Manajemen','S1','UNG','R'],['Ilmu Kelautan','S1','UNG','R'],['Kesehatan Masyarakat','S1','UNG','R'],
+    ['Agribisnis','S1','UNSULBAR','R'],['Kesehatan Masyarakat','S1','UNSULBAR','R'],['Ilmu Pemerintahan','S1','UNSULBAR','R'],
+    ['Teknik Pertambangan','S1','UNKHAIR','R'],['Ilmu Kelautan','S1','UNKHAIR','R'],['Ilmu Hukum','S1','UNKHAIR','R'],['Agribisnis','S1','UNKHAIR','R'],
+    ['Teknik Sipil','S1','UNMUS','R'],['Agribisnis','S1','UNMUS','R'],['Ilmu Hukum','S1','UNMUS','R'],
+    // Politeknik (vokasi D3/D4)
+    ['Teknik Informatika','D4','POLINEMA','R'],['Akuntansi','D4','POLINEMA','R'],['Teknik Elektronika','D3','POLINEMA','R'],['Manajemen Pemasaran','D4','POLINEMA','R'],
+    ['Teknik Elektro','D3','POLSRI','R'],['Akuntansi','D3','POLSRI','R'],['Teknik Kimia','D3','POLSRI','R'],['Manajemen Informatika','D4','POLSRI','R'],
+    ['Teknik Perkapalan','D4','PPNS','R'],['Teknik Permesinan Kapal','D4','PPNS','R'],['Teknik Kelistrikan Kapal','D4','PPNS','R'],
+    // PTKIN (keislaman) baru
+    ['Ekonomi Syariah','S1','UINSA','R'],['Psikologi','S1','UINSA','R'],['Sistem Informasi','S1','UINSA','R'],['Hukum Keluarga Islam','S1','UINSA','R'],
+    ['Ekonomi Islam','S1','UINSU','R'],['Ilmu Komunikasi','S1','UINSU','R'],['Perbankan Syariah','S1','UINSU','R'],
+    ['Hukum Keluarga Islam','S1','UINAR','R'],['Pendidikan Agama Islam','S1','UINAR','R'],['Ekonomi Syariah','S1','UINAR','R'],
+    ['Ekonomi Islam','S1','UINWS','R'],['Pendidikan Agama Islam','S1','UINWS','R'],['Psikologi','S1','UINWS','R'],
+    // PTS baru (reguler)
+    ['Manajemen','S1','UMSU','R'],['Ilmu Hukum','S1','UMSU','R'],['Agroteknologi','S1','UMSU','R'],['Akuntansi','S1','UMSU','R'],
+    ['Ilmu Hukum','S1','UMJ','R'],['Kesehatan Masyarakat','S1','UMJ','R'],['Teknik Kimia','S1','UMJ','R'],['Ilmu Komunikasi','S1','UMJ','R'],
+    ['Kedokteran','S1','UPH','R'],['Manajemen','S1','UPH','R'],['Perhotelan','S1','UPH','R'],['Desain Komunikasi Visual','S1','UPH','R'],['Hubungan Internasional','S1','UPH','R'],
+    ['Hubungan Internasional','S1','UAI','R'],['Teknik Industri','S1','UAI','R'],['Sastra Arab','S1','UAI','R'],['Bioteknologi','S1','UAI','R'],
+    ['Kedokteran','S1','UNJANI','R'],['Teknik Informatika','S1','UNJANI','R'],['Farmasi','S1','UNJANI','R'],['Teknik Sipil','S1','UNJANI','R'],
+    ['Teknik Informatika','S1','UNIKOM','R'],['Desain Komunikasi Visual','S1','UNIKOM','R'],['Sistem Informasi','S1','UNIKOM','R'],['Manajemen','S1','UNIKOM','R'],
+    ['Manajemen','S1','WIDYATAMA','R'],['Akuntansi','S1','WIDYATAMA','R'],['Desain Komunikasi Visual','S1','WIDYATAMA','R'],['Teknik Informatika','S1','WIDYATAMA','R'],
+    ['Kedokteran','S1','UNISSULA','R'],['Ilmu Hukum','S1','UNISSULA','R'],['Teknik Informatika','S1','UNISSULA','R'],['Teknik Industri','S1','UNISSULA','R'],
+    ['Manajemen','S1','UNTAG','R'],['Ilmu Administrasi Negara','S1','UNTAG','R'],['Psikologi','S1','UNTAG','R'],['Ilmu Hukum','S1','UNTAG','R'],
+    ['Teknik Informatika','S1','DINUS','R'],['Sistem Informasi','S1','DINUS','R'],['Ilmu Komunikasi','S1','DINUS','R'],['Desain Komunikasi Visual','S1','DINUS','R'],
+    ['Informatika','S1','AMIKOM','R'],['Film & Animasi','S1','AMIKOM','R'],['Sistem Informasi','S1','AMIKOM','R'],
+    ['Farmasi','S1','UNVPANCA','R'],['Teknik Mesin','S1','UNVPANCA','R'],['Ilmu Hukum','S1','UNVPANCA','R'],['Psikologi','S1','UNVPANCA','R'],
+    ['Farmasi','S1','UHAMKA','R'],['Pendidikan Bahasa Inggris','S1','UHAMKA','R'],['Kesehatan Masyarakat','S1','UHAMKA','R'],
+    // Tambahan prodi lintas rumpun di kampus lama (memperluas pilihan)
+    ['Ilmu Kelautan','S1','UNRAM','R'],['Ilmu Kelautan','S1','UNSRAT','R'],['Kedokteran','S1','UNTAD','R'],['Kedokteran','S1','UNHALU','R'],
+    ['Teknik Informatika','S1','UNTAN','R'],['Teknik Informatika','S1','UNMUL','R'],['Kedokteran','S1','UNMUL','R'],['Kedokteran','S1','UNCEN','R'],
+    ['Agribisnis','S1','UNSYIAH','R'],['Teknik Kimia','S1','UNSRI','R'],['Ilmu Komputer','S1','USU','R'],['Teknik Elektro','S1','USU','R'],
+    ['Kedokteran Gigi','S1','UNPAD','R'],['Kedokteran Gigi','S1','USU','R'],['Kedokteran Hewan','S1','UNSYIAH','R'],['Kedokteran Hewan','S1','UNUD','R'],
+    ['Teknologi Pangan','S1','UNIB','R'],['Teknologi Pangan','S1','UNSRAT','R'],['Ilmu Gizi','S1','UNHAS','R'],['Ilmu Gizi','S1','UNAIR','R'],
+    ['Ilmu Komunikasi','S1','UAJY','R'],['Arsitektur','S1','UAJY','R'],['Teknik Industri','S1','UAJY','R'],['Akuntansi','S1','SOEGIJA','R'],
+    ['Manajemen','S1','UNSOED','R'],['Kedokteran','S1','UNSOED','R'],['Ilmu Kelautan','S1','UNSOED','R'],['Peternakan','S1','UNSOED','R'],
+    ['Manajemen','S1','UNEJ','R'],['Kedokteran','S1','UNEJ','R'],['Ilmu Hukum','S1','UNEJ','R'],['Sistem Informasi','S1','UNEJ','R'],
+    ['Kedokteran','S1','UNS','R'],['Teknik Industri','S1','UNS','R'],['Ilmu Komunikasi','S1','UNS','R'],['Kedokteran','S1','UNDIP','R'],
+    ['Kedokteran','S1','UNAND','R'],['Teknik Sipil','S1','UNAND','R'],['Ilmu Komunikasi','S1','UNAND','R'],['Sastra Inggris','S1','UNAND','R'],
+    ['Kedokteran','S1','UNILA','R'],['Teknik Sipil','S1','UNILA','R'],['Agribisnis','S1','UNILA','R'],['Ilmu Hukum','S1','UNRI','R'],
+    // ==== Perluasan prodi ONLINE / PJJ (Indonesia) ====
+    ['Manajemen SDM','S1','UT','O'],['Perpajakan','D3','UT','O'],['Akuntansi Sektor Publik','S1','UT','O'],['Ilmu Komunikasi','S1','UT','O'],
+    ['Perencanaan Wilayah dan Kota','S1','UT','O'],['Kearsipan','D4','UT','O'],['Sistem Informasi','S1','UT','O'],['Pendidikan Bahasa Indonesia','S1','UT','O'],
+    ['Magister Ilmu Hukum','S2','UT','O'],['Magister Ilmu Kelautan','S2','UT','O'],
+    ['Sistem Informasi','S1','DINUS','O'],['Teknik Informatika','S1','DINUS','O'],
+    ['Manajemen','S1','UMSU','O'],['Akuntansi','S1','UNTAG','O'],['Manajemen','S1','UHAMKA','O'],
+    ['Teknik Informatika','S1','AMIKOM','O'],['Sistem Informasi','S1','UBSI','O'],['Manajemen','S1','UNIKOM','O'],
+    ['Ilmu Komunikasi','S1','MERCU','O'],['Sistem Informasi','S1','UPH','O'],['Magister Teknologi Informasi','S2','BINUS','O'],
+    // ==== Perluasan prodi luar negeri (kurasi; gloss Indonesia dalam kurung) ====
+    ['Computer Science (Ilmu Komputer)','S1','YALE','R'],['Economics (Ilmu Ekonomi)','S1','YALE','R'],['Law (Hukum)','S2','YALE','R'],
+    ['Computer Science (Ilmu Komputer)','S1','PRIN','R'],['Public Policy (Kebijakan Publik)','S2','PRIN','R'],
+    ['Business (Manajemen)','S1','UPENN','R'],['Business Administration (MBA/Manajemen)','S2','UPENN','R'],['Medicine (Kedokteran)','S1','UPENN','R'],
+    ['Computer Science (Ilmu Komputer)','S1','CALTECH','R'],['Physics (Fisika)','S1','CALTECH','R'],
+    ['Computer Science (Ilmu Komputer)','S1','UCLA','R'],['Film & Media (Film)','S1','UCLA','R'],['Business (Manajemen)','S1','UCLA','R'],
+    ['Engineering (Teknik)','S1','UMICH','R'],['Business (Manajemen)','S1','UMICH','R'],['Data Science (Sains Data)','S2','UMICH','R'],
+    ['Computer Science (Ilmu Komputer)','S1','CORNELL','R'],['Hotel Administration (Perhotelan)','S1','CORNELL','R'],['Agriculture (Pertanian)','S1','CORNELL','R'],
+    ['Medicine (Kedokteran)','S1','KCL','R'],['Law (Hukum)','S1','KCL','R'],['International Relations (Hubungan Internasional)','S1','KCL','R'],
+    ['Economics (Ilmu Ekonomi)','S1','LSE','R'],['Finance (Keuangan)','S1','LSE','R'],['Political Science (Ilmu Politik)','S1','LSE','R'],
+    ['Business (Manajemen)','S1','WARWICK','R'],['Economics (Ilmu Ekonomi)','S1','WARWICK','R'],['Computer Science (Ilmu Komputer)','S1','WARWICK','R'],
+    ['Medicine (Kedokteran)','S1','GLASGOW','R'],['Engineering (Teknik)','S1','GLASGOW','R'],
+    ['Engineering (Teknik)','S1','OSAKA','R'],['Science (Sains)','S1','OSAKA','R'],['Engineering (Teknik)','S1','NAGOYA','R'],['Engineering (Teknik)','S1','TOHOKU','R'],
+    ['Political Science (Ilmu Politik)','S1','WASEDA','R'],['Business (Manajemen)','S1','WASEDA','R'],
+    ['Business (Manajemen)','S1','YONSEI','R'],['Engineering (Teknik)','S1','YONSEI','R'],['Business (Manajemen)','S1','KOREAU','R'],
+    ['Computer Science (Ilmu Komputer)','S1','FUDAN','R'],['Medicine (Kedokteran)','S1','FUDAN','R'],['Engineering (Teknik)','S1','SJTU','R'],['Computer Science (Ilmu Komputer)','S1','ZJU','R'],
+    ['Business (Manajemen)','S1','HKUST','R'],['Engineering (Teknik)','S1','HKUST','R'],['Business (Manajemen)','S1','CUHK','R'],['Medicine (Kedokteran)','S1','CUHK','R'],
+    ['Business (Manajemen)','S1','UVA','R'],['Communication Science (Ilmu Komunikasi)','S2','UVA','R'],['Law (Hukum)','S1','UTRECHT','R'],['Life Sciences (Ilmu Hayati)','S1','GRONINGEN','R'],
+    ['Engineering (Teknik)','S1','KULEUVEN','R'],['Computer Science (Ilmu Komputer)','S2','KULEUVEN','R'],
+    ['Computer Science (Ilmu Komputer)','S1','EPFL','R'],['Electrical Engineering (Teknik Elektro)','S1','EPFL','R'],
+    ['Medicine (Kedokteran)','S1','HEIDELBERG','R'],['Physics (Fisika)','S1','HEIDELBERG','R'],['Medicine (Kedokteran)','S1','LMU','R'],['Mechanical Engineering (Teknik Mesin)','S1','RWTH','R'],
+    ['Engineering (Teknik)','S2','KTH','R'],['Engineering (Teknik)','S1','LUND','R'],['Public Health (Kesehatan Masyarakat)','S2','UCPH','R'],
+    ['Business (Manajemen)','S1','AUCKLAND','R'],['Engineering (Teknik)','S1','AUCKLAND','R'],
+    ['Engineering (Teknik)','S1','USM_MY','R'],['Agriculture (Pertanian)','S1','UPM_MY','R'],['Veterinary Medicine (Kedokteran Hewan)','S1','UPM_MY','R'],
+    ['Islamic Studies (Studi Islam)','S1','IIUM','R'],['Engineering (Teknik)','S1','IIUM','R'],['Economics (Ekonomi)','S1','IIUM','R'],
+    ['Medicine (Kedokteran)','S1','CHULA','R'],['Engineering (Teknik)','S1','CHULA','R'],['Medicine (Kedokteran)','S1','MAHIDOL','R'],['Public Health (Kesehatan Masyarakat)','S2','MAHIDOL','R'],
+    ['Syariah (Hukum Islam)','S1','MADINAH','R'],['Bahasa Arab','S1','MADINAH','R'],['Ushuluddin','S1','MADINAH','R'],
+    ['Artificial Intelligence (Kecerdasan Buatan)','S2','QATAR_HBKU','R'],['Data Science (Sains Data)','S2','QATAR_HBKU','R']
   ];
   var LEVELS=['D3','D4','S1','Profesi','S2','S3'];
   var MODES=[['R','Reguler / Offline'],['O','Online / PJJ'],['K','Kelas Karyawan / Prosus'],['I','Kelas Internasional / IUP']];
