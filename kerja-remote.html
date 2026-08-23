@@ -119,6 +119,44 @@
 .rl-foot{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:12px;padding-top:11px;border-top:1px solid var(--hair-dark);flex-wrap:wrap}
 .rl-sal{font-size:11.5px;color:var(--muted-strong)}
 .rl-sal b{color:var(--on-dark)}
+/* Toolbar: view switch + sort */
+.rl-toolbar{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:12px}
+.rl-views{display:inline-flex;background:var(--elevated);border:1px solid var(--hair-dark);border-radius:10px;padding:3px;gap:2px}
+.rl-vbtn{display:inline-flex;align-items:center;gap:6px;min-height:36px;padding:6px 13px;border:none;background:none;color:var(--muted);font:inherit;font-weight:600;font-size:13px;border-radius:7px;cursor:pointer;transition:.15s}
+.rl-vbtn .i{width:16px;height:16px}
+.rl-vbtn:hover{color:var(--on-dark)}
+.rl-vbtn.on{background:var(--primary);color:#fff}
+.rl-vbtn:focus-visible{outline:2px solid var(--info);outline-offset:2px}
+.rl-sortsel{width:auto;min-width:170px;height:38px}
+/* Per-role source links */
+.rl-src-row{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.rl-src{display:inline-flex;align-items:center;min-height:32px;padding:5px 11px;border-radius:7px;font-size:11.5px;font-weight:700;text-decoration:none;background:var(--elevated);color:var(--muted-strong);border:1px solid var(--hair-dark);transition:border-color .15s,transform .15s,color .15s}
+.rl-src:hover{border-color:var(--primary);color:var(--on-dark);transform:translateY(-1px)}
+.rl-src:focus-visible{outline:2px solid var(--info);outline-offset:2px}
+.rl-src-p{background:var(--primary);color:#fff;border-color:var(--primary)}
+.rl-src-p:hover{color:#fff;filter:brightness(1.06)}
+.rl-foot-l{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.rl-more{display:none;align-items:center;gap:5px;min-height:32px;padding:5px 11px;border:1px solid var(--hair-dark);background:none;color:var(--accent-ink);font:inherit;font-weight:600;font-size:12px;border-radius:7px;cursor:pointer;transition:.15s}
+.rl-more:hover{border-color:var(--primary);color:var(--on-dark)}
+.rl-more .i{width:14px;height:14px;transition:transform .2s}
+.rl-card.open .rl-more .i{transform:rotate(180deg)}
+.rl-src-hint{font-size:10.5px;color:var(--muted);width:100%;margin-top:2px}
+/* List (compact) view */
+.rl-grid.rl-list{display:flex;flex-direction:column;gap:8px}
+.rl-list .rl-card{padding:12px 15px}
+.rl-list .rl-head{align-items:center}
+.rl-list .rl-body{display:none;margin-top:10px;padding-top:11px;border-top:1px solid var(--hair-dark)}
+.rl-list .rl-card.open .rl-body{display:block}
+.rl-list .rl-more{display:inline-flex}
+.rl-list .rl-foot{border-top:none;padding-top:0;margin-top:10px}
+@media(min-width:720px){
+  .rl-list .rl-foot{flex-wrap:nowrap}
+  .rl-list .rl-src-row{justify-content:flex-end;flex:1}
+}
+@media(prefers-reduced-motion:reduce){
+  .rl-card,.rl-src,.rl-more .i{transition:none}
+  .rl-src:hover{transform:none}
+}
 </style>
 </head>
 <body>
@@ -224,9 +262,20 @@
 
       <!-- Panel: Posisi -->
       <div class="jb-panel on" id="panelRoles">
+        <div class="rl-toolbar">
+          <div class="rl-views" role="group" aria-label="Tampilan katalog">
+            <button type="button" class="rl-vbtn on" data-view="grid" aria-pressed="true"><svg class="i" aria-hidden="true"><use href="#i-layers"/></svg>Kartu detail</button>
+            <button type="button" class="rl-vbtn" data-view="list" aria-pressed="false"><svg class="i" aria-hidden="true"><use href="#i-list"/></svg>List ringkas</button>
+          </div>
+          <select id="rlSort" class="in rl-sortsel" aria-label="Urutkan posisi">
+            <option value="lvl">Urut: termudah dulu</option>
+            <option value="az">Urut: A → Z</option>
+            <option value="cat">Urut: per kategori</option>
+          </select>
+        </div>
         <div id="rlResults" class="rl-grid"></div>
         <div class="bs-note">
-          <b>Cara baca katalog ini.</b> Tiap kartu adalah <b>jenis posisi</b> (bukan satu lowongan tunggal): isinya gambaran <b>tugas</b> dan <b>skill yang perlu dikuasai</b> supaya kamu tahu harus belajar apa. <b>Estimasi gaji</b> adalah <b>kisaran umum pasar</b>, bukan angka pasti — gaji nyata tergantung klien, jam kerja, negara, dan pengalaman. Tombol <b>“Cari lowongan aktif ↗”</b> membuka hasil pencarian <b>live</b> di LinkedIn (filter Remote) sehingga lowongan yang muncul selalu yang terbaru &amp; benar-benar ada. Perekrut asli <b>tidak pernah memungut biaya</b> — waspadai penipuan lowongan.
+          <b>Cara baca katalog ini.</b> Tiap kartu adalah <b>jenis posisi</b> (bukan satu lowongan tunggal): isinya gambaran <b>tugas</b> dan <b>skill yang perlu dikuasai</b> supaya kamu tahu harus belajar apa. <b>Estimasi gaji</b> adalah <b>kisaran umum pasar</b>, bukan angka pasti — gaji nyata tergantung klien, jam kerja, negara, dan pengalaman. Tiap posisi punya <b>beberapa tombol platform</b> (mis. Upwork, Fiverr, LinkedIn, Web3, Glints) yang membuka <b>pencarian ter-filter</b> khusus untuk posisi itu — jadi kamu langsung diarahkan ke daftar lowongan yang <b>relevan &amp; live</b> di platform paling cocok, bukan pencarian umum. Tombol <b>primer (warna solid)</b> = platform yang paling banyak lowongannya untuk posisi tsb. Perekrut asli <b>tidak pernah memungut biaya</b> — waspadai penipuan lowongan.
         </div>
       </div>
 
@@ -470,6 +519,7 @@
 
   var activeTab='roles';
   var state={q:'',rem:{},bid:{},neg:'',paid:false,fav:false,rcat:{},reasy:false};
+  var roleView='grid', roleSort='lvl';
 
   function chk(container,items,group){
     $(container).innerHTML=items.map(function(it){var v=Array.isArray(it)?it[0]:it,label=Array.isArray(it)?it[1]:it;
@@ -518,21 +568,70 @@
     return (b.n+' '+b.s+' '+b.d).toLowerCase().indexOf(q)>=0;
   }
 
+  // ===== role source deep-links (targeted, per-platform) =====
+  // Each builder returns a live, filtered search URL for the given query — never a fabricated single-posting URL.
+  function e(q){return encodeURIComponent(q);}
+  var SRC={
+    linkedin:{n:'LinkedIn',u:function(q){return 'https://www.linkedin.com/jobs/search/?f_WT=2&keywords='+e(q);}},
+    upwork:{n:'Upwork',u:function(q){return 'https://www.upwork.com/nx/search/jobs/?q='+e(q);}},
+    fiverr:{n:'Fiverr',u:function(q){return 'https://www.fiverr.com/search/gigs?query='+e(q);}},
+    indeed:{n:'Indeed',u:function(q){return 'https://id.indeed.com/jobs?q='+e(q+' remote')+'&sc=0kf%3Aattr(DSQF7)%3B';}},
+    glints:{n:'Glints',u:function(q){return 'https://glints.com/id/opportunities/jobs/explore?keyword='+e(q)+'&country=ID';}},
+    web3:{n:'Web3 Career',u:function(q){return 'https://web3.career/?search='+e(q);}},
+    cjl:{n:'CryptoJobsList',u:function(q){return 'https://cryptojobslist.com/?query='+e(q);}},
+    aijobs:{n:'ai-jobs.net',u:function(q){return 'https://ai-jobs.net/?search='+e(q);}}
+  };
+  // category -> ordered platforms (first = primary, most listings for that field)
+  var CATSRC={
+    VA:['upwork','linkedin','glints'], CS:['linkedin','indeed','glints'],
+    WRITE:['upwork','fiverr','linkedin'], SOCIAL:['upwork','linkedin','glints'],
+    DATA:['aijobs','linkedin','upwork'], DESIGN:['upwork','fiverr','linkedin'],
+    DEV:['upwork','linkedin','indeed'], CRYPTO:['web3','cjl','linkedin'],
+    MKT:['linkedin','upwork','glints'], MEDIA:['upwork','fiverr','linkedin'],
+    TEACH:['linkedin','upwork','glints']
+  };
+  // Direct employer/marketplace pages for roles that hire continuously via their own portal.
+  var DIRECT={
+    'online english tutor':[{n:'Cambly',u:'https://www.cambly.com/en/tutors?lang=en'},{n:'Preply',u:'https://preply.com/en/teach/online-tutoring-jobs'}],
+    'ai trainer':[{n:'Outlier',u:'https://outlier.ai/'},{n:'DataAnnotation',u:'https://www.dataannotation.tech/'}],
+    'data annotation remote':[{n:'DataAnnotation',u:'https://www.dataannotation.tech/'},{n:'Remotasks',u:'https://www.remotasks.com/'}],
+    'search quality rater':[{n:'TELUS Digital',u:'https://www.telusdigital.com/careers'},{n:'Appen',u:'https://connect.appen.com/qrp/public/jobs'}]
+  };
+  function roleSources(r){
+    var out=[]; var direct=DIRECT[r.q]||null;
+    if(direct){direct.forEach(function(d,i){out.push({n:d.n,u:d.u,p:i===0});});}
+    var cats=CATSRC[r.cat]||['linkedin','upwork','indeed'];
+    cats.forEach(function(k,i){var s=SRC[k];if(s)out.push({n:s.n,u:s.u(r.q),p:!direct&&i===0});});
+    return out;
+  }
   // ===== renderers =====
   function renderRoles(){
     var res=ROLES.filter(matchRole);
-    res.sort(function(a,b){if(a.lvl!==b.lvl)return a.lvl==='Mudah'?-1:1;return a.t.localeCompare(b.t);});
-    $('bsCount').innerHTML='Menampilkan <b>'+res.length+'</b> jenis posisi'+(state.q?(' untuk “'+esc(state.q)+'”'):'')+'. Tiap kartu berisi tugas &amp; skill; klik "Cari lowongan aktif" untuk lowongan live.';
-    if(!res.length){$('rlResults').innerHTML='<div class="bs-empty"><p>Tidak ada posisi untuk filter ini.</p><p style="font-size:13px;margin-top:6px">Coba kurangi filter atau ganti kata kunci.</p></div>';return;}
-    $('rlResults').innerHTML=res.map(function(r){
-      var li='https://www.linkedin.com/jobs/search/?f_WT=2&keywords='+encodeURIComponent(r.q);
+    res.sort(function(a,b){
+      if(roleSort==='az')return a.t.localeCompare(b.t);
+      if(roleSort==='cat'){if(a.cat!==b.cat)return RCAT[a.cat].localeCompare(RCAT[b.cat]);return a.t.localeCompare(b.t);}
+      if(a.lvl!==b.lvl)return a.lvl==='Mudah'?-1:1;return a.t.localeCompare(b.t);
+    });
+    $('bsCount').innerHTML='Menampilkan <b>'+res.length+'</b> jenis posisi'+(state.q?(' untuk “'+esc(state.q)+'”'):'')+'. Tiap kartu punya tombol platform yang mengarah ke pencarian ter-filter untuk posisi itu.';
+    var grid=$('rlResults');
+    grid.className='rl-grid'+(roleView==='list'?' rl-list':'');
+    if(!res.length){grid.innerHTML='<div class="bs-empty"><p>Tidak ada posisi untuk filter ini.</p><p style="font-size:13px;margin-top:6px">Coba kurangi filter atau ganti kata kunci.</p></div>';return;}
+    grid.innerHTML=res.map(function(r){
       var lvlClass=r.lvl==='Mudah'?'lvl-mudah':'lvl-menengah';
-      return '<div class="rl-card"><div class="rl-head"><div><div class="rl-t">'+esc(r.t)+'</div><div class="rl-cat">'+esc(RCAT[r.cat])+'</div></div>'+
-        '<span class="rl-lvl '+lvlClass+'">'+esc(r.lvl)+'</span></div>'+
+      var srcs=roleSources(r);
+      var srcRow=srcs.map(function(s){
+        return '<a class="rl-src'+(s.p?' rl-src-p':'')+'" href="'+esc(s.u)+'" target="_blank" rel="noopener" title="Cari lowongan “'+esc(r.t)+'” di '+esc(s.n)+'">'+esc(s.n)+' ↗</a>';
+      }).join('');
+      var body='<div class="rl-body">'+
         '<div class="rl-d">'+esc(r.d)+'</div>'+
         '<div class="rl-sec"><b>Tugas utama</b><ul>'+r.tasks.map(function(t){return '<li>'+esc(t)+'</li>';}).join('')+'</ul></div>'+
-        '<div class="rl-sec"><b>Skill yang dikuasai</b><div class="rl-skills">'+r.skills.map(function(s){return '<span class="rl-skill">'+esc(s)+'</span>';}).join('')+'</div></div>'+
-        '<div class="rl-foot"><span class="rl-sal">'+esc(r.sal)+'</span><a class="bs-link" href="'+esc(li)+'" target="_blank" rel="noopener">Cari lowongan aktif ↗</a></div>'+
+        '<div class="rl-sec"><b>Skill yang dikuasai</b><div class="rl-skills">'+r.skills.map(function(s){return '<span class="rl-skill">'+esc(s)+'</span>';}).join('')+'</div></div></div>';
+      return '<div class="rl-card"><div class="rl-head"><div><div class="rl-t">'+esc(r.t)+'</div><div class="rl-cat">'+esc(RCAT[r.cat])+'</div></div>'+
+        '<span class="rl-lvl '+lvlClass+'">'+esc(r.lvl)+'</span></div>'+
+        body+
+        '<div class="rl-foot"><div class="rl-foot-l"><span class="rl-sal">'+esc(r.sal)+'</span>'+
+        '<button type="button" class="rl-more"><svg class="i" aria-hidden="true"><use href="#i-chevron-down"/></svg><span>Lihat detail</span></button></div>'+
+        '<div class="rl-src-row">'+srcRow+'<span class="rl-src-hint">Tombol solid = platform dengan lowongan terbanyak untuk posisi ini.</span></div></div>'+
         '</div>';
     }).join('');
   }
@@ -627,6 +726,24 @@
       renderStat();if(activeTab==='companies')renderJobs();else switchTab('companies');alert(added+' perusahaan diimpor ke direktori (sesi ini).');
     }catch(err){alert('File JSON tidak valid. Format: array objek {c,bd,loc,neg,rem,sal,u,x}.');}};
     rd.readAsText(f);e.target.value='';});
+
+  // role view toggle (grid / list)
+  Array.prototype.forEach.call(document.querySelectorAll('.rl-vbtn'),function(b){
+    b.addEventListener('click',function(){
+      roleView=this.getAttribute('data-view');
+      Array.prototype.forEach.call(document.querySelectorAll('.rl-vbtn'),function(x){var on=x===b;x.classList.toggle('on',on);x.setAttribute('aria-pressed',on?'true':'false');});
+      renderRoles();
+    });
+  });
+  // role sort
+  $('rlSort').addEventListener('change',function(){roleSort=this.value;renderRoles();});
+  // expand/collapse detail (list view) via delegation
+  $('rlResults').addEventListener('click',function(e){
+    var m=e.target.closest('.rl-more');if(!m)return;
+    var card=m.closest('.rl-card');if(!card)return;
+    var open=card.classList.toggle('open');
+    var lbl=m.querySelector('span');if(lbl)lbl.textContent=open?'Tutup detail':'Lihat detail';
+  });
 
   renderChips(); renderStat(); renderBoards(); renderJobs(); renderRoles();
 })();
