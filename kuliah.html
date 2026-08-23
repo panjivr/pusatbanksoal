@@ -63,6 +63,9 @@
 .ku-tag.m-online{background:rgba(14,165,164,.14);color:var(--accent2);border-color:rgba(14,165,164,.3)}
 .ku-tag.m-karyawan{background:rgba(245,166,35,.16);color:#c77f0a;border-color:rgba(245,166,35,.3)}
 .ku-tag.m-iup{background:rgba(139,92,246,.16);color:#a78bfa;border-color:rgba(139,92,246,.34)}
+.ku-tag.apt{background:rgba(22,163,74,.14);color:#15803d;border-color:rgba(22,163,74,.34);font-weight:700}
+a.ku-tag.verify{text-decoration:none;cursor:pointer}
+a.ku-tag.verify:hover{border-color:var(--primary);color:var(--accent-ink)}
 .ku-star{background:none;border:none;color:var(--muted);cursor:pointer;font-size:18px;flex:none;line-height:1;padding:2px}
 .ku-star.on{color:var(--primary)}
 .ku-empty{text-align:center;color:var(--muted);padding:40px 16px}
@@ -90,7 +93,7 @@
 <div class="nav-group active">
 <button type="button" class="nav-group-btn" aria-expanded="false" aria-haspopup="true" aria-controls="menu-kampus">Kampus &amp; Karier<svg class="i nav-caret" aria-hidden="true"><use href="#i-chevron-down"></use></svg></button>
 <div class="nav-menu" id="menu-kampus" role="menu">
-<a href="kuliah.html" class="nav-menu-item active" role="menuitem" aria-current="page"><span class="nav-menu-ic"><svg class="i" aria-hidden="true"><use href="#i-grad"></use></svg></span><span class="nav-menu-tx"><b>Kuliah</b><small>699 prodi di 185 kampus</small></span></a>
+<a href="kuliah.html" class="nav-menu-item active" role="menuitem" aria-current="page"><span class="nav-menu-ic"><svg class="i" aria-hidden="true"><use href="#i-grad"></use></svg></span><span class="nav-menu-tx"><b>Kuliah</b><small>1120 prodi di 278 kampus</small></span></a>
 <a href="beasiswa.html" class="nav-menu-item" role="menuitem"><span class="nav-menu-ic"><svg class="i" aria-hidden="true"><use href="#i-money"></use></svg></span><span class="nav-menu-tx"><b>Beasiswa</b><small>64 beasiswa dalam &amp; luar negeri</small></span></a>
 <a href="skripsi.html" class="nav-menu-item" role="menuitem"><span class="nav-menu-ic"><svg class="i" aria-hidden="true"><use href="#i-doc"></use></svg></span><span class="nav-menu-tx"><b>Riset &amp; Skripsi</b><small>Asisten riset &amp; penulisan</small></span></a>
 </div></div>
@@ -279,8 +282,52 @@
     USM_MY:['Universiti Sains Malaysia','Penang','Malaysia','Luar Negeri'],UPM_MY:['Universiti Putra Malaysia','Selangor','Malaysia','Luar Negeri'],
     IIUM:['International Islamic University Malaysia','Kuala Lumpur','Malaysia','Luar Negeri'],CHULA:['Chulalongkorn University','Bangkok','Thailand','Luar Negeri'],
     MAHIDOL:['Mahidol University','Bangkok','Thailand','Luar Negeri'],MADINAH:['Islamic University of Madinah','Madinah','Arab Saudi','Luar Negeri'],
-    QATAR_HBKU:['Hamad Bin Khalifa University','Doha','Qatar','Luar Negeri']
+    QATAR_HBKU:['Hamad Bin Khalifa University','Doha','Qatar','Luar Negeri'],
+    /* ==== Perluasan kabupaten/kota — Jawa Timur (Ponorogo & Madiun raya, Kediri, Madura, dll) ==== */
+    UMPO:['Universitas Muhammadiyah Ponorogo','Ponorogo','Jawa Timur','PTS'],IAINPO:['IAIN Ponorogo','Ponorogo','Jawa Timur','PTKIN'],
+    UNIDA_GONTOR:['Universitas Darussalam Gontor','Ponorogo','Jawa Timur','PTS'],INSURI:['Institut Agama Islam Sunan Giri Ponorogo','Ponorogo','Jawa Timur','PTKIN'],
+    UNIPMA:['Universitas PGRI Madiun','Madiun','Jawa Timur','PTS'],UMERMDN:['Universitas Merdeka Madiun','Madiun','Jawa Timur','PTS'],
+    UNPKEDIRI:['Universitas Nusantara PGRI Kediri','Kediri','Jawa Timur','PTS'],UNISKAKDR:['Universitas Islam Kadiri','Kediri','Jawa Timur','PTS'],
+    IAINKEDIRI:['IAIN Kediri','Kediri','Jawa Timur','PTKIN'],UINSATU:['UIN Sayyid Ali Rahmatullah Tulungagung','Tulungagung','Jawa Timur','PTKIN'],
+    UTM_MADURA:['Universitas Trunojoyo Madura','Bangkalan','Jawa Timur','PTN'],UMSIDA:['Universitas Muhammadiyah Sidoarjo','Sidoarjo','Jawa Timur','PTS'],
+    UMG_GRESIK:['Universitas Muhammadiyah Gresik','Gresik','Jawa Timur','PTS'],UNISMA:['Universitas Islam Malang','Malang','Jawa Timur','PTS'],
+    UMJEMBER:['Universitas Muhammadiyah Jember','Jember','Jawa Timur','PTS'],UNHASY:['Universitas Hasyim Asy\'ari Jombang','Jombang','Jawa Timur','PTS'],
+    UWKS:['Universitas Wijaya Kusuma Surabaya','Surabaya','Jawa Timur','PTS'],
+    /* ==== Jawa Tengah & DI Yogyakarta ==== */
+    UMK_KUDUS:['Universitas Muria Kudus','Kudus','Jawa Tengah','PTS'],UNIKAL:['Universitas Pekalongan','Pekalongan','Jawa Tengah','PTS'],
+    UNIMMA:['Universitas Muhammadiyah Magelang','Magelang','Jawa Tengah','PTS'],UMP_PWT:['Universitas Muhammadiyah Purwokerto','Banyumas','Jawa Tengah','PTS'],
+    UPGRIS:['Universitas PGRI Semarang','Semarang','Jawa Tengah','PTS'],UNISRI:['Universitas Slamet Riyadi Surakarta','Surakarta','Jawa Tengah','PTS'],
+    UINSALATIGA:['UIN Salatiga','Salatiga','Jawa Tengah','PTKIN'],UINSAID:['UIN Raden Mas Said Surakarta','Sukoharjo','Jawa Tengah','PTKIN'],
+    IAINKUDUS:['IAIN Kudus','Kudus','Jawa Tengah','PTKIN'],UINSAIZU:['UIN Prof. K.H. Saifuddin Zuhri Purwokerto','Banyumas','Jawa Tengah','PTKIN'],
+    UINGUSDUR:['UIN K.H. Abdurrahman Wahid Pekalongan','Pekalongan','Jawa Tengah','PTKIN'],UTY:['Universitas Teknologi Yogyakarta','Yogyakarta','DI Yogyakarta','PTS'],
+    UMBY:['Universitas Mercu Buana Yogyakarta','Bantul','DI Yogyakarta','PTS'],
+    /* ==== Jawa Barat & Banten ==== */
+    UNSIKA:['Universitas Singaperbangsa Karawang','Karawang','Jawa Barat','PTN'],UGJ_CIREBON:['Universitas Swadaya Gunung Jati','Cirebon','Jawa Barat','PTS'],
+    UNIGAL:['Universitas Galuh','Ciamis','Jawa Barat','PTS'],UNIKU:['Universitas Kuningan','Kuningan','Jawa Barat','PTS'],
+    UNIGA_GARUT:['Universitas Garut','Garut','Jawa Barat','PTS'],UNMA_MJL:['Universitas Majalengka','Majalengka','Jawa Barat','PTS'],
+    UIKA_BOGOR:['Universitas Ibn Khaldun Bogor','Bogor','Jawa Barat','PTS'],UNPAK:['Universitas Pakuan','Bogor','Jawa Barat','PTS'],
+    UINCRB:['UIN Siber Syekh Nurjati Cirebon','Cirebon','Jawa Barat','PTKIN'],UINBTN:['UIN Sultan Maulana Hasanuddin Banten','Serang','Banten','PTKIN'],
+    UNSERA:['Universitas Serang Raya','Serang','Banten','PTS'],
+    /* ==== Sumatera ==== */
+    UNIMAL:['Universitas Malikussaleh','Lhokseumawe','Aceh','PTN'],BUNGHATTA:['Universitas Bung Hatta','Padang','Sumatera Barat','PTS'],
+    UINIB:['UIN Imam Bonjol Padang','Padang','Sumatera Barat','PTKIN'],UIR:['Universitas Islam Riau','Pekanbaru','Riau','PTS'],
+    UINSUSKA:['UIN Sultan Syarif Kasim Riau','Pekanbaru','Riau','PTKIN'],UISU:['Universitas Islam Sumatera Utara','Medan','Sumatera Utara','PTS'],
+    ITDEL:['Institut Teknologi Del','Toba','Sumatera Utara','PTS'],UINRF:['UIN Raden Fatah Palembang','Palembang','Sumatera Selatan','PTKIN'],
+    BINADARMA:['Universitas Bina Darma','Palembang','Sumatera Selatan','PTS'],UBL_LAMPUNG:['Universitas Bandar Lampung','Bandar Lampung','Lampung','PTS'],
+    UINRIL:['UIN Raden Intan Lampung','Bandar Lampung','Lampung','PTKIN'],TEKNOKRAT:['Universitas Teknokrat Indonesia','Bandar Lampung','Lampung','PTS'],
+    UINSTS:['UIN Sulthan Thaha Saifuddin Jambi','Jambi','Jambi','PTKIN'],
+    /* ==== Kalimantan, Sulawesi, Bali–Nusra, Papua ==== */
+    UINANTASARI:['UIN Antasari Banjarmasin','Banjarmasin','Kalimantan Selatan','PTKIN'],UNISKABJM:['Universitas Islam Kalimantan MAB','Banjarmasin','Kalimantan Selatan','PTS'],
+    UMPKALBAR:['Universitas Muhammadiyah Pontianak','Pontianak','Kalimantan Barat','PTS'],IAINPTK:['IAIN Pontianak','Pontianak','Kalimantan Barat','PTKIN'],
+    UNISMUH:['Universitas Muhammadiyah Makassar','Makassar','Sulawesi Selatan','PTS'],UMI_MKS:['Universitas Muslim Indonesia','Makassar','Sulawesi Selatan','PTS'],
+    UINAM:['UIN Alauddin Makassar','Gowa','Sulawesi Selatan','PTKIN'],UNIMA_MDO:['Universitas Negeri Manado','Tondano','Sulawesi Utara','PTN'],
+    UNDIKSHA:['Universitas Pendidikan Ganesha','Singaraja','Bali','PTN'],WARMADEWA:['Universitas Warmadewa','Denpasar','Bali','PTS'],
+    UINMTR:['UIN Mataram','Mataram','NTB','PTKIN'],UNWIRA:['Universitas Katolik Widya Mandira','Kupang','NTT','PTS'],
+    USTJ:['Universitas Sains dan Teknologi Jayapura','Jayapura','Papua','PTS']
   };
+  // Akreditasi institusi (APT) BAN-PT — hanya untuk kampus yang akreditasi puncaknya sudah mapan & kami yakini.
+  // Kampus lain menampilkan tautan "cek PDDikti" untuk data resmi & terkini (akreditasi bersifat per-prodi dan dapat berubah).
+  var APT={UI:'Unggul',UGM:'Unggul',ITB:'Unggul',IPB:'Unggul',UNPAD:'Unggul',UB:'Unggul',UNDIP:'Unggul',ITS:'Unggul',UNAIR:'Unggul',UNS:'Unggul',UNHAS:'Unggul',USU:'Unggul',UNAND:'Unggul',UNEJ:'Unggul',UNSOED:'Unggul',UNSRI:'Unggul',UNILA:'Unggul',UNUD:'Unggul',UPI:'Unggul',UNJ:'Unggul',UNY:'Unggul',UNESA:'Unggul',UNM:'Unggul',UNNES:'Unggul',UMLG:'Unggul',UNP:'Unggul',UNIMED:'Unggul',UNSYIAH:'Unggul',UNSRAT:'Unggul',UT:'Unggul',TELKOM:'Unggul',BINUS:'Unggul',UMM:'Unggul',UMY:'Unggul',UMS:'Unggul',UII:'Unggul',UAD:'Unggul',UMN:'Unggul',UNTAR:'Unggul',TRISAKTI:'Unggul',UNPAR:'Unggul',PETRA:'Unggul',UBAYA:'Unggul',USD:'Unggul',GUNADARMA:'Unggul',MERCU:'Unggul',DINUS:'Unggul',UPH:'Unggul',UKSW:'Unggul',UINJKT:'Unggul',UINYK:'Unggul',UINMLG:'Unggul',UINBDG:'Unggul',UINSA:'Unggul',UINWS:'Unggul',POLBAN:'Unggul',PENS:'Unggul'};
   // Program: [prodi, jenjang, kodeKampus, mode]  (mode: R=Reguler/offline, O=Online/PJJ, K=Kelas Karyawan/Prosus)
   var DATA=[
     // Teknologi Pangan / Ilmu & Teknologi Pangan / Teknologi Hasil Pertanian
@@ -391,7 +438,7 @@
     ['Syariah (Hukum Islam)','S1','ALAZHAR','R'],['Ushuluddin','S1','ALAZHAR','R'],['Bahasa Arab','S1','ALAZHAR','R'],
     ['Computer Science (Ilmu Komputer)','S1','UTM_MY','R'],['Engineering (Teknik)','S1','UKM_MY','R'],['Medicine (Kedokteran)','S1','UM_MY','R'],
     // ==== Kuliah ONLINE / PJJ (Indonesia) ====
-    ['Manajemen','S1','UT','O'],['Ilmu Administrasi Negara','S1','UT','O'],['Ilmu Administrasi Bisnis','S1','UT','O'],
+    ['Ilmu Administrasi Negara','S1','UT','O'],['Ilmu Administrasi Bisnis','S1','UT','O'],
     ['Ilmu Pemerintahan','S1','UT','O'],['Sosiologi','S1','UT','O'],['Ilmu Perpustakaan','S1','UT','O'],['Sastra Inggris','S1','UT','O'],
     ['Statistika','S1','UT','O'],['Matematika','S1','UT','O'],['Biologi','S1','UT','O'],['Agribisnis','S1','UT','O'],
     ['Teknologi Pangan','S1','UT','O'],['Perencanaan Wilayah dan Kota','S1','UT','O'],['Ekonomi Pembangunan','S1','UT','O'],
@@ -480,12 +527,12 @@
     ['Kedokteran','S1','UNILA','R'],['Teknik Sipil','S1','UNILA','R'],['Agribisnis','S1','UNILA','R'],['Ilmu Hukum','S1','UNRI','R'],
     // ==== Perluasan prodi ONLINE / PJJ (Indonesia) ====
     ['Manajemen SDM','S1','UT','O'],['Perpajakan','D3','UT','O'],['Akuntansi Sektor Publik','S1','UT','O'],['Ilmu Komunikasi','S1','UT','O'],
-    ['Perencanaan Wilayah dan Kota','S1','UT','O'],['Kearsipan','D4','UT','O'],['Sistem Informasi','S1','UT','O'],['Pendidikan Bahasa Indonesia','S1','UT','O'],
+    ['Kearsipan','D4','UT','O'],['Sistem Informasi','S1','UT','O'],['Pendidikan Bahasa Indonesia','S1','UT','O'],
     ['Magister Ilmu Hukum','S2','UT','O'],['Magister Ilmu Kelautan','S2','UT','O'],
     ['Sistem Informasi','S1','DINUS','O'],['Teknik Informatika','S1','DINUS','O'],
     ['Manajemen','S1','UMSU','O'],['Akuntansi','S1','UNTAG','O'],['Manajemen','S1','UHAMKA','O'],
     ['Teknik Informatika','S1','AMIKOM','O'],['Sistem Informasi','S1','UBSI','O'],['Manajemen','S1','UNIKOM','O'],
-    ['Ilmu Komunikasi','S1','MERCU','O'],['Sistem Informasi','S1','UPH','O'],['Magister Teknologi Informasi','S2','BINUS','O'],
+    ['Sistem Informasi','S1','UPH','O'],['Magister Teknologi Informasi','S2','BINUS','O'],
     // ==== Perluasan prodi luar negeri (kurasi; gloss Indonesia dalam kurung) ====
     ['Computer Science (Ilmu Komputer)','S1','YALE','R'],['Economics (Ilmu Ekonomi)','S1','YALE','R'],['Law (Hukum)','S2','YALE','R'],
     ['Computer Science (Ilmu Komputer)','S1','PRIN','R'],['Public Policy (Kebijakan Publik)','S2','PRIN','R'],
@@ -513,7 +560,105 @@
     ['Islamic Studies (Studi Islam)','S1','IIUM','R'],['Engineering (Teknik)','S1','IIUM','R'],['Economics (Ekonomi)','S1','IIUM','R'],
     ['Medicine (Kedokteran)','S1','CHULA','R'],['Engineering (Teknik)','S1','CHULA','R'],['Medicine (Kedokteran)','S1','MAHIDOL','R'],['Public Health (Kesehatan Masyarakat)','S2','MAHIDOL','R'],
     ['Syariah (Hukum Islam)','S1','MADINAH','R'],['Bahasa Arab','S1','MADINAH','R'],['Ushuluddin','S1','MADINAH','R'],
-    ['Artificial Intelligence (Kecerdasan Buatan)','S2','QATAR_HBKU','R'],['Data Science (Sains Data)','S2','QATAR_HBKU','R']
+    ['Artificial Intelligence (Kecerdasan Buatan)','S2','QATAR_HBKU','R'],['Data Science (Sains Data)','S2','QATAR_HBKU','R'],
+    // ==== Perluasan kabupaten/kota — Ponorogo & Jawa Timur ====
+    ['Manajemen','S1','UMPO','R'],['Akuntansi','S1','UMPO','R'],['Ilmu Hukum','S1','UMPO','R'],['Teknik Informatika','S1','UMPO','R'],['Ilmu Keperawatan','S1','UMPO','R'],['PGSD','S1','UMPO','R'],
+    ['Pendidikan Agama Islam','S1','IAINPO','R'],['Ekonomi Syariah','S1','IAINPO','R'],['Hukum Keluarga Islam','S1','IAINPO','R'],['Perbankan Syariah','S1','IAINPO','R'],['Komunikasi dan Penyiaran Islam','S1','IAINPO','R'],
+    ['Hukum Ekonomi Syariah','S1','UNIDA_GONTOR','R'],['Manajemen','S1','UNIDA_GONTOR','R'],['Ilmu Komunikasi','S1','UNIDA_GONTOR','R'],['Farmasi','S1','UNIDA_GONTOR','R'],['Agroteknologi','S1','UNIDA_GONTOR','R'],['Pendidikan Bahasa Arab','S1','UNIDA_GONTOR','R'],
+    ['Pendidikan Agama Islam','S1','INSURI','R'],['Ekonomi Syariah','S1','INSURI','R'],['PGMI','S1','INSURI','R'],
+    ['Manajemen','S1','UNIPMA','R'],['Akuntansi','S1','UNIPMA','R'],['PGSD','S1','UNIPMA','R'],['Teknik Informatika','S1','UNIPMA','R'],['Pendidikan Bahasa Inggris','S1','UNIPMA','R'],
+    ['Manajemen','S1','UMERMDN','R'],['Ilmu Hukum','S1','UMERMDN','R'],['Teknik Sipil','S1','UMERMDN','R'],['Ilmu Komunikasi','S1','UMERMDN','R'],
+    ['Manajemen','S1','UNPKEDIRI','R'],['Akuntansi','S1','UNPKEDIRI','R'],['PGSD','S1','UNPKEDIRI','R'],['Teknik Informatika','S1','UNPKEDIRI','R'],['Pendidikan Bahasa Inggris','S1','UNPKEDIRI','R'],
+    ['Manajemen','S1','UNISKAKDR','R'],['Agroteknologi','S1','UNISKAKDR','R'],['Ilmu Hukum','S1','UNISKAKDR','R'],['Teknik Industri','S1','UNISKAKDR','R'],
+    ['Pendidikan Agama Islam','S1','IAINKEDIRI','R'],['Ekonomi Syariah','S1','IAINKEDIRI','R'],['Hukum Keluarga Islam','S1','IAINKEDIRI','R'],['Tadris Bahasa Inggris','S1','IAINKEDIRI','R'],
+    ['Pendidikan Agama Islam','S1','UINSATU','R'],['Ekonomi Syariah','S1','UINSATU','R'],['Hukum Keluarga Islam','S1','UINSATU','R'],['Tadris Matematika','S1','UINSATU','R'],['Manajemen Pendidikan Islam','S1','UINSATU','R'],
+    ['Manajemen','S1','UTM_MADURA','R'],['Ilmu Hukum','S1','UTM_MADURA','R'],['Teknik Informatika','S1','UTM_MADURA','R'],['Agroekoteknologi','S1','UTM_MADURA','R'],['Akuntansi','S1','UTM_MADURA','R'],
+    ['Manajemen','S1','UMSIDA','R'],['Akuntansi','S1','UMSIDA','R'],['Teknik Informatika','S1','UMSIDA','R'],['PGSD','S1','UMSIDA','R'],['Ilmu Keperawatan','S1','UMSIDA','R'],
+    ['Manajemen','S1','UMG_GRESIK','R'],['Akuntansi','S1','UMG_GRESIK','R'],['Teknik Industri','S1','UMG_GRESIK','R'],['PGSD','S1','UMG_GRESIK','R'],
+    ['Manajemen','S1','UNISMA','R'],['Ilmu Hukum','S1','UNISMA','R'],['Agribisnis','S1','UNISMA','R'],['Kedokteran','S1','UNISMA','R'],['Teknik Informatika','S1','UNISMA','R'],['PGSD','S1','UNISMA','R'],
+    ['Manajemen','S1','UMJEMBER','R'],['Akuntansi','S1','UMJEMBER','R'],['Ilmu Hukum','S1','UMJEMBER','R'],['Teknik Informatika','S1','UMJEMBER','R'],['Ilmu Keperawatan','S1','UMJEMBER','R'],
+    ['Pendidikan Agama Islam','S1','UNHASY','R'],['Manajemen','S1','UNHASY','R'],['Teknik Informatika','S1','UNHASY','R'],['Ilmu Keperawatan','S1','UNHASY','R'],
+    ['Manajemen','S1','UWKS','R'],['Kedokteran','S1','UWKS','R'],['Ilmu Hukum','S1','UWKS','R'],['Teknik Sipil','S1','UWKS','R'],
+    // ==== Jawa Tengah & DI Yogyakarta ====
+    ['Manajemen','S1','UMK_KUDUS','R'],['Akuntansi','S1','UMK_KUDUS','R'],['Teknik Informatika','S1','UMK_KUDUS','R'],['PGSD','S1','UMK_KUDUS','R'],['Psikologi','S1','UMK_KUDUS','R'],
+    ['Manajemen','S1','UNIKAL','R'],['Ilmu Hukum','S1','UNIKAL','R'],['Teknik Informatika','S1','UNIKAL','R'],['Ilmu Keperawatan','S1','UNIKAL','R'],
+    ['Manajemen','S1','UNIMMA','R'],['Teknik Informatika','S1','UNIMMA','R'],['PGSD','S1','UNIMMA','R'],['Farmasi','S1','UNIMMA','R'],
+    ['Manajemen','S1','UMP_PWT','R'],['Akuntansi','S1','UMP_PWT','R'],['Teknik Informatika','S1','UMP_PWT','R'],['Farmasi','S1','UMP_PWT','R'],['Ilmu Keperawatan','S1','UMP_PWT','R'],['Pendidikan Bahasa Inggris','S1','UMP_PWT','R'],
+    ['PGSD','S1','UPGRIS','R'],['Pendidikan Bahasa Inggris','S1','UPGRIS','R'],['Manajemen','S1','UPGRIS','R'],['Teknik Informatika','S1','UPGRIS','R'],
+    ['Manajemen','S1','UNISRI','R'],['Ilmu Hukum','S1','UNISRI','R'],['Ilmu Administrasi Negara','S1','UNISRI','R'],['PGSD','S1','UNISRI','R'],
+    ['Pendidikan Agama Islam','S1','UINSALATIGA','R'],['Ekonomi Syariah','S1','UINSALATIGA','R'],['Hukum Keluarga Islam','S1','UINSALATIGA','R'],['Tadris Bahasa Inggris','S1','UINSALATIGA','R'],
+    ['Pendidikan Agama Islam','S1','UINSAID','R'],['Ekonomi Syariah','S1','UINSAID','R'],['Manajemen Bisnis Syariah','S1','UINSAID','R'],['Hukum Keluarga Islam','S1','UINSAID','R'],
+    ['Pendidikan Agama Islam','S1','IAINKUDUS','R'],['Ekonomi Syariah','S1','IAINKUDUS','R'],['Manajemen Bisnis Syariah','S1','IAINKUDUS','R'],['Hukum Keluarga Islam','S1','IAINKUDUS','R'],
+    ['Pendidikan Agama Islam','S1','UINSAIZU','R'],['Ekonomi Syariah','S1','UINSAIZU','R'],['Hukum Keluarga Islam','S1','UINSAIZU','R'],['Komunikasi dan Penyiaran Islam','S1','UINSAIZU','R'],
+    ['Pendidikan Agama Islam','S1','UINGUSDUR','R'],['Ekonomi Syariah','S1','UINGUSDUR','R'],['Hukum Keluarga Islam','S1','UINGUSDUR','R'],['Perbankan Syariah','S1','UINGUSDUR','R'],
+    ['Teknik Informatika','S1','UTY','R'],['Sistem Informasi','S1','UTY','R'],['Manajemen','S1','UTY','R'],['Akuntansi','S1','UTY','R'],['Psikologi','S1','UTY','R'],
+    ['Psikologi','S1','UMBY','R'],['Manajemen','S1','UMBY','R'],['Teknologi Hasil Pertanian','S1','UMBY','R'],['Farmasi','S1','UMBY','R'],
+    // ==== Jawa Barat & Banten ====
+    ['Manajemen','S1','UNSIKA','R'],['Ilmu Hukum','S1','UNSIKA','R'],['Teknik Informatika','S1','UNSIKA','R'],['Agroteknologi','S1','UNSIKA','R'],['PGSD','S1','UNSIKA','R'],['Akuntansi','S1','UNSIKA','R'],
+    ['Manajemen','S1','UGJ_CIREBON','R'],['Ilmu Hukum','S1','UGJ_CIREBON','R'],['Kedokteran','S1','UGJ_CIREBON','R'],['Pendidikan Bahasa Inggris','S1','UGJ_CIREBON','R'],
+    ['Manajemen','S1','UNIGAL','R'],['Ilmu Hukum','S1','UNIGAL','R'],['Teknik Informatika','S1','UNIGAL','R'],['PGSD','S1','UNIGAL','R'],
+    ['Manajemen','S1','UNIKU','R'],['Akuntansi','S1','UNIKU','R'],['Sistem Informasi','S1','UNIKU','R'],['Pendidikan Biologi','S1','UNIKU','R'],
+    ['Manajemen','S1','UNIGA_GARUT','R'],['Ilmu Administrasi Negara','S1','UNIGA_GARUT','R'],['Teknik Informatika','S1','UNIGA_GARUT','R'],['Pendidikan Agama Islam','S1','UNIGA_GARUT','R'],
+    ['Manajemen','S1','UNMA_MJL','R'],['Teknik Informatika','S1','UNMA_MJL','R'],['PGSD','S1','UNMA_MJL','R'],['Agroteknologi','S1','UNMA_MJL','R'],
+    ['Manajemen','S1','UIKA_BOGOR','R'],['Ilmu Hukum','S1','UIKA_BOGOR','R'],['Teknik Informatika','S1','UIKA_BOGOR','R'],['Pendidikan Agama Islam','S1','UIKA_BOGOR','R'],
+    ['Manajemen','S1','UNPAK','R'],['Akuntansi','S1','UNPAK','R'],['Ilmu Hukum','S1','UNPAK','R'],['Teknik Informatika','S1','UNPAK','R'],['Farmasi','S1','UNPAK','R'],
+    ['Pendidikan Agama Islam','S1','UINCRB','R'],['Ekonomi Syariah','S1','UINCRB','R'],['Hukum Keluarga Islam','S1','UINCRB','R'],['Komunikasi dan Penyiaran Islam','S1','UINCRB','R'],
+    ['Pendidikan Agama Islam','S1','UINBTN','R'],['Ekonomi Syariah','S1','UINBTN','R'],['Hukum Keluarga Islam','S1','UINBTN','R'],['Manajemen','S1','UINBTN','R'],
+    ['Manajemen','S1','UNSERA','R'],['Teknik Informatika','S1','UNSERA','R'],['Ilmu Hukum','S1','UNSERA','R'],['Teknik Industri','S1','UNSERA','R'],
+    // ==== Sumatera ====
+    ['Ilmu Hukum','S1','UNIMAL','R'],['Manajemen','S1','UNIMAL','R'],['Teknik Informatika','S1','UNIMAL','R'],['Teknik Sipil','S1','UNIMAL','R'],['Agroekoteknologi','S1','UNIMAL','R'],
+    ['Manajemen','S1','BUNGHATTA','R'],['Teknik Sipil','S1','BUNGHATTA','R'],['Ilmu Hukum','S1','BUNGHATTA','R'],['Akuntansi','S1','BUNGHATTA','R'],['Teknik Informatika','S1','BUNGHATTA','R'],
+    ['Pendidikan Agama Islam','S1','UINIB','R'],['Ekonomi Syariah','S1','UINIB','R'],['Hukum Keluarga Islam','S1','UINIB','R'],['Komunikasi dan Penyiaran Islam','S1','UINIB','R'],
+    ['Ilmu Hukum','S1','UIR','R'],['Manajemen','S1','UIR','R'],['Teknik Sipil','S1','UIR','R'],['Teknik Informatika','S1','UIR','R'],
+    ['Pendidikan Agama Islam','S1','UINSUSKA','R'],['Teknik Informatika','S1','UINSUSKA','R'],['Ekonomi Syariah','S1','UINSUSKA','R'],['Ilmu Komunikasi','S1','UINSUSKA','R'],
+    ['Kedokteran','S1','UISU','R'],['Ilmu Hukum','S1','UISU','R'],['Manajemen','S1','UISU','R'],['Agroteknologi','S1','UISU','R'],
+    ['Teknik Informatika','S1','ITDEL','R'],['Sistem Informasi','S1','ITDEL','R'],['Teknik Elektro','S1','ITDEL','R'],['Manajemen Rekayasa','S1','ITDEL','R'],
+    ['Pendidikan Agama Islam','S1','UINRF','R'],['Ekonomi Syariah','S1','UINRF','R'],['Hukum Keluarga Islam','S1','UINRF','R'],['Sistem Informasi','S1','UINRF','R'],
+    ['Teknik Informatika','S1','BINADARMA','R'],['Sistem Informasi','S1','BINADARMA','R'],['Manajemen','S1','BINADARMA','R'],['Ilmu Komunikasi','S1','BINADARMA','R'],
+    ['Manajemen','S1','UBL_LAMPUNG','R'],['Ilmu Hukum','S1','UBL_LAMPUNG','R'],['Teknik Sipil','S1','UBL_LAMPUNG','R'],['Teknik Informatika','S1','UBL_LAMPUNG','R'],
+    ['Pendidikan Agama Islam','S1','UINRIL','R'],['Ekonomi Syariah','S1','UINRIL','R'],['Hukum Keluarga Islam','S1','UINRIL','R'],['Manajemen','S1','UINRIL','R'],
+    ['Teknik Informatika','S1','TEKNOKRAT','R'],['Sistem Informasi','S1','TEKNOKRAT','R'],['Manajemen','S1','TEKNOKRAT','R'],['Pendidikan Bahasa Inggris','S1','TEKNOKRAT','R'],
+    ['Pendidikan Agama Islam','S1','UINSTS','R'],['Ekonomi Syariah','S1','UINSTS','R'],['Hukum Keluarga Islam','S1','UINSTS','R'],['Komunikasi dan Penyiaran Islam','S1','UINSTS','R'],
+    // ==== Kalimantan, Sulawesi, Bali–Nusra, Papua ====
+    ['Pendidikan Agama Islam','S1','UINANTASARI','R'],['Ekonomi Syariah','S1','UINANTASARI','R'],['Hukum Keluarga Islam','S1','UINANTASARI','R'],['Komunikasi dan Penyiaran Islam','S1','UINANTASARI','R'],
+    ['Manajemen','S1','UNISKABJM','R'],['Teknik Informatika','S1','UNISKABJM','R'],['Ilmu Hukum','S1','UNISKABJM','R'],['Kesehatan Masyarakat','S1','UNISKABJM','R'],
+    ['Manajemen','S1','UMPKALBAR','R'],['Teknik Informatika','S1','UMPKALBAR','R'],['Ilmu Keperawatan','S1','UMPKALBAR','R'],['Agroteknologi','S1','UMPKALBAR','R'],
+    ['Pendidikan Agama Islam','S1','IAINPTK','R'],['Ekonomi Syariah','S1','IAINPTK','R'],['Hukum Keluarga Islam','S1','IAINPTK','R'],['Tadris Bahasa Inggris','S1','IAINPTK','R'],
+    ['Manajemen','S1','UNISMUH','R'],['Akuntansi','S1','UNISMUH','R'],['PGSD','S1','UNISMUH','R'],['Ilmu Keperawatan','S1','UNISMUH','R'],['Agribisnis','S1','UNISMUH','R'],['Pendidikan Bahasa Inggris','S1','UNISMUH','R'],
+    ['Manajemen','S1','UMI_MKS','R'],['Ilmu Hukum','S1','UMI_MKS','R'],['Kedokteran','S1','UMI_MKS','R'],['Teknik Informatika','S1','UMI_MKS','R'],['Farmasi','S1','UMI_MKS','R'],
+    ['Pendidikan Agama Islam','S1','UINAM','R'],['Ekonomi Syariah','S1','UINAM','R'],['Ilmu Komunikasi','S1','UINAM','R'],['Teknik Informatika','S1','UINAM','R'],
+    ['PGSD','S1','UNIMA_MDO','R'],['Pendidikan Bahasa Inggris','S1','UNIMA_MDO','R'],['Manajemen','S1','UNIMA_MDO','R'],['Teknik Informatika','S1','UNIMA_MDO','R'],
+    ['PGSD','S1','UNDIKSHA','R'],['Pendidikan Bahasa Inggris','S1','UNDIKSHA','R'],['Manajemen','S1','UNDIKSHA','R'],['Akuntansi','S1','UNDIKSHA','R'],['Teknik Informatika','S1','UNDIKSHA','R'],['Ilmu Hukum','S1','UNDIKSHA','R'],
+    ['Manajemen','S1','WARMADEWA','R'],['Ilmu Hukum','S1','WARMADEWA','R'],['Kedokteran','S1','WARMADEWA','R'],['Teknik Sipil','S1','WARMADEWA','R'],
+    ['Pendidikan Agama Islam','S1','UINMTR','R'],['Ekonomi Syariah','S1','UINMTR','R'],['Hukum Keluarga Islam','S1','UINMTR','R'],['Tadris Bahasa Inggris','S1','UINMTR','R'],
+    ['Manajemen','S1','UNWIRA','R'],['Ilmu Hukum','S1','UNWIRA','R'],['Teknik Sipil','S1','UNWIRA','R'],['Teknik Informatika','S1','UNWIRA','R'],
+    ['Teknik Sipil','S1','USTJ','R'],['Teknik Informatika','S1','USTJ','R'],['Manajemen','S1','USTJ','R'],['Ilmu Hukum','S1','USTJ','R'],
+    ['PGSD','S1','UNM','R'],['Pendidikan Bahasa Inggris','S1','UNM','R'],['Pendidikan Matematika','S1','UNM','R'],['Manajemen','S1','UNM','R'],['Teknik Informatika','S1','UNM','R'],
+    ['Kedokteran','S1','UPNVJ','R'],['Manajemen','S1','UPNVJ','R'],['Ilmu Hukum','S1','UPNVJ','R'],['Teknik Informatika','S1','UPNVJ','R'],['Ilmu Komunikasi','S1','UPNVJ','R'],
+    ['Teknik Perminyakan','S1','UPNYK','R'],['Teknik Geologi','S1','UPNYK','R'],['Manajemen','S1','UPNYK','R'],['Agribisnis','S1','UPNYK','R'],['Ilmu Komunikasi','S1','UPNYK','R'],
+    ['Teknik Informatika','S1','ITERA','R'],['Teknik Sipil','S1','ITERA','R'],['Arsitektur','S1','ITERA','R'],['Teknik Elektro','S1','ITERA','R'],['Teknik Geomatika','S1','ITERA','R'],
+    ['Teknik Kimia','S1','ITK','R'],['Teknik Sipil','S1','ITK','R'],['Informatika','S1','ITK','R'],['Teknik Elektro','S1','ITK','R'],['Teknik Mesin','S1','ITK','R'],
+    ['Kedokteran','S1','UMS','R'],['Teknik Informatika','S1','UMS','R'],['Manajemen','S1','UMS','R'],['Ilmu Hukum','S1','UMS','R'],['Farmasi','S1','UMS','R'],
+    ['Teknik Informatika','S1','UAD','R'],['Psikologi','S1','UAD','R'],['Farmasi','S1','UAD','R'],['Manajemen','S1','UAD','R'],['Pendidikan Bahasa Inggris','S1','UAD','R'],
+    ['Manajemen','S1','UNTAR','R'],['Akuntansi','S1','UNTAR','R'],['Teknik Sipil','S1','UNTAR','R'],['Ilmu Hukum','S1','UNTAR','R'],['Kedokteran','S1','UNTAR','R'],
+    ['Ilmu Komunikasi','S1','UNISBA','R'],['Ilmu Hukum','S1','UNISBA','R'],['Manajemen','S1','UNISBA','R'],['Kedokteran','S1','UNISBA','R'],['Ekonomi Syariah','S1','UNISBA','R'],
+    ['Manajemen','S1','ATMAJKT','R'],['Akuntansi','S1','ATMAJKT','R'],['Psikologi','S1','ATMAJKT','R'],['Teknik Informatika','S1','ATMAJKT','R'],['Kedokteran','S1','ATMAJKT','R'],
+    ['Agribisnis','S1','UNIPA','R'],['Kehutanan','S1','UNIPA','R'],['Manajemen','S1','UNIPA','R'],['Teknik Informatika','S1','UNIPA','R'],['Ilmu Kelautan','S1','UNIPA','R'],
+    ['Business','S1','SYD','R'],['Computer Science','S1','SYD','R'],['Engineering','S1','SYD','R'],['Medicine','S1','SYD','R'],['Law','S1','SYD','R'],
+    ['Business','S1','UQ','R'],['Engineering','S1','UQ','R'],['Computer Science','S1','UQ','R'],['Biotechnology','S1','UQ','R'],['Environmental Science','S1','UQ','R'],
+    ['Computer Science','S1','EDIN','R'],['Business','S1','EDIN','R'],['Medicine','S1','EDIN','R'],['Engineering','S1','EDIN','R'],['Law','S1','EDIN','R'],
+    ['Computer Science','S1','MANC','R'],['Business','S1','MANC','R'],['Engineering','S1','MANC','R'],['Economics','S1','MANC','R'],['Chemistry','S1','MANC','R'],
+    ['Computer Science','S1','COLUM','R'],['Business','S1','COLUM','R'],['Engineering','S1','COLUM','R'],['Economics','S1','COLUM','R'],['Journalism','S1','COLUM','R'],
+    ['Computer Science','S1','UBC','R'],['Business','S1','UBC','R'],['Engineering','S1','UBC','R'],['Forestry','S1','UBC','R'],['Environmental Science','S1','UBC','R'],
+    ['Computer Science','S1','MCGILL','R'],['Business','S1','MCGILL','R'],['Engineering','S1','MCGILL','R'],['Medicine','S1','MCGILL','R'],['Economics','S1','MCGILL','R'],
+    ['Engineering','S1','KYOTO','R'],['Computer Science','S1','KYOTO','R'],['Economics','S1','KYOTO','R'],['Physics','S1','KYOTO','R'],['Environmental Studies','S1','KYOTO','R'],
+    ['Computer Science','S1','TITECH','R'],['Engineering','S1','TITECH','R'],['Materials Science','S1','TITECH','R'],['Chemistry','S1','TITECH','R'],['Life Science','S1','TITECH','R'],
+    ['Computer Science','S1','SNU','R'],['Business','S1','SNU','R'],['Engineering','S1','SNU','R'],['Economics','S1','SNU','R'],['Materials Science','S1','SNU','R'],
+    ['Computer Science','S1','PKU','R'],['Economics','S1','PKU','R'],['Business','S1','PKU','R'],['International Relations','S1','PKU','R'],['Chemistry','S1','PKU','R'],
+    ['Business','S1','HKU','R'],['Computer Science','S1','HKU','R'],['Engineering','S1','HKU','R'],['Law','S1','HKU','R'],['Medicine','S1','HKU','R'],
+    ['Computer Science','S1','NTU_TW','R'],['Electrical Engineering','S1','NTU_TW','R'],['Business','S1','NTU_TW','R'],['Economics','S1','NTU_TW','R'],['Mechanical Engineering','S1','NTU_TW','R'],
+    ['Law','S1','LEIDEN','R'],['International Relations','S1','LEIDEN','R'],['Computer Science','S1','LEIDEN','R'],['Psychology','S1','LEIDEN','R'],['Political Science','S1','LEIDEN','R'],
+    ['Computer Science','S1','SORBONNE','R'],['Engineering','S1','SORBONNE','R'],['Physics','S1','SORBONNE','R'],['Economics','S1','SORBONNE','R'],['Literature','S1','SORBONNE','R']
   ];
   var LEVELS=['D3','D4','S1','Profesi','S2','S3'];
   var MODES=[['R','Reguler / Offline'],['O','Online / PJJ'],['K','Kelas Karyawan / Prosus'],['I','Kelas Internasional / IUP']];
@@ -559,7 +704,9 @@
     if(!res.length){$('kuResults').innerHTML='<div class="ku-empty"><p>Tidak ada hasil untuk filter ini.</p><p style="font-size:13px;margin-top:6px">Coba kata kunci lain, kurangi filter, atau cek data resmi di PDDikti.</p></div>';return;}
     $('kuResults').innerHTML=res.map(function(d){var c=CAMP[d[2]],on=favs.indexOf(favKey(d))>=0,mc=d[3]==='O'?' m-online':d[3]==='K'?' m-karyawan':d[3]==='I'?' m-iup':'';
       return '<div class="ku-card"><div><div class="p">'+esc(d[0])+'</div><div class="u">'+esc(c[0])+' · '+esc(c[1])+', '+esc(c[2])+'</div>'+
-        '<div class="meta"><span class="ku-tag j">'+esc(d[1])+'</span><span class="ku-tag'+mc+'">'+esc(MODEL[d[3]])+'</span><span class="ku-tag">'+esc(c[3])+'</span></div></div>'+
+        '<div class="meta"><span class="ku-tag j">'+esc(d[1])+'</span><span class="ku-tag'+mc+'">'+esc(MODEL[d[3]])+'</span><span class="ku-tag">'+esc(c[3])+'</span>'+
+        (APT[d[2]]?'<span class="ku-tag apt" title="Akreditasi institusi (APT) BAN-PT — verifikasi terkini di PDDikti">APT: '+esc(APT[d[2]])+'</span>':'<a class="ku-tag verify" href="https://pddikti.kemdikbud.go.id/" target="_blank" rel="noopener" title="Cek akreditasi resmi & terkini di PDDikti">Akreditasi: cek PDDikti ↗</a>')+
+        '</div></div>'+
         '<button class="ku-star'+(on?' on':'')+'" data-fav="'+esc(favKey(d))+'" aria-label="Simpan">'+(on?'★':'☆')+'</button></div>';
     }).join('');
   }
