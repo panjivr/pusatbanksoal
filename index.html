@@ -189,26 +189,148 @@
 
 <hr class="divider-glow">
 
+<style>
+/* ===== Skripsi showcase (scoped) ===== */
+#skripsi .sk-head{max-width:760px}
+#skripsi .sk-kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin-top:30px}
+#skripsi .sk-kpi{background:var(--card);border:1px solid var(--hair-dark);border-radius:16px;padding:18px 14px;text-align:center}
+#skripsi .sk-kpi b{font-family:var(--num);font-weight:700;font-size:26px;color:var(--primary);display:block;line-height:1;letter-spacing:-.5px}
+#skripsi .sk-kpi span{font-size:12px;color:var(--muted);margin-top:7px;display:block;line-height:1.35}
+#skripsi .sk-pro{display:grid;grid-template-columns:repeat(auto-fit,minmax(258px,1fr));gap:16px;margin-top:26px}
+#skripsi .sk-pro-card{position:relative;border:1px solid var(--hair-dark);border-radius:20px;padding:24px;overflow:hidden;background:
+  radial-gradient(120% 90% at 100% 0,rgba(47,107,237,.14),transparent 55%),var(--card);transition:transform .2s ease,box-shadow .2s ease}
+#skripsi .sk-pro-card:hover{transform:translateY(-4px);box-shadow:0 18px 40px -20px rgba(47,107,237,.5)}
+#skripsi .sk-pro-card .tile{width:52px;height:52px;border-radius:15px;display:grid;place-items:center;
+  background:linear-gradient(135deg,var(--primary),var(--accent2));color:#fff;box-shadow:0 8px 22px -8px rgba(47,107,237,.7)}
+#skripsi .sk-pro-card .tile svg{width:26px;height:26px}
+#skripsi .sk-pro-card h4{margin-top:16px;font-size:18px;color:var(--on-dark)}
+#skripsi .sk-pro-card p{margin-top:7px;font-size:13.5px;color:var(--muted);line-height:1.6}
+#skripsi .sk-pill{position:absolute;top:16px;right:16px;font-size:10.5px;font-weight:800;letter-spacing:.6px;text-transform:uppercase;
+  padding:4px 10px;border-radius:999px;background:var(--primary-soft);color:var(--accent-ink)}
+#skripsi .sk-flow{display:flex;flex-wrap:wrap;gap:9px;margin-top:26px;align-items:center}
+#skripsi .sk-flow .step{display:inline-flex;align-items:center;gap:9px;padding:9px 15px;border-radius:999px;
+  border:1px solid var(--hair-dark);font-size:13px;font-weight:600;color:var(--body);background:var(--card)}
+#skripsi .sk-flow .step em{width:22px;height:22px;border-radius:50%;display:grid;place-items:center;font-style:normal;
+  font-size:11px;font-weight:800;background:var(--primary-soft);color:var(--accent-ink)}
+#skripsi .sk-flow .sep{color:var(--muted);opacity:.55}
+#skripsi .sk-split{display:grid;grid-template-columns:1.05fr .95fr;gap:26px;align-items:center;margin-top:30px}
+@media(max-width:820px){#skripsi .sk-split{grid-template-columns:1fr}}
+#skripsi .sk-check{list-style:none;margin-top:16px;padding:0}
+#skripsi .sk-check li{display:flex;gap:10px;align-items:flex-start;margin-top:11px;font-size:14px;color:var(--body)}
+#skripsi .sk-check svg{width:20px;height:20px;color:var(--up);flex:0 0 auto;margin-top:1px}
+#skripsi .sk-mock{border:1px solid var(--hair-dark);border-radius:18px;overflow:hidden;background:var(--card);box-shadow:0 24px 60px -30px rgba(0,0,0,.6)}
+#skripsi .sk-mock .top{display:flex;align-items:center;gap:7px;padding:11px 14px;border-bottom:1px solid var(--hair-dark);background:var(--elevated)}
+#skripsi .sk-mock .top i{width:10px;height:10px;border-radius:50%;background:var(--hair-dark);display:block}
+#skripsi .sk-mock .top b{margin-left:8px;font-size:12px;color:var(--muted);font-weight:600}
+#skripsi .sk-mock .body{padding:18px 20px}
+#skripsi .sk-mock .tag{display:inline-block;font-size:10.5px;font-weight:800;letter-spacing:.5px;color:var(--accent-ink);background:var(--primary-soft);padding:3px 9px;border-radius:6px}
+#skripsi .sk-mock h5{font-size:14px;color:var(--on-dark);margin:12px 0 8px;font-weight:700}
+#skripsi .sk-mock p{font-size:12.5px;line-height:1.75;color:var(--muted-strong);margin:0 0 9px}
+#skripsi .sk-mock .cite{color:var(--accent-ink);font-weight:600}
+#skripsi .sk-mock .row{height:8px;border-radius:4px;background:var(--elevated);margin:7px 0}
+#skripsi .sk-mock .row.s{width:88%}#skripsi .sk-mock .row.m{width:70%}
+#skripsi .sk-tools{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-top:22px}
+#skripsi .sk-tool{display:flex;gap:12px;align-items:flex-start;padding:14px 15px;border:1px solid var(--hair-dark);border-radius:14px;background:var(--card);transition:border-color .18s ease,transform .12s ease}
+#skripsi .sk-tool:hover{border-color:var(--primary);transform:translateY(-2px)}
+#skripsi .sk-tool .ti{flex:0 0 auto;width:38px;height:38px;border-radius:11px;display:grid;place-items:center;background:var(--primary-soft);color:var(--accent-ink)}
+#skripsi .sk-tool .ti svg{width:19px;height:19px}
+#skripsi .sk-tool b{font-size:13.5px;color:var(--on-dark);display:block}
+#skripsi .sk-tool span{font-size:12px;color:var(--muted);display:block;margin-top:2px;line-height:1.45}
+#skripsi .sk-quote{margin-top:28px;border:1px solid var(--hair-dark);border-left:3px solid var(--primary);border-radius:14px;padding:20px 22px;background:var(--card)}
+#skripsi .sk-quote p{font-size:15px;color:var(--on-dark);line-height:1.6}
+#skripsi .sk-quote .who{display:flex;align-items:center;gap:11px;margin-top:14px}
+#skripsi .sk-quote .who .av{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;font-weight:800;color:#fff;background:linear-gradient(135deg,var(--primary),var(--accent2))}
+#skripsi .sk-cta{margin-top:30px;border-radius:22px;padding:34px 28px;text-align:center;border:1px solid var(--hair-dark);
+  background:radial-gradient(90% 130% at 50% 0,rgba(47,107,237,.16),transparent 60%),var(--card)}
+</style>
 <section class="section" id="skripsi" aria-labelledby="skripsi-h"><div class="wrap">
-<span class="section-eyebrow reveal">Fitur unggulan baru <span class="badge-new">Baru</span></span>
-<h2 id="skripsi-h" class="reveal">Kelar skripsi lebih <span class="gradient-text">terarah</span>, dengan sumber ilmiah <span class="gradient-text">nyata</span></h2>
-<p class="lead mt reveal">Riset &amp; Skripsi — ruang kerja riset dan skripsi berbasis AI untuk mahasiswa tingkat akhir. Mencari sumber ilmiah asli, menyusun sitasi otomatis, dan merangkai kerangka proposal BAB I–III tanpa mengarang data.</p>
-<div class="grid g2 mt-lg">
-<div class="glass-card lift reveal d1"><span class="ico"><svg class="i" aria-hidden="true"><use href="#i-search"></use></svg></span><h4 class="mt">Sumber ilmiah nyata</h4><p class="muted mt">Telusuri jurnal dan artikel asli langsung dari OpenAlex &amp; Crossref — bukan referensi karangan. Setiap sumber punya DOI yang bisa kamu cek sendiri.</p></div>
-<div class="glass-card lift reveal d2"><span class="ico"><svg class="i" aria-hidden="true"><use href="#i-book"></use></svg></span><h4 class="mt">Sitasi otomatis</h4><p class="muted mt">Susun daftar pustaka dan sitasi dalam gaya APA, IEEE, Harvard, atau Vancouver secara otomatis — konsisten dari awal sampai akhir.</p></div>
-<div class="glass-card lift reveal d3"><span class="ico"><svg class="i" aria-hidden="true"><use href="#i-layers"></use></svg></span><h4 class="mt">Kerangka BAB I–III</h4><p class="muted mt">Bangun kerangka proposal — latar belakang, rumusan masalah, tinjauan pustaka, dan metodologi — sebagai titik mulai yang terstruktur untuk kamu kembangkan.</p></div>
-<div class="glass-card lift reveal d4"><span class="ico"><svg class="i" aria-hidden="true"><use href="#i-shield-check"></use></svg></span><h4 class="mt">Jujur &amp; tersimpan lokal</h4><p class="muted mt">Tanpa sitasi atau data palsu. Semua catatan riset dan draftmu tersimpan lokal di perangkat — tetap milikmu sepenuhnya.</p></div>
+<div class="sk-head">
+<span class="section-eyebrow reveal">Workspace Skripsi &amp; Riset <span class="badge-new">Unggulan</span></span>
+<h2 id="skripsi-h" class="reveal">Dari <span class="gradient-text">halaman kosong</span> sampai <span class="gradient-text">siap sidang</span> — satu ruang kerja</h2>
+<p class="lead mt reveal">Berhenti begadang bingung mulai dari mana. <b>30+ alat</b> yang menemani setiap tahap skripsi: cari referensi asli, generate BAB I–III, humanize anti-AI, audit naskah, sampai simulasi sidang. <b>Gratis, tanpa API berbayar, dan tidak pernah mengarang data.</b></p>
 </div>
+
+<div class="sk-kpis reveal">
+<div class="sk-kpi"><b>30+</b><span>alat riset &amp; penulisan</span></div>
+<div class="sk-kpi"><b>BAB I–III</b><span>ter-generate penuh</span></div>
+<div class="sk-kpi"><b>7</b><span>gaya sitasi</span></div>
+<div class="sk-kpi"><b>50</b><span>referensi nyata sekali cari</span></div>
+<div class="sk-kpi"><b>4</b><span>format file: DOCX·PDF·XLSX·CSV</span></div>
+<div class="sk-kpi"><b>Rp0</b><span>tanpa kartu kredit</span></div>
+</div>
+
+<h3 class="mt-lg reveal" style="font-size:15px;color:var(--muted);text-transform:uppercase;letter-spacing:.6px">Fitur pembeda yang tak ada di tempat lain</h3>
+<div class="sk-pro">
+<div class="sk-pro-card reveal d1"><span class="sk-pill">Pro</span><span class="tile"><svg class="i" aria-hidden="true"><use href="#i-shield-check"></use></svg></span><h4>Skripsi Doctor</h4><p>Unggah DOCX/PDF → audit menyeluruh berskor: kelengkapan BAB I–V, sitasi vs daftar pustaka, konsistensi angka responden, kata baku, sampai pola tulisan AI. Laporan bisa diunduh.</p></div>
+<div class="sk-pro-card reveal d2"><span class="sk-pill">Pro</span><span class="tile"><svg class="i" aria-hidden="true"><use href="#i-brain"></use></svg></span><h4>Simulasi Sidang</h4><p>AI berperan jadi penguji — pilih mode Santai, Metodologi, atau Killer. Jawab tiap pertanyaan, dapat skor + masukan spesifik, plus prediksi pertanyaan penguji.</p></div>
+<div class="sk-pro-card reveal d3"><span class="sk-pill">Pro</span><span class="tile"><svg class="i" aria-hidden="true"><use href="#i-chart"></use></svg></span><h4>Analisis Data</h4><p>Unggah CSV/XLSX → deteksi tipe tiap kolom, hitung statistik deskriptif, lalu saran uji yang tepat (t-test, ANOVA, korelasi, regresi). Membaca datamu apa adanya.</p></div>
+</div>
+
+<div class="sk-flow reveal">
+<span class="step"><em>1</em> Ide &amp; Judul</span><span class="sep">→</span>
+<span class="step"><em>2</em> Referensi</span><span class="sep">→</span>
+<span class="step"><em>3</em> Metodologi</span><span class="sep">→</span>
+<span class="step"><em>4</em> Menulis</span><span class="sep">→</span>
+<span class="step"><em>5</em> Sidang &amp; Revisi</span>
+</div>
+
+<div class="sk-split">
+<div class="reveal">
+<span class="section-eyebrow">Fitur andalan</span>
+<h3 class="mt" style="font-size:26px;color:var(--on-dark)">Generate Penuh BAB I–III — <span class="gradient-text">terima beres</span></h3>
+<p class="muted mt" style="line-height:1.7">Cukup isi judul &amp; objek penelitian. Sistem menarik definisi nyata dari Wikipedia, merangkai latar belakang funnel, rumusan, tujuan, tinjauan pustaka, sampai metodologi Sugiyono — lalu di-<b>humanize</b> agar tidak berpola AI.</p>
+<ul class="sk-check">
+<li><svg class="i" aria-hidden="true"><use href="#i-check"></use></svg> Setiap paragraf bersitasi otomatis — <b>tanpa mengarang sumber</b>.</li>
+<li><svg class="i" aria-hidden="true"><use href="#i-check"></use></svg> Humanizer anti-AI + cek plagiasi internal.</li>
+<li><svg class="i" aria-hidden="true"><use href="#i-check"></use></svg> Times New Roman, spasi 1,15/1,5, ekspor <b>PDF &amp; Word</b>.</li>
+<li><svg class="i" aria-hidden="true"><use href="#i-check"></use></svg> Angka lapangan tetap milikmu — sistem tidak memalsukan data.</li>
+</ul>
+</div>
+<div class="sk-mock reveal d2" aria-hidden="true">
+<div class="top"><i></i><i></i><i></i><b>proposal-skripsi.docx</b></div>
+<div class="body">
+<span class="tag">BAB I · PENDAHULUAN</span>
+<h5>A. Latar Belakang Masalah</h5>
+<p>Perkembangan di bidang manajemen menempatkan motivasi kerja sebagai isu yang memperoleh perhatian luas <span class="cite">(Sujarwo dkk., 2021)</span>. Secara konseptual, motivasi kerja dipahami sebagai dorongan internal dan eksternal…</p>
+<div class="row s"></div><div class="row"></div><div class="row m"></div>
+<h5 style="margin-top:14px">B. Rumusan Masalah</h5>
+<p>1. Bagaimana gambaran motivasi kerja pada objek penelitian? &nbsp; 2. Adakah pengaruh motivasi terhadap kinerja pegawai?</p>
+</div>
+</div>
+</div>
+
+<h3 class="mt-lg reveal" style="font-size:15px;color:var(--muted);text-transform:uppercase;letter-spacing:.6px">Alat lengkap sepanjang perjalanan skripsi</h3>
+<div class="sk-tools">
+<div class="sk-tool reveal"><span class="ti"><svg class="i" aria-hidden="true"><use href="#i-sparkles"></use></svg></span><div><b>Generator Ide &amp; Judul</b><span>Judul, rumusan, tujuan, variabel, hipotesis, kerangka</span></div></div>
+<div class="sk-tool reveal"><span class="ti"><svg class="i" aria-hidden="true"><use href="#i-search"></use></svg></span><div><b>Sumber Ilmiah Nyata</b><span>OpenAlex &amp; Crossref, tiap sumber punya DOI</span></div></div>
+<div class="sk-tool reveal"><span class="ti"><svg class="i" aria-hidden="true"><use href="#i-book"></use></svg></span><div><b>Sitasi 7 Gaya</b><span>APA·IEEE·Harvard·Vancouver·Chicago·MLA</span></div></div>
+<div class="sk-tool reveal"><span class="ti"><svg class="i" aria-hidden="true"><use href="#i-target"></use></svg></span><div><b>Kalkulator Sampel</b><span>Slovin &amp; Cochran + pemilih uji statistik</span></div></div>
+<div class="sk-tool reveal"><span class="ti"><svg class="i" aria-hidden="true"><use href="#i-list"></use></svg></span><div><b>Generator Instrumen</b><span>Kuesioner Likert &amp; pedoman wawancara</span></div></div>
+<div class="sk-tool reveal"><span class="ti"><svg class="i" aria-hidden="true"><use href="#i-refresh"></use></svg></span><div><b>Parafrase &amp; Humanize</b><span>Kurangi duplikasi &amp; pola khas AI</span></div></div>
+<div class="sk-tool reveal"><span class="ti"><svg class="i" aria-hidden="true"><use href="#i-doc"></use></svg></span><div><b>Bundel Halaman Awal</b><span>Cover, pengesahan, abstrak, daftar isi → DOCX</span></div></div>
+<div class="sk-tool reveal"><span class="ti"><svg class="i" aria-hidden="true"><use href="#i-check"></use></svg></span><div><b>Revisi Dosen Tracker</b><span>Catat masukan dosen, pantau progres revisi</span></div></div>
+</div>
+
+<div class="sk-quote reveal">
+<p>“Aku stuck 2 bulan di BAB I. Pakai Generate Penuh, kerangkanya langsung jadi dan tinggal kupoles — dosen malah muji strukturnya rapi. Skripsi Doctor-nya juga nemuin sitasi yang belum masuk daftar pustaka.”</p>
+<div class="who"><div class="av">D</div><div><b style="color:var(--on-dark)">Dina R.</b><br><span class="muted" style="font-size:12.5px">Mahasiswa tingkat akhir · <em style="font-style:normal;opacity:.7">ilustratif</em></span></div></div>
+</div>
+
 <div class="trust-bar mt-lg reveal">
-<span>OpenAlex &amp; Crossref</span>
-<span>APA · IEEE · Harvard · Vancouver</span>
-<span>Proposal BAB I–III</span>
-<span>Tanpa data palsu</span>
-<span>Tersimpan lokal</span>
+<span><svg class="i" style="width:16px;height:16px;color:var(--up)" aria-hidden="true"><use href="#i-check"></use></svg> Gratis</span>
+<span><svg class="i" style="width:16px;height:16px;color:var(--up)" aria-hidden="true"><use href="#i-check"></use></svg> Tanpa API berbayar</span>
+<span><svg class="i" style="width:16px;height:16px;color:var(--up)" aria-hidden="true"><use href="#i-check"></use></svg> Tidak mengarang data</span>
+<span><svg class="i" style="width:16px;height:16px;color:var(--up)" aria-hidden="true"><use href="#i-check"></use></svg> Sumber nyata ber-DOI</span>
+<span><svg class="i" style="width:16px;height:16px;color:var(--up)" aria-hidden="true"><use href="#i-check"></use></svg> Tersimpan di perangkatmu</span>
 </div>
-<div class="flex gap wrap-flex mt-lg reveal">
-<a href="skripsi.html" class="btn btn-primary btn-lg">Buka Workspace Skripsi</a>
-<span class="muted" style="align-self:center;font-size:13px">Untuk mahasiswa tingkat akhir yang sedang menyusun proposal &amp; skripsi.</span>
+
+<div class="sk-cta reveal">
+<h3 style="font-size:24px;color:var(--on-dark)">Mulai skripsimu <span class="gradient-text">hari ini</span></h3>
+<p class="muted mt" style="max-width:52ch;margin-left:auto;margin-right:auto">Buka workspace, buat proyek pertama, dan biarkan setiap alat bekerja untukmu — dari judul sampai sidang.</p>
+<div class="flex gap wrap-flex mt-lg" style="justify-content:center">
+<a href="skripsi.html" class="btn btn-primary btn-lg">Buka Workspace Skripsi <svg class="i" aria-hidden="true"><use href="#i-arrow-right"></use></svg></a>
+<a href="skripsi-app.html" class="btn btn-ghost btn-lg">Coba Generate Penuh</a>
+</div>
 </div>
 </div></section>
 
@@ -292,7 +414,7 @@
 <a href="analisis.html" class="card hover-lift lift reveal d1" style="text-decoration:none;color:inherit;display:block"><span class="ico"><svg class="i" aria-hidden="true"><use href="#i-brain"></use></svg></span><h4 class="mt">AI Analisis</h4><p class="muted mt">Peta kekuatan &amp; kelemahan per subtes plus rekomendasi belajar yang terarah.</p></a>
 <a href="kuliah.html" class="card hover-lift lift reveal d2" style="text-decoration:none;color:inherit;display:block"><span class="ico"><svg class="i" aria-hidden="true"><use href="#i-grad"></use></svg></span><h4 class="mt">Kuliah</h4><p class="muted mt">Direktori prodi &amp; jurusan di berbagai kampus Indonesia — jalur reguler, online/PJJ, kelas karyawan, hingga kelas internasional.</p></a>
 <a href="beasiswa.html" class="card hover-lift lift reveal d3" style="text-decoration:none;color:inherit;display:block"><span class="ico"><svg class="i" aria-hidden="true"><use href="#i-money"></use></svg></span><h4 class="mt">Beasiswa</h4><p class="muted mt">Kurasi beasiswa dalam &amp; luar negeri dengan periode indikatif dan tautan resmi untuk kamu apply.</p></a>
-<a href="skripsi.html" class="card hover-lift lift reveal d1" style="text-decoration:none;color:inherit;display:block"><span class="ico"><svg class="i" aria-hidden="true"><use href="#i-doc"></use></svg></span><h4 class="mt">Riset &amp; Skripsi</h4><p class="muted mt">Asisten riset berbasis sumber ilmiah nyata (OpenAlex &amp; Crossref), sitasi otomatis, dan kerangka BAB I–III.</p></a>
+<a href="skripsi.html" class="card hover-lift lift reveal d1" style="text-decoration:none;color:inherit;display:block"><span class="ico"><svg class="i" aria-hidden="true"><use href="#i-doc"></use></svg></span><h4 class="mt">Riset &amp; Skripsi <span class="badge badge-y" style="font-size:10px">30+ alat</span></h4><p class="muted mt">Generate BAB I–III penuh, Skripsi Doctor, Simulasi Sidang, Analisis Data, sitasi 7 gaya, humanize anti-AI — dari judul sampai siap sidang.</p></a>
 <a href="prompt-studio.html" class="card hover-lift lift reveal d2" style="text-decoration:none;color:inherit;display:block"><span class="ico"><svg class="i" aria-hidden="true"><use href="#i-sparkles"></use></svg></span><h4 class="mt">Prompt Studio</h4><p class="muted mt">Generator prompt AI untuk membantu belajar, menulis, dan menyelesaikan tugas lebih cepat.</p></a>
 <a href="bisnis.html" class="card hover-lift lift reveal d3" style="text-decoration:none;color:inherit;display:block"><span class="ico"><svg class="i" aria-hidden="true"><use href="#i-bolt"></use></svg></span><h4 class="mt">Studio Bisnis</h4><p class="muted mt">Kumpulan alat AI untuk ide, konten, dan monetisasi — dari belajar menuju berkarya.</p></a>
 <a href="verifikasi.html" class="card hover-lift lift reveal d1" style="text-decoration:none;color:inherit;display:block"><span class="ico"><svg class="i" aria-hidden="true"><use href="#i-shield-check"></use></svg></span><h4 class="mt">Verifikasi Sertifikat</h4><p class="muted mt">Cek keaslian sertifikat penyelesaian yang diterbitkan PusatBankSoal.id.</p></a>
