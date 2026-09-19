@@ -104,6 +104,28 @@
 .fn-ratio .r .v{font-family:var(--num);font-size:20px;font-weight:700}
 .fn-ratio .r .t{font-size:12px;color:var(--muted);margin:3px 0 6px}
 .fn-tabx{display:inline-block;font-size:11px;font-weight:700;padding:2px 9px;border-radius:6px}
+/* Panduan A-Z */
+.fn-ladder{display:flex;flex-direction:column;gap:10px;margin-top:6px}
+.fn-step{display:flex;gap:13px;align-items:flex-start;background:var(--card);border:1px solid var(--hair-dark);border-left:4px solid var(--primary);border-radius:12px;padding:13px 15px}
+.fn-step .no{flex:none;width:30px;height:30px;border-radius:50%;background:var(--grad-brand);color:#fff;font-weight:800;display:flex;align-items:center;justify-content:center;font-size:14px;font-family:var(--num)}
+.fn-step h5{margin:0 0 3px;font-size:14.5px;color:var(--on-dark)}.fn-step p{margin:0;font-size:12.8px;color:var(--body);line-height:1.5}
+.fn-rules{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px;margin-top:6px}
+.fn-rule{background:var(--card);border:1px solid var(--hair-dark);border-radius:12px;padding:14px}
+.fn-rule b{display:block;color:var(--primary);font-size:14.5px;margin-bottom:4px}.fn-rule span{font-size:12.5px;color:var(--body);line-height:1.5}
+.fn-acc{border:1px solid var(--hair-dark);border-radius:12px;margin-top:10px;overflow:hidden;background:var(--card)}
+.fn-acc>summary{cursor:pointer;padding:13px 16px;font-weight:600;font-size:14px;color:var(--on-dark);list-style:none;display:flex;justify-content:space-between;align-items:center;gap:10px}
+.fn-acc>summary::-webkit-details-marker{display:none}
+.fn-acc>summary::after{content:"+";font-size:20px;color:var(--muted);font-weight:400;flex:none}
+.fn-acc[open]>summary::after{content:"–"}
+.fn-acc>summary:hover{color:var(--primary)}
+.fn-acc .bd{padding:0 16px 14px;font-size:13px;color:var(--body);line-height:1.6}
+.fn-acc .bd p{margin:0 0 8px}.fn-acc .bd ul{margin:6px 0;padding-left:18px}.fn-acc .bd li{margin-bottom:5px}
+.fn-dl{margin:0;font-size:13px}.fn-dl dt{font-weight:700;color:var(--primary);margin-top:10px}.fn-dl dd{margin:2px 0 0;color:var(--body);line-height:1.55}
+.fn-dd2{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:6px}@media(max-width:640px){.fn-dd2{grid-template-columns:1fr}}
+.fn-do,.fn-dont{border-radius:12px;padding:14px 16px}
+.fn-do{background:rgba(28,122,58,.1);border:1px solid rgba(28,122,58,.35)}.fn-dont{background:rgba(220,68,68,.09);border:1px solid rgba(220,68,68,.32)}
+.fn-do h5,.fn-dont h5{margin:0 0 7px;font-size:13.5px}.fn-do h5{color:#3aa564}.fn-dont h5{color:#ff8080}
+.fn-do ul,.fn-dont ul{margin:0;padding-left:17px}.fn-do li,.fn-dont li{font-size:12.5px;line-height:1.55;margin-bottom:5px;color:var(--body)}
 @media print{.nav,.footer,.fn-sub,.no-print{display:none!important}body{background:#fff}.fn-paper{box-shadow:none}}
 </style>
 </head>
@@ -158,6 +180,7 @@
     <button class="fn-tab" data-tab="rencana" role="tab">🎯 Rencana &amp; Tujuan</button>
     <button class="fn-tab" data-tab="utang" role="tab">⚠️ Utang &amp; Jebakan</button>
     <button class="fn-tab" data-tab="cek" role="tab">🩺 Cek &amp; Riset</button>
+    <button class="fn-tab" data-tab="panduan" role="tab">📚 Ilmu Finansial A-Z</button>
   </nav>
 
   <!-- LAPORAN -->
@@ -534,6 +557,179 @@
           <ul><li>Anggarkan bantuan ortu sebagai pos tetap, jangan “sisa-sisa”</li><li>Tetap sisihkan buat diri sendiri (dana darurat + pensiun)</li><li>Komunikasi terbuka soal batas kemampuan ke keluarga</li><li>Bangun pemasukan pasif biar rantai sandwich berhenti di kamu</li></ul></div>
       </div>
       <p class="fn-src">Sumber riset: SNLIK/OJK 2024–2025 · Satgas PASTI OJK (pinjol ilegal, 2025) · PPATK (judi online) · BEI/KSEI (investor pasar modal 2025) · riset akademik doom spending, FOMO &amp; paylater Gen Z Indonesia · tren loud budgeting &amp; frugal living. Angka bisa berubah; ini edukasi, bukan nasihat keuangan.</p>
+    </div>
+  </section>
+
+  <!-- ================= PANDUAN / ILMU FINANSIAL A-Z ================= -->
+  <section class="fn-panel" data-panel="panduan">
+    <nav class="fn-jump" aria-label="Loncat ke bagian">
+      <a href="#pd-tahap">🪜 Tahapan</a><a href="#pd-urut">✅ Urutan Langkah</a><a href="#pd-aturan">📐 Aturan Praktis</a><a href="#pd-usia">🎂 Per Usia</a><a href="#pd-kamus">📖 Kamus A-Z</a><a href="#pd-habit">🧠 Kebiasaan</a><a href="#pd-cek">🗓️ Checklist</a>
+    </nav>
+
+    <div class="fn-card" id="pd-intro">
+      <h3>📚 Ilmu Finansial dari A sampai Z</h3>
+      <p class="fn-note">Semua yang perlu kamu tahu buat mengatur uang seumur hidup — dari nol sampai merdeka finansial. Baca pelan-pelan, lalu praktikkan pakai kalkulator di tab lain. <b class="fn-hl">Prinsip inti:</b> belanjakan lebih sedikit dari yang kamu hasilkan, sisihkan selisihnya, lindungi dari risiko, dan biarkan waktu + bunga berbunga bekerja.</p>
+    </div>
+
+    <!-- TAHAPAN / PIRAMIDA -->
+    <div class="fn-card" id="pd-tahap">
+      <h3>🪜 Tahapan Keuangan (piramida) — bangun dari bawah</h3>
+      <p class="fn-note">Jangan loncat ke atas sebelum fondasi bawah beres. Ini urutan yang dipakai perencana keuangan di seluruh dunia.</p>
+      <div class="fn-ladder">
+        <div class="fn-step"><span class="no">1</span><div><h5>Amankan arus kas</h5><p>Catat pemasukan &amp; pengeluaran. Pastikan <b>pemasukan &gt; pengeluaran</b>. Kalau masih minus: potong pengeluaran atau tambah pemasukan dulu. (Tab Laporan)</p></div></div>
+        <div class="fn-step"><span class="no">2</span><div><h5>Dana darurat</h5><p>Kumpulkan 3–12× pengeluaran bulanan di tempat aman &amp; likuid. Ini bantalan biar tak jatuh ke utang saat ada masalah. (Tab Rencana → Dana Darurat)</p></div></div>
+        <div class="fn-step"><span class="no">3</span><div><h5>Proteksi (asuransi)</h5><p>Minimal BPJS Kesehatan. Punya tanggungan? Tambah asuransi jiwa. Satu musibah tak boleh menghabiskan semua tabunganmu.</p></div></div>
+        <div class="fn-step"><span class="no">4</span><div><h5>Lunasi utang konsumtif</h5><p>Bereskan utang bunga tinggi (paylater, kartu kredit, pinjol) — dahulukan bunga terbesar (avalanche). (Tab Utang)</p></div></div>
+        <div class="fn-step"><span class="no">5</span><div><h5>Investasi untuk tujuan</h5><p>Rumah, pendidikan anak, pensiun. Pilih instrumen sesuai jangka waktu &amp; profil risiko. (Tab Investasi &amp; Rencana)</p></div></div>
+        <div class="fn-step"><span class="no">6</span><div><h5>Merdeka finansial &amp; warisan</h5><p>Passive income menutup biaya hidup (aturan 4%). Setelah itu: sedekah, warisan, wujudkan mimpi. (Tab Rencana → FIRE)</p></div></div>
+      </div>
+    </div>
+
+    <!-- URUTAN LANGKAH -->
+    <div class="fn-card" id="pd-urut">
+      <h3>✅ "Harus bagaimana?" — Urutan langkah tiap gajian</h3>
+      <p class="fn-note">Setiap uang masuk, jalankan urutan ini (metode <b class="fn-hl">pay yourself first</b> — sisihkan dulu, jajan belakangan):</p>
+      <div class="fn-ladder">
+        <div class="fn-step"><span class="no">1</span><div><h5>Sisihkan tabungan/investasi di DEPAN (≥10–20%)</h5><p>Begitu gajian, langsung pindahkan ke rekening terpisah/autodebet — sebelum tergoda belanja.</p></div></div>
+        <div class="fn-step"><span class="no">2</span><div><h5>Bayar kewajiban &amp; cicilan</h5><p>Zakat/donasi, tagihan wajib, cicilan (jaga total cicilan ≤30% pemasukan).</p></div></div>
+        <div class="fn-step"><span class="no">3</span><div><h5>Penuhi kebutuhan (50%)</h5><p>Makan, transport, tempat tinggal, listrik, internet, kesehatan.</p></div></div>
+        <div class="fn-step"><span class="no">4</span><div><h5>Sisanya untuk keinginan (30%)</h5><p>Healing, nongkrong, hobi — <b>tanpa rasa bersalah</b>, karena kewajiban &amp; nabung sudah beres.</p></div></div>
+        <div class="fn-step"><span class="no">5</span><div><h5>Review tiap akhir bulan</h5><p>Bandingkan rencana vs realita di tab Laporan. Perbaiki bulan depan.</p></div></div>
+      </div>
+    </div>
+
+    <!-- ATURAN PRAKTIS -->
+    <div class="fn-card" id="pd-aturan">
+      <h3>📐 Aturan praktis (rules of thumb)</h3>
+      <p class="fn-note">Patokan cepat yang dipakai dunia keuangan. Bukan hukum mati, tapi titik awal yang bagus.</p>
+      <div class="fn-rules">
+        <div class="fn-rule"><b>50 / 30 / 20</b><span>50% kebutuhan · 30% keinginan · 20% nabung/investasi. Pemula? Mulai dari sini.</span></div>
+        <div class="fn-rule"><b>Dana darurat 3–12×</b><span>Lajang 6×, menikah 9×, freelance/banyak tanggungan 12× pengeluaran bulanan.</span></div>
+        <div class="fn-rule"><b>Cicilan ≤ 30%</b><span>Total semua cicilan utang maksimal 30% pemasukan. Lebih = lampu merah.</span></div>
+        <div class="fn-rule"><b>Aturan 4% (FIRE)</b><span>Butuh dana = pengeluaran tahunan × 25. Ambil 4%/th, dana relatif awet.</span></div>
+        <div class="fn-rule"><b>Rule of 72</b><span>72 ÷ %return = tahun uangmu jadi 2×. Return 12% → ±6 tahun berlipat.</span></div>
+        <div class="fn-rule"><b>Porsi saham ≈ (100 − umur)%</b><span>Makin muda makin berani (waktu panjang), sisanya ke instrumen aman.</span></div>
+        <div class="fn-rule"><b>Pay yourself first</b><span>Nabung di awal, bukan dari "sisa" (biasanya nggak ada sisa).</span></div>
+        <div class="fn-rule"><b>Kalahkan inflasi</b><span>Return investasi minimal di atas inflasi (±3–5%/th) biar tak rugi diam-diam.</span></div>
+      </div>
+    </div>
+
+    <!-- PER USIA -->
+    <div class="fn-card" id="pd-usia">
+      <h3>🎂 Peta jalan per fase usia</h3>
+      <details class="fn-acc"><summary>🎒 Pelajar &amp; mahasiswa (uang saku belum tetap)</summary><div class="bd">
+        <ul><li>Latih <b>"nabung dulu, jajan sisanya"</b> dari uang saku.</li><li>Bedakan kebutuhan vs keinginan (termasuk top-up game/skin).</li><li>Coba tantangan nabung 52 minggu / no-buy sebulan.</li><li>Belajar cari cuan halal: freelance kecil, jualan, jasa. Hindari judol &amp; "cuan instan".</li></ul>
+      </div></details>
+      <details class="fn-acc"><summary>💼 20-an — first jobber &amp; awal karier</summary><div class="bd">
+        <ul><li>Bangun <b>dana darurat</b> &amp; kebiasaan menabung sejak gaji pertama.</li><li>Hindari <b>lifestyle inflation</b> (gaji naik, gaya hidup ikut naik → tetap boncos).</li><li>Mulai investasi kecil rutin (reksadana/DCA) — waktu 30–40 th ke depan = senjata terkuatmu.</li><li>Rem paylater: cuma untuk yang bisa dilunasi bulan itu juga.</li><li>Investasi terbaik di usia ini: <b>skill &amp; kesehatan</b> (naikkan penghasilan).</li></ul>
+      </div></details>
+      <details class="fn-acc"><summary>👪 30-an — keluarga muda &amp; tanggungan</summary><div class="bd">
+        <ul><li>Naikkan dana darurat (9–12×), tambah <b>asuransi kesehatan &amp; jiwa</b>.</li><li>Mulai <b>dana pendidikan anak</b> &amp; <b>DP rumah</b> dari jauh hari (tab Rencana).</li><li>Generasi sandwich: anggarkan bantuan ortu sebagai pos tetap, jangan "sisa".</li><li>Naikkan porsi investasi seiring penghasilan; jaga rasio cicilan ≤30%.</li></ul>
+      </div></details>
+      <details class="fn-acc"><summary>🏡 40-an — masa puncak penghasilan</summary><div class="bd">
+        <ul><li>Genjot <b>dana pensiun</b> — ini window emas terakhir untuk mengejar.</li><li>Lunasi utang besar (KPR) terarah; hindari utang konsumtif baru.</li><li>Diversifikasi aset (saham, obligasi, emas, properti) &amp; rebalancing rutin.</li><li>Siapkan dana kuliah anak yang sudah dekat.</li></ul>
+      </div></details>
+      <details class="fn-acc"><summary>🌅 50-an &amp; pra-pensiun</summary><div class="bd">
+        <ul><li>Geser porsi ke instrumen <b>lebih aman</b> (obligasi/deposito) — kurangi risiko.</li><li>Hitung ulang kesiapan pensiun (tab Rencana → Dana Pensiun); tutup kekurangan.</li><li>Pastikan proteksi kesehatan kuat (biaya medis naik saat tua).</li><li>Rencanakan warisan &amp; wasiat.</li></ul>
+      </div></details>
+    </div>
+
+    <!-- KAMUS A-Z -->
+    <div class="fn-card" id="pd-kamus">
+      <h3>📖 Kamus istilah finansial A-Z</h3>
+      <p class="fn-note">Istilah yang wajib kamu paham. Buka yang ingin kamu tahu.</p>
+      <details class="fn-acc"><summary>Konsep dasar (aset, liabilitas, arus kas, net worth)</summary><div class="bd"><dl class="fn-dl">
+        <dt>Aset</dt><dd>Segala yang bernilai &amp; bisa menghasilkan/naik nilai (tabungan, investasi, properti sewa, emas).</dd>
+        <dt>Liabilitas / utang</dt><dd>Kewajiban yang harus dibayar (cicilan, paylater, KTA). Menguras kantongmu tiap bulan.</dd>
+        <dt>Arus kas (cash flow)</dt><dd>Selisih uang masuk dikurangi uang keluar. Positif = sehat.</dd>
+        <dt>Kekayaan bersih (net worth)</dt><dd>Total aset − total utang. Ukuran sebenarnya seberapa "kaya" kamu.</dd>
+        <dt>Aset produktif vs konsumtif</dt><dd>Produktif menghasilkan (kos, dividen); konsumtif menyusut nilainya (mobil, gadget).</dd>
+      </dl></div></details>
+      <details class="fn-acc"><summary>Menabung &amp; anggaran</summary><div class="bd"><dl class="fn-dl">
+        <dt>Budgeting</dt><dd>Merencanakan ke mana uang pergi sebelum dibelanjakan. Metode: 50/30/20, zero-based, amplop.</dd>
+        <dt>Zero-based budgeting</dt><dd>Setiap rupiah diberi "tugas" sampai sisa = 0 (semua dialokasikan, termasuk nabung).</dd>
+        <dt>Sinking fund</dt><dd>Nabung khusus untuk pengeluaran besar berkala (THR lebaran, pajak kendaraan, liburan).</dd>
+        <dt>Pay yourself first</dt><dd>Sisihkan tabungan di awal, bukan dari sisa.</dd>
+        <dt>Loud budgeting</dt><dd>Terbuka soal anggaran — berani bilang "nggak, lagi nabung" tanpa gengsi.</dd>
+      </dl></div></details>
+      <details class="fn-acc"><summary>Investasi &amp; imbal hasil</summary><div class="bd"><dl class="fn-dl">
+        <dt>Bunga berbunga (compound)</dt><dd>Bunga menghasilkan bunga lagi. Keajaiban waktu — makin lama makin dahsyat.</dd>
+        <dt>Return / imbal hasil</dt><dd>Keuntungan dari investasi, biasanya dalam %/tahun.</dd>
+        <dt>Risiko</dt><dd>Kemungkinan hasil beda dari harapan (bisa rugi). Return tinggi = risiko tinggi.</dd>
+        <dt>Diversifikasi</dt><dd>"Jangan taruh semua telur di satu keranjang." Sebar ke banyak instrumen.</dd>
+        <dt>Likuiditas</dt><dd>Seberapa cepat aset jadi uang tunai tanpa rugi (deposito rendah, RD pasar uang tinggi).</dd>
+        <dt>DCA (dollar cost averaging)</dt><dd>Investasi rutin nominal tetap tiap bulan, apapun harganya — meratakan harga beli.</dd>
+        <dt>Profil risiko</dt><dd>Konservatif / moderat / agresif — tentukan sebelum pilih instrumen.</dd>
+        <dt>Dividen / kupon / yield</dt><dd>Penghasilan berkala dari saham (dividen), obligasi (kupon); yield = % terhadap modal.</dd>
+        <dt>Rebalancing</dt><dd>Menyetel ulang porsi portofolio ke target secara berkala.</dd>
+      </dl></div></details>
+      <details class="fn-acc"><summary>Utang &amp; kredit</summary><div class="bd"><dl class="fn-dl">
+        <dt>Utang baik vs buruk</dt><dd>Baik = untuk aset produktif/naik nilai (KPR rumah, modal usaha). Buruk = konsumtif berbunga tinggi (paylater buat gaya hidup).</dd>
+        <dt>Bunga flat vs efektif</dt><dd>Flat dihitung dari pokok awal (terlihat murah, aslinya mahal); efektif dari sisa pokok (lebih adil).</dd>
+        <dt>Debt-to-income (DTI)</dt><dd>Rasio cicilan terhadap pemasukan. Jaga ≤30%.</dd>
+        <dt>Snowball vs Avalanche</dt><dd>Snowball: lunasi utang terkecil dulu (motivasi). Avalanche: bunga tertinggi dulu (paling hemat).</dd>
+        <dt>Gali lubang tutup lubang</dt><dd>Berutang untuk bayar utang lain — jebakan, hindari.</dd>
+      </dl></div></details>
+      <details class="fn-acc"><summary>Proteksi &amp; risiko</summary><div class="bd"><dl class="fn-dl">
+        <dt>Asuransi</dt><dd>Memindahkan risiko besar ke perusahaan asuransi dengan bayar premi. Kesehatan &amp; jiwa paling utama.</dd>
+        <dt>BPJS</dt><dd>Jaminan kesehatan &amp; ketenagakerjaan dari negara — proteksi dasar termurah.</dd>
+        <dt>Dana darurat</dt><dd>Tabungan khusus untuk kejadian tak terduga; beda dari dana investasi.</dd>
+        <dt>Emergency vs sinking fund</dt><dd>Darurat = tak terduga; sinking = terduga tapi besar/berkala.</dd>
+      </dl></div></details>
+      <details class="fn-acc"><summary>Ekonomi &amp; makro</summary><div class="bd"><dl class="fn-dl">
+        <dt>Inflasi</dt><dd>Kenaikan harga umum → daya beli uang turun. Musuh utama uang yang "didiamkan".</dd>
+        <dt>Suku bunga acuan (BI Rate)</dt><dd>Patokan bunga dari Bank Indonesia; memengaruhi bunga tabungan, deposito, KPR.</dd>
+        <dt>Resesi</dt><dd>Ekonomi menyusut beberapa waktu; penghasilan &amp; investasi bisa tertekan (di sinilah dana darurat menyelamatkan).</dd>
+        <dt>LPS</dt><dd>Lembaga Penjamin Simpanan — menjamin tabungan/deposito s/d Rp2 M/bank (bila bunga ≤ tingkat penjaminan).</dd>
+        <dt>OJK</dt><dd>Otoritas Jasa Keuangan — mengawasi &amp; memberi izin lembaga keuangan. Cek legalitas sebelum invest/pinjam.</dd>
+      </dl></div></details>
+    </div>
+
+    <!-- KEBIASAAN & KESALAHAN -->
+    <div class="fn-card" id="pd-habit">
+      <h3>🧠 Kebiasaan sehat vs kesalahan umum</h3>
+      <div class="fn-dd2">
+        <div class="fn-do"><h5>✅ Lakukan</h5><ul>
+          <li>Catat semua pengeluaran, sekecil apapun</li>
+          <li>Nabung/investasi otomatis di awal (autodebet)</li>
+          <li>Dana darurat sebelum investasi</li>
+          <li>Punya tujuan tertulis (pendek &amp; panjang)</li>
+          <li>Belajar terus &amp; investasikan ke skill</li>
+          <li>Cek legalitas OJK sebelum invest/pinjam</li>
+          <li>Hidup di bawah kemampuan (bukan di atasnya)</li>
+        </ul></div>
+        <div class="fn-dont"><h5>⛔ Hindari</h5><ul>
+          <li>Doom spending &amp; belanja karena FOMO</li>
+          <li>Lifestyle inflation tiap gaji naik</li>
+          <li>Paylater/pinjol untuk gaya hidup</li>
+          <li>Judi online &amp; "cuan instan" / investasi bodong</li>
+          <li>Semua telur di satu keranjang (tanpa diversifikasi)</li>
+          <li>Menunda investasi ("nanti aja") — waktu = uang</li>
+          <li>Utang untuk barang yang cepat turun nilai</li>
+        </ul></div>
+      </div>
+      <div class="fn-callout" style="margin-top:14px"><b>Kaya vs kelihatan kaya:</b> orang benar-benar kaya sering hidup sederhana &amp; kekayaannya "tak kelihatan" (investasi &amp; aset). Yang <i>kelihatan</i> kaya sering justru penuh utang. Kejar <b>kaya beneran</b>, bukan pamer.</div>
+    </div>
+
+    <!-- CHECKLIST -->
+    <div class="fn-card" id="pd-cek">
+      <h3>🗓️ Checklist rutin</h3>
+      <div class="fn-dd2">
+        <div class="fn-do" style="background:var(--primary-soft);border-color:var(--hair-dark)"><h5 style="color:var(--primary)">📅 Tiap bulan</h5><ul>
+          <li>Isi Laporan bulan ini &amp; cek arus kas</li>
+          <li>Pastikan nabung/investasi sudah jalan</li>
+          <li>Cek rasio: menabung, cicilan, likuiditas</li>
+          <li>Evaluasi pengeluaran "bocor" &amp; perbaiki</li>
+        </ul></div>
+        <div class="fn-do" style="background:var(--primary-soft);border-color:var(--hair-dark)"><h5 style="color:var(--primary)">🎯 Tiap tahun</h5><ul>
+          <li>Hitung ulang kekayaan bersih (naik?)</li>
+          <li>Review tujuan &amp; target pensiun</li>
+          <li>Rebalancing portofolio investasi</li>
+          <li>Cek ulang perlindungan asuransi &amp; dana darurat</li>
+          <li>Naikkan % menabung saat penghasilan naik</li>
+        </ul></div>
+      </div>
+      <p class="fn-note" style="margin-top:14px">Semua materi di sini bersifat edukasi, bukan nasihat keuangan pribadi. Untuk keputusan besar, pertimbangkan konsultasi ke perencana keuangan tersertifikasi.</p>
     </div>
   </section>
 
