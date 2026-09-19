@@ -187,20 +187,20 @@
     <div class="fn-card">
       <h3>Kalkulator Saham (IDX)</h3>
       <div class="fn-grid mt">
-        <div class="fn-field"><label class="fn-label" for="shBuy">Harga beli / lembar (Rp)</label><input class="fn-in" id="shBuy" type="number" placeholder="4500"></div>
-        <div class="fn-field"><label class="fn-label" for="shLot">Jumlah lot (1 lot = 100 lembar)</label><input class="fn-in" id="shLot" type="number" placeholder="10"></div>
-        <div class="fn-field"><label class="fn-label" for="shNow">Harga sekarang / lembar (Rp)</label><input class="fn-in" id="shNow" type="number" placeholder="5200"></div>
-        <div class="fn-field"><label class="fn-label" for="shDiv">Dividen / lembar / tahun (Rp)</label><input class="fn-in" id="shDiv" type="number" placeholder="180"></div>
-        <div class="fn-field"><label class="fn-label" for="shFee">Fee beli+jual (%)</label><input class="fn-in" id="shFee" type="number" placeholder="0.3" step="0.01"></div>
+        <div class="fn-field"><label class="fn-label" for="shBuy">Harga beli / lembar (Rp)</label><input class="fn-in" id="shBuy" type="text" inputmode="decimal" placeholder="4500"></div>
+        <div class="fn-field"><label class="fn-label" for="shLot">Jumlah lot (1 lot = 100 lembar)</label><input class="fn-in" id="shLot" type="text" inputmode="decimal" placeholder="10"></div>
+        <div class="fn-field"><label class="fn-label" for="shNow">Harga sekarang / lembar (Rp)</label><input class="fn-in" id="shNow" type="text" inputmode="decimal" placeholder="5200"></div>
+        <div class="fn-field"><label class="fn-label" for="shDiv">Dividen / lembar / tahun (Rp)</label><input class="fn-in" id="shDiv" type="text" inputmode="decimal" placeholder="180"></div>
+        <div class="fn-field"><label class="fn-label" for="shFee">Fee beli+jual (%)</label><input class="fn-in" id="shFee" type="text" inputmode="decimal" placeholder="0.3" step="0.01"></div>
       </div>
       <div class="fn-res" id="shOut"></div>
     </div>
     <div class="fn-card">
       <h3>DCA — Nabung Saham Rutin</h3>
       <div class="fn-grid mt">
-        <div class="fn-field"><label class="fn-label" for="dcaM">Setoran / bulan (Rp)</label><input class="fn-in" id="dcaM" type="number" placeholder="1000000"></div>
-        <div class="fn-field"><label class="fn-label" for="dcaY">Lama (tahun)</label><input class="fn-in" id="dcaY" type="number" placeholder="10"></div>
-        <div class="fn-field"><label class="fn-label" for="dcaR">Perkiraan return / tahun (%)</label><input class="fn-in" id="dcaR" type="number" placeholder="12"></div>
+        <div class="fn-field"><label class="fn-label" for="dcaM">Setoran / bulan (Rp)</label><input class="fn-in" id="dcaM" type="text" inputmode="decimal" placeholder="1000000"></div>
+        <div class="fn-field"><label class="fn-label" for="dcaY">Lama (tahun)</label><input class="fn-in" id="dcaY" type="text" inputmode="decimal" placeholder="10"></div>
+        <div class="fn-field"><label class="fn-label" for="dcaR">Perkiraan return / tahun (%)</label><input class="fn-in" id="dcaR" type="text" inputmode="decimal" placeholder="12"></div>
       </div>
       <div class="fn-res" id="dcaOut"></div>
     </div>
@@ -217,10 +217,10 @@
     <div class="fn-card">
       <h3>Kalkulator Reksadana</h3>
       <div class="fn-grid mt">
-        <div class="fn-field"><label class="fn-label" for="rdAwal">Modal awal (Rp)</label><input class="fn-in" id="rdAwal" type="number" placeholder="5000000"></div>
-        <div class="fn-field"><label class="fn-label" for="rdBulan">Setoran / bulan (Rp)</label><input class="fn-in" id="rdBulan" type="number" placeholder="500000"></div>
-        <div class="fn-field"><label class="fn-label" for="rdReturn">Perkiraan return / tahun (%)</label><input class="fn-in" id="rdReturn" type="number" placeholder="8"></div>
-        <div class="fn-field"><label class="fn-label" for="rdTahun">Lama (tahun)</label><input class="fn-in" id="rdTahun" type="number" placeholder="10"></div>
+        <div class="fn-field"><label class="fn-label" for="rdAwal">Modal awal (Rp)</label><input class="fn-in" id="rdAwal" type="text" inputmode="decimal" placeholder="5000000"></div>
+        <div class="fn-field"><label class="fn-label" for="rdBulan">Setoran / bulan (Rp)</label><input class="fn-in" id="rdBulan" type="text" inputmode="decimal" placeholder="500000"></div>
+        <div class="fn-field"><label class="fn-label" for="rdReturn">Perkiraan return / tahun (%)</label><input class="fn-in" id="rdReturn" type="text" inputmode="decimal" placeholder="8"></div>
+        <div class="fn-field"><label class="fn-label" for="rdTahun">Lama (tahun)</label><input class="fn-in" id="rdTahun" type="text" inputmode="decimal" placeholder="10"></div>
       </div>
       <div class="fn-res" id="rdOut"></div>
     </div>
@@ -241,11 +241,11 @@
     <div class="fn-card">
       <h3>Kalkulator Obligasi / SBN</h3>
       <div class="fn-grid mt">
-        <div class="fn-field"><label class="fn-label" for="obNom">Nilai investasi / nominal (Rp)</label><input class="fn-in" id="obNom" type="number" placeholder="10000000"></div>
-        <div class="fn-field"><label class="fn-label" for="obKupon">Kupon / tahun (%)</label><input class="fn-in" id="obKupon" type="number" placeholder="6.4" step="0.01"></div>
-        <div class="fn-field"><label class="fn-label" for="obTenor">Tenor (tahun)</label><input class="fn-in" id="obTenor" type="number" placeholder="3"></div>
+        <div class="fn-field"><label class="fn-label" for="obNom">Nilai investasi / nominal (Rp)</label><input class="fn-in" id="obNom" type="text" inputmode="decimal" placeholder="10000000"></div>
+        <div class="fn-field"><label class="fn-label" for="obKupon">Kupon / tahun (%)</label><input class="fn-in" id="obKupon" type="text" inputmode="decimal" placeholder="6.4" step="0.01"></div>
+        <div class="fn-field"><label class="fn-label" for="obTenor">Tenor (tahun)</label><input class="fn-in" id="obTenor" type="text" inputmode="decimal" placeholder="3"></div>
         <div class="fn-field"><label class="fn-label" for="obFreq">Frekuensi kupon</label><select class="fn-sel" id="obFreq"><option value="12">Bulanan</option><option value="4">Per 3 bulan</option><option value="2">Per 6 bulan</option><option value="1">Tahunan</option></select></div>
-        <div class="fn-field"><label class="fn-label" for="obTax">Pajak kupon (%)</label><input class="fn-in" id="obTax" type="number" placeholder="10" step="0.1"></div>
+        <div class="fn-field"><label class="fn-label" for="obTax">Pajak kupon (%)</label><input class="fn-in" id="obTax" type="text" inputmode="decimal" placeholder="10" step="0.1"></div>
         <div class="fn-field"><label class="fn-label" for="obTipe">Jenis kupon</label><select class="fn-sel" id="obTipe"><option value="fix">Tetap (fixed)</option><option value="float">Mengambang (floating, ilustrasi)</option></select></div>
       </div>
       <div class="fn-res" id="obOut"></div>
@@ -268,10 +268,10 @@
       <h3>Merdeka Finansial (FIRE)</h3>
       <p class="fn-note">Aturan 4%: kamu “merdeka” saat dana investasi = <b class="fn-hl">pengeluaran tahunan × 25</b> (hasil ±4%/tahun menutup biaya hidup).</p>
       <div class="fn-grid mt">
-        <div class="fn-field"><label class="fn-label" for="frExp">Pengeluaran / bulan (Rp)</label><input class="fn-in" id="frExp" type="number" placeholder="6000000"></div>
-        <div class="fn-field"><label class="fn-label" for="frNow">Dana investasi saat ini (Rp)</label><input class="fn-in" id="frNow" type="number" placeholder="50000000"></div>
-        <div class="fn-field"><label class="fn-label" for="frMonthly">Investasi / bulan (Rp)</label><input class="fn-in" id="frMonthly" type="number" placeholder="3000000"></div>
-        <div class="fn-field"><label class="fn-label" for="frReturn">Return / tahun (%)</label><input class="fn-in" id="frReturn" type="number" placeholder="10"></div>
+        <div class="fn-field"><label class="fn-label" for="frExp">Pengeluaran / bulan (Rp)</label><input class="fn-in" id="frExp" type="text" inputmode="decimal" placeholder="6000000"></div>
+        <div class="fn-field"><label class="fn-label" for="frNow">Dana investasi saat ini (Rp)</label><input class="fn-in" id="frNow" type="text" inputmode="decimal" placeholder="50000000"></div>
+        <div class="fn-field"><label class="fn-label" for="frMonthly">Investasi / bulan (Rp)</label><input class="fn-in" id="frMonthly" type="text" inputmode="decimal" placeholder="3000000"></div>
+        <div class="fn-field"><label class="fn-label" for="frReturn">Return / tahun (%)</label><input class="fn-in" id="frReturn" type="text" inputmode="decimal" placeholder="10"></div>
       </div>
       <div class="fn-res" id="frOut"></div>
     </div>
@@ -295,7 +295,7 @@
   // safe-bind: never let a missing element halt init; recalc on input+change (mobile IME safety)
   function bind(ids,fn){(ids||[]).forEach(function(id){var el=$(id);if(!el)return;el.addEventListener('input',fn);el.addEventListener('change',fn);});}
   function on(id,ev,fn){var el=$(id);if(el)el.addEventListener(ev,fn);}
-  function n(id){var v=parseFloat(($(id)&&$(id).value)||'');return isFinite(v)?v:0;}
+  function n(id){var el=$(id);if(!el)return 0;var v=parseFloat(String(el.value).replace(/[^0-9.\-]/g,''));return isFinite(v)?v:0;}
   function rp(x){if(!isFinite(x))return '—';return 'Rp '+Math.round(x).toLocaleString('id-ID');}
   function pct(x){return isFinite(x)?(Math.round(x*100)/100)+'%':'—';}
   function rows(a){return a.map(function(r){return '<div class="fn-row"><span>'+r[0]+'</span><b>'+r[1]+'</b></div>';}).join('');}
