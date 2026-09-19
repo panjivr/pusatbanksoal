@@ -292,13 +292,16 @@
 <script>
 (function(){
   var $=function(id){return document.getElementById(id);};
+  // safe-bind: never let a missing element halt init; recalc on input+change (mobile IME safety)
+  function bind(ids,fn){(ids||[]).forEach(function(id){var el=$(id);if(!el)return;el.addEventListener('input',fn);el.addEventListener('change',fn);});}
+  function on(id,ev,fn){var el=$(id);if(el)el.addEventListener(ev,fn);}
   function n(id){var v=parseFloat(($(id)&&$(id).value)||'');return isFinite(v)?v:0;}
   function rp(x){if(!isFinite(x))return '—';return 'Rp '+Math.round(x).toLocaleString('id-ID');}
   function pct(x){return isFinite(x)?(Math.round(x*100)/100)+'%':'—';}
   function rows(a){return a.map(function(r){return '<div class="fn-row"><span>'+r[0]+'</span><b>'+r[1]+'</b></div>';}).join('');}
 
   // ---- sub-nav ----
-  $('fnSub').addEventListener('click',function(e){var b=e.target.closest('.fn-tab');if(!b)return;var t=b.getAttribute('data-tab');
+  on('fnSub','click',function(e){var b=e.target.closest('.fn-tab');if(!b)return;var t=b.getAttribute('data-tab');
     Array.prototype.forEach.call(this.querySelectorAll('.fn-tab'),function(x){x.classList.toggle('on',x===b);});
     Array.prototype.forEach.call(document.querySelectorAll('.fn-panel'),function(p){p.classList.toggle('on',p.getAttribute('data-panel')===t);});
   });
@@ -332,10 +335,10 @@
     frCalc();
   }
   document.addEventListener('input',function(e){if(e.target.classList&&e.target.classList.contains('lp')){lpSave();calcLaporan();}});
-  $('fnMonth').addEventListener('change',lpLoad);
-  $('fnPrint').addEventListener('click',function(){window.print();});
-  $('fnReset').addEventListener('click',function(){if(window.confirm('Kosongkan data bulan ini?')){try{localStorage.removeItem(monthKey());}catch(e){}lpLoad();}});
-  $('fnCopy').addEventListener('click',function(){var m=$('fnMonth').value;if(!m)return;var d=new Date(m+'-01');d.setMonth(d.getMonth()-1);
+  on('fnMonth','change',lpLoad);
+  on('fnPrint','click',function(){window.print();});
+  on('fnReset','click',function(){if(window.confirm('Kosongkan data bulan ini?')){try{localStorage.removeItem(monthKey());}catch(e){}lpLoad();}});
+  on('fnCopy','click',function(){var m=$('fnMonth').value;if(!m)return;var d=new Date(m+'-01');d.setMonth(d.getMonth()-1);
     var prev='pbs_fin_'+d.getFullYear()+'-'+('0'+(d.getMonth()+1)).slice(-2);var data=localStorage.getItem(prev);
     if(!data){alert('Belum ada data bulan sebelumnya.');return;}try{localStorage.setItem(monthKey(),data);}catch(e){}lpLoad();});
 
@@ -350,7 +353,7 @@
     el.innerHTML='<div class="fn-big" style="color:'+(total>=0?'var(--up)':'var(--down)')+'">'+rp(total)+'<span style="font-size:13px;color:var(--muted);font-weight:400"> total untung/rugi ('+pct(totPct)+')</span></div>'+
       rows([['Modal beli (+fee)',rp(modal+feeBuy)+' ('+lem.toLocaleString('id-ID')+' lembar)'],['Nilai sekarang (−fee jual)',rp(nilai-feeSell)],['Capital gain/loss',rp(capital)+' ('+pct(capPct)+')'],['Dividen / tahun',rp(divYear)],['Yield on cost',pct(yoc)],['Harga BEP (incl. fee)',rp(bep)]]);
   }
-  ['shBuy','shLot','shNow','shDiv','shFee'].forEach(function(id){$(id).addEventListener('input',calcSaham);});
+  bind(['shBuy','shLot','shNow','shDiv','shFee'],calcSaham);
   function calcDCA(){
     var m=n('dcaM'),y=n('dcaY'),r=n('dcaR')/100,mo=y*12,i=r/12;var el=$('dcaOut');
     if(m<=0||mo<=0){el.innerHTML='<p class="fn-note">Isi setoran, lama, dan return.</p>';return;}
@@ -358,11 +361,11 @@
     el.innerHTML='<div class="fn-big">'+rp(fv)+'<span style="font-size:13px;color:var(--muted);font-weight:400"> perkiraan nilai akhir</span></div>'+
       rows([['Total setoran',rp(setor)],['Imbal hasil',rp(untung)],['Lama',y+' tahun ('+mo+' bln)']]);
   }
-  ['dcaM','dcaY','dcaR'].forEach(function(id){$(id).addEventListener('input',calcDCA);});
+  bind(['dcaM','dcaY','dcaR'],calcDCA);
   // referensi IDX (indikatif dividend yield)
   var IDX=[['BBCA','Bank Central Asia','Perbankan','2–3%'],['BBRI','Bank Rakyat Indonesia','Perbankan','5–8%'],['BMRI','Bank Mandiri','Perbankan','5–7%'],['BBNI','Bank Negara Indonesia','Perbankan','4–6%'],['TLKM','Telkom Indonesia','Telekomunikasi','4–6%'],['ASII','Astra International','Aneka Industri','5–8%'],['UNVR','Unilever Indonesia','Konsumsi','4–6%'],['ICBP','Indofood CBP','Konsumsi','2–3%'],['INDF','Indofood Sukses Makmur','Konsumsi','3–5%'],['KLBF','Kalbe Farma','Kesehatan','2–3%'],['HMSP','HM Sampoerna','Konsumsi (rokok)','6–9%'],['GGRM','Gudang Garam','Konsumsi (rokok)','3–6%'],['ANTM','Aneka Tambang','Logam/Tambang','1–4%'],['ADRO','Adaro Energy','Energi/Batu bara','8–15%'],['PTBA','Bukit Asam','Energi/Batu bara','8–15%'],['ITMG','Indo Tambangraya','Energi/Batu bara','10–20%'],['PGAS','Perusahaan Gas Negara','Energi','6–10%'],['UNTR','United Tractors','Alat berat','5–9%'],['SMGR','Semen Indonesia','Semen','2–4%'],['INTP','Indocement','Semen','3–5%'],['JPFA','Japfa Comfeed','Pakan/Unggas','2–5%'],['CPIN','Charoen Pokphand','Pakan/Unggas','1–3%'],['ICBP','Indofood CBP','Konsumsi','2–3%'],['MYOR','Mayora Indah','Konsumsi','1–2%'],['AMRT','Sumber Alfaria (Alfamart)','Ritel','1–2%'],['MAPI','Mitra Adiperkasa','Ritel','0–1%'],['ACES','Aspirasi Hidup (ACE)','Ritel','2–4%'],['TOWR','Sarana Menara Nusantara','Menara','1–2%'],['TBIG','Tower Bersama','Menara','1–2%'],['ISAT','Indosat','Telekomunikasi','2–5%'],['EXCL','XL Axiata','Telekomunikasi','1–3%'],['MDKA','Merdeka Copper Gold','Logam/Tambang','0%'],['INCO','Vale Indonesia','Nikel','1–3%'],['MEDC','Medco Energi','Energi','2–4%'],['PGEO','Pertamina Geothermal','Energi (panas bumi)','2–4%'],['AKRA','AKR Corporindo','Distribusi/Energi','3–5%'],['BRPT','Barito Pacific','Petrokimia','0–1%'],['TPIA','Chandra Asri','Petrokimia','0%'],['MIKA','Mitra Keluarga','Kesehatan (RS)','1–2%'],['SIDO','Sido Muncul','Konsumsi/Herbal','4–6%'],['BFIN','BFI Finance','Pembiayaan','5–8%'],['ARTO','Bank Jago','Bank digital','0%'],['GOTO','GoTo Gojek Tokopedia','Teknologi','0%'],['BUKA','Bukalapak','Teknologi','0%'],['EMTK','Elang Mahkota Teknologi','Media/Teknologi','0–1%']];
-  (function(){var seen={},rowsH=IDX.filter(function(r){if(seen[r[0]])return false;seen[r[0]]=1;return true;}).map(function(r){return '<tr><td><b class="fn-hl">'+r[0]+'</b></td><td>'+r[1]+'</td><td>'+r[2]+'</td><td class="num">'+r[3]+'</td></tr>';}).join('');
-    $('shRef').querySelector('tbody').innerHTML=rowsH;})();
+  (function(){var ref=$('shRef'),tb=ref&&ref.querySelector('tbody');if(!tb)return;var seen={},rowsH=IDX.filter(function(r){if(seen[r[0]])return false;seen[r[0]]=1;return true;}).map(function(r){return '<tr><td><b class="fn-hl">'+r[0]+'</b></td><td>'+r[1]+'</td><td>'+r[2]+'</td><td class="num">'+r[3]+'</td></tr>';}).join('');
+    tb.innerHTML=rowsH;})();
 
   // ================= REKSADANA =================
   function calcRD(){
@@ -373,7 +376,7 @@
     el.innerHTML='<div class="fn-big">'+rp(fv)+'<span style="font-size:13px;color:var(--muted);font-weight:400"> perkiraan nilai akhir</span></div>'+
       rows([['Total setoran',rp(setor)],['Imbal hasil',rp(untung)+' ('+pct(setor>0?untung/setor*100:0)+')'],['Lama',y+' tahun']]);
   }
-  ['rdAwal','rdBulan','rdReturn','rdTahun'].forEach(function(id){$(id).addEventListener('input',calcRD);});
+  bind(['rdAwal','rdBulan','rdReturn','rdTahun'],calcRD);
 
   // ================= OBLIGASI =================
   function calcOb(){
@@ -384,8 +387,8 @@
     el.innerHTML='<div class="fn-big">'+rp(netPeriode)+'<span style="font-size:13px;color:var(--muted);font-weight:400"> kupon bersih / '+({12:'bulan',4:'3 bulan',2:'6 bulan',1:'tahun'}[freq])+'</span></div>'+
       rows([['Kupon kotor / tahun',rp(kuponTahun)],['Kupon bersih / tahun (−pajak)',rp(netTahun)],['Total kupon '+tenor+' th (bersih)',rp(totalKupon)],['Diterima saat jatuh tempo',rp(totalTerima)],['Yield bersih / tahun',pct(nom>0?netTahun/nom*100:0)]]);
   }
-  ['obNom','obKupon','obTenor','obTax'].forEach(function(id){$(id).addEventListener('input',calcOb);});
-  $('obFreq').addEventListener('change',calcOb);$('obTipe').addEventListener('change',calcOb);
+  bind(['obNom','obKupon','obTenor','obTax'],calcOb);
+  on('obFreq','change',calcOb);on('obTipe','change',calcOb);
 
   // ================= MERDEKA (FIRE) =================
   function frCalc(){
@@ -397,11 +400,11 @@
     el.innerHTML='<div class="fn-big">'+rp(target)+'<span style="font-size:13px;color:var(--muted);font-weight:400"> dana merdeka finansial</span></div>'+
       rows([['Pengeluaran / tahun',rp(exp*12)],['Target (× 25 / aturan 4%)',rp(target)],['Passive income di target (4%/th)',rp(target*0.04/12)+' / bln'],['Perkiraan tercapai dalam',(now>=target?'Sudah tercapai! 🎉':yrs)]]);
   }
-  ['frExp','frNow','frMonthly','frReturn'].forEach(function(id){$(id).addEventListener('input',frCalc);});
+  bind(['frExp','frNow','frMonthly','frReturn'],frCalc);
 
-  // init
-  (function(){var d=new Date();$('fnMonth').value=d.getFullYear()+'-'+('0'+(d.getMonth()+1)).slice(-2);})();
-  lpLoad(); calcSaham(); calcDCA(); calcRD(); calcOb(); frCalc();
+  // init (each guarded so one failure can't kill the rest)
+  (function(){var m=$('fnMonth');if(m){var d=new Date();m.value=d.getFullYear()+'-'+('0'+(d.getMonth()+1)).slice(-2);}})();
+  [lpLoad,calcSaham,calcDCA,calcRD,calcOb,frCalc].forEach(function(f){try{f();}catch(e){}});
 })();
 </script>
 <script src="assets/app.js" defer></script>
