@@ -68,6 +68,27 @@
 .fn-tbl th{color:var(--muted);font-weight:600;font-size:12px;text-transform:uppercase;letter-spacing:.3px}
 .fn-tbl td.num,.fn-tbl th.num{text-align:right;font-family:var(--num)}
 .fn-tbl tbody tr:hover,.fn-tbl tr:hover{background:var(--elevated)}
+.fn-bar{height:12px;border-radius:99px;background:var(--elevated);overflow:hidden;margin:10px 0 4px}.fn-bar>i{display:block;height:100%;border-radius:99px;background:var(--grad-brand);transition:width .4s}
+.fn-chips{display:flex;flex-wrap:wrap;gap:8px;margin:4px 0 12px}
+.fn-chip{background:var(--elevated);border:1px solid var(--hair-dark);color:var(--body);border-radius:99px;padding:7px 13px;font:inherit;font-size:12.5px;cursor:pointer;transition:.15s}
+.fn-chip:hover{border-color:var(--primary)}.fn-chip.on{background:var(--primary);border-color:var(--primary);color:var(--on-primary)}
+.fn-warn{background:rgba(220,68,68,.1);border:1px solid rgba(220,68,68,.4);border-left:4px solid #dc4444;border-radius:12px;padding:15px 17px;margin-top:14px}
+.fn-warn h4{color:#ff8080;margin:0 0 6px;font-size:14.5px}.fn-warn p,.fn-warn li{color:var(--body);font-size:13px;line-height:1.55}.fn-warn ul{margin:6px 0 0;padding-left:18px}
+.fn-callout{background:var(--primary-soft);border:1px solid var(--hair-dark);border-left:4px solid var(--primary);border-radius:12px;padding:14px 16px;margin-top:14px;font-size:13px;line-height:1.55;color:var(--body)}
+.fn-stat{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin:14px 0}
+.fn-stat .s{background:var(--card);border:1px solid var(--hair-dark);border-radius:12px;padding:14px}
+.fn-stat .s b{display:block;font-family:var(--num);font-size:22px;color:var(--primary);line-height:1.1}
+.fn-stat .s span{display:block;color:var(--muted);font-size:12px;margin-top:5px;line-height:1.4}
+.fn-q{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:12px 0;border-bottom:1px solid var(--hair-soft)}
+.fn-q p{margin:0;font-size:13.5px;color:var(--body);line-height:1.4}
+.fn-tog{flex:none;width:54px;height:30px;border-radius:99px;border:1px solid var(--hair-dark);background:var(--elevated);position:relative;cursor:pointer;transition:.2s}
+.fn-tog::after{content:"";position:absolute;top:3px;left:3px;width:22px;height:22px;border-radius:50%;background:var(--muted);transition:.2s}
+.fn-tog.on{background:var(--primary);border-color:var(--primary)}.fn-tog.on::after{left:27px;background:#fff}
+.fn-gens{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px;margin-top:14px}
+.fn-gen{background:var(--card);border:1px solid var(--hair-dark);border-radius:14px;padding:16px}
+.fn-gen h4{margin:0 0 4px;font-size:15px;color:var(--on-dark)}.fn-gen .tag{font-size:11.5px;color:var(--muted);display:block;margin-bottom:8px}
+.fn-gen ul{margin:0;padding-left:17px}.fn-gen li{font-size:12.5px;color:var(--body);line-height:1.5;margin-bottom:4px}
+.fn-src{font-size:11px;color:var(--muted);margin-top:12px;line-height:1.5}.fn-src a{color:var(--accent-ink)}
 @media print{.nav,.footer,.fn-sub,.no-print{display:none!important}body{background:#fff}.fn-paper{box-shadow:none}}
 </style>
 </head>
@@ -123,6 +144,10 @@
     <button class="fn-tab" data-tab="reksadana" role="tab">💹 Reksadana</button>
     <button class="fn-tab" data-tab="obligasi" role="tab">🏦 Obligasi / SBN</button>
     <button class="fn-tab" data-tab="merdeka" role="tab">🌴 Merdeka (FIRE)</button>
+    <button class="fn-tab" data-tab="darurat" role="tab">🛟 Dana Darurat</button>
+    <button class="fn-tab" data-tab="utang" role="tab">⚠️ Utang &amp; Jebakan</button>
+    <button class="fn-tab" data-tab="tujuan" role="tab">🎯 Tujuan &amp; Latte</button>
+    <button class="fn-tab" data-tab="cek" role="tab">🩺 Cek Sehat Finansial</button>
   </nav>
 
   <!-- LAPORAN -->
@@ -277,6 +302,122 @@
     </div>
   </section>
 
+  <!-- ================= DANA DARURAT ================= -->
+  <section class="fn-panel" data-panel="darurat">
+    <div class="fn-card">
+      <h3>🛟 Dana Darurat</h3>
+      <p class="fn-note">Bantalan saat kehilangan pemasukan (di-PHK, sakit, usaha sepi). <b class="fn-hl">Prioritas #1</b> sebelum investasi — biar nggak lari ke pinjol saat darurat.</p>
+      <div class="fn-grid mt">
+        <div class="fn-field"><label class="fn-label" for="edExp">Pengeluaran wajib / bulan (Rp)</label><input class="fn-in" id="edExp" type="text" inputmode="decimal" placeholder="4000000"></div>
+        <div class="fn-field"><label class="fn-label" for="edStat">Statusmu</label><select class="fn-sel" id="edStat">
+          <option value="3">Pelajar/mahasiswa (masih ditanggung) — 3×</option>
+          <option value="6" selected>Lajang, kerja tetap — 6×</option>
+          <option value="9">Menikah / punya cicilan — 9×</option>
+          <option value="12">Freelance / punya tanggungan — 12×</option>
+        </select></div>
+        <div class="fn-field"><label class="fn-label" for="edNow">Sudah terkumpul (Rp)</label><input class="fn-in" id="edNow" type="text" inputmode="decimal" placeholder="0"></div>
+        <div class="fn-field"><label class="fn-label" for="edSave">Bisa nabung / bulan (Rp)</label><input class="fn-in" id="edSave" type="text" inputmode="decimal" placeholder="500000"></div>
+      </div>
+      <div class="fn-res" id="edOut"></div>
+    </div>
+  </section>
+
+  <!-- ================= UTANG & JEBAKAN ================= -->
+  <section class="fn-panel" data-panel="utang">
+    <div class="fn-card">
+      <h3>⚠️ Kalkulator Lunas Utang</h3>
+      <p class="fn-note">Paylater, kartu kredit, KTA, cicilan — lihat berapa lama lunas &amp; total bunga yang kamu bayar. Bunga paylater sering 2,5–4%/bulan (≈30–48%/tahun!).</p>
+      <div class="fn-grid mt">
+        <div class="fn-field"><label class="fn-label" for="dbSisa">Sisa utang (Rp)</label><input class="fn-in" id="dbSisa" type="text" inputmode="decimal" placeholder="5000000"></div>
+        <div class="fn-field"><label class="fn-label" for="dbRate">Bunga / bulan (%)</label><input class="fn-in" id="dbRate" type="text" inputmode="decimal" placeholder="2.95"></div>
+        <div class="fn-field"><label class="fn-label" for="dbPay">Bayar / bulan (Rp)</label><input class="fn-in" id="dbPay" type="text" inputmode="decimal" placeholder="500000"></div>
+      </div>
+      <div class="fn-res" id="dbOut"></div>
+      <div class="fn-warn">
+        <h4>🚨 Awas jebakan yang menyasar anak muda</h4>
+        <p><b>73,7% korban pinjol ilegal berusia 16–35 tahun</b> — kerugian dilaporkan tembus Rp700 miliar (Satgas PASTI OJK, 2025). Judi online sudah menjerat <b>±8,8 juta pemain</b>, dan 3,8 juta di antaranya sampai berutang.</p>
+        <ul>
+          <li><b>Cek legalitas dulu:</b> pinjol/investasi resmi wajib terdaftar OJK. Cek di <a href="https://www.ojk.go.id/id/kanal/iknb/Pages/Fintech.aspx" target="_blank" rel="noopener">daftar fintech OJK</a> atau WA 081-157-157-157.</li>
+          <li><b>Judol pasti kalah.</b> Bandar diprogram menang — “menang” di awal cuma umpan. Nggak ada “cuan” dari judol, yang ada utang.</li>
+          <li><b>Pinjol ilegal:</b> bunga mencekik, data disebar, teror. Kalau terlanjur: lapor, jangan pinjam lagi buat nutup (gali lubang tutup lubang).</li>
+          <li><b>Aturan aman:</b> total cicilan utang <b>maksimal 30% pemasukan</b>. Lebih dari itu = lampu merah.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= TUJUAN & LATTE ================= -->
+  <section class="fn-panel" data-panel="tujuan">
+    <div class="fn-card">
+      <h3>🎯 Tabungan Tujuan / Impian</h3>
+      <p class="fn-note">iPhone, DP rumah, nikah, umroh, laptop, healing — pilih preset atau isi sendiri. Lihat kapan tercapai.</p>
+      <div class="fn-chips" id="goalChips">
+        <button class="fn-chip" data-goal="20000000">📱 HP flagship 20jt</button>
+        <button class="fn-chip" data-goal="15000000">💻 Laptop 15jt</button>
+        <button class="fn-chip" data-goal="50000000">💍 Nikah 50jt</button>
+        <button class="fn-chip" data-goal="80000000">🏠 DP rumah 80jt</button>
+        <button class="fn-chip" data-goal="35000000">🕋 Umroh 35jt</button>
+        <button class="fn-chip" data-goal="8000000">✈️ Healing/liburan 8jt</button>
+      </div>
+      <div class="fn-grid">
+        <div class="fn-field"><label class="fn-label" for="glTarget">Target dana (Rp)</label><input class="fn-in" id="glTarget" type="text" inputmode="decimal" placeholder="20000000"></div>
+        <div class="fn-field"><label class="fn-label" for="glNow">Punya sekarang (Rp)</label><input class="fn-in" id="glNow" type="text" inputmode="decimal" placeholder="0"></div>
+        <div class="fn-field"><label class="fn-label" for="glSave">Nabung / bulan (Rp)</label><input class="fn-in" id="glSave" type="text" inputmode="decimal" placeholder="1000000"></div>
+        <div class="fn-field"><label class="fn-label" for="glRet">Return tabungan/invest /th (%)</label><input class="fn-in" id="glRet" type="text" inputmode="decimal" placeholder="4"></div>
+      </div>
+      <div class="fn-res" id="glOut"></div>
+    </div>
+    <div class="fn-card">
+      <h3>☕ Latte Factor</h3>
+      <p class="fn-note">Pengeluaran kecil tiap hari (kopi susu, rokok, jajan, top-up game) diam-diam gede banget kalau dijumlah setahun — apalagi kalau diinvestasikan.</p>
+      <div class="fn-grid mt">
+        <div class="fn-field"><label class="fn-label" for="ltDay">Jajan “receh” / hari (Rp)</label><input class="fn-in" id="ltDay" type="text" inputmode="decimal" placeholder="25000"></div>
+        <div class="fn-field"><label class="fn-label" for="ltRet">Kalau diinvestasikan /th (%)</label><input class="fn-in" id="ltRet" type="text" inputmode="decimal" placeholder="10"></div>
+      </div>
+      <div class="fn-res" id="ltOut"></div>
+    </div>
+  </section>
+
+  <!-- ================= CEK SEHAT FINANSIAL + RISET ================= -->
+  <section class="fn-panel" data-panel="cek">
+    <div class="fn-card">
+      <h3>🩺 Cek Sehat Finansial</h3>
+      <p class="fn-note">Jawab jujur (gaya <b class="fn-hl">loud budgeting</b> — terbuka sama diri sendiri). Geser yang “iya”.</p>
+      <div id="ckList">
+        <div class="fn-q"><p>Punya <b>dana darurat</b> minimal 3× pengeluaran bulanan?</p><div class="fn-tog" data-w="20" role="switch" tabindex="0"></div></div>
+        <div class="fn-q"><p>Total <b>cicilan utang</b> di bawah 30% pemasukan? (atau nggak punya utang)</p><div class="fn-tog" data-w="20" role="switch" tabindex="0"></div></div>
+        <div class="fn-q"><p>Rutin <b>menabung/investasi</b> minimal 10% pemasukan tiap bulan?</p><div class="fn-tog" data-w="20" role="switch" tabindex="0"></div></div>
+        <div class="fn-q"><p>Pemasukan &gt; pengeluaran (nggak “besar pasak daripada tiang”)?</p><div class="fn-tog" data-w="15" role="switch" tabindex="0"></div></div>
+        <div class="fn-q"><p>Punya <b>tujuan keuangan</b> tertulis (jangka pendek &amp; panjang)?</p><div class="fn-tog" data-w="10" role="switch" tabindex="0"></div></div>
+        <div class="fn-q"><p><b>Bebas</b> dari judi online &amp; pinjol ilegal?</p><div class="fn-tog" data-w="15" role="switch" tabindex="0"></div></div>
+      </div>
+      <div class="fn-res" id="ckOut"></div>
+    </div>
+    <div class="fn-card">
+      <h3>📊 Perilaku uang generasi kita — hasil riset</h3>
+      <p class="fn-note">Target market kita: Gen Z, Milenial, Gen Alpha &amp; generasi sandwich Indonesia. Ini realita yang jarang dibahas, biar kamu nggak ikut kejebak.</p>
+      <div class="fn-stat">
+        <div class="s"><b>66,5%</b><span>Indeks literasi keuangan nasional 2025 — Gen Z hanya ±44%, usia 15–17 th 51,7% (SNLIK/OJK)</span></div>
+        <div class="s"><b>98%</b><span>Gen Z belanja lewat platform digital → rawan impulsif, doom spending &amp; FOMO</span></div>
+        <div class="s"><b>73,7%</b><span>korban pinjol ilegal berusia 16–35 th; kerugian dilaporkan ±Rp700 M (OJK, 2025)</span></div>
+        <div class="s"><b>±8,8 jt</b><span>pemain judi online; 3,8 jt di antaranya sampai berutang (PPATK)</span></div>
+        <div class="s"><b>18 jt+</b><span>investor pasar modal (Agu 2025), 55% berusia ≤30 th — anak muda melek investasi</span></div>
+      </div>
+      <div class="fn-callout"><b>Doom spending</b> = belanja buat “ngobatin” stres/cemas soal masa depan. <b>FOMO</b> + paylater = mesin belanja impulsif. Penawarnya satu: <b>literasi keuangan</b> — makin paham, makin kecil belanja impulsif (terbukti di riset).</div>
+      <div class="fn-gens">
+        <div class="fn-gen"><h4>Gen Z (lahir ’97–’12)</h4><span class="tag">Pelajar akhir–pekerja awal · YOLO vs frugal</span>
+          <ul><li>Bangun <b>dana darurat</b> sebelum invest &amp; sebelum paylater</li><li>Pakai <b>loud budgeting</b>: berani bilang “nggak, lagi nabung”</li><li>Mulai invest kecil rutin (reksadana/DCA) — waktu = senjata utama</li><li>Rem paylater: cuma untuk yang bisa dilunasi bulan itu juga</li></ul></div>
+        <div class="fn-gen"><h4>Milenial (lahir ’81–’96)</h4><span class="tag">Karier–keluarga · sering generasi sandwich</span>
+          <ul><li>Pisahkan dana anak, ortu &amp; diri sendiri biar nggak tekor</li><li>Naikkan dana darurat ke 9–12× (tanggungan lebih banyak)</li><li>Kejar tujuan besar: DP rumah, dana pendidikan, pensiun/FIRE</li><li>Proteksi: asuransi kesehatan biar 1 sakit nggak menghabiskan tabungan</li></ul></div>
+        <div class="fn-gen"><h4>Gen Alpha &amp; pelajar (lahir ’13+)</h4><span class="tag">Uang jajan · uang digital · top-up game</span>
+          <ul><li>Latih <b>“nabung dulu, jajan sisanya”</b> dari uang saku</li><li>Tantangan nabung 52 minggu / no-buy challenge sebulan</li><li>Bedakan <b>kebutuhan vs keinginan</b> sebelum top-up/skin game</li><li>Uang digital tetap uang beneran — catat pengeluarannya</li></ul></div>
+        <div class="fn-gen"><h4>Generasi Sandwich</h4><span class="tag">Nanggung ortu + anak + diri sendiri</span>
+          <ul><li>Anggarkan bantuan ortu sebagai pos tetap, jangan “sisa-sisa”</li><li>Tetap sisihkan buat diri sendiri (dana darurat + pensiun)</li><li>Komunikasi terbuka soal batas kemampuan ke keluarga</li><li>Bangun pemasukan pasif biar rantai sandwich berhenti di kamu</li></ul></div>
+      </div>
+      <p class="fn-src">Sumber riset: SNLIK/OJK 2024–2025 · Satgas PASTI OJK (pinjol ilegal, 2025) · PPATK (judi online) · BEI/KSEI (investor pasar modal 2025) · riset akademik doom spending, FOMO &amp; paylater Gen Z Indonesia · tren loud budgeting &amp; frugal living. Angka bisa berubah; ini edukasi, bukan nasihat keuangan.</p>
+    </div>
+  </section>
+
   <div class="fn-note" style="max-width:70ch">Semua fitur di halaman ini <b class="fn-hl">gratis &amp; terbuka untuk umum</b>. Angka bersifat estimasi dari input kamu; ini bukan nasihat keuangan/investasi. Data tersimpan lokal di perangkatmu.</div>
 </div></section>
 </main>
@@ -402,9 +543,80 @@
   }
   bind(['frExp','frNow','frMonthly','frReturn'],frCalc);
 
+  // ================= DANA DARURAT =================
+  function edCalc(){
+    var exp=n('edExp'),mult=parseFloat(($('edStat')&&$('edStat').value)||'6'),now=n('edNow'),save=n('edSave');var el=$('edOut');if(!el)return;
+    if(exp<=0){el.innerHTML='<p class="fn-note">Isi pengeluaran wajib bulananmu.</p>';return;}
+    var target=exp*mult,kurang=Math.max(0,target-now),pctv=target>0?Math.min(100,now/target*100):0;
+    var bulan=save>0?Math.ceil(kurang/save):Infinity;
+    el.innerHTML='<div class="fn-big">'+rp(target)+'<span style="font-size:13px;color:var(--muted);font-weight:400"> target dana darurat ('+mult+'× pengeluaran)</span></div>'+
+      '<div class="fn-bar"><i style="width:'+pctv+'%"></i></div>'+
+      rows([['Sudah terkumpul',rp(now)+' ('+Math.round(pctv)+'%)'],['Masih kurang',rp(kurang)],['Kalau nabung '+rp(save)+'/bln',(kurang<=0?'Sudah cukup! 🎉':(bulan===Infinity?'isi nominal nabung':'tercapai '+Math.floor(bulan/12)+' th '+(bulan%12)+' bln'))]])+
+      '<p class="fn-note">'+(now>=target?'Mantap! Dana daruratmu aman — sekarang aman buat mulai investasi.':'Simpan di tempat likuid &amp; aman (tabungan/RDPU/deposito), bukan saham. Ini bantalan, bukan alat cuan.')+'</p>';
+  }
+  bind(['edExp','edNow','edSave'],edCalc);on('edStat','change',edCalc);
+
+  // ================= UTANG (payoff) =================
+  function dbCalc(){
+    var sisa=n('dbSisa'),r=n('dbRate')/100,pay=n('dbPay');var el=$('dbOut');if(!el)return;
+    if(sisa<=0){el.innerHTML='<p class="fn-note">Isi sisa utang, bunga &amp; pembayaran/bulan.</p>';return;}
+    var bunga1=sisa*r;
+    if(pay<=bunga1){el.innerHTML='<div class="fn-big" style="color:var(--down)">Nggak akan lunas ⚠️</div><p class="fn-note">Bayaranmu ('+rp(pay)+'/bln) lebih kecil/sama dengan bunga bulan pertama ('+rp(bunga1)+'). Utang malah membengkak. Naikkan pembayaran atau ajukan restrukturisasi.</p>';return;}
+    var bal=sisa,bulan=0,totBunga=0;
+    while(bal>0&&bulan<600){var b=bal*r;totBunga+=b;bal=bal+b-pay;bulan++;}
+    var totBayar=sisa+totBunga;
+    el.innerHTML='<div class="fn-big">'+ (Math.floor(bulan/12)+' th '+(bulan%12)+' bln') +'<span style="font-size:13px;color:var(--muted);font-weight:400"> sampai lunas</span></div>'+
+      rows([['Total bunga dibayar',rp(totBunga)],['Total keluar (pokok+bunga)',rp(totBayar)],['Bunga vs pokok',pct(sisa>0?totBunga/sisa*100:0)+' dari pokok']])+
+      '<p class="fn-note">Tips: bayar lebih dari minimum &amp; dahulukan utang bunga tertinggi (metode <b>avalanche</b>) biar total bunga paling kecil.</p>';
+  }
+  bind(['dbSisa','dbRate','dbPay'],dbCalc);
+
+  // ================= TUJUAN + LATTE =================
+  function glCalc(){
+    var t=n('glTarget'),now=n('glNow'),save=n('glSave'),r=n('glRet')/100/12;var el=$('glOut');if(!el)return;
+    if(t<=0){el.innerHTML='<p class="fn-note">Pilih preset atau isi target danamu.</p>';return;}
+    var kurang=Math.max(0,t-now),pctv=t>0?Math.min(100,now/t*100):0;
+    var bal=now,bulan=0;
+    if(now<t){ if(save<=0&&r<=0){bulan=Infinity;} else { while(bal<t&&bulan<1200){bal=bal*(1+r)+save;bulan++;} if(bulan>=1200)bulan=Infinity; } }
+    el.innerHTML='<div class="fn-big">'+rp(t)+'<span style="font-size:13px;color:var(--muted);font-weight:400"> target</span></div>'+
+      '<div class="fn-bar"><i style="width:'+pctv+'%"></i></div>'+
+      rows([['Sudah punya',rp(now)+' ('+Math.round(pctv)+'%)'],['Masih kurang',rp(kurang)],['Perkiraan tercapai',(now>=t?'Sudah tercapai! 🎉':(bulan===Infinity?'isi nominal nabung':Math.floor(bulan/12)+' th '+(bulan%12)+' bln'))]]);
+  }
+  bind(['glTarget','glNow','glSave','glRet'],glCalc);
+  Array.prototype.forEach.call(document.querySelectorAll('#goalChips .fn-chip'),function(c){c.addEventListener('click',function(){
+    Array.prototype.forEach.call(document.querySelectorAll('#goalChips .fn-chip'),function(x){x.classList.toggle('on',x===c);});
+    if($('glTarget')){$('glTarget').value=c.getAttribute('data-goal');glCalc();}
+  });});
+  function ltCalc(){
+    var d=n('ltDay'),r=n('ltRet')/100;var el=$('ltOut');if(!el)return;
+    if(d<=0){el.innerHTML='<p class="fn-note">Isi jajan harianmu.</p>';return;}
+    var thn=d*365,i=r/12,fv=i>0?(d*30.4)*((Math.pow(1+i,120)-1)/i):(d*30.4)*120;
+    el.innerHTML='<div class="fn-big">'+rp(thn)+'<span style="font-size:13px;color:var(--muted);font-weight:400"> hangus / tahun</span></div>'+
+      rows([['Per bulan',rp(d*30.4)],['Per 5 tahun',rp(thn*5)],['Kalau diinvestasikan 10 th (@'+pct(r*100)+')',rp(fv)]])+
+      '<p class="fn-note">Bukan berarti nggak boleh jajan — tapi sadar aja: '+rp(d)+'/hari = '+rp(thn)+'/tahun. Alihkan sebagian ke investasi, sisanya nikmati tanpa rasa bersalah.</p>';
+  }
+  bind(['ltDay','ltRet'],ltCalc);
+
+  // ================= CEK SEHAT FINANSIAL =================
+  function ckCalc(){
+    var el=$('ckOut');if(!el)return;var score=0;
+    Array.prototype.forEach.call(document.querySelectorAll('#ckList .fn-tog.on'),function(t){score+=parseFloat(t.getAttribute('data-w'))||0;});
+    var lvl,col,msg;
+    if(score>=85){lvl='Sehat 💪';col='var(--up)';msg='Keuanganmu solid. Fokus scaling: naikkan investasi &amp; kejar merdeka finansial (tab FIRE).';}
+    else if(score>=60){lvl='Cukup 🙂';col='var(--primary)';msg='Fondasi oke, masih ada bolong. Tutup dulu yang belum “iya” di atas — biasanya dana darurat atau rasio utang.';}
+    else if(score>=35){lvl='Waspada ⚠️';col='#e0a83a';msg='Rawan. Prioritas: bereskan utang berbunga tinggi &amp; bangun dana darurat sebelum yang lain.';}
+    else{lvl='Kritis 🚑';col='var(--down)';msg='Bahaya. Mulai dari langkah terkecil: catat pengeluaran (tab Laporan), stop utang baru, sisihkan berapa pun buat dana darurat.';}
+    el.innerHTML='<div class="fn-big" style="color:'+col+'">Skor '+score+'/100 — '+lvl+'</div><div class="fn-bar"><i style="width:'+score+'%"></i></div><p class="fn-note">'+msg+'</p>';
+  }
+  Array.prototype.forEach.call(document.querySelectorAll('#ckList .fn-tog'),function(t){
+    function toggle(){t.classList.toggle('on');ckCalc();}
+    t.addEventListener('click',toggle);
+    t.addEventListener('keydown',function(e){if(e.key===' '||e.key==='Enter'){e.preventDefault();toggle();}});
+  });
+
   // init (each guarded so one failure can't kill the rest)
   (function(){var m=$('fnMonth');if(m){var d=new Date();m.value=d.getFullYear()+'-'+('0'+(d.getMonth()+1)).slice(-2);}})();
-  [lpLoad,calcSaham,calcDCA,calcRD,calcOb,frCalc].forEach(function(f){try{f();}catch(e){}});
+  [lpLoad,calcSaham,calcDCA,calcRD,calcOb,frCalc,edCalc,dbCalc,glCalc,ltCalc,ckCalc].forEach(function(f){try{f();}catch(e){}});
 })();
 </script>
 <script src="assets/app.js" defer></script>
