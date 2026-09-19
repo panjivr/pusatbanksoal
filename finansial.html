@@ -89,6 +89,21 @@
 .fn-gen h4{margin:0 0 4px;font-size:15px;color:var(--on-dark)}.fn-gen .tag{font-size:11.5px;color:var(--muted);display:block;margin-bottom:8px}
 .fn-gen ul{margin:0;padding-left:17px}.fn-gen li{font-size:12.5px;color:var(--body);line-height:1.5;margin-bottom:4px}
 .fn-src{font-size:11px;color:var(--muted);margin-top:12px;line-height:1.5}.fn-src a{color:var(--accent-ink)}
+.fn-jump{display:flex;flex-wrap:wrap;gap:7px;margin:0 0 14px}
+.fn-jump a{background:var(--elevated);border:1px solid var(--hair-dark);color:var(--body);border-radius:99px;padding:6px 13px;font-size:12.5px;text-decoration:none;transition:.15s}
+.fn-jump a:hover{border-color:var(--primary);color:var(--primary)}
+.fn-panel[id]{scroll-margin-top:118px}
+.fn-cmp{width:100%;border-collapse:collapse;font-size:12.5px;margin-top:6px}
+.fn-cmp th,.fn-cmp td{text-align:left;padding:9px 10px;border-bottom:1px solid var(--hair-soft);vertical-align:top}
+.fn-cmp th{color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.3px;white-space:nowrap}
+.fn-cmp td b{color:var(--on-dark)}
+.fn-risk{display:inline-block;padding:2px 8px;border-radius:6px;font-size:11px;font-weight:600}
+.fn-r1{background:#cdebd3;color:#1c7a3a}.fn-r2{background:#d7e6fb;color:#1d4ed8}.fn-r3{background:#fce9cf;color:#a86a1c}.fn-r4{background:#f4d3c4;color:#a3421c}.fn-r5{background:rgba(220,68,68,.15);color:#c22}
+.fn-ratio{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-top:6px}
+.fn-ratio .r{background:var(--card);border:1px solid var(--hair-dark);border-radius:12px;padding:14px}
+.fn-ratio .r .v{font-family:var(--num);font-size:20px;font-weight:700}
+.fn-ratio .r .t{font-size:12px;color:var(--muted);margin:3px 0 6px}
+.fn-tabx{display:inline-block;font-size:11px;font-weight:700;padding:2px 9px;border-radius:6px}
 @media print{.nav,.footer,.fn-sub,.no-print{display:none!important}body{background:#fff}.fn-paper{box-shadow:none}}
 </style>
 </head>
@@ -138,16 +153,11 @@
   </div>
 
   <nav class="fn-sub" id="fnSub" role="tablist" aria-label="Alat finansial">
-    <button class="fn-tab on" data-tab="laporan" role="tab">📄 Laporan Pribadi</button>
-    <button class="fn-tab" data-tab="anggaran" role="tab">📊 Anggaran</button>
-    <button class="fn-tab" data-tab="saham" role="tab">📈 Saham</button>
-    <button class="fn-tab" data-tab="reksadana" role="tab">💹 Reksadana</button>
-    <button class="fn-tab" data-tab="obligasi" role="tab">🏦 Obligasi / SBN</button>
-    <button class="fn-tab" data-tab="merdeka" role="tab">🌴 Merdeka (FIRE)</button>
-    <button class="fn-tab" data-tab="darurat" role="tab">🛟 Dana Darurat</button>
+    <button class="fn-tab on" data-tab="laporan" role="tab">📄 Laporan &amp; Anggaran</button>
+    <button class="fn-tab" data-tab="investasi" role="tab">📈 Investasi</button>
+    <button class="fn-tab" data-tab="rencana" role="tab">🎯 Rencana &amp; Tujuan</button>
     <button class="fn-tab" data-tab="utang" role="tab">⚠️ Utang &amp; Jebakan</button>
-    <button class="fn-tab" data-tab="tujuan" role="tab">🎯 Tujuan &amp; Latte</button>
-    <button class="fn-tab" data-tab="cek" role="tab">🩺 Cek Sehat Finansial</button>
+    <button class="fn-tab" data-tab="cek" role="tab">🩺 Cek &amp; Riset</button>
   </nav>
 
   <!-- LAPORAN -->
@@ -199,16 +209,25 @@
   </section>
 
   <!-- ANGGARAN -->
-  <section class="fn-panel" data-panel="anggaran">
+  <section class="fn-panel" data-panel="laporan">
     <div class="fn-card">
       <h3>Anggaran 50 / 30 / 20</h3>
-      <p class="fn-note">Aturan sederhana: 50% kebutuhan, 30% keinginan, 20% menabung/investasi. Berdasarkan total pemasukanmu di tab Laporan.</p>
+      <p class="fn-note">Aturan sederhana: 50% kebutuhan, 30% keinginan, 20% menabung/investasi. Berdasarkan total pemasukan di atas.</p>
       <div class="fn-res" id="fnBudget"></div>
+    </div>
+    <div class="fn-card">
+      <h3>🩻 Rasio Keuangan Sehat</h3>
+      <p class="fn-note">Dihitung otomatis dari angka di Laporan di atas. Ini “hasil lab” kondisi keuanganmu — patokan perencana keuangan.</p>
+      <div class="fn-ratio" id="fnRatio"></div>
+      <p class="fn-note" style="margin-top:12px">Patokan sehat: <b class="fn-hl">menabung ≥10–20%</b> pemasukan · <b class="fn-hl">cicilan utang ≤30%</b> pemasukan · <b class="fn-hl">dana likuid ≥3–6×</b> pengeluaran bulanan · <b class="fn-hl">kekayaan bersih positif</b> &amp; tumbuh.</p>
     </div>
   </section>
 
   <!-- SAHAM -->
-  <section class="fn-panel" data-panel="saham">
+  <section class="fn-panel" data-panel="investasi" id="inv-saham">
+    <nav class="fn-jump" aria-label="Loncat ke alat">
+      <a href="#inv-saham">📈 Saham</a><a href="#inv-reksadana">💹 Reksadana</a><a href="#inv-obligasi">🏦 Obligasi/SBN</a><a href="#inv-deposito">🏛️ Deposito</a><a href="#inv-emas">🥇 Emas</a><a href="#inv-banding">⚖️ Bandingkan</a>
+    </nav>
     <div class="fn-card">
       <h3>Kalkulator Saham (IDX)</h3>
       <div class="fn-grid mt">
@@ -238,7 +257,7 @@
   </section>
 
   <!-- REKSADANA -->
-  <section class="fn-panel" data-panel="reksadana">
+  <section class="fn-panel" data-panel="investasi" id="inv-reksadana">
     <div class="fn-card">
       <h3>Kalkulator Reksadana</h3>
       <div class="fn-grid mt">
@@ -262,7 +281,7 @@
   </section>
 
   <!-- OBLIGASI -->
-  <section class="fn-panel" data-panel="obligasi">
+  <section class="fn-panel" data-panel="investasi" id="inv-obligasi">
     <div class="fn-card">
       <h3>Kalkulator Obligasi / SBN</h3>
       <div class="fn-grid mt">
@@ -287,8 +306,62 @@
     </div>
   </section>
 
+  <!-- DEPOSITO -->
+  <section class="fn-panel" data-panel="investasi" id="inv-deposito">
+    <div class="fn-card">
+      <h3>🏛️ Kalkulator Deposito</h3>
+      <p class="fn-note">Paling aman &amp; pasti (dijamin LPS s/d Rp2 M/bank kalau bunga ≤ tingkat penjaminan). Cocok untuk dana darurat/jangka pendek. Bunga kena pajak final 20%.</p>
+      <div class="fn-grid mt">
+        <div class="fn-field"><label class="fn-label" for="dpNom">Nominal (Rp)</label><input class="fn-in" id="dpNom" type="text" inputmode="decimal" placeholder="10000000"></div>
+        <div class="fn-field"><label class="fn-label" for="dpRate">Bunga / tahun (%)</label><input class="fn-in" id="dpRate" type="text" inputmode="decimal" placeholder="4.25"></div>
+        <div class="fn-field"><label class="fn-label" for="dpTenor">Tenor (bulan)</label><input class="fn-in" id="dpTenor" type="text" inputmode="decimal" placeholder="12"></div>
+        <div class="fn-field"><label class="fn-label" for="dpTax">Pajak bunga (%)</label><input class="fn-in" id="dpTax" type="text" inputmode="decimal" placeholder="20"></div>
+      </div>
+      <div class="fn-res" id="dpOut"></div>
+    </div>
+  </section>
+
+  <!-- EMAS -->
+  <section class="fn-panel" data-panel="investasi" id="inv-emas">
+    <div class="fn-card">
+      <h3>🥇 Kalkulator Emas</h3>
+      <p class="fn-note">Lindung nilai (hedge) terhadap inflasi &amp; pelemahan rupiah. Ingat selisih harga <b>beli–buyback</b> (spread) biasanya 3–6%, jadi baru untung kalau harga naik melebihi itu.</p>
+      <div class="fn-grid mt">
+        <div class="fn-field"><label class="fn-label" for="emBuy">Harga beli / gram (Rp)</label><input class="fn-in" id="emBuy" type="text" inputmode="decimal" placeholder="1350000"></div>
+        <div class="fn-field"><label class="fn-label" for="emGram">Jumlah (gram)</label><input class="fn-in" id="emGram" type="text" inputmode="decimal" placeholder="10"></div>
+        <div class="fn-field"><label class="fn-label" for="emNow">Harga buyback sekarang / gram (Rp)</label><input class="fn-in" id="emNow" type="text" inputmode="decimal" placeholder="1420000"></div>
+        <div class="fn-field"><label class="fn-label" for="emYear">Lama disimpan (tahun, opsional)</label><input class="fn-in" id="emYear" type="text" inputmode="decimal" placeholder="2"></div>
+      </div>
+      <div class="fn-res" id="emOut"></div>
+    </div>
+  </section>
+
+  <!-- BANDINGKAN -->
+  <section class="fn-panel" data-panel="investasi" id="inv-banding">
+    <div class="fn-card">
+      <h3>⚖️ Bandingkan Instrumen Investasi</h3>
+      <p class="fn-note">Kisaran indikatif jangka panjang di Indonesia — bukan janji. Makin tinggi potensi imbal hasil, makin tinggi risikonya. <b class="fn-hl">Aturan emas: pahami dulu, baru beli.</b></p>
+      <div class="scroll-x"><table class="fn-cmp">
+        <thead><tr><th>Instrumen</th><th>Potensi return/th</th><th>Risiko</th><th>Likuiditas</th><th>Pajak</th><th>Cocok untuk</th></tr></thead>
+        <tbody>
+        <tr><td><b>Deposito</b></td><td>3–6%</td><td><span class="fn-risk fn-r1">Sangat rendah</span></td><td>Rendah (terkunci tenor)</td><td>20% final</td><td>Dana darurat, jangka pendek</td></tr>
+        <tr><td><b>RD Pasar Uang</b></td><td>3–6%</td><td><span class="fn-risk fn-r1">Rendah</span></td><td>Tinggi (cair 1–2 hari)</td><td>Bebas (di reksadana)</td><td>Dana darurat, parkir dana</td></tr>
+        <tr><td><b>Obligasi / SBN</b></td><td>6–7%</td><td><span class="fn-risk fn-r2">Rendah–sedang</span></td><td>Sedang</td><td>10% final</td><td>Pendapatan tetap, 2–3 th</td></tr>
+        <tr><td><b>Emas</b></td><td>5–10%</td><td><span class="fn-risk fn-r3">Sedang</span></td><td>Tinggi</td><td>—</td><td>Lindung nilai, jangka panjang</td></tr>
+        <tr><td><b>RD Saham / Saham</b></td><td>8–15%</td><td><span class="fn-risk fn-r4">Tinggi</span></td><td>Tinggi</td><td>0,1% jual (saham)</td><td>Tujuan &gt;5 th, dana pensiun</td></tr>
+        <tr><td><b>P2P Lending</b></td><td>10–18%</td><td><span class="fn-risk fn-r4">Tinggi (gagal bayar)</span></td><td>Rendah</td><td>Sesuai pajak</td><td>Diversifikasi kecil, siap rugi</td></tr>
+        <tr><td><b>Kripto</b></td><td>Sangat fluktuatif</td><td><span class="fn-risk fn-r5">Sangat tinggi</span></td><td>Tinggi</td><td>0,21% transaksi</td><td>Uang “dingin” yang siap hilang</td></tr>
+        </tbody>
+      </table></div>
+      <div class="fn-callout">Strategi umum sesuai umur: <b>makin muda → makin berani</b> (porsi saham lebih besar karena waktu panjang). Rumus kasar porsi saham ≈ <b>(100 − umur)%</b>, sisanya ke instrumen aman. Selalu <b>dana darurat dulu</b>, baru investasi.</div>
+    </div>
+  </section>
+
   <!-- MERDEKA -->
-  <section class="fn-panel" data-panel="merdeka">
+  <section class="fn-panel" data-panel="rencana" id="rc-fire">
+    <nav class="fn-jump" aria-label="Loncat ke alat">
+      <a href="#rc-darurat">🛟 Dana Darurat</a><a href="#rc-tujuan">🎯 Tujuan &amp; Latte</a><a href="#rc-pensiun">👴 Dana Pensiun</a><a href="#rc-inflasi">📉 Inflasi</a><a href="#rc-didik">🎓 Dana Pendidikan</a><a href="#rc-fire">🌴 FIRE</a>
+    </nav>
     <div class="fn-card">
       <h3>Merdeka Finansial (FIRE)</h3>
       <p class="fn-note">Aturan 4%: kamu “merdeka” saat dana investasi = <b class="fn-hl">pengeluaran tahunan × 25</b> (hasil ±4%/tahun menutup biaya hidup).</p>
@@ -303,7 +376,7 @@
   </section>
 
   <!-- ================= DANA DARURAT ================= -->
-  <section class="fn-panel" data-panel="darurat">
+  <section class="fn-panel" data-panel="rencana" id="rc-darurat">
     <div class="fn-card">
       <h3>🛟 Dana Darurat</h3>
       <p class="fn-note">Bantalan saat kehilangan pemasukan (di-PHK, sakit, usaha sepi). <b class="fn-hl">Prioritas #1</b> sebelum investasi — biar nggak lari ke pinjol saat darurat.</p>
@@ -347,7 +420,7 @@
   </section>
 
   <!-- ================= TUJUAN & LATTE ================= -->
-  <section class="fn-panel" data-panel="tujuan">
+  <section class="fn-panel" data-panel="rencana" id="rc-tujuan">
     <div class="fn-card">
       <h3>🎯 Tabungan Tujuan / Impian</h3>
       <p class="fn-note">iPhone, DP rumah, nikah, umroh, laptop, healing — pilih preset atau isi sendiri. Lihat kapan tercapai.</p>
@@ -375,6 +448,52 @@
         <div class="fn-field"><label class="fn-label" for="ltRet">Kalau diinvestasikan /th (%)</label><input class="fn-in" id="ltRet" type="text" inputmode="decimal" placeholder="10"></div>
       </div>
       <div class="fn-res" id="ltOut"></div>
+    </div>
+  </section>
+
+  <!-- DANA PENSIUN -->
+  <section class="fn-panel" data-panel="rencana" id="rc-pensiun">
+    <div class="fn-card">
+      <h3>👴 Dana Pensiun / Hari Tua</h3>
+      <p class="fn-note">Berapa yang harus terkumpul saat pensiun supaya bisa hidup tanpa kerja — sudah memperhitungkan <b class="fn-hl">inflasi</b> sampai kamu pensiun. Makin muda mulai, makin ringan.</p>
+      <div class="fn-grid mt">
+        <div class="fn-field"><label class="fn-label" for="pnAge">Umur sekarang (th)</label><input class="fn-in" id="pnAge" type="text" inputmode="decimal" placeholder="25"></div>
+        <div class="fn-field"><label class="fn-label" for="pnRet">Rencana pensiun umur (th)</label><input class="fn-in" id="pnRet" type="text" inputmode="decimal" placeholder="55"></div>
+        <div class="fn-field"><label class="fn-label" for="pnExp">Pengeluaran / bulan saat ini (Rp)</label><input class="fn-in" id="pnExp" type="text" inputmode="decimal" placeholder="5000000"></div>
+        <div class="fn-field"><label class="fn-label" for="pnNow">Dana pensiun terkumpul (Rp)</label><input class="fn-in" id="pnNow" type="text" inputmode="decimal" placeholder="0"></div>
+        <div class="fn-field"><label class="fn-label" for="pnInfl">Inflasi / tahun (%)</label><input class="fn-in" id="pnInfl" type="text" inputmode="decimal" placeholder="4"></div>
+        <div class="fn-field"><label class="fn-label" for="pnRet2">Return investasi / tahun (%)</label><input class="fn-in" id="pnRet2" type="text" inputmode="decimal" placeholder="9"></div>
+      </div>
+      <div class="fn-res" id="pnOut"></div>
+    </div>
+  </section>
+
+  <!-- INFLASI -->
+  <section class="fn-panel" data-panel="rencana" id="rc-inflasi">
+    <div class="fn-card">
+      <h3>📉 Kalkulator Inflasi (nilai uang masa depan)</h3>
+      <p class="fn-note">Uang “diam” makin lama makin kecil daya belinya. Ini alasan menabung saja tidak cukup — harus diinvestasikan minimal di atas inflasi.</p>
+      <div class="fn-grid mt">
+        <div class="fn-field"><label class="fn-label" for="ifNow">Nilai / harga sekarang (Rp)</label><input class="fn-in" id="ifNow" type="text" inputmode="decimal" placeholder="10000000"></div>
+        <div class="fn-field"><label class="fn-label" for="ifRate">Inflasi / tahun (%)</label><input class="fn-in" id="ifRate" type="text" inputmode="decimal" placeholder="4"></div>
+        <div class="fn-field"><label class="fn-label" for="ifYear">Berapa tahun ke depan</label><input class="fn-in" id="ifYear" type="text" inputmode="decimal" placeholder="10"></div>
+      </div>
+      <div class="fn-res" id="ifOut"></div>
+    </div>
+  </section>
+
+  <!-- DANA PENDIDIKAN -->
+  <section class="fn-panel" data-panel="rencana" id="rc-didik">
+    <div class="fn-card">
+      <h3>🎓 Dana Pendidikan Anak</h3>
+      <p class="fn-note">Biaya kuliah naik ±10%/tahun — jauh di atas inflasi umum. Siapkan dari jauh hari biar tidak kaget. Isi biaya <b>sekarang</b>, hitung otomatis biaya saat anak masuk.</p>
+      <div class="fn-grid mt">
+        <div class="fn-field"><label class="fn-label" for="edcCost">Biaya pendidikan sekarang (Rp)</label><input class="fn-in" id="edcCost" type="text" inputmode="decimal" placeholder="80000000"></div>
+        <div class="fn-field"><label class="fn-label" for="edcYear">Berapa tahun lagi masuk</label><input class="fn-in" id="edcYear" type="text" inputmode="decimal" placeholder="12"></div>
+        <div class="fn-field"><label class="fn-label" for="edcInfl">Inflasi pendidikan / th (%)</label><input class="fn-in" id="edcInfl" type="text" inputmode="decimal" placeholder="10"></div>
+        <div class="fn-field"><label class="fn-label" for="edcRet">Return tabungan/invest /th (%)</label><input class="fn-in" id="edcRet" type="text" inputmode="decimal" placeholder="8"></div>
+      </div>
+      <div class="fn-res" id="edcOut"></div>
     </div>
   </section>
 
@@ -473,6 +592,18 @@
     $('fnBudget').innerHTML='<div class="fn-big">'+rp(totIn)+'<span style="font-size:13px;color:var(--muted);font-weight:400"> total pemasukan / bulan</span></div>'+
       rows([['Kebutuhan (50%)',rp(k)],['Keinginan (30%)',rp(w)],['Tabung/investasi (20%)',rp(s)]])+
       '<p class="fn-note">Pengeluaranmu saat ini '+rp(totEx)+'. '+(totEx>totIn?'<span style="color:var(--down)">Lebih besar dari pemasukan — waspada!</span>':'Sisa '+rp(totIn-totEx)+' bisa ditabung/investasi.')+'</p>';
+    // rasio keuangan sehat
+    (function(){var rEl=$('fnRatio');if(!rEl)return;
+      var cicil=lpVal('exCicil'),tunai=lpVal('asTunai');
+      var sav=totIn>0?cash/totIn*100:0,dti=totIn>0?cicil/totIn*100:0,liq=totEx>0?tunai/totEx:0;
+      function bd(ok,warn){return ok?'<span class="fn-tabx fn-r1">Sehat</span>':(warn?'<span class="fn-tabx fn-r3">Waspada</span>':'<span class="fn-tabx fn-r5">Bahaya</span>');}
+      function cd(v,t,b){return '<div class="r"><div class="v">'+v+'</div><div class="t">'+t+'</div>'+b+'</div>';}
+      rEl.innerHTML=
+        cd(totIn>0?Math.round(sav)+'%':'—','Rasio menabung (nabung ÷ pemasukan)',bd(sav>=10,sav>=0&&totIn>0))+
+        cd(totIn>0?Math.round(dti)+'%':'—','Rasio cicilan utang (÷ pemasukan)',bd(totIn>0&&dti<=30,dti<=45))+
+        cd(totEx>0?(Math.round(liq*10)/10)+'×':'—','Rasio likuiditas (kas ÷ pengeluaran/bln)',bd(liq>=3,liq>=1))+
+        cd(rp(net),'Kekayaan bersih (aset − utang)',bd(net>0,net>=0));
+    })();
     frCalc();
   }
   document.addEventListener('input',function(e){if(e.target.classList&&e.target.classList.contains('lp')){lpSave();calcLaporan();}});
@@ -614,9 +745,75 @@
     t.addEventListener('keydown',function(e){if(e.key===' '||e.key==='Enter'){e.preventDefault();toggle();}});
   });
 
+  // ================= DEPOSITO =================
+  function dpCalc(){
+    var nom=n('dpNom'),r=n('dpRate')/100,ten=n('dpTenor'),tax=n('dpTax')/100;var el=$('dpOut');if(!el)return;
+    if(nom<=0||r<=0||ten<=0){el.innerHTML='<p class="fn-note">Isi nominal, bunga &amp; tenor.</p>';return;}
+    var bungaKotor=nom*r*(ten/12),pajak=bungaKotor*tax,bungaBersih=bungaKotor-pajak,total=nom+bungaBersih;
+    var perBln=bungaBersih/ten,yieldEfektif=nom>0?(bungaBersih/nom)/(ten/12)*100:0;
+    el.innerHTML='<div class="fn-big">'+rp(total)+'<span style="font-size:13px;color:var(--muted);font-weight:400"> total saat jatuh tempo</span></div>'+
+      rows([['Bunga kotor',rp(bungaKotor)],['Pajak ('+Math.round(tax*100)+'%)',rp(pajak)],['Bunga bersih',rp(bungaBersih)],['Rata-rata / bulan',rp(perBln)],['Yield bersih / tahun',pct(yieldEfektif)]])+
+      '<p class="fn-note">Dijamin LPS s/d Rp2 miliar/bank asalkan bunga ≤ tingkat penjaminan LPS. Cocok untuk dana yang tidak boleh turun nilainya.</p>';
+  }
+  bind(['dpNom','dpRate','dpTenor','dpTax'],dpCalc);
+
+  // ================= EMAS =================
+  function emCalc(){
+    var buy=n('emBuy'),gr=n('emGram'),now=n('emNow'),yr=n('emYear');var el=$('emOut');if(!el)return;
+    if(buy<=0||gr<=0){el.innerHTML='<p class="fn-note">Isi harga beli &amp; jumlah gram.</p>';return;}
+    var modal=buy*gr,nilai=now*gr,untung=nilai-modal,pctv=modal>0?untung/modal*100:0;
+    var cagr=(yr>0&&now>0&&buy>0)?(Math.pow(now/buy,1/yr)-1)*100:null;
+    el.innerHTML='<div class="fn-big" style="color:'+(untung>=0?'var(--up)':'var(--down)')+'">'+rp(untung)+'<span style="font-size:13px;color:var(--muted);font-weight:400"> '+(untung>=0?'untung':'rugi')+' ('+pct(pctv)+')</span></div>'+
+      rows([['Modal beli ('+gr+' gram)',rp(modal)],['Nilai buyback sekarang',rp(nilai)],['Selisih (spread + gerak harga)',rp(untung)]].concat(cagr!==null?[['Rata-rata / tahun (CAGR)',pct(cagr)]]:[]))+
+      '<p class="fn-note">Ingat: emas untung kalau kenaikan harga &gt; spread beli-buyback (biasanya 3–6%). Bagus sebagai <b>lindung nilai</b>, bukan mesin cuan cepat.</p>';
+  }
+  bind(['emBuy','emGram','emNow','emYear'],emCalc);
+
+  // ================= DANA PENSIUN =================
+  function pnCalc(){
+    var age=n('pnAge'),ret=n('pnRet'),exp=n('pnExp'),now=n('pnNow'),infl=n('pnInfl')/100,r=n('pnRet2')/100;var el=$('pnOut');if(!el)return;
+    var years=ret-age;
+    if(exp<=0||years<=0){el.innerHTML='<p class="fn-note">Isi umur, rencana pensiun (lebih besar dari umur), &amp; pengeluaran.</p>';return;}
+    var expFuture=exp*Math.pow(1+infl,years);           // pengeluaran/bln saat pensiun
+    var target=expFuture*12*25;                          // aturan 4%
+    var i=r/12,mo=years*12;
+    var fvNow=now*Math.pow(1+i,mo);
+    var kurang=Math.max(0,target-fvNow);
+    var perluNabung=i>0?kurang*i/(Math.pow(1+i,mo)-1):kurang/mo;
+    el.innerHTML='<div class="fn-big">'+rp(target)+'<span style="font-size:13px;color:var(--muted);font-weight:400"> target dana pensiun (di umur '+ret+')</span></div>'+
+      rows([['Sisa waktu',years+' tahun'],['Pengeluaran/bln saat pensiun (sdh inflasi)',rp(expFuture)],['Danamu sekarang jadi (nanti)',rp(fvNow)],['Harus nabung/investasi rutin',rp(perluNabung)+' / bulan'],['Passive income di target (4%/th)',rp(target*0.04/12)+' / bln']])+
+      '<p class="fn-note">Makin cepat mulai, angka “harus nabung/bulan” makin kecil karena bunga berbunga bekerja lebih lama untukmu.</p>';
+  }
+  bind(['pnAge','pnRet','pnExp','pnNow','pnInfl','pnRet2'],pnCalc);
+
+  // ================= INFLASI =================
+  function ifCalc(){
+    var now=n('ifNow'),r=n('ifRate')/100,y=n('ifYear');var el=$('ifOut');if(!el)return;
+    if(now<=0||y<=0){el.innerHTML='<p class="fn-note">Isi nilai sekarang, inflasi &amp; jumlah tahun.</p>';return;}
+    var future=now*Math.pow(1+r,y);           // harga barang yang sama nanti
+    var daya=now*Math.pow(1/(1+r),y);         // daya beli uang yang didiamkan
+    el.innerHTML='<div class="fn-big">'+rp(future)+'<span style="font-size:13px;color:var(--muted);font-weight:400"> harga barang yang sama, '+y+' th lagi</span></div>'+
+      rows([['Nilai sekarang',rp(now)],['Kalau uang cuma didiamkan, daya belinya jadi',rp(daya)+' (setara hari ini)'],['Kehilangan daya beli',rp(now-daya)],['Return minimal biar tidak rugi',pct(r*100)+' / tahun']])+
+      '<p class="fn-note">Inilah kenapa "nabung di bawah bantal" pelan-pelan bikin miskin. Investasi harus mengalahkan inflasi (±'+pct(r*100)+').</p>';
+  }
+  bind(['ifNow','ifRate','ifYear'],ifCalc);
+
+  // ================= DANA PENDIDIKAN =================
+  function edcCalc(){
+    var cost=n('edcCost'),y=n('edcYear'),infl=n('edcInfl')/100,r=n('edcRet')/100;var el=$('edcOut');if(!el)return;
+    if(cost<=0||y<=0){el.innerHTML='<p class="fn-note">Isi biaya pendidikan &amp; berapa tahun lagi.</p>';return;}
+    var future=cost*Math.pow(1+infl,y),i=r/12,mo=y*12;
+    var nabung=i>0?future*i/(Math.pow(1+i,mo)-1):future/mo;
+    var nabungTanpaInvest=future/mo;
+    el.innerHTML='<div class="fn-big">'+rp(future)+'<span style="font-size:13px;color:var(--muted);font-weight:400"> perkiraan biaya saat masuk ('+y+' th lagi)</span></div>'+
+      rows([['Biaya sekarang',rp(cost)],['Kenaikan karena inflasi pendidikan',rp(future-cost)],['Nabung + investasi ('+pct(r*100)+'/th)',rp(nabung)+' / bulan'],['Kalau nabung biasa (tanpa investasi)',rp(nabungTanpaInvest)+' / bulan']])+
+      '<p class="fn-note">Biaya kuliah naik ±10%/th. Mulai dari sekarang &amp; investasikan biar setoran bulanan jauh lebih ringan.</p>';
+  }
+  bind(['edcCost','edcYear','edcInfl','edcRet'],edcCalc);
+
   // init (each guarded so one failure can't kill the rest)
   (function(){var m=$('fnMonth');if(m){var d=new Date();m.value=d.getFullYear()+'-'+('0'+(d.getMonth()+1)).slice(-2);}})();
-  [lpLoad,calcSaham,calcDCA,calcRD,calcOb,frCalc,edCalc,dbCalc,glCalc,ltCalc,ckCalc].forEach(function(f){try{f();}catch(e){}});
+  [lpLoad,calcSaham,calcDCA,calcRD,calcOb,frCalc,edCalc,dbCalc,glCalc,ltCalc,ckCalc,dpCalc,emCalc,pnCalc,ifCalc,edcCalc].forEach(function(f){try{f();}catch(e){}});
 })();
 </script>
 <script src="assets/app.js" defer></script>
