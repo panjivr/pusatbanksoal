@@ -1,0 +1,409 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Finansial — Laporan Keuangan Pribadi & Kalkulator Saham, Reksadana, Obligasi | PusatBankSoal.id</title>
+<meta name="description" content="Kalkulator keuangan pribadi gaya Cashflow: laporan keuangan (aset, liabilitas, kekayaan bersih, arus kas, keluar dari rat race) + kalkulator investasi saham (IDX), reksadana, dan obligasi/SBN Indonesia. Gratis untuk umum, tersimpan di perangkatmu.">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<meta name="theme-color" content="#0a0e17">
+<link rel="canonical" href="https://pusatbanksoal.id/finansial.html">
+<link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+<link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@600;700;800&family=IBM+Plex+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="PusatBankSoal.id">
+<meta property="og:url" content="https://pusatbanksoal.id/finansial.html">
+<meta property="og:title" content="Finansial — Laporan Keuangan Pribadi & Kalkulator Investasi">
+<meta property="og:description" content="Laporan keuangan pribadi gaya Cashflow + kalkulator saham, reksadana & obligasi Indonesia. Gratis.">
+<meta property="og:image" content="https://pusatbanksoal.id/assets/og.png">
+<meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="stylesheet" href="assets/style.css">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@graph":[
+ {"@type":"WebApplication","name":"Finansial PusatBankSoal.id","applicationCategory":"FinanceApplication","operatingSystem":"Web","url":"https://pusatbanksoal.id/finansial.html","offers":{"@type":"Offer","price":"0","priceCurrency":"IDR"},"inLanguage":"id-ID"},
+ {"@type":"BreadcrumbList","itemListElement":[
+  {"@type":"ListItem","position":1,"name":"Beranda","item":"https://pusatbanksoal.id/"},
+  {"@type":"ListItem","position":2,"name":"Finansial","item":"https://pusatbanksoal.id/finansial.html"}]}
+]}
+</script>
+<script src="assets/auth.js"></script>
+<style>
+.fn-sub{display:flex;flex-wrap:nowrap;gap:6px;margin:18px 0 8px;position:sticky;top:64px;background:var(--canvas);padding:10px 0;z-index:20;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:thin}
+.fn-sub::-webkit-scrollbar{height:6px}.fn-sub::-webkit-scrollbar-thumb{background:var(--hair-dark);border-radius:99px}
+.fn-tab{flex:none;background:var(--elevated);border:1px solid var(--hair-dark);color:var(--muted-strong);border-radius:999px;padding:8px 15px;font:inherit;font-size:13px;font-weight:600;cursor:pointer;transition:.15s;white-space:nowrap}
+.fn-tab:hover{border-color:var(--muted)}.fn-tab.on{background:var(--primary);border-color:var(--primary);color:var(--on-primary)}
+.fn-panel{display:none}.fn-panel.on{display:block;animation:fnFade .25s ease}
+@keyframes fnFade{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:none}}
+@media(prefers-reduced-motion:reduce){.fn-panel.on{animation:none}}
+.fn-card{background:var(--grad-surface);border:1px solid var(--hair-dark);border-radius:16px;padding:20px;box-shadow:var(--sh-md)}.fn-card+.fn-card{margin-top:16px}
+.fn-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}@media(max-width:640px){.fn-grid{grid-template-columns:1fr}}
+.fn-field{margin-bottom:12px}.fn-label{display:block;color:var(--muted);font-size:13px;margin-bottom:6px}
+.fn-in,.fn-sel{width:100%;height:44px;background:var(--elevated);border:1px solid var(--hair-dark);color:var(--body);border-radius:9px;padding:0 13px;font-size:14px;font-family:inherit}
+.fn-in:focus,.fn-sel:focus{outline:2px solid var(--info);border-color:var(--info)}
+.fn-res{background:var(--card);border:1px solid var(--hair-dark);border-radius:12px;padding:16px;margin-top:14px}
+.fn-row{display:flex;justify-content:space-between;gap:12px;padding:8px 0;border-bottom:1px solid var(--hair-soft);font-size:14px}.fn-row:last-child{border-bottom:none}.fn-row b{color:var(--on-dark);font-family:var(--num)}
+.fn-big{font-family:var(--num);font-weight:700;font-size:clamp(20px,3vw,26px);color:var(--primary)}
+.fn-note{color:var(--muted);font-size:12.5px;margin-top:8px;line-height:1.5}
+.fn-hl{color:var(--on-dark);font-weight:600}
+.fn-two{display:grid;grid-template-columns:1fr 1fr;gap:20px}@media(max-width:720px){.fn-two{grid-template-columns:1fr}}
+/* Laporan kertas */
+.fn-paper{background:#f3ead8;color:#3a2f1c;border-radius:14px;padding:26px;box-shadow:var(--sh-md);font-family:Georgia,'Times New Roman',serif}
+.fn-paper h2{color:#4a2f1c;text-align:center;font-family:Georgia,serif;letter-spacing:1px;margin:0}
+.fn-paper .sub{text-align:center;color:#7a6a4c;font-size:13px;margin-top:2px;margin-bottom:16px}
+.fn-paper h4{color:#5a3a1c;border-bottom:2px solid #c9b48c;padding-bottom:4px;margin:14px 0 6px;font-size:14px;letter-spacing:.5px;text-transform:uppercase}
+.fn-pr{display:flex;justify-content:space-between;gap:10px;padding:5px 0;font-size:14px;border-bottom:1px dotted #cbb78e}
+.fn-pr .lbl input{width:100%;background:transparent;border:none;border-bottom:1px dashed #b89e6a;color:#3a2f1c;font-family:inherit;font-size:14px;padding:2px 0}
+.fn-pr .lbl input:focus{outline:none;border-bottom-color:#8a6d2f}
+.fn-pin{width:130px;text-align:right;background:transparent;border:none;border-bottom:1px dashed #b89e6a;color:#3a2f1c;font-family:'IBM Plex Mono',monospace;font-size:14px;font-weight:600}
+.fn-pin:focus{outline:none;border-bottom-color:#8a6d2f}
+.fn-ptot{display:flex;justify-content:space-between;font-weight:700;padding:7px 0;border-top:2px solid #b89e6a;margin-top:4px;font-size:15px;color:#3a2f1c;font-family:'IBM Plex Mono',monospace}
+.fn-badge{display:inline-block;padding:4px 12px;border-radius:8px;font-weight:700;font-size:13px}
+.fn-ok{background:#cdebd3;color:#1c7a3a}.fn-bad{background:#f4d3c4;color:#a3421c}
+.fn-tbl{width:100%;border-collapse:collapse;font-size:13px}
+.fn-tbl th,.fn-tbl td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--hair-soft)}
+.fn-tbl th{color:var(--muted);font-weight:600;font-size:12px;text-transform:uppercase;letter-spacing:.3px}
+.fn-tbl td.num,.fn-tbl th.num{text-align:right;font-family:var(--num)}
+.fn-tbl tbody tr:hover,.fn-tbl tr:hover{background:var(--elevated)}
+@media print{.nav,.footer,.fn-sub,.no-print{display:none!important}body{background:#fff}.fn-paper{box-shadow:none}}
+</style>
+</head>
+<body>
+<nav class="nav"><div class="nav-in">
+<a class="brand" href="index.html"><span class="logo">P</span>Pusat<b>BankSoal</b></a>
+<div class="nav-links" id="navLinks">
+<a href="index.html" class="nav-link">Beranda</a>
+<div class="nav-group">
+<button type="button" class="nav-group-btn" aria-expanded="false" aria-haspopup="true" aria-controls="menu-belajar">Belajar<svg class="i nav-caret" aria-hidden="true"><use href="#i-chevron-down"></use></svg></button>
+<div class="nav-menu" id="menu-belajar" role="menu">
+<a href="tryout.html" class="nav-menu-item" role="menuitem"><span class="nav-menu-ic"><svg class="i" aria-hidden="true"><use href="#i-target"></use></svg></span><span class="nav-menu-tx"><b>Tryout</b><small>Simulasi ujian & latihan soal</small></span></a>
+<a href="pembahasan.html" class="nav-menu-item" role="menuitem"><span class="nav-menu-ic"><svg class="i" aria-hidden="true"><use href="#i-book"></use></svg></span><span class="nav-menu-tx"><b>Bank Soal &amp; Pembahasan</b><small>Soal lengkap dengan pembahasan</small></span></a>
+<a href="dashboard.html" class="nav-menu-item" role="menuitem"><span class="nav-menu-ic"><svg class="i" aria-hidden="true"><use href="#i-chart"></use></svg></span><span class="nav-menu-tx"><b>Dashboard</b><small>Progres &amp; statistik belajar</small></span></a>
+<a href="analisis.html" class="nav-menu-item" role="menuitem"><span class="nav-menu-ic"><svg class="i" aria-hidden="true"><use href="#i-brain"></use></svg></span><span class="nav-menu-tx"><b>AI Analisis</b><small>Analisis kelemahan berbasis AI</small></span></a>
+</div></div>
+<div class="nav-group active">
+<button type="button" class="nav-group-btn" aria-expanded="false" aria-haspopup="true" aria-controls="menu-kampus">Kampus &amp; Karier<svg class="i nav-caret" aria-hidden="true"><use href="#i-chevron-down"></use></svg></button>
+<div class="nav-menu" id="menu-kampus" role="menu">
+<a href="kuliah.html" class="nav-menu-item" role="menuitem"><span class="nav-menu-ic"><svg class="i" aria-hidden="true"><use href="#i-grad"></use></svg></span><span class="nav-menu-tx"><b>Kuliah</b><small>1161 prodi di 290 kampus</small></span></a>
+<a href="beasiswa.html" class="nav-menu-item" role="menuitem"><span class="nav-menu-ic"><svg class="i" aria-hidden="true"><use href="#i-money"></use></svg></span><span class="nav-menu-tx"><b>Beasiswa</b><small>90 beasiswa dalam &amp; luar negeri</small></span></a>
+<a href="kerja-remote.html" class="nav-menu-item" role="menuitem"><span class="nav-menu-ic"><svg class="i" aria-hidden="true"><use href="#i-globe"></use></svg></span><span class="nav-menu-tx"><b>Kerja Remote</b><small>Lowongan remote ID &amp; luar negeri</small></span></a><a href="finansial.html" class="nav-menu-item active" role="menuitem" aria-current="page"><span class="nav-menu-ic"><svg class="i" aria-hidden="true"><use href="#i-money"></use></svg></span><span class="nav-menu-tx"><b>Finansial</b><small>Kalkulator keuangan &amp; investasi</small></span></a>
+<a href="skripsi.html" class="nav-menu-item" role="menuitem"><span class="nav-menu-ic"><svg class="i" aria-hidden="true"><use href="#i-doc"></use></svg></span><span class="nav-menu-tx"><b>Riset &amp; Skripsi</b><small>Asisten riset &amp; penulisan</small></span></a>
+</div></div>
+<div class="nav-group">
+<button type="button" class="nav-group-btn" aria-expanded="false" aria-haspopup="true" aria-controls="menu-studio">Studio AI<svg class="i nav-caret" aria-hidden="true"><use href="#i-chevron-down"></use></svg></button>
+<div class="nav-menu" id="menu-studio" role="menu">
+<a href="prompt-studio.html" class="nav-menu-item" role="menuitem"><span class="nav-menu-ic"><svg class="i" aria-hidden="true"><use href="#i-sparkles"></use></svg></span><span class="nav-menu-tx"><b>Prompt Studio</b><small>Generator prompt AI</small></span></a>
+<a href="bisnis.html" class="nav-menu-item" role="menuitem"><span class="nav-menu-ic"><svg class="i" aria-hidden="true"><use href="#i-bolt"></use></svg></span><span class="nav-menu-tx"><b>Studio Bisnis</b><small>Alat bisnis &amp; monetisasi</small></span></a>
+</div></div>
+<a href="index.html#harga" class="nav-link">Harga</a>
+</div>
+<div class="nav-right"><a href="auth.html" class="hide-sm" style="font-weight:600">Masuk</a><a href="auth.html" class="btn btn-primary btn-sm">Daftar Gratis</a><button class="nav-toggle" data-nav-toggle aria-label="Buka menu" aria-expanded="false"><svg class="i" aria-hidden="true"><use href="#i-menu"></use></svg></button></div>
+</div></nav>
+
+<main>
+<section class="section-sm"><div class="wrap">
+  <span class="section-eyebrow">Finansial · Gratis untuk umum</span>
+  <h1 class="mt">Kalkulator <span class="gradient-text">keuangan &amp; investasi</span> pribadi</h1>
+  <p class="lead mt">Laporan keuangan pribadi gaya papan permainan <i>Cashflow</i> — lihat apakah kamu sudah bisa <b style="color:var(--on-dark)">keluar dari rat race</b> — plus kalkulator <b style="color:var(--on-dark)">saham (IDX), reksadana &amp; obligasi/SBN</b>. Semua dihitung di perangkatmu &amp; tersimpan otomatis.</p>
+
+  <div class="fn-card mt" style="display:flex;gap:12px;align-items:center;flex-wrap:wrap">
+    <span>📅 <b class="fn-hl">Bulan laporan</b></span>
+    <input class="fn-in" id="fnMonth" type="month" style="max-width:180px">
+    <button class="btn btn-secondary btn-sm" id="fnCopy">Salin dari bulan lalu</button>
+    <span class="fn-note" style="margin:0">Tiap bulan disimpan &amp; dihitung terpisah.</span>
+  </div>
+
+  <nav class="fn-sub" id="fnSub" role="tablist" aria-label="Alat finansial">
+    <button class="fn-tab on" data-tab="laporan" role="tab">📄 Laporan Pribadi</button>
+    <button class="fn-tab" data-tab="anggaran" role="tab">📊 Anggaran</button>
+    <button class="fn-tab" data-tab="saham" role="tab">📈 Saham</button>
+    <button class="fn-tab" data-tab="reksadana" role="tab">💹 Reksadana</button>
+    <button class="fn-tab" data-tab="obligasi" role="tab">🏦 Obligasi / SBN</button>
+    <button class="fn-tab" data-tab="merdeka" role="tab">🌴 Merdeka (FIRE)</button>
+  </nav>
+
+  <!-- LAPORAN -->
+  <section class="fn-panel on" data-panel="laporan">
+    <div class="flex gap wrap-flex no-print" style="margin-bottom:12px">
+      <button class="btn btn-primary btn-sm" id="fnPrint">Cetak / PDF</button>
+      <button class="btn btn-ghost btn-sm" id="fnReset">Kosongkan bulan ini</button>
+    </div>
+    <div class="fn-paper" id="fnPaper">
+      <h2>LAPORAN KEUANGAN</h2>
+      <div class="sub" id="fnPaperSub">Financial Statement</div>
+      <div class="fn-two">
+        <div>
+          <h4>Pemasukan / bln</h4>
+          <div class="fn-pr"><span>Gaji</span><input class="fn-pin lp" data-k="inGaji" inputmode="numeric"></div>
+          <div class="fn-pr"><span>Sampingan</span><input class="fn-pin lp" data-k="inSamp" inputmode="numeric"></div>
+          <div class="fn-pr"><span>Pemasukan pasif</span><input class="fn-pin lp" data-k="inPasif" inputmode="numeric"></div>
+          <div class="fn-ptot"><span>Total Pemasukan</span><span id="fnTotIn">Rp 0</span></div>
+          <div class="fn-ptot"><span>↳ Pasif</span><span id="fnTotPasif">Rp 0</span></div>
+          <h4>Pengeluaran / bln</h4>
+          <div class="fn-pr"><span>Kebutuhan pokok</span><input class="fn-pin lp" data-k="exPokok" inputmode="numeric"></div>
+          <div class="fn-pr"><span>Pajak (kendaraan dll)</span><input class="fn-pin lp" data-k="exPajak" inputmode="numeric"></div>
+          <div class="fn-pr"><span>Biaya sekolah anak</span><input class="fn-pin lp" data-k="exSekolah" inputmode="numeric"></div>
+          <div class="fn-pr"><span>Perawatan / servis</span><input class="fn-pin lp" data-k="exRawat" inputmode="numeric"></div>
+          <div class="fn-pr"><span>Cicilan / bayar utang</span><input class="fn-pin lp" data-k="exCicil" inputmode="numeric"></div>
+          <div class="fn-pr"><span>Gaya hidup</span><input class="fn-pin lp" data-k="exGaya" inputmode="numeric"></div>
+          <div class="fn-pr"><span>Lainnya</span><input class="fn-pin lp" data-k="exLain" inputmode="numeric"></div>
+          <div class="fn-ptot"><span>Total Pengeluaran</span><span id="fnTotEx">Rp 0</span></div>
+          <div class="fn-ptot"><span>Arus Kas / bln</span><span id="fnCash">Rp 0</span></div>
+        </div>
+        <div>
+          <h4>Aset (menghasilkan / bernilai)</h4>
+          <div class="fn-pr"><span>Uang tunai / tabungan</span><input class="fn-pin lp" data-k="asTunai" inputmode="numeric"></div>
+          <div class="fn-pr"><span>Investasi (saham/RD/dll)</span><input class="fn-pin lp" data-k="asInvest" inputmode="numeric"></div>
+          <div class="fn-pr"><span>Properti / aset lain</span><input class="fn-pin lp" data-k="asLain" inputmode="numeric"></div>
+          <div class="fn-ptot"><span>Total Aset</span><span id="fnTotAset">Rp 0</span></div>
+          <h4>Liabilitas (utang)</h4>
+          <div class="fn-pr"><span>Utang / KPR / pinjaman</span><input class="fn-pin lp" data-k="liUtang" inputmode="numeric"></div>
+          <div class="fn-pr"><span>Utang lainnya</span><input class="fn-pin lp" data-k="liLain" inputmode="numeric"></div>
+          <div class="fn-ptot"><span>Total Liabilitas</span><span id="fnTotLia">Rp 0</span></div>
+          <div class="fn-ptot" style="border-top:3px double #8a6d2f"><span>KEKAYAAN BERSIH</span><span id="fnNet">Rp 0</span></div>
+          <h4>Passive income vs pengeluaran</h4>
+          <div id="fnRat" style="text-align:center;margin-top:6px"></div>
+          <p style="text-align:center;font-size:12px;color:#7a6a4c;margin-top:8px" id="fnRatNote"></p>
+        </div>
+      </div>
+    </div>
+    <p class="fn-note">“Aset menaruh uang di kantongmu; liabilitas mengambil uang dari kantongmu.” — Robert Kiyosaki. Tujuannya: <b class="fn-hl">pemasukan pasif ≥ total pengeluaran</b> = merdeka finansial.</p>
+  </section>
+
+  <!-- ANGGARAN -->
+  <section class="fn-panel" data-panel="anggaran">
+    <div class="fn-card">
+      <h3>Anggaran 50 / 30 / 20</h3>
+      <p class="fn-note">Aturan sederhana: 50% kebutuhan, 30% keinginan, 20% menabung/investasi. Berdasarkan total pemasukanmu di tab Laporan.</p>
+      <div class="fn-res" id="fnBudget"></div>
+    </div>
+  </section>
+
+  <!-- SAHAM -->
+  <section class="fn-panel" data-panel="saham">
+    <div class="fn-card">
+      <h3>Kalkulator Saham (IDX)</h3>
+      <div class="fn-grid mt">
+        <div class="fn-field"><label class="fn-label" for="shBuy">Harga beli / lembar (Rp)</label><input class="fn-in" id="shBuy" type="number" placeholder="4500"></div>
+        <div class="fn-field"><label class="fn-label" for="shLot">Jumlah lot (1 lot = 100 lembar)</label><input class="fn-in" id="shLot" type="number" placeholder="10"></div>
+        <div class="fn-field"><label class="fn-label" for="shNow">Harga sekarang / lembar (Rp)</label><input class="fn-in" id="shNow" type="number" placeholder="5200"></div>
+        <div class="fn-field"><label class="fn-label" for="shDiv">Dividen / lembar / tahun (Rp)</label><input class="fn-in" id="shDiv" type="number" placeholder="180"></div>
+        <div class="fn-field"><label class="fn-label" for="shFee">Fee beli+jual (%)</label><input class="fn-in" id="shFee" type="number" placeholder="0.3" step="0.01"></div>
+      </div>
+      <div class="fn-res" id="shOut"></div>
+    </div>
+    <div class="fn-card">
+      <h3>DCA — Nabung Saham Rutin</h3>
+      <div class="fn-grid mt">
+        <div class="fn-field"><label class="fn-label" for="dcaM">Setoran / bulan (Rp)</label><input class="fn-in" id="dcaM" type="number" placeholder="1000000"></div>
+        <div class="fn-field"><label class="fn-label" for="dcaY">Lama (tahun)</label><input class="fn-in" id="dcaY" type="number" placeholder="10"></div>
+        <div class="fn-field"><label class="fn-label" for="dcaR">Perkiraan return / tahun (%)</label><input class="fn-in" id="dcaR" type="number" placeholder="12"></div>
+      </div>
+      <div class="fn-res" id="dcaOut"></div>
+    </div>
+    <div class="fn-card">
+      <h3>Referensi Saham Blue-chip IDX</h3>
+      <p class="fn-note">Daftar kurasi (LQ45/populer) dengan sektor &amp; <b class="fn-hl">indikasi dividend yield</b> sebagai gambaran. <b>Bukan harga/anjuran real-time</b> — cek harga terkini di aplikasi sekuritas, RTI, atau IDX. Isi angkanya ke kalkulator di atas.</p>
+      <div class="scroll-x mt"><table class="fn-tbl" id="shRef"><thead><tr><th>Kode</th><th>Nama</th><th>Sektor</th><th class="num">Div. yield*</th></tr></thead><tbody></tbody></table></div>
+      <p class="fn-note">*Indikatif/kisaran historis, dapat berubah. Dividen &amp; harga tidak dijamin.</p>
+    </div>
+  </section>
+
+  <!-- REKSADANA -->
+  <section class="fn-panel" data-panel="reksadana">
+    <div class="fn-card">
+      <h3>Kalkulator Reksadana</h3>
+      <div class="fn-grid mt">
+        <div class="fn-field"><label class="fn-label" for="rdAwal">Modal awal (Rp)</label><input class="fn-in" id="rdAwal" type="number" placeholder="5000000"></div>
+        <div class="fn-field"><label class="fn-label" for="rdBulan">Setoran / bulan (Rp)</label><input class="fn-in" id="rdBulan" type="number" placeholder="500000"></div>
+        <div class="fn-field"><label class="fn-label" for="rdReturn">Perkiraan return / tahun (%)</label><input class="fn-in" id="rdReturn" type="number" placeholder="8"></div>
+        <div class="fn-field"><label class="fn-label" for="rdTahun">Lama (tahun)</label><input class="fn-in" id="rdTahun" type="number" placeholder="10"></div>
+      </div>
+      <div class="fn-res" id="rdOut"></div>
+    </div>
+    <div class="fn-card">
+      <h3>Jenis Reksadana &amp; Kisaran Return</h3>
+      <div class="scroll-x mt"><table class="fn-tbl"><thead><tr><th>Jenis</th><th>Risiko</th><th class="num">Return/th (kira²)</th><th>Cocok untuk</th></tr></thead><tbody>
+      <tr><td>Pasar Uang</td><td>Sangat rendah</td><td class="num">3–5%</td><td>Dana darurat, &lt;1 th</td></tr>
+      <tr><td>Pendapatan Tetap</td><td>Rendah–sedang</td><td class="num">6–8%</td><td>1–3 tahun</td></tr>
+      <tr><td>Campuran</td><td>Sedang</td><td class="num">8–12%</td><td>3–5 tahun</td></tr>
+      <tr><td>Saham</td><td>Tinggi</td><td class="num">10–15%</td><td>&gt;5 tahun</td></tr>
+      </tbody></table></div>
+      <p class="fn-note">Kisaran ilustratif — kinerja masa lalu tidak menjamin hasil masa depan. Reksadana diawasi OJK; beli via APERD/aplikasi resmi (Bibit, Bareksa, dll).</p>
+    </div>
+  </section>
+
+  <!-- OBLIGASI -->
+  <section class="fn-panel" data-panel="obligasi">
+    <div class="fn-card">
+      <h3>Kalkulator Obligasi / SBN</h3>
+      <div class="fn-grid mt">
+        <div class="fn-field"><label class="fn-label" for="obNom">Nilai investasi / nominal (Rp)</label><input class="fn-in" id="obNom" type="number" placeholder="10000000"></div>
+        <div class="fn-field"><label class="fn-label" for="obKupon">Kupon / tahun (%)</label><input class="fn-in" id="obKupon" type="number" placeholder="6.4" step="0.01"></div>
+        <div class="fn-field"><label class="fn-label" for="obTenor">Tenor (tahun)</label><input class="fn-in" id="obTenor" type="number" placeholder="3"></div>
+        <div class="fn-field"><label class="fn-label" for="obFreq">Frekuensi kupon</label><select class="fn-sel" id="obFreq"><option value="12">Bulanan</option><option value="4">Per 3 bulan</option><option value="2">Per 6 bulan</option><option value="1">Tahunan</option></select></div>
+        <div class="fn-field"><label class="fn-label" for="obTax">Pajak kupon (%)</label><input class="fn-in" id="obTax" type="number" placeholder="10" step="0.1"></div>
+        <div class="fn-field"><label class="fn-label" for="obTipe">Jenis kupon</label><select class="fn-sel" id="obTipe"><option value="fix">Tetap (fixed)</option><option value="float">Mengambang (floating, ilustrasi)</option></select></div>
+      </div>
+      <div class="fn-res" id="obOut"></div>
+    </div>
+    <div class="fn-card">
+      <h3>Jenis SBN Ritel</h3>
+      <div class="scroll-x mt"><table class="fn-tbl"><thead><tr><th>Produk</th><th>Kupon</th><th>Tenor</th><th>Bisa dijual?</th></tr></thead><tbody>
+      <tr><td>ORI (Obligasi Negara Ritel)</td><td>Tetap</td><td>3 th</td><td>Ya (pasar sekunder)</td></tr>
+      <tr><td>SR (Sukuk Ritel)</td><td>Tetap (syariah)</td><td>3 th</td><td>Ya (pasar sekunder)</td></tr>
+      <tr><td>SBR (Savings Bond Ritel)</td><td>Mengambang + floor</td><td>2 th</td><td>Tidak (ada early redemption)</td></tr>
+      <tr><td>ST (Sukuk Tabungan)</td><td>Mengambang + floor (syariah)</td><td>2 th</td><td>Tidak (ada early redemption)</td></tr>
+      </tbody></table></div>
+      <p class="fn-note">Pajak kupon SBN ritel umumnya <b class="fn-hl">10% final</b>. Dijamin negara (UU). Kupon aktual mengikuti penerbitan resmi Kemenkeu — cek <b>kemenkeu.go.id</b> / mitra distribusi.</p>
+    </div>
+  </section>
+
+  <!-- MERDEKA -->
+  <section class="fn-panel" data-panel="merdeka">
+    <div class="fn-card">
+      <h3>Merdeka Finansial (FIRE)</h3>
+      <p class="fn-note">Aturan 4%: kamu “merdeka” saat dana investasi = <b class="fn-hl">pengeluaran tahunan × 25</b> (hasil ±4%/tahun menutup biaya hidup).</p>
+      <div class="fn-grid mt">
+        <div class="fn-field"><label class="fn-label" for="frExp">Pengeluaran / bulan (Rp)</label><input class="fn-in" id="frExp" type="number" placeholder="6000000"></div>
+        <div class="fn-field"><label class="fn-label" for="frNow">Dana investasi saat ini (Rp)</label><input class="fn-in" id="frNow" type="number" placeholder="50000000"></div>
+        <div class="fn-field"><label class="fn-label" for="frMonthly">Investasi / bulan (Rp)</label><input class="fn-in" id="frMonthly" type="number" placeholder="3000000"></div>
+        <div class="fn-field"><label class="fn-label" for="frReturn">Return / tahun (%)</label><input class="fn-in" id="frReturn" type="number" placeholder="10"></div>
+      </div>
+      <div class="fn-res" id="frOut"></div>
+    </div>
+  </section>
+
+  <div class="fn-note" style="max-width:70ch">Semua fitur di halaman ini <b class="fn-hl">gratis &amp; terbuka untuk umum</b>. Angka bersifat estimasi dari input kamu; ini bukan nasihat keuangan/investasi. Data tersimpan lokal di perangkatmu.</div>
+</div></section>
+</main>
+
+<footer class="footer"><div class="wrap"><div class="cols">
+<div><a class="brand" href="index.html" style="color:var(--ink)"><span class="logo">P</span>Pusat<b>BankSoal</b></a><p style="color:#5b6672;font-size:13px;margin-top:14px;max-width:34ch">AI Education Intelligence Platform. Tryout, bank soal, kuliah, beasiswa & keuangan #1 di Indonesia.</p></div>
+<div><h5>Produk</h5><a href="tryout.html">Tryout CPNS</a><a href="kuliah.html">Kuliah & Kampus</a><a href="beasiswa.html">Beasiswa</a><a href="finansial.html">Finansial</a><a href="bisnis.html">Studio Bisnis</a></div>
+<div><h5>Kategori</h5><a href="tryout.html">CPNS & PPPK</a><a href="tryout.html">SNBT/UTBK</a><a href="tryout.html">Kedinasan</a><a href="tryout.html">BUMN</a><a href="tryout.html">TNI/POLRI</a></div>
+<div><h5>Perusahaan</h5><a href="#">Tentang Kami</a><a href="#">Blog</a><a href="#">Karier</a><a href="#">Kontak</a></div>
+<div><h5>Bantuan</h5><a href="#">Pusat Bantuan</a><a href="#">Syarat & Ketentuan</a><a href="#">Kebijakan Privasi</a><a href="admin.html">Admin</a></div>
+</div><div class="bottom"><span>© <span data-year>2026</span> PusatBankSoal.id — Seluruh hak cipta dilindungi.</span><span>Dibuat untuk pejuang ujian Indonesia 🇮🇩</span></div></div></footer>
+
+<script>
+(function(){
+  var $=function(id){return document.getElementById(id);};
+  function n(id){var v=parseFloat(($(id)&&$(id).value)||'');return isFinite(v)?v:0;}
+  function rp(x){if(!isFinite(x))return '—';return 'Rp '+Math.round(x).toLocaleString('id-ID');}
+  function pct(x){return isFinite(x)?(Math.round(x*100)/100)+'%':'—';}
+  function rows(a){return a.map(function(r){return '<div class="fn-row"><span>'+r[0]+'</span><b>'+r[1]+'</b></div>';}).join('');}
+
+  // ---- sub-nav ----
+  $('fnSub').addEventListener('click',function(e){var b=e.target.closest('.fn-tab');if(!b)return;var t=b.getAttribute('data-tab');
+    Array.prototype.forEach.call(this.querySelectorAll('.fn-tab'),function(x){x.classList.toggle('on',x===b);});
+    Array.prototype.forEach.call(document.querySelectorAll('.fn-panel'),function(p){p.classList.toggle('on',p.getAttribute('data-panel')===t);});
+  });
+
+  // ================= LAPORAN (per-bulan) =================
+  var LP_KEYS=['inGaji','inSamp','inPasif','exPokok','exPajak','exSekolah','exRawat','exCicil','exGaya','exLain','asTunai','asInvest','asLain','liUtang','liLain'];
+  function monthKey(){return 'pbs_fin_'+($('fnMonth').value||'x');}
+  function lpLoad(){var o={};try{o=JSON.parse(localStorage.getItem(monthKey())||'{}');}catch(e){}
+    LP_KEYS.forEach(function(k){var el=document.querySelector('.lp[data-k="'+k+'"]');if(el)el.value=(o[k]!=null?o[k]:'');});
+    calcLaporan();}
+  function lpSave(){var o={};LP_KEYS.forEach(function(k){var el=document.querySelector('.lp[data-k="'+k+'"]');o[k]=el?el.value:'';});
+    try{localStorage.setItem(monthKey(),JSON.stringify(o));}catch(e){}}
+  function lpVal(k){var el=document.querySelector('.lp[data-k="'+k+'"]');if(!el)return 0;var v=parseFloat(String(el.value).replace(/[^\d.-]/g,''));return isFinite(v)?v:0;}
+  function calcLaporan(){
+    var totIn=lpVal('inGaji')+lpVal('inSamp')+lpVal('inPasif'),pasif=lpVal('inPasif');
+    var totEx=lpVal('exPokok')+lpVal('exPajak')+lpVal('exSekolah')+lpVal('exRawat')+lpVal('exCicil')+lpVal('exGaya')+lpVal('exLain');
+    var totAset=lpVal('asTunai')+lpVal('asInvest')+lpVal('asLain'),totLia=lpVal('liUtang')+lpVal('liLain'),net=totAset-totLia,cash=totIn-totEx;
+    $('fnTotIn').textContent=rp(totIn);$('fnTotPasif').textContent=rp(pasif);$('fnTotEx').textContent=rp(totEx);
+    $('fnCash').textContent=rp(cash);$('fnTotAset').textContent=rp(totAset);$('fnTotLia').textContent=rp(totLia);$('fnNet').textContent=rp(net);
+    var merdeka=pasif>=totEx&&totEx>0;
+    $('fnRat').innerHTML='<span class="fn-badge '+(merdeka?'fn-ok':'fn-bad')+'">'+(merdeka?'✓ KELUAR DARI RAT RACE':'Masih di dalam rat race')+'</span>';
+    $('fnRatNote').textContent=merdeka?('Pemasukan pasif ('+rp(pasif)+') sudah menutup pengeluaran ('+rp(totEx)+'). Merdeka!'):
+      (totEx>0?('Pasif '+rp(pasif)+' dari '+rp(totEx)+' pengeluaran ('+Math.round(pasif/totEx*100)+'%). Kurang '+rp(Math.max(0,totEx-pasif))+'/bln.'):'Isi angka pemasukan & pengeluaranmu.');
+    var d=$('fnMonth').value?new Date($('fnMonth').value+'-01'):new Date();
+    $('fnPaperSub').textContent='Financial Statement · '+d.toLocaleDateString('id-ID',{month:'long',year:'numeric'});
+    // anggaran
+    var k=totIn*0.5,w=totIn*0.3,s=totIn*0.2;
+    $('fnBudget').innerHTML='<div class="fn-big">'+rp(totIn)+'<span style="font-size:13px;color:var(--muted);font-weight:400"> total pemasukan / bulan</span></div>'+
+      rows([['Kebutuhan (50%)',rp(k)],['Keinginan (30%)',rp(w)],['Tabung/investasi (20%)',rp(s)]])+
+      '<p class="fn-note">Pengeluaranmu saat ini '+rp(totEx)+'. '+(totEx>totIn?'<span style="color:var(--down)">Lebih besar dari pemasukan — waspada!</span>':'Sisa '+rp(totIn-totEx)+' bisa ditabung/investasi.')+'</p>';
+    frCalc();
+  }
+  document.addEventListener('input',function(e){if(e.target.classList&&e.target.classList.contains('lp')){lpSave();calcLaporan();}});
+  $('fnMonth').addEventListener('change',lpLoad);
+  $('fnPrint').addEventListener('click',function(){window.print();});
+  $('fnReset').addEventListener('click',function(){if(window.confirm('Kosongkan data bulan ini?')){try{localStorage.removeItem(monthKey());}catch(e){}lpLoad();}});
+  $('fnCopy').addEventListener('click',function(){var m=$('fnMonth').value;if(!m)return;var d=new Date(m+'-01');d.setMonth(d.getMonth()-1);
+    var prev='pbs_fin_'+d.getFullYear()+'-'+('0'+(d.getMonth()+1)).slice(-2);var data=localStorage.getItem(prev);
+    if(!data){alert('Belum ada data bulan sebelumnya.');return;}try{localStorage.setItem(monthKey(),data);}catch(e){}lpLoad();});
+
+  // ================= SAHAM =================
+  function calcSaham(){
+    var buy=n('shBuy'),lot=n('shLot'),now=n('shNow'),div=n('shDiv'),fee=n('shFee')/100,lem=lot*100;
+    var el=$('shOut');if(lem<=0||buy<=0){el.innerHTML='<p class="fn-note">Isi harga beli &amp; jumlah lot.</p>';return;}
+    var modal=buy*lem,feeBuy=modal*(fee/2),nilai=now*lem,feeSell=nilai*(fee/2);
+    var capital=(nilai-feeSell)-(modal+feeBuy),capPct=modal>0?capital/modal*100:0;
+    var divYear=div*lem,yoc=modal>0?divYear/modal*100:0,total=capital+divYear,totPct=modal>0?total/modal*100:0;
+    var bep=buy*(1+fee);
+    el.innerHTML='<div class="fn-big" style="color:'+(total>=0?'var(--up)':'var(--down)')+'">'+rp(total)+'<span style="font-size:13px;color:var(--muted);font-weight:400"> total untung/rugi ('+pct(totPct)+')</span></div>'+
+      rows([['Modal beli (+fee)',rp(modal+feeBuy)+' ('+lem.toLocaleString('id-ID')+' lembar)'],['Nilai sekarang (−fee jual)',rp(nilai-feeSell)],['Capital gain/loss',rp(capital)+' ('+pct(capPct)+')'],['Dividen / tahun',rp(divYear)],['Yield on cost',pct(yoc)],['Harga BEP (incl. fee)',rp(bep)]]);
+  }
+  ['shBuy','shLot','shNow','shDiv','shFee'].forEach(function(id){$(id).addEventListener('input',calcSaham);});
+  function calcDCA(){
+    var m=n('dcaM'),y=n('dcaY'),r=n('dcaR')/100,mo=y*12,i=r/12;var el=$('dcaOut');
+    if(m<=0||mo<=0){el.innerHTML='<p class="fn-note">Isi setoran, lama, dan return.</p>';return;}
+    var fv=i>0?m*((Math.pow(1+i,mo)-1)/i):m*mo,setor=m*mo,untung=fv-setor;
+    el.innerHTML='<div class="fn-big">'+rp(fv)+'<span style="font-size:13px;color:var(--muted);font-weight:400"> perkiraan nilai akhir</span></div>'+
+      rows([['Total setoran',rp(setor)],['Imbal hasil',rp(untung)],['Lama',y+' tahun ('+mo+' bln)']]);
+  }
+  ['dcaM','dcaY','dcaR'].forEach(function(id){$(id).addEventListener('input',calcDCA);});
+  // referensi IDX (indikatif dividend yield)
+  var IDX=[['BBCA','Bank Central Asia','Perbankan','2–3%'],['BBRI','Bank Rakyat Indonesia','Perbankan','5–8%'],['BMRI','Bank Mandiri','Perbankan','5–7%'],['BBNI','Bank Negara Indonesia','Perbankan','4–6%'],['TLKM','Telkom Indonesia','Telekomunikasi','4–6%'],['ASII','Astra International','Aneka Industri','5–8%'],['UNVR','Unilever Indonesia','Konsumsi','4–6%'],['ICBP','Indofood CBP','Konsumsi','2–3%'],['INDF','Indofood Sukses Makmur','Konsumsi','3–5%'],['KLBF','Kalbe Farma','Kesehatan','2–3%'],['HMSP','HM Sampoerna','Konsumsi (rokok)','6–9%'],['GGRM','Gudang Garam','Konsumsi (rokok)','3–6%'],['ANTM','Aneka Tambang','Logam/Tambang','1–4%'],['ADRO','Adaro Energy','Energi/Batu bara','8–15%'],['PTBA','Bukit Asam','Energi/Batu bara','8–15%'],['ITMG','Indo Tambangraya','Energi/Batu bara','10–20%'],['PGAS','Perusahaan Gas Negara','Energi','6–10%'],['UNTR','United Tractors','Alat berat','5–9%'],['SMGR','Semen Indonesia','Semen','2–4%'],['INTP','Indocement','Semen','3–5%'],['JPFA','Japfa Comfeed','Pakan/Unggas','2–5%'],['CPIN','Charoen Pokphand','Pakan/Unggas','1–3%'],['ICBP','Indofood CBP','Konsumsi','2–3%'],['MYOR','Mayora Indah','Konsumsi','1–2%'],['AMRT','Sumber Alfaria (Alfamart)','Ritel','1–2%'],['MAPI','Mitra Adiperkasa','Ritel','0–1%'],['ACES','Aspirasi Hidup (ACE)','Ritel','2–4%'],['TOWR','Sarana Menara Nusantara','Menara','1–2%'],['TBIG','Tower Bersama','Menara','1–2%'],['ISAT','Indosat','Telekomunikasi','2–5%'],['EXCL','XL Axiata','Telekomunikasi','1–3%'],['MDKA','Merdeka Copper Gold','Logam/Tambang','0%'],['INCO','Vale Indonesia','Nikel','1–3%'],['MEDC','Medco Energi','Energi','2–4%'],['PGEO','Pertamina Geothermal','Energi (panas bumi)','2–4%'],['AKRA','AKR Corporindo','Distribusi/Energi','3–5%'],['BRPT','Barito Pacific','Petrokimia','0–1%'],['TPIA','Chandra Asri','Petrokimia','0%'],['MIKA','Mitra Keluarga','Kesehatan (RS)','1–2%'],['SIDO','Sido Muncul','Konsumsi/Herbal','4–6%'],['BFIN','BFI Finance','Pembiayaan','5–8%'],['ARTO','Bank Jago','Bank digital','0%'],['GOTO','GoTo Gojek Tokopedia','Teknologi','0%'],['BUKA','Bukalapak','Teknologi','0%'],['EMTK','Elang Mahkota Teknologi','Media/Teknologi','0–1%']];
+  (function(){var seen={},rowsH=IDX.filter(function(r){if(seen[r[0]])return false;seen[r[0]]=1;return true;}).map(function(r){return '<tr><td><b class="fn-hl">'+r[0]+'</b></td><td>'+r[1]+'</td><td>'+r[2]+'</td><td class="num">'+r[3]+'</td></tr>';}).join('');
+    $('shRef').querySelector('tbody').innerHTML=rowsH;})();
+
+  // ================= REKSADANA =================
+  function calcRD(){
+    var awal=n('rdAwal'),bulan=n('rdBulan'),r=n('rdReturn')/100,y=n('rdTahun'),mo=y*12,i=r/12;var el=$('rdOut');
+    if(mo<=0){el.innerHTML='<p class="fn-note">Isi lama (tahun) &amp; return.</p>';return;}
+    var fvAwal=awal*Math.pow(1+i,mo),fvBulan=i>0?bulan*((Math.pow(1+i,mo)-1)/i):bulan*mo,fv=fvAwal+fvBulan;
+    var setor=awal+bulan*mo,untung=fv-setor;
+    el.innerHTML='<div class="fn-big">'+rp(fv)+'<span style="font-size:13px;color:var(--muted);font-weight:400"> perkiraan nilai akhir</span></div>'+
+      rows([['Total setoran',rp(setor)],['Imbal hasil',rp(untung)+' ('+pct(setor>0?untung/setor*100:0)+')'],['Lama',y+' tahun']]);
+  }
+  ['rdAwal','rdBulan','rdReturn','rdTahun'].forEach(function(id){$(id).addEventListener('input',calcRD);});
+
+  // ================= OBLIGASI =================
+  function calcOb(){
+    var nom=n('obNom'),kupon=n('obKupon')/100,tenor=n('obTenor'),freq=parseFloat($('obFreq').value),tax=n('obTax')/100;var el=$('obOut');
+    if(nom<=0||kupon<=0||tenor<=0){el.innerHTML='<p class="fn-note">Isi nominal, kupon &amp; tenor.</p>';return;}
+    var kuponTahun=nom*kupon,perPeriode=kuponTahun/freq,netPeriode=perPeriode*(1-tax),netTahun=kuponTahun*(1-tax);
+    var totalKupon=netTahun*tenor,totalTerima=totalKupon+nom;
+    el.innerHTML='<div class="fn-big">'+rp(netPeriode)+'<span style="font-size:13px;color:var(--muted);font-weight:400"> kupon bersih / '+({12:'bulan',4:'3 bulan',2:'6 bulan',1:'tahun'}[freq])+'</span></div>'+
+      rows([['Kupon kotor / tahun',rp(kuponTahun)],['Kupon bersih / tahun (−pajak)',rp(netTahun)],['Total kupon '+tenor+' th (bersih)',rp(totalKupon)],['Diterima saat jatuh tempo',rp(totalTerima)],['Yield bersih / tahun',pct(nom>0?netTahun/nom*100:0)]]);
+  }
+  ['obNom','obKupon','obTenor','obTax'].forEach(function(id){$(id).addEventListener('input',calcOb);});
+  $('obFreq').addEventListener('change',calcOb);$('obTipe').addEventListener('change',calcOb);
+
+  // ================= MERDEKA (FIRE) =================
+  function frCalc(){
+    var exp=n('frExp'),now=n('frNow'),m=n('frMonthly'),r=n('frReturn')/100;var el=$('frOut');if(!el)return;
+    if(exp<=0){el.innerHTML='<p class="fn-note">Isi pengeluaran bulananmu.</p>';return;}
+    var target=exp*12*25,i=r/12,months=0,bal=now;
+    if(bal<target){ if(m<=0&&i<=0){months=Infinity;} else { for(months=1;months<=1200;months++){bal=bal*(1+i)+m;if(bal>=target)break;} if(months>1200)months=Infinity; } }
+    var yrs=months===Infinity?'—':(Math.floor(months/12)+' th '+(months%12)+' bln');
+    el.innerHTML='<div class="fn-big">'+rp(target)+'<span style="font-size:13px;color:var(--muted);font-weight:400"> dana merdeka finansial</span></div>'+
+      rows([['Pengeluaran / tahun',rp(exp*12)],['Target (× 25 / aturan 4%)',rp(target)],['Passive income di target (4%/th)',rp(target*0.04/12)+' / bln'],['Perkiraan tercapai dalam',(now>=target?'Sudah tercapai! 🎉':yrs)]]);
+  }
+  ['frExp','frNow','frMonthly','frReturn'].forEach(function(id){$(id).addEventListener('input',frCalc);});
+
+  // init
+  (function(){var d=new Date();$('fnMonth').value=d.getFullYear()+'-'+('0'+(d.getMonth()+1)).slice(-2);})();
+  lpLoad(); calcSaham(); calcDCA(); calcRD(); calcOb(); frCalc();
+})();
+</script>
+<script src="assets/app.js" defer></script>
+</body>
+</html>
