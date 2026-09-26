@@ -41,6 +41,9 @@ Sepenuhnya **client-side** (data tersimpan lokal di perangkat, tidak diunggah ke
 | `skripsi.html` | **Riset & Skripsi** — landing AI Research & Thesis Workspace: pencarian sumber ilmiah, sitasi otomatis, kerangka BAB I–III |
 | `skripsi-app.html` | Workspace skripsi interaktif (noindex): pustaka referensi, editor sitasi, draft BAB, ekspor DOCX/PDF |
 | `assets/thesis.js` | Logika Riset & Skripsi: query OpenAlex/Crossref, formatter sitasi, penyimpanan lokal draft |
+| `franchise.html` | **Franchise & Peluang Bisnis** — direktori 55+ franchise (modal kecil–korporat) dengan biaya, lokasi, omzet, margin, BEP & ROI; kalkulator kelayakan; analisis daya beli per kota; boring business; ide bisnis non-franchise per modal |
+| `assets/data-franchise.js` | Dataset franchise, kota (UMK/UMP), boring business & ide bisnis (angka = kisaran referensi 2024–2025, wajib verifikasi ke franchisor) |
+| `assets/franchise.js` | Logika Franchise & Peluang: filter/pencarian, detail, kalkulator BEP/ROI, skor daya beli kota, shortlist (lokal) |
 | `assets/style.css` | Design system (token warna, tipografi, komponen premium) |
 
 ## Menjalankan
