@@ -378,5 +378,102 @@
 })();
 </script>
 <script src="assets/app.js" defer></script>
+<script>
+/* Panduan Beasiswa Utama — konten kurasi (syarat/benefit/tips ringkas; cek situs resmi untuk detail terbaru). */
+(function(){
+  var B=[
+    {n:'LPDP',neg:'Dalam & Luar Negeri',lv:'S2/S3',
+     benefit:['UKT penuh','Biaya hidup bulanan','Tiket PP, asuransi, buku','Tunjangan keluarga (S3) & dana riset'],
+     syarat:['WNI, sudah punya LoA / lolos seleksi','Batas usia (S2 ≤35, S3 ≤40)','IPK & bahasa (TOEFL/IELTS)','Esai komitmen kembali ke Indonesia'],
+     tips:['Kuatkan esai "kontribusi untuk Indonesia"','Siapkan LoA unconditional bila bisa','Latihan LGD & wawancara kebangsaan','Riset & rencana studi yang spesifik']},
+    {n:'KIP Kuliah Merdeka',neg:'Indonesia',lv:'D3–S1',
+     benefit:['Bebas UKT (sesuai akreditasi)','Bantuan biaya hidup bulanan berjenjang','Gratis biaya pendaftaran seleksi'],
+     syarat:['Lulus SMA/sederajat (maks 2 thn lalu)','Dari keluarga kurang mampu (DTKS/bukti)','Diterima di PTN/PTS terakreditasi','Data valid & jujur'],
+     tips:['Daftar akun KIP lebih awal','Siapkan dokumen ekonomi lengkap','Padukan dengan SNBP/SNBT','Jaga data konsisten (KK, SKTM)']},
+    {n:'Beasiswa Unggulan (Kemendikbud)',neg:'Indonesia',lv:'S1–S3',
+     benefit:['Biaya UKT','Biaya hidup','Biaya buku'],
+     syarat:['Prestasi akademik/non-akademik (tingkat nasional/internasional)','Sudah diterima di PT','IPK/nilai baik','Esai & rekomendasi'],
+     tips:['Tonjolkan prestasi terverifikasi','Esai visi & manfaat jelas','Lengkapi sertifikat prestasi','Ada kuota disabilitas & 3T']},
+    {n:'Chevening',neg:'Inggris (UK)',lv:'S2',
+     benefit:['Tuition penuh','Biaya hidup','Tiket PP & tunjangan','Jaringan alumni global'],
+     syarat:['Pengalaman kerja/kepemimpinan ± 2 thn','Diterima 3 kampus UK & pilih 1','IELTS memenuhi','Esai leadership & networking'],
+     tips:['Kuatkan cerita kepemimpinan & dampak','Jawab 4 esai dengan STAR','Bangun rencana karier pasca-studi','Aplikasi dibuka ± Agustus–November']},
+    {n:'Fulbright',neg:'Amerika Serikat',lv:'S2/S3',
+     benefit:['Tuition & biaya hidup','Tiket & asuransi','Tunjangan akademik','Pengalaman lintas budaya'],
+     syarat:['WNI, S1 (untuk S2)','TOEFL/IELTS & GRE (beberapa prodi)','Esai study objective & personal','Rekomendasi kuat'],
+     tips:['Mulai jauh hari (proses ± 1 thn)','Study objective sangat spesifik','Hubungi AMINEF untuk panduan','Kuatkan personal statement']},
+    {n:'Australia Awards (AAS)',neg:'Australia',lv:'S2/S3',
+     benefit:['Tuition penuh','Biaya hidup & tunjangan','Tiket PP & asuransi','Pelatihan pra-keberangkatan'],
+     syarat:['Pengalaman kerja relevan','IELTS/TOEFL','Bidang prioritas pembangunan','Komitmen kembali (2× durasi studi)'],
+     tips:['Pilih bidang prioritas AAS','Tunjukkan dampak untuk Indonesia','Siapkan IELTS dari awal','Manfaatkan jalur afirmasi bila memenuhi']},
+    {n:'DAAD',neg:'Jerman',lv:'S2/S3',
+     benefit:['Biaya hidup bulanan','Asuransi & tunjangan','Beberapa program tuition-free','Kursus bahasa Jerman'],
+     syarat:['S1 relevan & IPK baik','Pengalaman kerja (beberapa program)','Bahasa Inggris/Jerman','Motivation letter & CV'],
+     tips:['Banyak universitas Jerman gratis SPP','Cari program EPOS untuk negara berkembang','Kuatkan relevansi riset','Motivation letter terstruktur']},
+    {n:'MEXT',neg:'Jepang',lv:'D2–S3',
+     benefit:['Tuition penuh','Tunjangan bulanan','Tiket PP','Bebas biaya ujian & kursus bahasa'],
+     syarat:['Batas usia per jenjang','Nilai akademik baik','Ujian tulis & wawancara (jalur kedutaan)','Kesehatan memenuhi'],
+     tips:['Dua jalur: Kedutaan (G2G) & Universitas (U2U)','Pelajari materi ujian MEXT','Cari profesor pembimbing (U2U)','Belajar dasar bahasa Jepang']},
+    {n:'Erasmus Mundus',neg:'Eropa (multi-negara)',lv:'S2',
+     benefit:['Tuition penuh','Biaya hidup & mobilitas','Asuransi','Studi di 2+ negara Eropa'],
+     syarat:['S1 relevan','Bahasa Inggris (IELTS/TOEFL)','Motivation letter & CV','Rekomendasi'],
+     tips:['Lamar langsung ke konsorsium program','Bisa apply beberapa program','Tekankan mobilitas & lintas budaya','Deadline ± Oktober–Januari']},
+    {n:'GKS / KGSP',neg:'Korea Selatan',lv:'S1–S3',
+     benefit:['Tuition penuh','Tunjangan bulanan','Tiket & settlement','Kursus bahasa Korea 1 thn'],
+     syarat:['Batas usia & nilai','TOPIK/Inggris (bervariasi)','Kesehatan','Esai & rencana studi'],
+     tips:['Dua jalur: Kedutaan & Universitas','Nilai TOPIK menaikkan peluang','Personal statement & study plan kuat','Siapkan medis & dokumen legalisir']},
+    {n:'Türkiye Bursları',neg:'Turki',lv:'S1–S3',
+     benefit:['Tuition penuh','Biaya hidup bulanan','Asrama & tiket','Kursus bahasa Turki 1 thn'],
+     syarat:['Batas usia (S1 ≤21)','Nilai akademik baik','Esai motivasi','Dokumen akademik'],
+     tips:['Satu aplikasi untuk banyak kampus','Esai motivasi personal','Nilai rapor/ijazah penting','Deadline ± Januari–Februari']},
+    {n:'Stipendium Hungaricum',neg:'Hungaria',lv:'S1–S3',
+     benefit:['Bebas tuition','Tunjangan bulanan','Asrama/subsidi tempat tinggal','Asuransi kesehatan'],
+     syarat:['Nominasi via kementerian mitra','Nilai akademik','Bahasa Inggris','Motivation letter'],
+     tips:['Cek jalur nominasi Indonesia','Pilih 2 program','Motivation & rencana studi jelas','Deadline ± Januari']},
+    {n:'Djarum Beasiswa Plus',neg:'Indonesia',lv:'S1 (semester 4)',
+     benefit:['Dana beasiswa bulanan','Pelatihan soft skill (leadership, nation building)','Jaringan alumni Beswan'],
+     syarat:['Mahasiswa S1 semester IV','IPK min 3,00','Aktif organisasi','Lolos tes & wawancara'],
+     tips:['Tonjolkan kepemimpinan & organisasi','Siapkan tes potensi & wawancara','Manfaatkan pelatihan soft skill','Bangun jaringan Beswan']},
+    {n:'Tanoto Foundation (TELADAN)',neg:'Indonesia',lv:'S1',
+     benefit:['Bantuan biaya kuliah & hidup','Program pengembangan kepemimpinan','Magang & mentoring'],
+     syarat:['Mahasiswa tahun pertama kampus mitra','Prestasi & kepemimpinan','Kebutuhan finansial','Seleksi ketat'],
+     tips:['Cek kampus mitra Tanoto','Kuatkan rekam jejak kepemimpinan','Ceritakan dampak sosial','Ikuti seluruh tahap seleksi']},
+    {n:'Beasiswa BI / Bank (BCA, Mandiri, dll)',neg:'Indonesia',lv:'S1',
+     benefit:['Dana pendidikan/bulanan','Pembinaan & komunitas penerima','Peluang magang/karier'],
+     syarat:['Mahasiswa aktif, IPK baik','Aktif organisasi/prestasi','Kebutuhan biaya','Seleksi berkas & wawancara'],
+     tips:['Pantau info di kampus/website bank','Lengkapi berkas prestasi','Ikut komunitas penerima','Manfaatkan jalur magang']},
+    {n:'StuNed',neg:'Belanda',lv:'S2 / short course',
+     benefit:['Tuition','Biaya hidup','Tiket & asuransi','Fokus bidang prioritas kerja sama'],
+     syarat:['Pengalaman kerja ± 2 thn','Diterima di kampus Belanda','IELTS/TOEFL','Relevansi dengan pekerjaan'],
+     tips:['Pilih bidang prioritas StuNed','Relevansikan studi dgn pekerjaan','Dukungan surat dari instansi','Kelola via Nuffic Neso']},
+    {n:'New Zealand Scholarships',neg:'Selandia Baru',lv:'S2/S3',
+     benefit:['Tuition penuh','Biaya hidup','Tiket & asuransi','Tunjangan penelitian'],
+     syarat:['Pengalaman kerja relevan','IELTS','Bidang prioritas pembangunan','Komitmen kembali'],
+     tips:['Fokus dampak pembangunan','Siapkan IELTS lebih awal','Tekankan kontribusi pasca-studi','Cek jadwal tahunan']},
+    {n:'Beasiswa Indonesia Bangkit (Kemenag)',neg:'Dalam & Luar Negeri',lv:'S1–S3',
+     benefit:['Beasiswa penuh (kolaborasi LPDP)','UKT & biaya hidup','Tunjangan pendukung'],
+     syarat:['Santri/guru madrasah/mahasiswa PTKI','Nilai & bahasa','Esai & komitmen','Rekomendasi lembaga'],
+     tips:['Cek kategori (santri/guru/PTKI)','Kuatkan kontribusi keislaman & bangsa','Siapkan LoA bila jalur LN','Pantau beasiswa.kemenag.go.id']}
+  ];
+  function ul(a){return '<ul style="margin:4px 0 0 16px;font-size:12.5px;color:var(--muted)">'+a.map(function(x){return '<li style="margin-bottom:2px">'+x+'</li>';}).join('')+'</ul>';}
+  var cards=B.map(function(d){
+    return '<details class="glass-card" style="padding:18px"><summary style="cursor:pointer;list-style:none;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap">'+
+      '<b style="color:var(--on-dark);font-size:15px">'+d.n+'</b>'+
+      '<span style="display:flex;gap:6px;flex-wrap:wrap"><span class="chip" style="font-size:11px">'+d.neg+'</span><span class="chip" style="font-size:11px">'+d.lv+'</span></span></summary>'+
+      '<div class="grid g3" style="margin-top:12px;gap:14px">'+
+        '<div><b style="font-size:12.5px;color:var(--up)">Yang ditanggung</b>'+ul(d.benefit)+'</div>'+
+        '<div><b style="font-size:12.5px;color:var(--on-dark)">Syarat utama</b>'+ul(d.syarat)+'</div>'+
+        '<div><b style="font-size:12.5px;color:var(--primary)">Tips lolos</b>'+ul(d.tips)+'</div>'+
+      '</div></details>';
+  }).join('');
+  var sec=document.createElement('section');
+  sec.className='section'; sec.id='panduan-beasiswa';
+  sec.innerHTML='<div class="wrap"><span class="section-eyebrow">Panduan beasiswa</span>'+
+    '<h2 class="mt">Beasiswa utama: <span class="gradient-text">syarat, benefit &amp; tips lolos</span></h2>'+
+    '<p class="lead mt">'+B.length+' beasiswa paling dicari dalam &amp; luar negeri. Klik untuk lihat yang ditanggung, syarat utama, dan tips lolosnya. Selalu cek situs resmi untuk detail &amp; jadwal terbaru.</p>'+
+    '<div class="grid g2 mt-lg" style="gap:14px">'+cards+'</div></div>';
+  var f=document.querySelector('footer'); if(f&&f.parentNode) f.parentNode.insertBefore(sec,f);
+})();
+</script>
 </body>
 </html>

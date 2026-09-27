@@ -776,5 +776,146 @@ a.ku-tag.verify:hover{border-color:var(--primary);color:var(--accent-ink)}
 })();
 </script>
 <script src="assets/app.js" defer></script>
+<script>
+/* Panduan Jurusan Populer — konten kurasi (gaji fresh grad = estimasi IDR/bulan, kota besar). */
+(function(){
+  var J=[
+    {n:'Teknik Informatika / Ilmu Komputer',r:'Saintek',g:'Rp6–12 jt',
+     prospek:['Software Engineer','Data Scientist','DevOps / Cloud','Cybersecurity','AI/ML Engineer'],
+     mk:['Algoritma & Struktur Data','Basis Data','Jaringan Komputer','Rekayasa Perangkat Lunak','Kecerdasan Buatan'],
+     skill:['Pemrograman','Problem solving','Matematika diskret','Kolaborasi Git'],
+     cocok:'Suka logika, ngoprek, & bikin produk digital. Prospek luas & gaji tinggi.'},
+    {n:'Sistem Informasi',r:'Saintek',g:'Rp5–10 jt',
+     prospek:['Business Analyst','Product Manager','ERP Consultant','IT Project Manager','Data Analyst'],
+     mk:['Analisis & Desain Sistem','Basis Data','Manajemen Proyek TI','Proses Bisnis','Pemrograman'],
+     skill:['Analisis proses bisnis','SQL','Komunikasi','Manajemen proyek'],
+     cocok:'Jembatan antara bisnis & teknologi — suka teknologi tapi juga manajemen.'},
+    {n:'Kedokteran',r:'Saintek',g:'Rp7–15 jt (naik pesat sbg spesialis)',
+     prospek:['Dokter Umum','Dokter Spesialis','Peneliti Medis','Dokter Perusahaan','Akademisi'],
+     mk:['Anatomi & Fisiologi','Patologi','Farmakologi','Ilmu Penyakit Dalam','Bedah'],
+     skill:['Ketelitian','Empati','Stamina belajar tinggi','Etika profesi'],
+     cocok:'Panggilan menolong orang, tahan studi panjang (S.Ked + profesi + koas).'},
+    {n:'Farmasi',r:'Saintek',g:'Rp5–9 jt',
+     prospek:['Apoteker','R&D Farmasi/Kosmetik','Regulatory Affairs','Medical Representative','QA/QC Industri'],
+     mk:['Kimia Farmasi','Farmakologi','Teknologi Sediaan','Farmasi Klinik','Bioteknologi'],
+     skill:['Ketelitian lab','Kimia','Regulasi (BPOM)','Analisis'],
+     cocok:'Suka kimia & kesehatan, peluang industri obat/kosmetik/makanan besar.'},
+    {n:'Teknik Sipil',r:'Saintek',g:'Rp5–10 jt',
+     prospek:['Site/Structural Engineer','Konsultan Konstruksi','Manajer Proyek','Quantity Surveyor','ASN PU'],
+     mk:['Mekanika Teknik','Struktur Beton & Baja','Geoteknik','Manajemen Konstruksi','Hidrologi'],
+     skill:['Analisis struktur','AutoCAD/SAP2000','Manajemen proyek','Ketelitian'],
+     cocok:'Suka bangunan/infrastruktur & kerja lapangan + perhitungan.'},
+    {n:'Teknik Elektro',r:'Saintek',g:'Rp6–11 jt',
+     prospek:['Electrical Engineer','Embedded/IoT Engineer','Telekomunikasi','Otomasi Industri','Energi/PLN'],
+     mk:['Rangkaian Listrik','Elektronika','Sistem Kendali','Sistem Tenaga','Mikroprosesor'],
+     skill:['Matematika & fisika kuat','Elektronika','Pemrograman embedded','Analisis'],
+     cocok:'Suka elektronika, energi, atau otomasi — fleksibel ke IT/IoT.'},
+    {n:'Teknik Industri',r:'Saintek',g:'Rp6–11 jt',
+     prospek:['Industrial Engineer','Supply Chain','Operations/PPIC','Konsultan','Business Analyst'],
+     mk:['Riset Operasi','Perancangan Sistem Kerja','Manajemen Rantai Pasok','Statistika Industri','Ergonomi'],
+     skill:['Optimasi & analitik','Manajemen','Statistik','Problem solving'],
+     cocok:'Suka efisiensi, sistem, & manajemen — jembatan teknik & bisnis.'},
+    {n:'Teknik Mesin',r:'Saintek',g:'Rp6–11 jt',
+     prospek:['Mechanical Engineer','Manufaktur/Otomotif','Maintenance/Migas','R&D','HVAC'],
+     mk:['Termodinamika','Mekanika Fluida','Elemen Mesin','Material Teknik','Manufaktur'],
+     skill:['CAD/CAE','Fisika terapan','Analisis','Problem solving'],
+     cocok:'Suka mesin, otomotif, manufaktur, atau energi.'},
+    {n:'Arsitektur',r:'Saintek',g:'Rp5–9 jt',
+     prospek:['Arsitek','Desainer Interior','Urban Planner','Konsultan','Kontraktor Desain'],
+     mk:['Perancangan Arsitektur','Struktur & Konstruksi','Teori Arsitektur','Urban Design','Grafis Arsitektur'],
+     skill:['Desain & estetika','AutoCAD/SketchUp/Revit','Visualisasi','Kreativitas'],
+     cocok:'Perpaduan seni, teknik, & fungsi — suka menggambar & merancang ruang.'},
+    {n:'Ilmu Gizi',r:'Saintek',g:'Rp4–8 jt',
+     prospek:['Ahli Gizi/Dietisien','Konsultan Gizi','R&D Pangan','Kesehatan Masyarakat','Content Kesehatan'],
+     mk:['Biokimia Gizi','Dietetika','Gizi Masyarakat','Ilmu Pangan','Penilaian Status Gizi'],
+     skill:['Analisis gizi','Empati & edukasi','Sains pangan','Komunikasi'],
+     cocok:'Suka kesehatan, makanan, & gaya hidup — tren wellness naik.'},
+    {n:'Manajemen',r:'Soshum',g:'Rp5–9 jt',
+     prospek:['Management Trainee','Marketing/Brand','HR','Business Development','Entrepreneur'],
+     mk:['Manajemen Pemasaran','Manajemen Keuangan','MSDM','Manajemen Strategi','Kewirausahaan'],
+     skill:['Kepemimpinan','Analisis bisnis','Komunikasi','Negosiasi'],
+     cocok:'Fleksibel & luas — cocok calon manajer, marketer, atau pebisnis.'},
+    {n:'Akuntansi',r:'Soshum',g:'Rp5–9 jt',
+     prospek:['Akuntan/Auditor','Tax Consultant','Financial Analyst','Controller','CFO (jenjang)'],
+     mk:['Akuntansi Keuangan','Audit','Perpajakan','Akuntansi Manajemen','Sistem Informasi Akuntansi'],
+     skill:['Ketelitian','Analisis keuangan','Excel','Regulasi & pajak'],
+     cocok:'Suka angka, detail, & keuangan — jalur jelas (CPA/CA/BKP).'},
+    {n:'Ilmu Hukum',r:'Soshum',g:'Rp5–10 jt',
+     prospek:['Advokat/Pengacara','Legal Corporate','Notaris (jenjang)','Jaksa/Hakim (jenjang)','Compliance'],
+     mk:['Hukum Perdata','Hukum Pidana','Hukum Tata Negara','Hukum Bisnis','Hukum Acara'],
+     skill:['Analisis & argumentasi','Menulis legal','Detail','Public speaking'],
+     cocok:'Suka argumentasi, keadilan, & teks — prospek korporat & litigasi.'},
+    {n:'Ilmu Komunikasi',r:'Soshum',g:'Rp4–8 jt',
+     prospek:['PR/Communications','Digital Marketing','Jurnalis','Content Creator','Brand Strategist'],
+     mk:['Teori Komunikasi','Public Relations','Jurnalistik','Komunikasi Pemasaran','Media Digital'],
+     skill:['Menulis & storytelling','Public speaking','Kreativitas','Media sosial'],
+     cocok:'Suka media, konten, & interaksi — sangat relevan era digital.'},
+    {n:'Psikologi',r:'Soshum',g:'Rp4–8 jt',
+     prospek:['HR/Rekrutmen','Psikolog (S2 Profesi)','UX Researcher','Konselor','Trainer/L&D'],
+     mk:['Psikologi Perkembangan','Psikologi Sosial','Psikologi Industri','Asesmen','Metode Penelitian'],
+     skill:['Empati & observasi','Analisis','Wawancara','Riset'],
+     cocok:'Suka memahami perilaku manusia — luas ke HR, UX, klinis.'},
+    {n:'Hubungan Internasional',r:'Soshum',g:'Rp5–9 jt',
+     prospek:['Diplomat/Kemenlu','Analis Kebijakan','NGO Internasional','Corporate Affairs','Jurnalis Global'],
+     mk:['Politik Internasional','Ekonomi Politik Global','Diplomasi','Organisasi Internasional','Kajian Kawasan'],
+     skill:['Bahasa asing','Analisis geopolitik','Negosiasi','Menulis'],
+     cocok:'Suka isu global, politik, & bahasa asing.'},
+    {n:'Desain Komunikasi Visual (DKV)',r:'Soshum',g:'Rp5–10 jt',
+     prospek:['Graphic/UI Designer','Art Director','Ilustrator','Motion Designer','Brand Designer'],
+     mk:['Nirmana & Tipografi','Desain Grafis','Ilustrasi','Multimedia','Branding'],
+     skill:['Adobe/Figma','Estetika & konsep','Kreativitas','Portofolio kuat'],
+     cocok:'Suka seni visual & digital — permintaan desainer tinggi.'},
+    {n:'Ekonomi / Ilmu Ekonomi',r:'Soshum',g:'Rp5–10 jt',
+     prospek:['Ekonom/Analis','Banking','Kebijakan Publik','Data/Research','Konsultan'],
+     mk:['Mikro & Makroekonomi','Ekonometrika','Ekonomi Pembangunan','Moneter','Statistika'],
+     skill:['Analisis kuantitatif','Ekonometrika','Berpikir kritis','Data'],
+     cocok:'Suka analisis, kebijakan, & angka pada skala besar.'},
+    {n:'Data Science / Sains Data',r:'Saintek',g:'Rp7–13 jt',
+     prospek:['Data Scientist','Data Analyst','ML Engineer','BI Developer','AI Specialist'],
+     mk:['Statistika','Machine Learning','Basis Data','Big Data','Visualisasi Data'],
+     skill:['Python/R','SQL','Statistik','Storytelling data'],
+     cocok:'Suka data, statistik, & AI — salah satu bidang paling dicari.'},
+    {n:'Pendidikan (PGSD / Keguruan)',r:'Soshum',g:'Rp3–7 jt',
+     prospek:['Guru','Dosen (jenjang)','Instructional Designer','EdTech','Trainer'],
+     mk:['Pedagogi','Psikologi Pendidikan','Kurikulum','Evaluasi Pembelajaran','Praktik Mengajar'],
+     skill:['Mengajar & sabar','Desain pembelajaran','Komunikasi','Kreativitas'],
+     cocok:'Panggilan mendidik — stabil (ASN/PPPK) & berkembang ke EdTech.'},
+    {n:'Keperawatan',r:'Saintek',g:'Rp4–8 jt',
+     prospek:['Perawat (Ners)','Perawat Luar Negeri','Perawat Perusahaan','Edukator Kesehatan','Home Care'],
+     mk:['Anatomi Fisiologi','Keperawatan Medikal Bedah','Keperawatan Jiwa','KDM','Manajemen Keperawatan'],
+     skill:['Empati & telaten','Prosedur klinis','Stamina','Kerja tim'],
+     cocok:'Suka merawat & kesehatan — peluang kerja LN (Jepang/Timur Tengah) besar.'},
+    {n:'Administrasi Bisnis / Niaga',r:'Soshum',g:'Rp4–8 jt',
+     prospek:['Business Development','Operations','Sales/Account','Procurement','Entrepreneur'],
+     mk:['Manajemen Operasi','Pemasaran','Kewirausahaan','Administrasi Perkantoran','Perilaku Organisasi'],
+     skill:['Organisasi','Komunikasi','Negosiasi','Analisis bisnis'],
+     cocok:'Praktis & aplikatif untuk dunia kerja/bisnis.'},
+    {n:'Sastra / Bahasa Inggris',r:'Soshum',g:'Rp4–8 jt',
+     prospek:['Penerjemah','Content/Copywriter','Guru/Trainer Bahasa','PR/Komunikasi','Editor'],
+     mk:['Linguistik','Sastra','Penerjemahan','Menulis Akademik','Kajian Budaya'],
+     skill:['Bahasa Inggris mahir','Menulis','Riset','Lintas budaya'],
+     cocok:'Suka bahasa, menulis, & budaya — fleksibel ke banyak industri.'}
+  ];
+  function ul(a){return '<ul style="margin:4px 0 0 16px;font-size:12.5px;color:var(--muted)">'+a.map(function(x){return '<li style="margin-bottom:2px">'+x+'</li>';}).join('')+'</ul>';}
+  var cards=J.map(function(d){
+    return '<details class="glass-card" style="padding:18px"><summary style="cursor:pointer;list-style:none;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap">'+
+      '<b style="color:var(--on-dark);font-size:15px">'+d.n+'</b>'+
+      '<span style="display:flex;gap:6px;flex-wrap:wrap"><span class="chip" style="font-size:11px">'+d.r+'</span><span class="chip" style="font-size:11px">Gaji awal '+d.g+'</span></span></summary>'+
+      '<p class="muted" style="font-size:12.5px;margin-top:10px">'+d.cocok+'</p>'+
+      '<div class="grid g2" style="margin-top:12px;gap:14px">'+
+        '<div><b style="font-size:12.5px;color:var(--on-dark)">Prospek karier</b>'+ul(d.prospek)+'</div>'+
+        '<div><b style="font-size:12.5px;color:var(--on-dark)">Mata kuliah inti</b>'+ul(d.mk)+'</div>'+
+        '<div><b style="font-size:12.5px;color:var(--on-dark)">Skill dikembangkan</b>'+ul(d.skill)+'</div>'+
+      '</div></details>';
+  }).join('');
+  var sec=document.createElement('section');
+  sec.className='section'; sec.id='panduan-jurusan';
+  sec.innerHTML='<div class="wrap"><span class="section-eyebrow">Panduan jurusan</span>'+
+    '<h2 class="mt">Bingung pilih jurusan? <span class="gradient-text">Kenali dulu</span> prospeknya</h2>'+
+    '<p class="lead mt">'+J.length+' jurusan populer — lihat prospek karier, mata kuliah inti, skill yang diasah, dan estimasi gaji awal. Gaji adalah kisaran fresh grad di kota besar; naik seiring pengalaman &amp; sertifikasi.</p>'+
+    '<div class="grid g2 mt-lg" style="gap:14px">'+cards+'</div></div>';
+  var f=document.querySelector('footer'); if(f&&f.parentNode) f.parentNode.insertBefore(sec,f);
+})();
+</script>
 </body>
 </html>
