@@ -40,13 +40,14 @@
 <script src="assets/auth.js"></script>
 <style>
 /* ===== Franchise & Peluang — scoped styles (memakai token dari style.css) ===== */
-.fr-sub{display:flex;flex-wrap:nowrap;gap:6px;margin:20px 0 8px;position:sticky;top:64px;background:var(--canvas);padding:10px 0;z-index:20;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:thin}
-.fr-sub::-webkit-scrollbar{height:6px}.fr-sub::-webkit-scrollbar-thumb{background:var(--hair-dark);border-radius:99px}
-.fr-tab{flex:none;background:var(--elevated);border:1px solid var(--hair-dark);color:var(--muted-strong);border-radius:999px;padding:8px 15px;font:inherit;font-size:13px;font-weight:600;cursor:pointer;transition:.15s;white-space:nowrap}
+.fr-sub{display:flex;flex-wrap:wrap;gap:8px;margin:18px 0 12px;padding:0}
+.fr-tab{background:var(--elevated);border:1px solid var(--hair-dark);color:var(--muted-strong);border-radius:10px;padding:9px 14px;font:inherit;font-size:13px;font-weight:600;cursor:pointer;transition:.15s;white-space:nowrap}
+@media(max-width:520px){.fr-tab{flex:1 1 auto;text-align:center;padding:9px 10px;font-size:12.5px}}
 .fr-tab:hover{border-color:var(--muted)}
 .fr-tab.on{background:var(--primary);border-color:var(--primary);color:var(--on-primary);box-shadow:0 4px 14px -6px var(--primary)}
 :root[data-theme="light"] .fr-tab{background:#fff;border-color:#d9e1ee}
 :root[data-theme="light"] .fr-tab:hover{border-color:#2f6bed;color:#1d4ed8}
+:root[data-theme="light"] .fr-tab.on{background:var(--primary);border-color:var(--primary);color:var(--on-primary)}
 :root[data-theme="light"] .fr-sub{border-bottom:1px solid #e2e8f2}
 .fr-panel{display:none}
 .fr-panel.on{display:block;animation:frFade .28s ease}
@@ -202,13 +203,14 @@
   </div>
 
   <nav class="fr-sub" id="frSub" role="tablist" aria-label="Menu peluang bisnis">
-    <button class="fr-tab on" data-tab="jelajah" role="tab" aria-selected="true">🔎 Jelajah Franchise</button>
-    <button class="fr-tab" data-tab="hitung" role="tab" aria-selected="false">🧮 Hitungan Usaha (BEP/ROI)</button>
-    <button class="fr-tab" data-tab="kota" role="tab" aria-selected="false">📍 Pilih Kota (Daya Beli)</button>
-    <button class="fr-tab" data-tab="boring" role="tab" aria-selected="false">💤 Boring Business</button>
-    <button class="fr-tab" data-tab="ide" role="tab" aria-selected="false">💡 Ide Bisnis (Non-Franchise)</button>
-    <button class="fr-tab" data-tab="luar" role="tab" aria-selected="false">🌍 Ide Luar Negeri</button>
-    <button class="fr-tab" data-tab="shortlist" role="tab" aria-selected="false">⭐ Shortlist-ku</button>
+    <button class="fr-tab on" data-tab="jelajah" role="tab" aria-selected="true">Franchise</button>
+    <button class="fr-tab" data-tab="hitung" role="tab" aria-selected="false">Kalkulator</button>
+    <button class="fr-tab" data-tab="kota" role="tab" aria-selected="false">Daya Beli Kota</button>
+    <button class="fr-tab" data-tab="boring" role="tab" aria-selected="false">Boring Business</button>
+    <button class="fr-tab" data-tab="ide" role="tab" aria-selected="false">Ide Bisnis</button>
+    <button class="fr-tab" data-tab="luar" role="tab" aria-selected="false">Ide Luar Negeri</button>
+    <button class="fr-tab" data-tab="sukses" role="tab" aria-selected="false">Kisah Sukses</button>
+    <button class="fr-tab" data-tab="shortlist" role="tab" aria-selected="false">Shortlist</button>
   </nav>
 
   <!-- ================= JELAJAH ================= -->
@@ -307,6 +309,12 @@
   <section class="fr-panel" data-panel="luar">
     <p class="fr-cap">Model bisnis yang <b>terbukti jalan di luar negeri</b> dan cocok diadaptasi ke Indonesia — dari photobox Korea, vending machine Jepang, sampai cloud kitchen &amp; laundromat swalayan. Banyak sudah mulai masuk; sisanya masih <b>ruang kosong</b> yang bisa kamu isi lebih dulu.</p>
     <div class="fr-list" id="luarList"></div>
+  </section>
+
+  <!-- ================= KISAH SUKSES ================= -->
+  <section class="fr-panel" data-panel="sukses">
+    <p class="fr-cap"><b>UMKM yang "pecah telur"</b> — mulai dari modal kecil/gerobak sampai jadi besar. Ambil <b>pelajarannya</b>, bukan cuma kagum. Kisah &amp; angka dihimpun dari pemberitaan publik; untuk inspirasi, bukan janji hasil.</p>
+    <div class="fr-list" id="suksesList"></div>
   </section>
 
   <!-- ================= SHORTLIST ================= -->

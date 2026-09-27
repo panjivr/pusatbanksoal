@@ -58,8 +58,6 @@
     }
     var pans = document.querySelectorAll('.fr-panel');
     for (var j = 0; j < pans.length; j++) pans[j].classList.toggle('on', pans[j].getAttribute('data-panel') === t);
-    var a = $('frSub').querySelector('.fr-tab.on');
-    if (a) { var n = $('frSub'); n.scrollLeft = a.offsetLeft - n.clientWidth / 2 + a.clientWidth / 2; }
     if (t === 'kota') renderKota();
     if (t === 'shortlist') renderShortlist();
     if (t === 'hitung') calcHitung();
@@ -311,6 +309,21 @@
         '<div class="kv"><span>Margin</span><b>' + esc(b.margin) + '</b></div>' +
         '<ul><li><b style="color:var(--down)">Risiko:</b> ' + esc(b.risiko) + '</li>' +
         '<li><b style="color:var(--up)">Tips:</b> ' + esc(b.tips) + '</li></ul>' +
+        '</div>';
+    }).join('');
+  })();
+
+  /* ---------- KISAH SUKSES (UMKM pecah telur) ---------- */
+  (function () {
+    if (typeof FR_SUKSES === 'undefined') return;
+    $('suksesList').innerHTML = FR_SUKSES.map(function (b) {
+      return '<div class="fr-item"><div class="nm">' + esc(b.nama) + '</div>' +
+        '<span class="tag">' + esc(b.tokoh) + ' · ' + esc(b.bidang) + '</span>' +
+        '<div class="kv"><span>Mulai</span><b style="font-family:inherit;font-weight:500;text-align:right;max-width:60%;color:var(--muted-strong)">' + esc(b.mulai) + '</b></div>' +
+        '<div class="kv"><span>Sekarang</span><b style="font-family:inherit;font-weight:600;text-align:right;max-width:60%;color:var(--on-dark)">' + esc(b.sekarang) + '</b></div>' +
+        '<div style="margin-top:9px;color:var(--muted);font-size:11px;font-weight:700;letter-spacing:.4px;text-transform:uppercase">Kunci sukses</div>' +
+        '<ul>' + b.kunci.map(function (k) { return '<li>' + esc(k) + '</li>'; }).join('') + '</ul>' +
+        '<div style="margin-top:9px;padding-top:9px;border-top:1px solid var(--hair-soft);font-size:12.5px;color:var(--muted-strong);line-height:1.5"><b style="color:var(--up)">Pelajaran:</b> ' + esc(b.pelajaran) + '</div>' +
         '</div>';
     }).join('');
   })();
