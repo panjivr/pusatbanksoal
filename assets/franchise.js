@@ -315,6 +315,22 @@
     }).join('');
   })();
 
+  /* ---------- IDE LUAR NEGERI (adaptasi) ---------- */
+  (function () {
+    if (typeof FR_LUAR === 'undefined') return;
+    $('luarList').innerHTML = FR_LUAR.map(function (b) {
+      return '<div class="fr-item"><div class="nm">' + esc(b.nama) + '</div>' +
+        '<span class="tag">Asal: ' + esc(b.asal) + '</span>' +
+        '<p>' + esc(b.why) + '</p>' +
+        '<div class="kv"><span>Modal (est.)</span><b>' + esc(b.modal) + '</b></div>' +
+        '<div class="kv"><span>Margin (est.)</span><b>' + esc(b.margin) + '</b></div>' +
+        '<ul><li><b style="color:var(--accent-ink)">Sudah di ID:</b> ' + esc(b.contohID) + '</li>' +
+        '<li><b style="color:var(--down)">Risiko:</b> ' + esc(b.risiko) + '</li>' +
+        '<li><b style="color:var(--up)">Tips:</b> ' + esc(b.tips) + '</li></ul>' +
+        '</div>';
+    }).join('');
+  })();
+
   /* ---------- IDE (non-franchise) ---------- */
   var IDE_KEYS = ['minim', 'menengah', 'banyak', 'ratusan'];
   (function () {
