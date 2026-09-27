@@ -299,6 +299,56 @@
     }).join('');
   }
 
+  /* ---------- COCOK-KAH: franchise + kota tertentu ---------- */
+  var cityById = {}; FR_CITIES.forEach(function (c) { cityById[c.id] = c; });
+  (function () {
+    var sel = $('ktCity'); if (!sel) return;
+    var list = FR_CITIES.slice().sort(function (a, b) { return a.nama < b.nama ? -1 : 1; });
+    sel.innerHTML = '<option value="">— lihat peringkat semua kota —</option>' +
+      list.map(function (c) { return '<option value="' + c.id + '">' + esc(c.nama) + ' — ' + esc(c.prov) + '</option>'; }).join('');
+  })();
+  function subScores(c, price, seg) {
+    var disc = c.umk / 30 * 0.15, afford = clamp01(disc / (Math.max(price, 1) * 4)), normUMK = clamp01(c.umk / 5700000);
+    var bpf; if (seg === 'premium') bpf = 0.7 * normUMK + 0.3 * afford; else if (seg === 'mid') bpf = 0.5 * afford + 0.5 * normUMK; else bpf = afford;
+    return { daya: Math.round(bpf * 100), pasar: Math.round(c.size / 5 * 100), biaya: Math.round((1 - (c.cost / 5) * 0.6) * 100) };
+  }
+  function mbar(label, val) {
+    var col = val >= 65 ? 'var(--up)' : val >= 45 ? '#f5a623' : 'var(--down)';
+    return '<div style="margin-top:10px"><div style="display:flex;justify-content:space-between;font-size:12.5px"><span>' + label + '</span><b style="color:' + col + '">' + val + '/100</b></div>' +
+      '<div class="fr-cbar" style="margin-top:5px"><div class="fr-cfill" style="width:' + val + '%;background:' + col + '"></div></div></div>';
+  }
+  function renderMatch() {
+    var out = $('ktMatch'); if (!out) return;
+    var c = cityById[$('ktCity') ? $('ktCity').value : ''];
+    if (!c) { out.style.display = 'none'; return; }
+    var f = byId[$('ktPick').value];
+    var price = parseNum($('ktPrice').value) || (f ? f.ticket : 15000);
+    var seg = $('ktSeg').value;
+    var s = cityScore(c, price, seg), sub = subScores(c, price, seg);
+    var col = s >= 65 ? 'var(--up)' : s >= 45 ? '#f5a623' : 'var(--down)';
+    var verdict = s >= 65 ? 'Cocok — layak dicoba' : s >= 45 ? 'Cukup — bisa dengan strategi tepat' : 'Kurang cocok — perlu hati-hati';
+    var r = [];
+    if (sub.daya >= 60) r.push('Daya beli warga <b>' + esc(c.nama) + '</b> memadai untuk harga jual ' + rp(price) + '.');
+    else if (sub.daya >= 40) r.push('Daya beli terbatas untuk harga ' + rp(price) + ' — andalkan harga terjangkau &amp; volume tinggi.');
+    else r.push('Daya beli tergolong rendah dibanding harga ' + rp(price) + ' — pertimbangkan menu lebih murah / porsi hemat.');
+    if (c.size >= 4) r.push('Pasar besar &amp; ramai — potensi transaksi tinggi, tapi kompetisi ketat (diferensiasi &amp; lokasi penting).');
+    else if (c.size <= 2) r.push('Pasar relatif kecil — kompetisi mungkin lebih longgar, namun batasi ekspektasi volume harian.');
+    else r.push('Ukuran pasar menengah — cukup untuk 1–2 gerai bila lokasi tepat.');
+    if (c.cost >= 4) r.push('Biaya hidup/sewa tinggi (' + esc(c.prov) + ') — tekan biaya tetap &amp; jaga margin agar tetap untung.');
+    else r.push('Biaya operasi relatif ramah — sewa/upah tidak terlalu menekan margin.');
+    if (f) r.push('<b>' + esc(f.nama) + '</b> bertipe <b>' + esc((TIER[f.tier] || {}).label || f.tier) + '</b> dengan modal ' + esc(invRange(f)) + '; ' + (f.tier === 'mikro' || f.tier === 'kecil' ? 'fleksibel untuk kota ini.' : 'pastikan pasar &amp; daya beli cukup untuk skala modalnya.'));
+    out.style.display = 'block';
+    out.innerHTML =
+      '<div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap">' +
+      '<div><div style="font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.4px">Kecocokan ' + (f ? esc(f.nama) + ' di ' : '') + '</div><div style="font-size:19px;font-weight:700;color:var(--on-dark)">' + esc(c.nama) + '</div><div class="fr-cmeta">' + esc(c.prov) + ' · UMK/UMP ≈ ' + rpShort(c.umk) + '</div></div>' +
+      '<div style="text-align:center"><div style="font-family:var(--num);font-size:34px;font-weight:800;color:' + col + ';line-height:1">' + s + '<span style="font-size:14px;color:var(--muted)">/100</span></div><div style="font-size:12.5px;font-weight:700;color:' + col + '">' + verdict + '</div></div></div>' +
+      mbar('Daya beli (UMK vs harga)', sub.daya) + mbar('Ukuran pasar', sub.pasar) + mbar('Efisiensi biaya operasi', sub.biaya) +
+      '<ul style="margin:12px 0 0 16px;font-size:13px;color:var(--muted-strong);line-height:1.55">' + r.map(function (x) { return '<li style="margin-bottom:4px">' + x + '</li>'; }).join('') + '</ul>' +
+      '<p class="fr-cap" style="margin-top:10px">Skor heuristik untuk penyaringan awal — bukan studi kelayakan. Selalu survei lokasi &amp; kompetitor langsung.</p>';
+  }
+  if ($('ktCity')) $('ktCity').addEventListener('change', renderMatch);
+  ['ktPick', 'ktPrice', 'ktSeg'].forEach(function (id) { if ($(id)) $(id).addEventListener('change', renderMatch); if ($(id)) $(id).addEventListener('input', renderMatch); });
+
   /* ---------- BORING ---------- */
   (function () {
     $('boringList').innerHTML = FR_BORING.map(function (b) {
