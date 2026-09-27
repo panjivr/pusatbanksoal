@@ -814,7 +814,9 @@ var KELAS_DATA = [
           {judul:'How to Win Friends and Influence People', penulis:'Dale Carnegie', ket:'Membangun hubungan & memengaruhi secara positif.'},
           {judul:'Steve Jobs', penulis:'Walter Isaacson', ket:'Biografi pemimpin yang mengandalkan inovasi.'}
         ]},
-        {t:'callout', k:'tip', judul:'Cara memakai', x:'Pilih satu buku sesuai chapter yang paling ingin kamu perkuat sekarang — jangan baca semua sekaligus.'}
+        {t:'callout', k:'tip', judul:'Cara memakai', x:'Pilih satu buku sesuai chapter yang paling ingin kamu perkuat sekarang — jangan baca semua sekaligus.'},
+        {t:'h', x:'Langkah terakhir: susun blueprint bisnismu'},
+        {t:'callout', k:'key', judul:'The Business Blueprint', x:'Sudah tuntas 7 chapter? Sekarang tuangkan bisnismu ke dalam <b>Business Blueprint</b> — template isian akhir yang merangkum semua materi jadi satu dokumen: fondasi diri, ideasi, riset pasar, produk & USP, marketing, operasional, sampai rencana peluncuran. Tiap kolom ada penjelasan istilah & contoh, isianmu tersimpan otomatis, dan bisa <b>diunduh sebagai PDF</b> siap presentasi.<br><br><a class="btn btn-primary btn-sm" href="blueprint.html">Buka Business Blueprint Generator →</a>'}
       ]
     }
   ]

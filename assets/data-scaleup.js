@@ -614,7 +614,9 @@ var KELAS_DATA = [
           {judul:'Good to Great', penulis:'Jim Collins', ket:'Langkah perusahaan mencapai keunggulan jangka panjang.'},
           {judul:'Leaders Eat Last', penulis:'Simon Sinek', ket:'Memimpin dengan mengutamakan tim.'}
         ]},
-        {t:'callout', k:'tip', judul:'Cara memakai', x:'Pilih satu buku sesuai chapter yang paling ingin kamu perkuat sekarang — jangan baca semua sekaligus.'}
+        {t:'callout', k:'tip', judul:'Cara memakai', x:'Pilih satu buku sesuai chapter yang paling ingin kamu perkuat sekarang — jangan baca semua sekaligus.'},
+        {t:'h', x:'Langkah terakhir: susun pitch deck-mu'},
+        {t:'callout', k:'key', judul:'Scale-Up Pitch Deck', x:'Sudah tuntas semua chapter scale-up? Sekarang rangkum bisnismu jadi <b>pitch deck</b> yang siap dipresentasikan — problem & solution, validasi pasar, market size, produk, model bisnis, kompetitor, segmentasi & persona, tim, finansial, sampai rencana ekspansi. Tiap kolom ada penjelasan istilah & contoh, tersimpan otomatis, dan bisa <b>diunduh sebagai PDF</b>.<br><br><a class="btn btn-primary btn-sm" href="deck.html">Buka Scale-Up Pitch Deck Generator →</a>'}
       ]
     }
   ]
