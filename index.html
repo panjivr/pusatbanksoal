@@ -135,6 +135,73 @@
 .lp-faq details{border:1px solid var(--hair-dark);border-radius:12px;background:var(--card);padding:10px 14px;margin-top:8px}
 .lp-faq summary{cursor:pointer;font-weight:600;font-size:14px;color:var(--on-dark)}
 .lp-faq p{font-size:13.5px;color:var(--muted);margin-top:8px;line-height:1.6}
+/* ---- HP & layar kecil: padat, 2 kolom ---- */
+@media(max-width:640px){
+  .lp-hero{padding:22px 0 16px}
+  .lp-hero .hero-logo{height:48px;padding:8px 12px}
+  .lp-hero .eyebrow{font-size:10px;letter-spacing:.8px}
+  .lp-hero .hero-h1{font-size:clamp(26px,7.6vw,34px);letter-spacing:-.8px;line-height:1.1}
+  .lp-hero .lead{font-size:13.5px;line-height:1.55;margin-top:8px}
+  .lp-hero .btn{padding:10px 14px;font-size:13.5px;flex:1 1 auto;justify-content:center}
+  .lp-hero .flex{gap:8px;margin-top:14px}
+  .lp-kpis{grid-template-columns:repeat(3,1fr);gap:6px;margin-top:14px}
+  .lp-kpi{flex-direction:column;align-items:center;text-align:center;gap:5px;padding:9px 6px;border-radius:12px}
+  .lp-kpi .ic{width:26px;height:26px;border-radius:8px}.lp-kpi .ic svg{width:14px;height:14px}
+  .lp-kpi b{font-size:14px}.lp-kpi span{font-size:10px}
+  .lp-sec{padding:18px 0}
+  .lp-sec h2{font-size:20px;line-height:1.2}
+  .lp-sec .lead{font-size:13px;margin-top:6px}
+  .section-eyebrow{font-size:10.5px}
+  .lp-map{grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
+  .lp-pillar{padding:10px 8px;border-radius:14px}
+  .lp-pillar .ph{gap:7px;padding-bottom:8px}
+  .lp-pillar .ph .pi{width:28px;height:28px;border-radius:9px}.lp-pillar .ph .pi svg{width:15px;height:15px}
+  .lp-pillar .ph b{font-size:13px}.lp-pillar .ph small{display:none}
+  .lp-item{padding:6px 2px;gap:7px;align-items:center}
+  .lp-item .ii{width:26px;height:26px;border-radius:8px}.lp-item .ii svg{width:14px;height:14px}
+  .lp-item b{font-size:12px;gap:4px}.lp-item b em{font-size:9.5px;padding:1px 6px}
+  .lp-item span{display:none}
+  .lp-pillar .lp-checks{gap:4px 10px;padding:6px 2px 0}.lp-pillar .lp-checks span{font-size:11px}
+  .lp-two{gap:12px}
+  .lp-tiles{grid-template-columns:1fr 1fr;gap:6px;margin-top:12px}
+  .lp-tile{padding:7px 8px;gap:7px;border-radius:11px}
+  .lp-tile .ti{width:26px;height:26px;border-radius:8px}.lp-tile .ti svg{width:14px;height:14px}
+  .lp-tile b{font-size:12px}.lp-tile small{font-size:10px;line-height:1.25}
+  .lp-flow{gap:6px;margin-top:10px}.lp-flow .st{padding:6px 10px;font-size:11.5px}.lp-flow .st em{width:17px;height:17px;font-size:9.5px}
+  .lp-checks{gap:5px 12px;margin-top:10px}.lp-checks span{font-size:12px}
+  .lp-sec .flex.mt-lg{margin-top:12px;gap:8px}.lp-sec .btn{padding:10px 14px;font-size:13.5px}
+  .lp-cta{padding:20px 14px;border-radius:16px}.lp-cta h2{font-size:20px}.lp-cta .muted{font-size:13px}
+  .lp-faq{margin-top:12px}.lp-faq details{padding:8px 11px;margin-top:6px}.lp-faq summary{font-size:13px}.lp-faq p{font-size:12.5px}
+  .divider-glow{margin:4px 0}
+  /* Hemat scroll di HP: tile 3 kolom ikon+nama, sembunyikan yang duplikat dengan peta fitur */
+  #belajar .lp-tiles,#skripsi .lp-tiles{display:flex;flex-wrap:wrap;gap:5px;margin-top:10px}
+  #belajar .lp-tile,#skripsi .lp-tile{padding:5px 9px 5px 6px;gap:6px;border-radius:999px}
+  #belajar .lp-tile .ti,#skripsi .lp-tile .ti{width:20px;height:20px;border-radius:50%}
+  #belajar .lp-tile .ti svg,#skripsi .lp-tile .ti svg{width:12px;height:12px}
+  #belajar .lp-tile small,#skripsi .lp-tile small,#belajar .lp-checks,.lp-hero .eyebrow,.lp-cta .muted{display:none}
+  #belajar .lp-tile b,#skripsi .lp-tile b{font-size:11.5px;white-space:nowrap}
+  #usaha,.lp-hero .btn-peta{display:none} /* usaha sudah terwakili di peta fitur */
+  .lp-sec{padding:14px 0}
+  .footer{padding:18px 0 14px}.footer .bottom{margin-top:10px;padding-top:10px;font-size:11px}
+  .footer .cols{grid-template-columns:1fr;gap:10px}
+  .footer .cols>div:not(:first-child){display:none}
+  .footer .cols p{margin-top:8px!important;font-size:12px!important}
+}
+/* ---- HP sangat kecil (≤380px) ---- */
+@media(max-width:380px){
+  .lp-map{grid-template-columns:1fr}
+  .lp-pillar{display:grid;grid-template-columns:1fr 1fr;gap:0 4px}
+  .lp-pillar .ph,.lp-pillar .lp-checks{grid-column:1/-1}
+  .lp-kpis{grid-template-columns:repeat(3,1fr)}
+  .lp-hero .hero-h1{font-size:24px}
+}
+/* ---- HP landscape / layar pendek ---- */
+@media(max-height:480px) and (orientation:landscape){
+  .lp-hero{padding:14px 0 10px}.lp-hero .hero-logo{display:none}.lp-hero .lead{display:none}
+  .lp-kpis{grid-template-columns:repeat(6,1fr)}
+}
+/* ---- Layar sangat lebar / TV ---- */
+@media(min-width:1800px){.wrap{max-width:1560px}.lp-sec h2{font-size:34px}.lp-item span,.lp-tile small{font-size:13px}}
 </style>
 
 <header class="hero lp-hero"><div class="wrap">
@@ -145,7 +212,7 @@
 <div class="flex gap wrap-flex mt-lg">
 <a href="auth.html" class="btn btn-primary btn-lg">Daftar Gratis</a>
 <a href="tryout.html" class="btn btn-ghost btn-lg">Mulai Tryout</a>
-<a href="#peta" class="btn btn-ghost btn-lg">Lihat Semua Fitur</a>
+<a href="#peta" class="btn btn-ghost btn-lg btn-peta">Lihat Semua Fitur</a>
 </div>
 <div class="lp-kpis">
 <div class="lp-kpi"><span class="ic"><svg class="i" aria-hidden="true"><use href="#i-book"></use></svg></span><div><b class="num" data-count="1495" data-suffix="+">1.495+</b><span>soal terkurasi</span></div></div>
