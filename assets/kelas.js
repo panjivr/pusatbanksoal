@@ -5,7 +5,7 @@
   'use strict';
   if (typeof KELAS_DATA === 'undefined') return;
   var $ = function (s, r) { return (r || document).querySelector(s); };
-  var LS = 'bekal_kelas_progress_v1';
+  var LS = (typeof window !== 'undefined' && window.KELAS_LS) ? window.KELAS_LS : 'bekal_kelas_progress_v1';
   function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
 
   /* ---- progres ---- */
