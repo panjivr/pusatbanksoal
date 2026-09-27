@@ -179,6 +179,9 @@ var KELAS_DATA = [
         {t:'formula', x:'CAC = total biaya pemasaran ÷ jumlah pelanggan baru', cap:'Makin kecil makin efisien.'},
         {t:'formula', x:'CLTV = (rata-rata belanja per periode) − (biaya memperoleh & mempertahankan)', cap:'Contoh: belanja Rp200rb/bln × 12 = Rp2,4jt; biaya Rp1jt → CLTV Rp1,4jt/tahun.'},
         {t:'callout', k:'tip', judul:'Kepuasan (survei sederhana)', x:'Tanya (skala 1–10): seberapa enak/berguna produk ini? seberapa mungkin merekomendasikan? worth it dengan harganya? Jumlahkan skor ÷ jumlah responden. Bandingkan antar-produk yang diuji.'},
+        {t:'h', x:'Price Sensitivity'},
+        {t:'p', x:'<b>Are they willing to pay or not?</b> Ukur seberapa banyak uang yang rela dikeluarkan pelanggan untuk produkmu. Ini melengkapi Conversion & Satisfaction — produk bisa disukai tapi belum tentu di harga yang kamu mau.'},
+        {t:'callout', k:'tip', judul:'Contoh gabungan metrik dalam MVP', x:'Uji satu produk dengan 3 metrik sekaligus — <b>Satisfaction</b>, <b>NPS</b>, & <b>Price Sensitivity</b> — lalu terapkan metrik yang sama ke produk pembanding (A/B) agar keputusan berbasis data yang setara.'},
         {t:'quiz', q:'Metrik yang mengukur pelanggan membeli <i>berulang</i> adalah…', opts:['Conversion Rate','Retention Rate','CAC'], a:1, exp:'Retention Rate = persentase pelanggan lama yang bertahan/beli berulang.'}
       ]
     },
@@ -396,7 +399,9 @@ var KELAS_DATA = [
           '<b>Brand</b> — bangun citra/merek.',
           '<b>Customer engagement</b> — tingkatkan interaksi & keterlibatan pelanggan.'
         ]},
-        {t:'callout', k:'key', judul:'Tindakan', x:'Pilih 2 dari 10 tipe inovasi yang paling bisa kamu terapkan tahun ini.'}
+        {t:'h', x:'Tingkatkan margin lewat layanan'},
+        {t:'p', x:'Selain menekan biaya, margin bisa naik dengan menambah <b>nilai/kualitas layanan</b>: pelayanan yang lebih baik, garansi, personalisasi, dukungan purna jual, atau pengalaman yang membuat pelanggan rela membayar lebih. Layanan yang unggul menaikkan kesediaan bayar & mempertahankan pelanggan.'},
+        {t:'callout', k:'key', judul:'Tindakan', x:'Pilih 2 dari 10 tipe inovasi yang paling bisa kamu terapkan tahun ini + 1 peningkatan layanan yang menaikkan margin.'}
       ]
     }
   ]
@@ -425,7 +430,13 @@ var KELAS_DATA = [
           ['Top of Mind','Merek pertama yang teringat','Jaga hubungan (mis. newsletter)'],
           ['Brand Preference','Lebih memilihmu dari pesaing','Layanan terbaik yang konsisten']
         ]},
-        {t:'callout', k:'tip', judul:'Perjalanan keputusan konsumen', x:'Initial consideration → active evaluation (riset & bandingkan) → closure (putuskan) → beli → post-purchase (evaluasi pengalaman). Puas → rekomendasi & setia; tak puas → pindah merek.'}
+        {t:'diagram', kind:'flow', judul:'Perjalanan keputusan konsumen', nodes:[
+          {t:'Initial', d:'Kenali kebutuhan/keinginan'},
+          {t:'Active Evaluation', d:'Riset, bandingkan, cari rekomendasi'},
+          {t:'Closure', d:'Putuskan beli/tidak'},
+          {t:'Buy', d:'Membeli produk yang dipilih'},
+          {t:'Post-Purchase', d:'Evaluasi pengalaman'}
+        ], cap:'Puas → rekomendasi & setia; tak puas → pindah merek. Di fase Consideration, tugasmu meyakinkan bahwa produkmu worth it & punya value pembeda.'}
       ]
     },
     { id:'s6l2', judul:'Loyalitas pelanggan & strategi B2C/B2B/B2A', durasi:'12 mnt',
@@ -507,7 +518,9 @@ var KELAS_DATA = [
           {t:'Hiring', d:'Mempekerjakan'},
           {t:'Onboarding', d:'Penyambutan & adaptasi'}
         ], cap:'Rekrut secara terstruktur — meningkatkan kualitas seleksi jauh lebih menguntungkan daripada sekadar memperbanyak kandidat.'},
-        {t:'callout', k:'tip', judul:'Interview terstruktur', x:'Identifikasi skill yang dibutuhkan → buat rubrik penilaian → pilih teknik (pengalaman/kasus) → buat guideline → pilih pewawancara tepat → latihan terstruktur.'}
+        {t:'callout', k:'tip', judul:'Interview terstruktur', x:'Identifikasi skill yang dibutuhkan → buat rubrik penilaian → pilih teknik (pengalaman/kasus) → buat guideline → pilih pewawancara tepat → latihan terstruktur.'},
+        {t:'h', x:'Socialization / Onboarding'},
+        {t:'p', x:'Proses mengenalkan karyawan baru ke tugas, budaya, & rekan kerja. Empat langkah agar efektif: (1) beradaptasi dengan perkembangan zaman & tinggalkan kebiasaan lama, (2) bantu karyawan menemukan kelebihan & peluangnya, (3) fasilitasi mengenal lingkungan & rekan, (4) libatkan aktif untuk mengeksplor kelebihannya.'}
       ]
     },
     { id:'s7l2', judul:'Kepemimpinan, SOP & growth hacking', durasi:'12 mnt',
@@ -536,7 +549,7 @@ var KELAS_DATA = [
         {t:'h', x:'Manajemen keuangan'},
         {t:'list', items:[
           '<b>Manajemen arus kas</b> — kelola uang masuk/keluar; cegah kekurangan kas & kebangkrutan.',
-          '<b>Metrik keuangan</b> — Profit Margin, ROI, Revenue Growth (juga ROA, ROE, Quick Ratio, Payback Period, Inventory Turnover, dll).',
+          '<b>Metrik keuangan</b> — 3 yang paling sering: <b>Profit Margin</b> (persentase pendapatan yang jadi laba), <b>ROI</b> (efisiensi/profitabilitas investasi), <b>Revenue Growth</b> (pertumbuhan pendapatan vs periode sebelumnya). Tambahan: ROA, ROE, Quick Ratio, Cash Ratio, Payback Period, Inventory Turnover.',
           '<b>Income statement</b> — pendapatan, HPP, laba kotor, biaya operasional, laba operasi, bunga, pajak, laba bersih, EBIT, dividen.'
         ]},
         {t:'h', x:'Pajak (Indonesia)'},
