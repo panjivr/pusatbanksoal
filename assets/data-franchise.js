@@ -208,7 +208,96 @@ var FR_CITIES = [
   {id:'yogyakarta',nama:'Kota Yogyakarta',prov:'DI Yogyakarta',umk:2655042,size:4,cost:3},
   {id:'solo',nama:'Kota Surakarta (Solo)',prov:'Jawa Tengah',umk:2416000,size:3,cost:2},
   {id:'lampung',nama:'Bandar Lampung',prov:'Lampung',umk:3000000,size:3,cost:2},
-  {id:'padang',nama:'Kota Padang',prov:'Sumatera Barat',umk:3000000,size:3,cost:2}
+  {id:'padang',nama:'Kota Padang',prov:'Sumatera Barat',umk:3000000,size:3,cost:2},
+  /* ====== TAMBAHAN KABUPATEN/KOTA — cakupan seluruh provinsi (UMK 2024 kisaran referensi) ====== */
+  /* -- Jabodetabek & Banten -- */
+  {id:'bogor-kota',nama:'Kota Bogor',prov:'Jawa Barat',umk:4813988,size:4,cost:3},
+  {id:'bogor-kab',nama:'Kabupaten Bogor',prov:'Jawa Barat',umk:4579541,size:4,cost:3},
+  {id:'bekasi-kab',nama:'Kabupaten Bekasi',prov:'Jawa Barat',umk:5343430,size:4,cost:4},
+  {id:'karawang',nama:'Kabupaten Karawang',prov:'Jawa Barat',umk:5257834,size:4,cost:4},
+  {id:'tangsel',nama:'Kota Tangerang Selatan',prov:'Banten',umk:4670791,size:4,cost:4},
+  {id:'tangerang-kab',nama:'Kabupaten Tangerang',prov:'Banten',umk:4601988,size:4,cost:3},
+  {id:'serang-kota',nama:'Kota Serang',prov:'Banten',umk:4148602,size:3,cost:3},
+  {id:'cilegon',nama:'Kota Cilegon',prov:'Banten',umk:4815102,size:3,cost:3},
+  /* -- Jawa Barat -- */
+  {id:'cimahi',nama:'Kota Cimahi',prov:'Jawa Barat',umk:3627880,size:3,cost:3},
+  {id:'cirebon-kota',nama:'Kota Cirebon',prov:'Jawa Barat',umk:2533038,size:3,cost:2},
+  {id:'purwakarta',nama:'Kabupaten Purwakarta',prov:'Jawa Barat',umk:4499768,size:3,cost:3},
+  {id:'sukabumi-kab',nama:'Kabupaten Sukabumi',prov:'Jawa Barat',umk:3389731,size:3,cost:2},
+  {id:'bandung-kab',nama:'Kabupaten Bandung',prov:'Jawa Barat',umk:3527967,size:4,cost:3},
+  {id:'tasikmalaya-kota',nama:'Kota Tasikmalaya',prov:'Jawa Barat',umk:2630951,size:3,cost:2},
+  {id:'subang',nama:'Kabupaten Subang',prov:'Jawa Barat',umk:3508626,size:3,cost:2},
+  {id:'garut',nama:'Kabupaten Garut',prov:'Jawa Barat',umk:2186437,size:3,cost:1},
+  {id:'indramayu',nama:'Kabupaten Indramayu',prov:'Jawa Barat',umk:2809890,size:3,cost:2},
+  /* -- Jawa Tengah & DIY -- */
+  {id:'tegal-kota',nama:'Kota Tegal',prov:'Jawa Tengah',umk:2231628,size:2,cost:2},
+  {id:'pekalongan-kota',nama:'Kota Pekalongan',prov:'Jawa Tengah',umk:2389801,size:2,cost:2},
+  {id:'magelang-kota',nama:'Kota Magelang',prov:'Jawa Tengah',umk:2142000,size:2,cost:2},
+  {id:'salatiga',nama:'Kota Salatiga',prov:'Jawa Tengah',umk:2378951,size:2,cost:2},
+  {id:'cilacap',nama:'Kabupaten Cilacap',prov:'Jawa Tengah',umk:2479106,size:3,cost:2},
+  {id:'kudus',nama:'Kabupaten Kudus',prov:'Jawa Tengah',umk:2516888,size:3,cost:2},
+  {id:'banyumas',nama:'Kabupaten Banyumas (Purwokerto)',prov:'Jawa Tengah',umk:2195690,size:3,cost:2},
+  {id:'sukoharjo',nama:'Kabupaten Sukoharjo',prov:'Jawa Tengah',umk:2215482,size:3,cost:2},
+  {id:'sleman',nama:'Kabupaten Sleman',prov:'DI Yogyakarta',umk:2315976,size:3,cost:2},
+  {id:'bantul',nama:'Kabupaten Bantul',prov:'DI Yogyakarta',umk:2216463,size:3,cost:2},
+  /* -- Jawa Timur -- */
+  {id:'sidoarjo',nama:'Kabupaten Sidoarjo',prov:'Jawa Timur',umk:4638582,size:4,cost:3},
+  {id:'gresik',nama:'Kabupaten Gresik',prov:'Jawa Timur',umk:4642031,size:4,cost:3},
+  {id:'pasuruan-kab',nama:'Kabupaten Pasuruan',prov:'Jawa Timur',umk:4716656,size:3,cost:3},
+  {id:'mojokerto-kab',nama:'Kabupaten Mojokerto',prov:'Jawa Timur',umk:4726000,size:3,cost:3},
+  {id:'kediri-kota',nama:'Kota Kediri',prov:'Jawa Timur',umk:2415362,size:2,cost:2},
+  {id:'madiun-kota',nama:'Kota Madiun',prov:'Jawa Timur',umk:2274277,size:2,cost:2},
+  {id:'batu',nama:'Kota Batu',prov:'Jawa Timur',umk:3155367,size:3,cost:3},
+  {id:'jember',nama:'Kabupaten Jember',prov:'Jawa Timur',umk:2665392,size:3,cost:2},
+  {id:'banyuwangi',nama:'Kabupaten Banyuwangi',prov:'Jawa Timur',umk:2638628,size:3,cost:2},
+  {id:'probolinggo-kota',nama:'Kota Probolinggo',prov:'Jawa Timur',umk:2701086,size:2,cost:2},
+  /* -- Sumatera -- */
+  {id:'bandaaceh',nama:'Kota Banda Aceh',prov:'Aceh',umk:3460672,size:3,cost:3},
+  {id:'lhokseumawe',nama:'Kota Lhokseumawe',prov:'Aceh',umk:3460672,size:2,cost:3},
+  {id:'binjai',nama:'Kota Binjai',prov:'Sumatera Utara',umk:3100000,size:2,cost:2},
+  {id:'pematangsiantar',nama:'Kota Pematangsiantar',prov:'Sumatera Utara',umk:3100000,size:2,cost:2},
+  {id:'deliserdang',nama:'Kabupaten Deli Serdang',prov:'Sumatera Utara',umk:3600000,size:3,cost:2},
+  {id:'dumai',nama:'Kota Dumai',prov:'Riau',umk:3700000,size:2,cost:3},
+  {id:'jambi-kota',nama:'Kota Jambi',prov:'Jambi',umk:3200000,size:3,cost:2},
+  {id:'bengkulu-kota',nama:'Kota Bengkulu',prov:'Bengkulu',umk:2507079,size:2,cost:2},
+  {id:'pangkalpinang',nama:'Kota Pangkalpinang',prov:'Kep. Bangka Belitung',umk:3840000,size:2,cost:3},
+  {id:'tanjungpinang',nama:'Kota Tanjungpinang',prov:'Kepulauan Riau',umk:3500000,size:2,cost:3},
+  {id:'bintan',nama:'Kabupaten Bintan',prov:'Kepulauan Riau',umk:4200000,size:2,cost:3},
+  {id:'bukittinggi',nama:'Kota Bukittinggi',prov:'Sumatera Barat',umk:3000000,size:2,cost:2},
+  {id:'metro',nama:'Kota Metro',prov:'Lampung',umk:2900000,size:2,cost:2},
+  /* -- Kalimantan -- */
+  {id:'pontianak',nama:'Kota Pontianak',prov:'Kalimantan Barat',umk:2900000,size:3,cost:3},
+  {id:'singkawang',nama:'Kota Singkawang',prov:'Kalimantan Barat',umk:2900000,size:2,cost:3},
+  {id:'banjarmasin',nama:'Kota Banjarmasin',prov:'Kalimantan Selatan',umk:3300000,size:3,cost:3},
+  {id:'banjarbaru',nama:'Kota Banjarbaru',prov:'Kalimantan Selatan',umk:3400000,size:2,cost:3},
+  {id:'palangkaraya',nama:'Kota Palangka Raya',prov:'Kalimantan Tengah',umk:3300000,size:2,cost:3},
+  {id:'bontang',nama:'Kota Bontang',prov:'Kalimantan Timur',umk:3600000,size:2,cost:4},
+  {id:'kukar',nama:'Kabupaten Kutai Kartanegara',prov:'Kalimantan Timur',umk:3550000,size:3,cost:4},
+  {id:'tarakan',nama:'Kota Tarakan',prov:'Kalimantan Utara',umk:3900000,size:2,cost:4},
+  /* -- Sulawesi -- */
+  {id:'manado',nama:'Kota Manado',prov:'Sulawesi Utara',umk:3775000,size:3,cost:3},
+  {id:'bitung',nama:'Kota Bitung',prov:'Sulawesi Utara',umk:3775000,size:2,cost:3},
+  {id:'palu',nama:'Kota Palu',prov:'Sulawesi Tengah',umk:2736000,size:2,cost:3},
+  {id:'kendari',nama:'Kota Kendari',prov:'Sulawesi Tenggara',umk:2925000,size:2,cost:3},
+  {id:'gorontalo-kota',nama:'Kota Gorontalo',prov:'Gorontalo',umk:3025100,size:2,cost:2},
+  {id:'mamuju',nama:'Kota Mamuju',prov:'Sulawesi Barat',umk:2914958,size:2,cost:3},
+  {id:'parepare',nama:'Kota Parepare',prov:'Sulawesi Selatan',umk:3434298,size:2,cost:2},
+  {id:'gowa',nama:'Kabupaten Gowa',prov:'Sulawesi Selatan',umk:3500000,size:3,cost:2},
+  /* -- Bali & Nusa Tenggara -- */
+  {id:'badung',nama:'Kabupaten Badung',prov:'Bali',umk:3318628,size:3,cost:4},
+  {id:'gianyar',nama:'Kabupaten Gianyar',prov:'Bali',umk:2928650,size:3,cost:3},
+  {id:'buleleng',nama:'Kabupaten Buleleng (Singaraja)',prov:'Bali',umk:2925000,size:2,cost:3},
+  {id:'mataram',nama:'Kota Mataram',prov:'Nusa Tenggara Barat',umk:2695000,size:3,cost:2},
+  {id:'lombokbarat',nama:'Kabupaten Lombok Barat',prov:'Nusa Tenggara Barat',umk:2610000,size:2,cost:2},
+  {id:'kupang',nama:'Kota Kupang',prov:'Nusa Tenggara Timur',umk:2400000,size:2,cost:3},
+  /* -- Maluku & Papua -- */
+  {id:'ambon',nama:'Kota Ambon',prov:'Maluku',umk:3000000,size:2,cost:3},
+  {id:'ternate',nama:'Kota Ternate',prov:'Maluku Utara',umk:3200000,size:2,cost:3},
+  {id:'jayapura',nama:'Kota Jayapura',prov:'Papua',umk:4000000,size:2,cost:5},
+  {id:'sorong',nama:'Kota Sorong',prov:'Papua Barat Daya',umk:3600000,size:2,cost:5},
+  {id:'timika',nama:'Kabupaten Mimika (Timika)',prov:'Papua Tengah',umk:4000000,size:2,cost:5},
+  {id:'manokwari',nama:'Kota Manokwari',prov:'Papua Barat',umk:3600000,size:2,cost:5},
+  {id:'merauke',nama:'Kabupaten Merauke',prov:'Papua Selatan',umk:3500000,size:2,cost:4}
 ];
 
 /* ============ BORING BUSINESS (membosankan tapi cuan) ============ */
@@ -255,7 +344,14 @@ var FR_IDE = {
     {nama:'Kelas Online & E-book',modal:'Rp0 – 3 jt',margin:'Tinggi',catatan:'Jual ilmu/skill sebagai kelas, e-book, atau template; sekali buat, jual berulang.',contoh:['Kelas skill','E-book','Template digital']},
     {nama:'Reseller Frozen Food & Sembako',modal:'Rp1 – 5 jt',margin:'20–40%',catatan:'Jual makanan beku/sembako ke tetangga & online; kebutuhan harian, repeat order tinggi.',contoh:['Frozen food','Sembako','Bumbu instan']},
     {nama:'Jasa Titip Antar (Kurir Lokal)',modal:'Rp0 – 3 jt',margin:'Tinggi',catatan:'Antar makanan/barang di area sendiri (kampus/komplek) tanpa aplikasi besar; modal motor + HP.',contoh:['Kurir lokal','Belanja titipan','Antar dokumen']},
-    {nama:'Ternak Skala Rumah (Lele/Puyuh/Lebah)',modal:'Rp2 – 5 jt',margin:'25–45%',catatan:'Kolam terpal/kandang kecil di rumah; panen cepat & permintaan stabil.',contoh:['Lele terpal','Telur puyuh','Madu lebah']}
+    {nama:'Ternak Skala Rumah (Lele/Puyuh/Lebah)',modal:'Rp2 – 5 jt',margin:'25–45%',catatan:'Kolam terpal/kandang kecil di rumah; panen cepat & permintaan stabil.',contoh:['Lele terpal','Telur puyuh','Madu lebah']},
+    {nama:'Jasa Penulisan, Terjemahan & Skripsi',modal:'Rp0 – 2 jt',margin:'70–90%',catatan:'Modal = laptop + skill bahasa/riset. Cari klien di kampus & platform freelance.',contoh:['Artikel/SEO','Terjemahan','Olah data/parafrase']},
+    {nama:'Les Privat & Bimbel Online',modal:'Rp0 – 2 jt',margin:'80–95%',catatan:'Ajar pelajaran/skill via Zoom atau datang ke rumah; modal utama keahlian & jadwal.',contoh:['Calistung','Mapel sekolah','Ngaji/bahasa']},
+    {nama:'Reseller Pulsa, PPOB & Token',modal:'Rp0 – 3 jt',margin:'3–15%',catatan:'Jual pulsa, token listrik, & bayar tagihan dari HP; margin kecil tapi repeat harian.',contoh:['Pulsa & kuota','Token PLN','Top-up game']},
+    {nama:'Kue Kering, Katering Kecil & Hampers',modal:'Rp1 – 5 jt',margin:'40–60%',catatan:'Produksi dari rumah, ramai saat Lebaran/Natal & acara; terima pre-order.',contoh:['Kue kering','Hampers','Snack box']},
+    {nama:'Jasa Cuci Helm, Tas & Karpet',modal:'Rp1 – 4 jt',margin:'50–70%',catatan:'Alat sederhana, margin besar karena mayoritas ongkos adalah tenaga & waktu.',contoh:['Cuci helm','Cuci tas/sepatu','Cuci karpet']},
+    {nama:'Kerajinan Tangan & Custom Gift',modal:'Rp1 – 5 jt',margin:'40–70%',catatan:'Produk custom (mug, kaos, buket) untuk kado & souvenir; jual via sosmed & marketplace.',contoh:['Buket snack/uang','Custom mug/kaos','Souvenir acara']},
+    {nama:'Budidaya Microgreen & Hidroponik Rumah',modal:'Rp1 – 4 jt',margin:'30–60%',catatan:'Sayur premium panen cepat di lahan sempit; pasok ke kafe/resto & rumah tangga.',contoh:['Microgreen','Selada hidroponik','Bibit sayur']}
   ]},
   menengah:{label:'Modal Menengah', range:'Rp5 – 50 juta', desc:'Sudah bisa punya alat, gerobak, atau stok layak. Cocok naik dari usaha rumahan ke lapak/booth nyata.', items:[
     {nama:'Gerobak / Booth Kuliner (mandiri)',modal:'Rp5 – 30 jt',margin:'30–55%',catatan:'Bikin brand sendiri tanpa fee franchise. Uji menu dulu skala kecil sebelum tambah booth.',contoh:['Kopi susu','Ayam/seblak','Camilan viral']},
@@ -269,7 +365,14 @@ var FR_IDE = {
     {nama:'Studio Foto Self-Service',modal:'Rp30 – 50 jt',margin:'40–60%',catatan:'Photobox ala Korea; Gen Z rela antre, minim SDM, sekali set-up jalan terus.',contoh:['Self-photo','Photobox','Studio mini']},
     {nama:'Bengkel Tambal Ban & Cuci Motor',modal:'Rp5 – 30 jt',margin:'30–50%',catatan:'Kebutuhan harian pemotor; gabung tambal ban + cuci + isi angin nitrogen.',contoh:['Tambal ban','Cuci steam','Ganti oli']},
     {nama:'Toko Kelontong Modern + PPOB',modal:'Rp15 – 50 jt',margin:'15–30%',catatan:'Warung upgrade: barang lengkap + jasa (token, transfer) untuk margin tambahan.',contoh:['Sembako','PPOB','Agen bank']},
-    {nama:'Konveksi & Sablon Kaos',modal:'Rp15 – 50 jt',margin:'25–45%',catatan:'Seragam, jersey, merchandise komunitas; order berulang dari sekolah/kantor/event.',contoh:['Sablon kaos','Konveksi seragam','Merchandise']}
+    {nama:'Konveksi & Sablon Kaos',modal:'Rp15 – 50 jt',margin:'25–45%',catatan:'Seragam, jersey, merchandise komunitas; order berulang dari sekolah/kantor/event.',contoh:['Sablon kaos','Konveksi seragam','Merchandise']},
+    {nama:'Kedai Kopi Keliling / Motor Coffee',modal:'Rp10 – 30 jt',margin:'40–60%',catatan:'Sepeda/motor kopi tanpa sewa tempat mahal; mangkal di CFD, kantor, event.',contoh:['Kopi susu keliling','Booth event','Kopi kantoran']},
+    {nama:'Warung Makan / Nasi & Lauk',modal:'Rp10 – 40 jt',margin:'30–50%',catatan:'Kebutuhan makan harian selalu ada; menu rumahan, cepat laku, pelanggan setia.',contoh:['Warteg','Nasi campur','Nasi + lauk kantoran']},
+    {nama:'Rental PS / Warnet Mini / Billiard',modal:'Rp20 – 50 jt',margin:'40–60%',catatan:'Hiburan murah untuk anak muda; alat sekali beli dipakai bertahun, minim bahan habis.',contoh:['Rental PS','Warnet/game','Mini billiard']},
+    {nama:'Percetakan & Digital Printing',modal:'Rp20 – 50 jt',margin:'30–50%',catatan:'Banner, undangan, stiker, sablon; order B2B sekolah/kantor & UMKM.',contoh:['Banner/spanduk','Undangan','Stiker & ID card']},
+    {nama:'Salon / Barbershop Sederhana',modal:'Rp15 – 40 jt',margin:'55–70%',catatan:'Jasa dengan margin tinggi (ongkos = tenaga); repeat customer bila kapster bagus.',contoh:['Potong & cukur','Creambath','Cat rambut']},
+    {nama:'Toko Bunga & Florist',modal:'Rp10 – 30 jt',margin:'40–60%',catatan:'Permintaan buket & rangkaian untuk wisuda/nikah/ultah; jual online + offline.',contoh:['Buket bunga','Papan bunga','Rangkaian acara']},
+    {nama:'Peternakan Ayam Petelur Skala Kecil',modal:'Rp15 – 40 jt',margin:'20–35%',catatan:'Kandang 200–500 ekor; telur kebutuhan pokok, pembeli tetap (warung/pasar).',contoh:['Telur ayam','Ayam afkir','Pupuk kandang']}
   ]},
   banyak:{label:'Modal Banyak', range:'Rp50 – 200 juta', desc:'Sudah bisa buka kedai/toko nyata dengan tempat sewa, beberapa karyawan, & sistem. Butuh manajemen.', items:[
     {nama:'Kafe / Kedai Kopi (brand sendiri)',modal:'Rp80 – 200 jt',margin:'15–30% bersih',catatan:'Tanpa fee franchise, tapi butuh branding, barista, & lokasi kuat. Margin kopi bagus tapi sewa berat.',contoh:['Coffee shop','Kedai + coworking','Kopi + roti']},
@@ -283,7 +386,14 @@ var FR_IDE = {
     {nama:'Cloud Kitchen Multi-Brand',modal:'Rp50 – 150 jt',margin:'25–40%',catatan:'Satu dapur, banyak brand online; tanpa dine-in mahal, andalkan ojol.',contoh:['Cloud kitchen','Multi-brand','Catering']},
     {nama:'Gym / Studio Kebugaran Lokal',modal:'Rp80 – 200 jt',margin:'20–40%',catatan:'Membership berulang; tren hidup sehat naik, alat sekali beli dipakai bertahun.',contoh:['Gym','Studio yoga/pilates','Sport center']},
     {nama:'Kos Eksklusif / Homestay',modal:'Rp150 – 200 jt',margin:'Yield 8–12%/th',catatan:'Kos ber-AC/wifi atau homestay harian; arus kas bulanan + nilai aset naik.',contoh:['Kos premium','Homestay','Guesthouse']},
-    {nama:'Depot Air + Agen Galon & Gas',modal:'Rp50 – 120 jt',margin:'30–60% (air)',catatan:'Kebutuhan pokok harian dengan margin besar & pelanggan langganan tetap.',contoh:['Depot air','Agen galon','Agen LPG']}
+    {nama:'Depot Air + Agen Galon & Gas',modal:'Rp50 – 120 jt',margin:'30–60% (air)',catatan:'Kebutuhan pokok harian dengan margin besar & pelanggan langganan tetap.',contoh:['Depot air','Agen galon','Agen LPG']},
+    {nama:'Apotek / Toko Obat Berizin',modal:'Rp80 – 200 jt',margin:'15–25%',catatan:'Kebutuhan obat stabil; wajib apoteker & izin (SIA/SIPA), bisa tambah alkes.',contoh:['Apotek','Toko obat','Alat kesehatan']},
+    {nama:'Toko Bangunan & Material',modal:'Rp100 – 200 jt',margin:'10–20%',catatan:'Volume besar margin tipis; kuat bila jadi pemasok proyek & tukang lokal.',contoh:['Material bangunan','Cat & besi','Alat pertukangan']},
+    {nama:'Daycare / PAUD / TK',modal:'Rp50 – 150 jt',margin:'25–45%',catatan:'Kebutuhan orang tua bekerja naik; SPP bulanan berulang, butuh izin & pengasuh.',contoh:['Daycare','PAUD/TK','Baby class']},
+    {nama:'Kedai Bakso / Mie Skala Resto',modal:'Rp50 – 120 jt',margin:'30–50%',catatan:'Menu favorit sejuta umat; brand & konsistensi rasa bikin ramai & bercabang.',contoh:['Bakso','Mie ayam','Mie pedas']},
+    {nama:'Travel, Tiket & Tour',modal:'Rp50 – 150 jt',margin:'10–25%',catatan:'Tiket, paket wisata, umrah; margin dari layanan & komisi, ramai musim liburan.',contoh:['Tiket & hotel','Paket tour','Travel umrah']},
+    {nama:'Studio Musik / Rental Alat',modal:'Rp70 – 200 jt',margin:'30–50%',catatan:'Sewa per jam berulang; alat sekali beli dipakai bertahun, tambah kelas musik.',contoh:['Studio band','Rental alat','Kelas musik']},
+    {nama:'Cuci Mobil + Salon Mobil',modal:'Rp80 – 200 jt',margin:'25–40%',catatan:'Populasi kendaraan besar; tambah coating/detailing & kafe tunggu untuk margin ekstra.',contoh:['Cuci hidrolik','Salon mobil','Detailing']}
   ]},
   ratusan:{label:'Modal Ratusan Juta+', range:'> Rp200 juta', desc:'Skala serius: restoran, properti sewa, klinik, gym, atau franchise besar. Butuh tim, sistem, & manajemen risiko.', items:[
     {nama:'Restoran / Resto Keluarga',modal:'Rp200 jt – 1 M',margin:'10–20% bersih',catatan:'Lokasi, konsep, & konsistensi menentukan. Modal besar untuk sewa, interior, & dapur.',contoh:['Resto keluarga','Seafood','Resto tema']},
@@ -296,7 +406,14 @@ var FR_IDE = {
     {nama:'Indoor Playground / Trampoline Park',modal:'Rp300 jt – 1 M',margin:'30–50%',catatan:'Hiburan keluarga di mal; tiket berulang + F&B, tren dari luar negeri.',contoh:['Playground','Trampoline park','Arena hiburan']},
     {nama:'Klinik Kecantikan / Estetika',modal:'Rp300 jt – 1 M',margin:'30–50%',catatan:'Permintaan skincare & estetika naik; treatment berulang, ticket besar (butuh dokter berizin).',contoh:['Klinik estetika','Facial & laser','Slimming']},
     {nama:'Cold Storage & Distribusi F&B',modal:'Rp300 jt – miliaran',margin:'20–40%',catatan:'Penyimpanan dingin untuk F&B & e-commerce; pendapatan kontrak berulang.',contoh:['Cold storage','Gudang sewa','Distribusi frozen']},
-    {nama:'Car Wash Premium & Detailing Center',modal:'Rp250 jt – 1 M',margin:'25–45%',catatan:'Skala besar dengan hidrolik, coating, kafe tunggu; ticket & volume tinggi.',contoh:['Auto spa','Nano coating','Salon mobil']}
+    {nama:'Car Wash Premium & Detailing Center',modal:'Rp250 jt – 1 M',margin:'25–45%',catatan:'Skala besar dengan hidrolik, coating, kafe tunggu; ticket & volume tinggi.',contoh:['Auto spa','Nano coating','Salon mobil']},
+    {nama:'Hotel Melati / Guesthouse Besar',modal:'Rp500 jt – miliaran',margin:'Yield 8–15%/th',catatan:'Pendapatan kamar per malam; kuat di kota wisata/bisnis, butuh manajemen & OTA.',contoh:['Hotel melati','Guesthouse','Homestay besar']},
+    {nama:'Pabrik / UKM Produksi (makanan olahan)',modal:'Rp300 jt – 1 M',margin:'20–40%',catatan:'Produksi skala besar (frozen, snack, minuman) untuk suplai ritel & reseller.',contoh:['Frozen food','Snack kemasan','Minuman kemasan']},
+    {nama:'Dealer / Showroom Motor & Mobil Bekas',modal:'Rp300 jt – 1 M',margin:'5–15%/unit',catatan:'Margin per unit + jasa kredit & servis; butuh modal stok besar & modal putar.',contoh:['Motor bekas','Mobil bekas','Kredit & tukar tambah']},
+    {nama:'Sekolah / Bimbel Besar',modal:'Rp300 jt – miliaran',margin:'25–45%',catatan:'SPP berulang; butuh izin, gedung, & guru. Skalanya besar tapi stabil.',contoh:['Bimbel besar','Sekolah/PAUD','Kampus mini']},
+    {nama:'Laundry Industri / Hotel Linen',modal:'Rp300 – 800 jt',margin:'25–45%',catatan:'Kontrak cuci untuk hotel, RS, resto; volume besar & pendapatan kontrak berulang.',contoh:['Linen hotel','Cucian RS','Laundry pabrik']},
+    {nama:'Ekspedisi / Logistik Regional',modal:'Rp300 jt – 1 M',margin:'15–30%',catatan:'Armada + gudang untuk kirim antar-kota; ditopang lonjakan e-commerce.',contoh:['Kurir regional','Trucking','Fulfillment']},
+    {nama:'Pertashop / SPBU Mini',modal:'Rp250 – 500 jt',margin:'Tipis, volume besar',catatan:'BBM kebutuhan harian di daerah; kemitraan Pertamina, pendapatan stabil.',contoh:['Pertashop','SPBU mini','BBM + LPG']}
   ]}
 };
 
