@@ -1,27 +1,23 @@
 /* ============================================================
    KELAS "BISNIS MULAI DARI NOL" — data kurikulum (Bekal)
    ------------------------------------------------------------
-   7 chapter berurutan (materi mengajarkan kerangka bisnis standar
-   — SWOT, IKIGAI, Porter's Five Forces, PESTLE, TAM/SAM/SOM,
-   STP, AIDA, 7P, valuasi, dll — ditulis ulang dengan bahasa &
-   contoh sendiri). Tiap sesi punya slot video (.mp4) utk diisi.
+   7 chapter berurutan. Materi mengajarkan kerangka bisnis standar
+   (SWOT/TOWS, IKIGAI, Lean Canvas, Porter's Five Forces, PESTLE,
+   TAM/SAM/SOM, USP, Competitive Moat, Maslow, STP, AIDA, 7P,
+   metrik keuangan & pertumbuhan, valuasi) — disusun dengan bahasa
+   & contoh sendiri. Kedalaman penuh; tiap chapter punya slot video
+   (.mp4) yang menyampaikan materi secara mendetail.
 
-   Skema blok (dirender oleh kelas.html):
-     {t:'lead'|'p'|'h', x}
-     {t:'callout', k:'key'|'tip'|'warn'|'quote', judul, x}
-     {t:'steps'|'list', items:[...]}
-     {t:'diagram', kind:'flow'|'funnel'|'pyramid'|'cycle'|'bars'|'quad', judul, nodes, cap}
-     {t:'table', head:[...], rows:[[...]], cap}
-     {t:'formula', x, cap}
-     {t:'img', src, cap} · {t:'video', src, poster, cap}
-     {t:'books', items:[{judul,penulis,ket}]}
-     {t:'quiz', q, opts:[...], a:idxBenar, exp}
+   Skema blok (dirender kelas.html):
+     lead|p|h · callout(key|tip|warn|quote) · list|steps
+     diagram(flow|funnel|pyramid|cycle|quad|bars) · table · formula
+     video · img · books · quiz
    ============================================================ */
 var KELAS_META = {
   judul: 'Bisnis Mulai dari Nol',
   batch: 'Batch 1',
   ringkas: '7 chapter membangun bisnis dari nol — fondasi founder & valuasi, inovasi ide, riset pasar, produk & USP, branding-sales-marketing, operasional lean, sampai metrik pertumbuhan. Belajar seperti kuliah online: teks, diagram, dan video.',
-  catatan: 'Materi menjelaskan kerangka bisnis standar (Porter, PESTLE, IKIGAI, TAM/SAM/SOM, STP, AIDA, 7P, dll) dengan bahasa & contoh sendiri. Slot video tiap sesi akan diisi saat rekaman kelas diunggah.'
+  catatan: 'Materi menjelaskan kerangka bisnis standar dengan bahasa & contoh sendiri. Slot video tiap sesi menyampaikan materi secara mendetail (diisi saat rekaman diunggah).'
 };
 
 var KELAS_DATA = [
@@ -34,26 +30,26 @@ var KELAS_DATA = [
     { id:'m0l1', judul:'Selamat datang & cara belajar', durasi:'6 mnt',
       ringkas:'Peta kelas dan cara menuntaskannya.',
       blocks:[
-        {t:'video', src:'', poster:'', cap:'Video pengantar (akan diisi saat rekaman diunggah).'},
-        {t:'lead', x:'Kelas ini untuk kamu yang <b>benar-benar mulai dari nol</b> — belum punya produk, modal terbatas, bahkan belum yakin mau jualan apa. Tujuannya bukan menghafal teori, melainkan membangun <b>fondasi yang benar</b> lalu bergerak sampai ada bukti pasar dan bisnis yang bisa dibesarkan.'},
-        {t:'callout', k:'key', judul:'Prinsip kelas', x:'Belajar sambil mengeksekusi. Tiap chapter ditutup dengan satu <b>Tindakan</b> nyata. Jangan lompat sebelum tindakannya kamu kerjakan.'},
+        {t:'video', src:'', poster:'', cap:'Video pengantar (diisi saat rekaman diunggah).'},
+        {t:'lead', x:'Kelas ini untuk kamu yang <b>benar-benar mulai dari nol</b> — belum punya produk, modal terbatas, bahkan belum yakin mau jualan apa. Tujuannya membangun <b>fondasi yang benar</b> lalu bergerak sampai ada bukti pasar dan bisnis yang bisa dibesarkan.'},
+        {t:'callout', k:'key', judul:'Prinsip kelas', x:'Belajar sambil mengeksekusi. Tiap chapter ditutup satu <b>Tindakan</b> nyata. Jangan lompat sebelum tindakannya kamu kerjakan.'},
         {t:'h', x:'Peta perjalanan — 7 chapter'},
         {t:'list', items:[
-          '<b>Chapter 1 — Fondasi Founder & Valuasi:</b> kenali diri, produk, tujuan; nilai & pitch bisnis.',
+          '<b>Chapter 1 — Fondasi Founder & Valuasi:</b> kenali diri, siapkan internal & eksternal, nilai & pitch bisnis.',
           '<b>Chapter 2 — Inovasi Ide Bisnis:</b> temukan & kembangkan ide yang cocok pasar.',
           '<b>Chapter 3 — Riset Pasar & Profil Pelanggan:</b> ukur pasar & pahami pelanggan.',
-          '<b>Chapter 4 — Produk Unggul & USP:</b> bangun produk yang beda & bernilai.',
+          '<b>Chapter 4 — Produk Unggul & USP:</b> bangun produk kompetitif & profitable.',
           '<b>Chapter 5 — Branding, Sales & Marketing:</b> perkenalkan & jual dengan efektif.',
           '<b>Chapter 6 — Operasional Lean:</b> jalankan bisnis rapi & efisien.',
           '<b>Chapter 7 — Skill Fondasi & Metrik Pertumbuhan:</b> ukur & besarkan bisnis.'
         ]},
         {t:'steps', items:[
-          'Tonton/baca satu sesi sampai selesai — jangan sambil lalu.',
+          'Tonton/baca satu sesi sampai selesai.',
           'Kerjakan kotak <b>Tindakan</b> di akhir sesi.',
           'Tandai sesi <b>Selesai</b> — progресmu tersimpan otomatis di perangkat.',
           'Ulang sesi yang berat; paham lebih penting dari cepat.'
         ]},
-        {t:'callout', k:'tip', judul:'Siapkan', x:'Satu buku catatan khusus kelas ini. Semua tugas ditulis di sana — itu jadi cetak biru bisnismu.'}
+        {t:'callout', k:'tip', judul:'Siapkan', x:'Satu buku catatan khusus kelas ini. Semua tugas ditulis di sana — jadi cetak biru bisnismu.'}
       ]
     }
   ]
@@ -62,13 +58,13 @@ var KELAS_DATA = [
 /* ============ CHAPTER 1 — FONDASI FOUNDER & VALUASI ============ */
 {
   id:'m1', judul:'Fondasi Founder & Valuasi', ikon:'i-user', label:'Chapter 1',
-  ringkas:'Inti bisnis adalah foundernya. Kenali diri & produk, lalu pahami cara menilai (valuasi) & mem-pitch bisnis.',
+  ringkas:'Inti bisnis adalah foundernya. Siapkan diri secara internal & eksternal, lalu pahami cara menilai (valuasi) & mem-pitch bisnis.',
   lessons:[
     { id:'m1l1', judul:'Bisnis vs dagang & bisnis yang hebat', durasi:'9 mnt',
-      ringkas:'Beda bisnis dengan sekadar berdagang, dan tolok ukur bisnis baik.',
+      ringkas:'Beda bisnis dengan berdagang, dan tolok ukur bisnis baik.',
       blocks:[
         {t:'video', src:'', poster:'', cap:'Rekaman sesi (menyusul).'},
-        {t:'lead', x:'<b>Bisnis</b> adalah organisasi yang mencari keuntungan lewat penjualan barang/jasa — dan berbeda dari sekadar <b>berdagang</b> (tukar barang untuk untung sesaat).'},
+        {t:'lead', x:'<b>Bisnis</b> adalah organisasi yang mencari keuntungan lewat penjualan barang/jasa — berbeda dari sekadar <b>berdagang</b> (tukar barang untuk untung sesaat).'},
         {t:'table', head:['Berdagang','Bisnis'], rows:[
           ['Tukar-menukar barang untuk untung','Ada inovasi & pengembangan produk'],
           ['Berhenti di transaksi','Ada pemasaran & branding'],
@@ -82,20 +78,20 @@ var KELAS_DATA = [
           {t:'Dampak ke dalam', d:'Beri ruang tumbuh & sejahtera bagi tim'},
           {t:'Dampak ke luar', d:'Selesaikan masalah pelanggan & masyarakat'}
         ], cap:'Makin luas & positif dampaknya, makin baik bisnisnya.'},
-        {t:'callout', k:'warn', judul:'Pelajaran', x:'Perusahaan yang dulu mendominasi bisa jatuh karena <b>tidak adaptif</b> terhadap perubahan. Bisnis hebat terus menyesuaikan diri.'},
+        {t:'callout', k:'warn', judul:'Pelajaran', x:'Perusahaan yang dulu mendominasi bisa jatuh karena <b>tidak adaptif</b> pada perubahan. Bisnis hebat terus menyesuaikan diri.'},
         {t:'quiz', q:'Penanda utama “bisnis hebat” adalah…', opts:['Sekadar berumur panjang','Memberi dampak nyata bagi stakeholder & adaptif','Untung besar sekali lalu tutup'], a:1, exp:'Tolok ukurnya dampak berkelanjutan bagi stakeholder.'}
       ]
     },
     { id:'m1l2', judul:'Mengenal diri: SWOT diri, IKIGAI & 3P', durasi:'11 mnt',
       ringkas:'Inti bisnis adalah kamu. Petakan kekuatan-kelemahan & temukan alasan bergerak.',
       blocks:[
-        {t:'lead', x:'Inti setiap bisnis adalah <b>foundernya</b>. Sebelum menilai pasar, kenali diri — kekuatan <i>dan</i> kelemahan, keadaan internal <i>dan</i> lingkungan eksternal.'},
+        {t:'lead', x:'Inti setiap bisnis adalah <b>foundernya</b>. Sebelum menilai pasar, kenali diri — kekuatan <i>dan</i> kelemahan, keadaan internal <i>dan</i> lingkungan eksternal. Fakta: banyak orang tidak bekerja sesuai bidang yang mereka inginkan; makin penting mengenali diri sebelum melangkah.'},
         {t:'diagram', kind:'quad', judul:'SWOT untuk dirimu', nodes:[
           {t:'Strength', d:'Apa kelebihanmu?'},
           {t:'Weakness', d:'Apa kelemahan yang perlu disiasati?'},
           {t:'Opportunity', d:'Peluang di sekitarmu?'},
           {t:'Threat', d:'Ancaman/risiko yang mengintai?'}
-        ], cap:'Contoh: chef lulusan Italia (kuat masak Italia, lemah masakan lokal) di daerah tanpa resto Italia (peluang) tapi selera warga belum tentu cocok (ancaman). Apa keputusanmu?'},
+        ], cap:'Contoh: chef lulusan Italia (kuat masak Italia, lemah masakan lokal), di daerah tanpa resto Italia (peluang) tapi selera warga belum tentu cocok (ancaman). Apa keputusanmu?'},
         {t:'h', x:'IKIGAI — alasan untuk bergerak'},
         {t:'diagram', kind:'cycle', judul:'4 pertanyaan IKIGAI', nodes:[
           {t:'Kamu sukai', d:'Apa yang kamu cintai?'},
@@ -104,18 +100,18 @@ var KELAS_DATA = [
           {t:'Dibayar', d:'Untuk apa orang mau bayar?'}
         ], cap:'Irisan keempatnya = arah usaha yang selaras dengan dirimu & pasar.'},
         {t:'callout', k:'tip', judul:'3P sebagai kompas', x:'<b>Passion</b> (kerja untuk yang kamu pedulikan) · <b>Purpose</b> (jadi lebih besar dari diri sendiri) · <b>Pleasure</b> (kejar hasil jangka pendek).'},
-        {t:'callout', k:'key', judul:'Tindakan', x:'Tulis SWOT dirimu (3 poin tiap kuadran) & jawab 4 pertanyaan IKIGAI. Simpan — jadi penyaring ide di Chapter 2.'}
+        {t:'callout', k:'key', judul:'Tindakan', x:'Tulis SWOT dirimu (3 poin tiap kuadran) & jawab 4 pertanyaan IKIGAI.'}
       ]
     },
-    { id:'m1l3', judul:'3 level produk & rencana SMART', durasi:'10 mnt',
-      ringkas:'Pahami lapisan produkmu & susun target yang benar-benar bisa dijalankan.',
+    { id:'m1l3', judul:'Tipe founder & rencana SMART', durasi:'10 mnt',
+      ringkas:'Kenali tipe pengusaha & susun target yang benar-benar bisa dijalankan.',
       blocks:[
-        {t:'h', x:'Tiga level produk/jasa'},
-        {t:'diagram', kind:'pyramid', judul:'Lapisan nilai produk', nodes:[
-          {t:'Core', d:'Manfaat inti — alasan utama orang beli (sumber pendapatan)'},
-          {t:'Actual', d:'Wujud nyata: kualitas, desain, fitur'},
-          {t:'Augmented', d:'Paket total: garansi, layanan purna jual, poin loyalti'}
-        ], cap:'Contoh IKEA: core=kebutuhan rumah tangga; actual=meja/kursi/lemari; augmented=bantuan rakit, pengalaman belanja, kafe.'},
+        {t:'p', x:'Setiap pengusaha punya sifat berbeda — <b>tidak ada yang salah</b>. Mengenali tipe dirimu memudahkan menentukan peran & mencari partner yang melengkapi.'},
+        {t:'diagram', kind:'flow', judul:'Tiga tipe umum pendiri', nodes:[
+          {t:'Perancang', d:'Idealis, suka menciptakan solusi & inovasi produk'},
+          {t:'Penghubung', d:'Pandai membangun koneksi & membaca pasar/pelanggan'},
+          {t:'Penjaga', d:'Memastikan seluruh proses bisnis rapi & teratur'}
+        ], cap:'Kombinasi tipe yang saling melengkapi membuat tim lebih kuat.'},
         {t:'h', x:'Rencana pengembangan diri — SMART'},
         {t:'table', head:['Huruf','Arti','Pertanyaan'], rows:[
           ['S','Specific','Apa persisnya yang mau dicapai?'],
@@ -125,16 +121,139 @@ var KELAS_DATA = [
           ['T','Time-bound','Kapan tenggatnya?']
         ], cap:'Contoh: “Buka 3 cabang di kota X dalam 4 bulan, modal Rp50 juta, 15 karyawan, resep dari cabang pertama.”'},
         {t:'list', items:[
-          '<b>Jangka pendek</b> (minggu–bulan): mis. “pahami keuangan pribadi dengan ikut kelas minggu depan.”',
-          '<b>Jangka panjang</b> (tahunan): mis. “luncurkan perusahaan sendiri dalam 5 tahun.”'
+          '<b>Tujuan jangka pendek</b> (minggu–bulan): mis. “pahami keuangan pribadi dengan ikut kelas minggu depan.”',
+          '<b>Tujuan jangka panjang</b> (tahunan): mis. “luncurkan perusahaan sendiri dalam 5 tahun.”'
         ]},
         {t:'quiz', q:'Bagian “M” pada SMART berarti…', opts:['Motivasi tinggi','Measurable — bisa diukur','Maksimal usaha'], a:1, exp:'M = Measurable; target harus punya ukuran.'}
       ]
     },
-    { id:'m1l4', judul:'Valuasi: menilai berapa bisnismu layak', durasi:'13 mnt',
-      ringkas:'Empat cara menaksir nilai sebuah bisnis sebelum menggalang dana.',
+    { id:'m1l4', judul:'Persiapan internal founder', durasi:'14 mnt',
+      ringkas:'Keuangan pribadi, permodalan, waktu, risiko, & ketajaman bisnis.',
       blocks:[
-        {t:'p', x:'<b>Fundraising</b> = proses bisnis mendapatkan dana dari investor (biasanya menawarkan saham/obligasi). Sebelumnya kamu perlu tahu <b>valuasi</b> — nilai bisnismu — agar tidak salah menawar.'},
+        {t:'lead', x:'Sebelum bisnis jalan, siapkan <b>empat hal internal</b>: keuangan pribadi, manajemen waktu, manajemen risiko, dan ketajaman bisnis.'},
+        {t:'h', x:'1) Keuangan pribadi'},
+        {t:'callout', k:'warn', judul:'Pengusaha = tidak ada gaji tetap', x:'Karena pendapatan tidak pasti, jaga hal berikut:'},
+        {t:'list', items:[
+          '<b>Arus kas aman</b> — pengeluaran harus selalu lebih kecil dari pendapatan.',
+          '<b>Dana darurat</b> — siapkan <b>3–6 bulan</b> rata-rata pengeluaran (mis. butuh Rp5jt/bln → siapkan Rp15–30jt). Pasca-krisis, bisa ditingkatkan sampai 12 bulan.',
+          '<b>Pisahkan</b> keuangan pribadi dengan bisnis.',
+          '<b>Berpikir logis</b>, jangan impulsif.'
+        ]},
+        {t:'h', x:'3 tipe permodalan'},
+        {t:'table', head:['Tipe','Penjelasan'], rows:[
+          ['Bootstrap (dana pribadi)','Pakai tabungan/sumber daya sendiri'],
+          ['Loan (pinjaman)','Pinjam ke pihak lain, mis. bank + bunga'],
+          ['Equity (saham)','Tambah modal dari pihak lain dengan menukar saham (mis. Venture Capital)']
+        ], cap:'Tips: perbanyak investasi pasif (reksa dana, obligasi, saham) yang tak perlu diperjualbelikan berkala.'},
+        {t:'h', x:'2) Manajemen waktu'},
+        {t:'p', x:'Waktu membuat pengusaha <b>efektif</b>. Susun to-do-list dengan <b>Action Priority Matrix</b> (memilah tugas berdasarkan usaha vs dampak), dan visualkan timeline dengan <b>Gantt chart</b> atau tabel waktu harian (bisa pakai kalender digital).'},
+        {t:'diagram', kind:'quad', judul:'Action Priority Matrix', nodes:[
+          {t:'Quick Wins', d:'Dampak tinggi, usaha rendah → kerjakan dulu'},
+          {t:'Major Projects', d:'Dampak tinggi, usaha tinggi → rencanakan'},
+          {t:'Fill-ins', d:'Dampak rendah, usaha rendah → sisipan'},
+          {t:'Thankless Tasks', d:'Dampak rendah, usaha tinggi → hindari'}
+        ], cap:'Prioritaskan yang dampaknya besar dengan usaha wajar.'},
+        {t:'h', x:'3) Manajemen risiko'},
+        {t:'p', x:'Tanyakan: “Apa risiko yang mungkin terjadi & bagaimana menghadapinya?” Risiko bisa berupa <b>finansial, keamanan, reputasi</b>, dll. Tujuannya <b>meminimalkan</b>, bukan menghindari sepenuhnya.'},
+        {t:'h', x:'4) Ketajaman bisnis'},
+        {t:'p', x:'Kepekaan yang <b>bisa dilatih</b> dari pengalaman, mencakup <b>skill, pengetahuan, & kemampuan</b>. Berguna saat mengambil keputusan dengan mempertimbangkan aspek internal & eksternal (mis. bagi tugas dengan partner sesuai kekuatan masing-masing).'},
+        {t:'callout', k:'tip', judul:'Tahap skill pengusaha', x:'<b>Early</b>: pitching, cari funding, strategi marketing, cari keunikan produk. <b>Mid</b>: pencatatan & analisa keuangan, kelola sumber daya. <b>Late</b>: analisa rasio keuangan, evaluasi, perbaikan masalah, buat dashboard — plus semua skill tahap sebelumnya.'}
+      ]
+    },
+    { id:'m1l5', judul:'Persiapan eksternal founder', durasi:'12 mnt',
+      ringkas:'Kebutuhan modal, partner, mentor, & kompetitor.',
+      blocks:[
+        {t:'h', x:'1) Kebutuhan modal'},
+        {t:'p', x:'Permodalan untuk membangun bisnismu. Tujuannya menghitung uang keluar pertama & memudahkan menghitung profitabilitas. Catat rapi: <b>sumber modal, jumlah, & detail kesepakatan</b>.'},
+        {t:'table', head:['Sumber','Jumlah','Kesepakatan'], rows:[
+          ['Utang ke orang tua','Rp3.000.000','Dikembalikan, bunga 0%'],
+          ['Utang ke teman','Rp1.000.000','Bunga 1%, jatuh tempo bulan tertentu'],
+          ['<b>Total modal awal</b>','<b>Rp4.000.000</b>','—']
+        ], cap:'Contoh tabel kebutuhan modal sederhana.'},
+        {t:'h', x:'2) Partner bisnis'},
+        {t:'p', x:'Partner bisa <b>melengkapi skill</b>-mu sekaligus jadi bentuk manajemen risiko. Data mendukung:'},
+        {t:'list', items:[
+          'Bisnis dengan <b>banyak founder</b> punya tingkat bertahan <b>~30% lebih tinggi</b> daripada solo founder (National Bureau of Economic Research).',
+          'Studi First Round Capital: bisnis multi-founder <b>mengungguli</b> solo founder hingga <b>103%</b>.'
+        ]},
+        {t:'callout', k:'warn', judul:'Catatan', x:'Tapi <b>tidak semua bisnis wajib</b> punya partner — sesuaikan kebutuhan.'},
+        {t:'h', x:'3) Mentor'},
+        {t:'p', x:'Orang yang mau membagi pengalaman & pengetahuannya. Langkah mencari mentor:'},
+        {t:'steps', items:[
+          'Cari orang yang kamu kagumi & sudah berhasil.',
+          'Cari kesamaan denganmu.',
+          'Mulai pembicaraan, perkenalkan diri, usahakan bertemu.',
+          'Prinsip memberi & menerima.',
+          'Pilih yang mau tumbuh & mendukungmu.',
+          'Punya manajemen konflik yang baik.',
+          'Punya visi yang sama.'
+        ]},
+        {t:'callout', k:'tip', judul:'Ingat', x:'Tidak ada mentor “terbaik” — yang ada <b>cocok-cocokan</b>.'},
+        {t:'h', x:'4) Kompetitor'},
+        {t:'p', x:'Bandingkan produk/jasamu dengan pesaing yang sudah ada. Ini membantu memahami <b>potensi pasar</b> & <b>diferensiasi</b> apa yang bisa kamu lakukan. Gunakan <b>position map</b> untuk memetakan posisimu terhadap pesaing.'},
+        {t:'callout', k:'key', judul:'Tindakan', x:'Isi tabel kebutuhan modalmu, tulis 1 kandidat mentor, dan buat position map sederhana vs 2 pesaing.'}
+      ]
+    },
+    { id:'m1l6', judul:'Dari SWOT ke TOWS (aksi)', durasi:'11 mnt',
+      ringkas:'Ubah hasil SWOT jadi langkah nyata dengan matriks TOWS.',
+      blocks:[
+        {t:'lead', x:'<b>SWOT</b> memetakan keadaan internal (Strength, Weakness) & eksternal (Opportunity, Threat). <b>TOWS</b> melangkah lebih jauh: memasangkan keempatnya jadi <b>aksi</b>. Mudahnya — SWOT tahap pengenalan diri, TOWS tahap tindakan.'},
+        {t:'diagram', kind:'quad', judul:'Matriks TOWS', nodes:[
+          {t:'S–O (Maksi-Maksi)', d:'Pakai kekuatan untuk memaksimalkan peluang'},
+          {t:'W–O (Mini-Maksi)', d:'Kurangi kelemahan dengan memanfaatkan peluang'},
+          {t:'S–T (Maksi-Mini)', d:'Pakai kekuatan untuk mengurangi ancaman'},
+          {t:'W–T (Mini-Mini)', d:'Hindari ancaman dengan mengurangi kelemahan'}
+        ], cap:'Setiap sel menghasilkan langkah konkret yang bisa dieksekusi.'},
+        {t:'h', x:'Contoh: usaha ayam goreng'},
+        {t:'table', head:['SWOT','Isi'], rows:[
+          ['Strength','Harga terjangkau; konsep trendy sesuai anak muda'],
+          ['Weakness','Masalah pendanaan; pasokan ayam sering telat'],
+          ['Opportunity','Permintaan tinggi; sedikit pesaing yang go-digital'],
+          ['Threat','Kompetitor punya banyak konsumen loyal & produk serupa']
+        ]},
+        {t:'list', items:[
+          '<b>S–O:</b> tambah modal untuk stok lebih banyak; go-digital lewat layanan pesan-antar.',
+          '<b>W–O:</b> pakai sistem pre-order online; penetrasi ke area permintaan tertinggi.',
+          '<b>S–T:</b> gencarkan marketing offline (banner/kemitraan lokal); pakai sistem referral/loyalti.',
+          '<b>W–T:</b> diversifikasi pemasok & menu; cari angel investor untuk pendanaan awal.'
+        ]},
+        {t:'callout', k:'key', judul:'Tindakan', x:'Susun SWOT bisnismu, lalu turunkan minimal 1 aksi untuk tiap sel TOWS.'}
+      ]
+    },
+    { id:'m1l7', judul:'Lean Canvas & proses bisnis', durasi:'10 mnt',
+      ringkas:'Petakan seluruh model & alur bisnis dalam satu halaman.',
+      blocks:[
+        {t:'lead', x:'Bisnis yang <b>lean</b> fokus menyelesaikan masalah sambil <b>merampingkan operasi & menekan biaya</b> — meningkatkan efisiensi, produktivitas, & profitabilitas. Salah satu alatnya: <b>Lean Canvas</b> (satu halaman untuk seluruh model bisnis).'},
+        {t:'table', head:['Blok Lean Canvas','Pertanyaan'], rows:[
+          ['Masalah','Masalah utama pelanggan?'],
+          ['Segmen pelanggan','Untuk siapa?'],
+          ['Unique Value Proposition','Kenapa beda & layak dipilih?'],
+          ['Solusi','Fitur/produk yang menjawab masalah'],
+          ['Saluran','Cara menjangkau pelanggan'],
+          ['Revenue Stream','Dari mana pendapatan berasal'],
+          ['Cost Structure','Seluruh biaya tetap & variabel'],
+          ['Key Metrics','Angka kunci yang dipantau'],
+          ['Unfair Advantage','Keunggulan yang sulit ditiru']
+        ], cap:'Kamu perlu tahu seluruh proses internal & eksternal untuk mengisinya.'},
+        {t:'h', x:'Business Process Mapping'},
+        {t:'p', x:'Seorang founder perlu paham <b>flowchart</b> sederhana — diagram yang mewakili alur kerja: tiap bentuk = satu langkah, panah = arah proses. Ini bagian dari Business Process Mapping.'},
+        {t:'diagram', kind:'flow', judul:'Cara membuat process mapping', nodes:[
+          {t:'Identifikasi', d:'Tentukan proses bisnisnya'},
+          {t:'Kumpulkan info', d:'Semua data terkait'},
+          {t:'Buat chart', d:'Gambarkan alurnya'},
+          {t:'Optimalkan', d:'Perbaiki agar efisien'}
+        ], cap:'Detail operasional dibahas lebih lanjut di Chapter 6.'}
+      ]
+    },
+    { id:'m1l8', judul:'Raising funds & valuasi', durasi:'14 mnt',
+      ringkas:'Menggalang dana & empat cara menaksir nilai bisnis.',
+      blocks:[
+        {t:'video', src:'', poster:'', cap:'Rekaman sesi valuasi (menyusul).'},
+        {t:'callout', k:'warn', judul:'Kenapa penting', x:'Salah satu penyebab bisnis gagal adalah <b>kekurangan dana</b>. Menggalang dana yang tepat jadi salah satu penyelamat.'},
+        {t:'p', x:'<b>Raising funds</b> = proses bisnis mendapatkan dana dari investor (untuk launch, marketing, operasional, growth), biasanya menawarkan saham/obligasi.'},
+        {t:'callout', k:'tip', judul:'Sebelum cari investor', x:'Mulai kecil (bootstrap) · uji ide ke 3F (friends, family, fools) · pastikan model bisnis terbukti · buat analisis pasar detail · lakukan validasi produk.'},
+        {t:'h', x:'Apa itu valuasi?'},
+        {t:'p', x:'Memberi “harga” pada sebuah objek (perusahaan, properti, dll). Founder perlu menghitungnya agar tidak salah menawar dan kedua pihak diuntungkan. Empat metode umum:'},
         {t:'h', x:'1) Asset-Based Valuation'},
         {t:'formula', x:'Valuasi = Total Harta − Total Hutang', cap:'Contoh: harta Rp70jt − hutang Rp20jt → Rp50 juta.'},
         {t:'h', x:'2) Market Multiple Valuation'},
@@ -147,16 +266,10 @@ var KELAS_DATA = [
         {t:'p', x:'Menaksir nilai dari <b>arus kas masa depan</b> yang di-diskon ke nilai sekarang: proyeksikan arus kas beberapa tahun, tentukan tingkat diskonto, jumlahkan nilai sekarangnya.'},
         {t:'h', x:'4) Enterprise Multiple (EV/EBITDA)'},
         {t:'p', x:'Membandingkan nilai perusahaan (Enterprise Value) terhadap EBITDA; lazim untuk bisnis yang sudah menghasilkan laba operasional.'},
-        {t:'table', head:['Metode','Cocok untuk'], rows:[
-          ['Asset-based','Bisnis dengan aset nyata besar'],
-          ['Market multiple','Ada pembanding sejenis'],
-          ['DCF','Proyeksi arus kas jelas'],
-          ['EV/EBITDA','Sudah profit operasional']
-        ], cap:'Sering dipakai beberapa metode lalu dibandingkan.'},
         {t:'quiz', q:'Rumus Asset-Based Valuation…', opts:['Total Harta − Total Hutang','Valuasi ÷ Metrik','Arus kas didiskon'], a:0, exp:'Asset-based = total harta − total hutang.'}
       ]
     },
-    { id:'m1l5', judul:'Cara pitch yang menarik investor', durasi:'11 mnt',
+    { id:'m1l9', judul:'Cara pitch yang menarik investor', durasi:'11 mnt',
       ringkas:'Kerangka presentasi agar investor cepat paham & tertarik.',
       blocks:[
         {t:'lead', x:'Pitch baik membuat investor cepat paham <b>masalah, solusi, ukuran peluang, dan kenapa kamu</b>. Ringkas, berbasis data, jujur.'},
@@ -168,12 +281,11 @@ var KELAS_DATA = [
           {t:'Bukti', d:'Traksi: penjualan, pengguna'},
           {t:'Tim & Ask', d:'Siapa kamu & butuh dana berapa'}
         ], cap:'Susun ceritanya mengalir, bukan tumpukan angka.'},
-        {t:'callout', k:'tip', judul:'Perkuat tim', x:'Studi menunjukkan bisnis dengan <b>lebih dari satu founder</b> punya tingkat bertahan lebih tinggi. Tunjukkan tim yang saling melengkapi.'},
         {t:'list', items:[
           '<b>Mulai dari masalah</b>, bukan fitur — investor beli peluang.',
           '<b>Tunjukkan traksi</b> sekecil apa pun.',
           '<b>Perjelas “ask”</b>: butuh dana berapa, untuk apa, target apa.',
-          'Untuk awal, pertimbangkan <b>angel investor</b>.'
+          'Untuk awal, pertimbangkan <b>angel investor</b> atau 3F.'
         ]},
         {t:'callout', k:'key', judul:'Tindakan', x:'Susun draf pitch 6 slide mengikuti alur di atas. Satu kalimat kuat per slide.'}
       ]
@@ -212,7 +324,7 @@ var KELAS_DATA = [
         {t:'h', x:'1) Low-Hanging Fruit Theory'},
         {t:'p', x:'Ambil “buah terdekat” — ide yang mudah diproses karena berangkat dari <b>kegemaran/keresahan pribadi</b>. Hemat biaya & personal. Contoh: buka jasa cuci motor karena tahu kendaraan pasti kotor & banyak orang malas mencuci sendiri.'},
         {t:'h', x:'2) Market Gap Theory'},
-        {t:'p', x:'Peluang muncul saat ada <b>celah</b> antara supply & demand. Contoh: saat stok masker menipis padahal permintaan melonjak, produsen kain cepat memproduksi masker massal.'},
+        {t:'p', x:'Peluang muncul saat ada <b>celah</b> antara supply & demand yang belum terpenuhi. Contoh: saat stok masker menipis padahal permintaan melonjak, produsen kain cepat memproduksi masker massal.'},
         {t:'steps', items:['Cari pangsa pasar yang <b>spesifik</b>.','Amati & adaptasi bisnis dari luar negeri.','Tanya langsung ke calon pelanggan.']},
         {t:'callout', k:'warn', judul:'Perhatikan', x:'Market Gap butuh <b>lebih banyak waktu & usaha</b>, tapi bila pasar belum jenuh potensinya besar.'},
         {t:'table', head:['Orientasi hasil','Fokus'], rows:[
@@ -241,7 +353,7 @@ var KELAS_DATA = [
           '🔵 <b>Biru</b> — moderator; mengatur diskusi.',
           '⚪ <b>Putih</b> — data & fakta hasil observasi.'
         ]},
-        {t:'callout', k:'key', judul:'Tindakan', x:'Pilih 1 masalah dari sesi lalu. Brainwriting 10 solusi, saring pakai topi Kuning (peluang) & Hitam (risiko). Lalu minta pendapat 3 orang sekitar untuk “pengakuan” ide.'}
+        {t:'callout', k:'key', judul:'Tindakan', x:'Pilih 1 masalah, brainwriting 10 solusi, saring pakai topi Kuning (peluang) & Hitam (risiko). Lalu minta pendapat 3 orang sekitar untuk “pengakuan” ide.'}
       ]
     }
   ]
@@ -256,7 +368,7 @@ var KELAS_DATA = [
       ringkas:'Dua kerangka menilai daya tarik & risiko industri.',
       blocks:[
         {t:'video', src:'', poster:'', cap:'Rekaman sesi (menyusul).'},
-        {t:'callout', k:'warn', judul:'Kenapa wajib riset & validasi?', x:'Tanpa riset & validasi, kegagalan hampir pasti. Riset mengidentifikasi peluang, mengurangi risiko, mengenal target pelanggan, dan memberi keyakinan mengambil keputusan.'},
+        {t:'callout', k:'warn', judul:'Kenapa wajib riset & validasi?', x:'Tanpa riset & validasi, kegagalan hampir pasti. Riset mengidentifikasi peluang, mengurangi risiko, mengenal target pelanggan, & memberi keyakinan mengambil keputusan.'},
         {t:'h', x:'Porter’s Five Forces'},
         {t:'list', items:[
           '<b>Barrier of Entry</b> — semudah apa pemain baru masuk? Makin mudah, makin rentan.',
@@ -300,7 +412,7 @@ var KELAS_DATA = [
           ['Harga','Bisa premium','Perang harga'],
           ['Contoh','Kategori belum ramai','Kopi, boba, nasi goreng, fashion']
         ], cap:'Bisnis baru lebih aman menghindari samudra merah yang jenuh.'},
-        {t:'p', x:'<b>Riset harga:</b> survei harga pesaing, tanya pelanggan, dan tetapkan berbasis <b>nilai</b> — lihat urgensi & manfaat dari sudut pelanggan, lalu sesuaikan kemampuan bayar.'},
+        {t:'p', x:'<b>Riset harga:</b> survei harga pesaing, tanya pelanggan, & tetapkan berbasis <b>nilai</b> — lihat urgensi & manfaat dari sudut pelanggan, lalu sesuaikan kemampuan bayar.'},
         {t:'quiz', q:'Urutan pasar dari terluas ke tersempit…', opts:['SOM→SAM→TAM','TAM→SAM→SOM','SAM→TAM→SOM'], a:1, exp:'TAM > SAM > SOM.'}
       ]
     },
@@ -341,47 +453,82 @@ var KELAS_DATA = [
 /* ============ CHAPTER 4 — PRODUK UNGGUL & USP ============ */
 {
   id:'m4', judul:'Produk Unggul & USP', ikon:'i-bolt', label:'Chapter 4',
-  ringkas:'Bangun produk yang benar-benar beda & bernilai lewat USP dan value proposition.',
+  ringkas:'Bangun produk yang kompetitif (beda & bernilai) sekaligus profitable.',
   lessons:[
-    { id:'m4l1', judul:'Unique Selling Proposition (USP)', durasi:'11 mnt',
-      ringkas:'Atribut yang membuat produkmu beda & dipilih.',
+    { id:'m4l1', judul:'Jadi kompetitif: USP & winning zone', durasi:'12 mnt',
+      ringkas:'Do it better or do it differently — temukan keunikan yang dipedulikan pasar.',
       blocks:[
         {t:'video', src:'', poster:'', cap:'Rekaman sesi (menyusul).'},
-        {t:'lead', x:'<b>USP (Unique Selling Proposition)</b> adalah atribut yang <b>membedakan</b> produk/jasamu dari pesaing — alasan spesifik kenapa orang memilihmu. Kuncinya: <b>unik & spesifik</b>.'},
+        {t:'lead', x:'Untuk kompetitif: <b>lakukan lebih baik</b> atau <b>lakukan berbeda</b>. <b>USP (Unique Selling Proposition)</b> adalah atribut yang <b>membedakan</b> produkmu & memberi nilai tambah bagi pelanggan. Kuncinya: <b>unik & spesifik</b>.'},
+        {t:'diagram', kind:'quad', judul:'Winning zone', nodes:[
+          {t:'Winning zone', d:'Kamu unggul & pelanggan peduli — pembeda jelas'},
+          {t:'Risky', d:'Kamu & pesaing sama-sama kuat — medan tempur, butuh eksekusi superior'},
+          {t:'Losing zone', d:'Pesaing memenuhi kebutuhan lebih baik — kamu kalah'},
+          {t:'Who cares', d:'Unggul di hal yang pelanggan tak pedulikan — buang waktu'}
+        ], cap:'Sasar “winning zone”: yang kamu kuat × yang pelanggan peduli × yang pesaing lemah.'},
         {t:'h', x:'Cara menemukan USP'},
         {t:'steps', items:[
-          'Pahami pelanggan & masalah yang paling mereka pedulikan.',
-          'Pahami produkmu: apa kelebihan nyatanya dibanding pesaing?',
-          'Cari “winning zone” — titik di mana kamu unggul <b>dan</b> pelanggan peduli, sementara pesaing lemah.'
+          'Identifikasi kebutuhan pelanggan.',
+          'Pahami produkmu — kelebihan & kekurangannya.',
+          'Identifikasi kompetitor produkmu.'
         ]},
-        {t:'diagram', kind:'quad', judul:'Menemukan winning zone', nodes:[
-          {t:'Yang kamu kuat', d:'Kelebihan yang benar-benar kamu punya'},
-          {t:'Yang pelanggan peduli', d:'Hal yang mereka nilai penting'},
-          {t:'Yang pesaing lemah', d:'Celah yang belum digarap pesaing'},
-          {t:'Winning zone', d:'Irisan ketiganya = USP-mu'}
-        ], cap:'USP paling kuat berada di irisan “kamu kuat × pelanggan peduli × pesaing lemah”.'},
-        {t:'callout', k:'warn', judul:'Hindari', x:'USP yang umum (“kualitas bagus, harga murah”) bukan pembeda — hampir semua klaim begitu. USP harus <b>spesifik</b> dan sulit ditiru.'},
-        {t:'quiz', q:'Ciri USP yang baik…', opts:['Umum & menyenangkan semua orang','Unik, spesifik, & sulit ditiru','Sama seperti pesaing tapi lebih murah'], a:1, exp:'USP harus unik & spesifik agar jadi alasan nyata memilihmu.'}
+        {t:'h', x:'3 tipe USP'},
+        {t:'table', head:['Tipe','Fokus','Contoh'], rows:[
+          ['Functional','Fungsi/kegunaan produk','Jaket agar tak kedinginan'],
+          ['Economic','Hemat / cost-effective','Mobil dengan harga murah'],
+          ['Emotional','Rasa/emosi saat membeli','Brand mewah menimbulkan rasa bangga']
+        ]},
+        {t:'callout', k:'warn', judul:'USP vs Value Proposition', x:'<b>USP</b> = hal <b>unik</b> yang membedakan dari pesaing. <b>VP (Value Proposition)</b> = hal <b>umum</b> yang dimiliki hampir semua usaha sejenis (memberi tahu apa produknya & kenapa penting). USP menajamkan pembeda; VP merangkum nilai dasar.'},
+        {t:'quiz', q:'Ciri USP yang baik…', opts:['Umum & menyenangkan semua orang','Unik & spesifik','Sama seperti pesaing tapi lebih murah'], a:1, exp:'USP harus unik & spesifik agar jadi alasan nyata memilihmu.'}
       ]
     },
-    { id:'m4l2', judul:'USP vs Value Proposition & Maslow', durasi:'10 mnt',
-      ringkas:'Beda “keunikan jual” dengan “janji nilai”, dan menautkannya ke kebutuhan manusia.',
+    { id:'m4l2', judul:'Kaitkan ke kebutuhan: Maslow', durasi:'10 mnt',
+      ringkas:'Jual solusi berdasarkan tingkat kebutuhan manusia.',
       blocks:[
-        {t:'table', head:['','USP','Value Proposition'], rows:[
-          ['Fokus','Faktor <b>keunikan</b> yang membedakan','<b>Janji nilai</b> total yang diterima pelanggan'],
-          ['Sudut','“Kenapa beda dari pesaing”','“Manfaat apa yang kamu dapat”'],
-          ['Contoh','Pengiriman 1 jam sampai','Belanja praktis, hemat waktu, tanpa antre']
-        ], cap:'USP menajamkan pembeda; value proposition merangkum keseluruhan nilai.'},
-        {t:'h', x:'Tautkan ke kebutuhan (Maslow)'},
-        {t:'p', x:'Semakin dalam produkmu menjawab kebutuhan manusia, semakin kuat nilainya. Hierarki Maslow membantu memetakan “kebutuhan apa yang kamu penuhi”.'},
-        {t:'diagram', kind:'pyramid', judul:'Hierarki kebutuhan (Maslow)', nodes:[
-          {t:'Fisiologis', d:'Makan, minum, tempat tinggal'},
-          {t:'Rasa aman', d:'Keamanan, kesehatan, kepastian'},
-          {t:'Sosial', d:'Pertemanan, rasa memiliki'},
-          {t:'Penghargaan', d:'Status, pengakuan, gengsi'},
-          {t:'Aktualisasi', d:'Pengembangan diri, makna'}
-        ], cap:'Produk yang menyentuh kebutuhan lebih dari satu tingkat biasanya lebih bernilai.'},
-        {t:'callout', k:'key', judul:'Tindakan', x:'Tulis 1 kalimat USP + 1 kalimat value proposition produkmu, lalu tandai tingkat kebutuhan Maslow yang kamu penuhi.'}
+        {t:'p', x:'Setelah USP ditemukan, kaitkan dengan <b>kebutuhan dasar</b> pelanggan. Hierarki Maslow membagi kebutuhan manusia jadi lima tingkat — jual solusi yang menjawab tingkat tertentu.'},
+        {t:'diagram', kind:'pyramid', judul:'Hierarki kebutuhan Maslow', nodes:[
+          {t:'Fisiologis', d:'Makan, minum, pakaian, tempat tinggal — mis. restoran cepat saji'},
+          {t:'Rasa aman', d:'Kesehatan, perlindungan, kepastian — mis. asuransi'},
+          {t:'Sosial', d:'Diterima & dicintai komunitas — mis. media sosial'},
+          {t:'Penghargaan', d:'Status, pengakuan — mis. produk mewah simbol status'},
+          {t:'Aktualisasi diri', d:'Pengembangan diri & visi besar — mis. platform kursus'}
+        ], cap:'Produk yang menyentuh lebih dari satu tingkat biasanya lebih bernilai. Contoh Nike memenuhi fisiologis, rasa aman/nyaman, & aktualisasi diri atlet.'},
+        {t:'callout', k:'key', judul:'Tindakan', x:'Tulis 1 kalimat USP produkmu, lalu tandai tingkat kebutuhan Maslow yang kamu penuhi.'}
+      ]
+    },
+    { id:'m4l3', judul:'Competitive Moat — parit pertahanan', durasi:'11 mnt',
+      ringkas:'Apa yang membuat bisnismu sulit direbut pesaing.',
+      blocks:[
+        {t:'lead', x:'<b>Moat</b> (parit) = keunggulan kompetitif yang membuat pesaing sulit merebut pasarmu — ibarat kastil dikelilingi parit. Intinya: <b>apa yang membuat bisnismu tak mudah dicuri/diganggu</b>.'},
+        {t:'diagram', kind:'quad', judul:'Empat jenis moat', nodes:[
+          {t:'Intellectual Property', d:'Paten, merek dagang, hak cipta yang melindungi bisnis'},
+          {t:'Network Effects', d:'Makin banyak pengguna, makin sulit ditembus pesaing'},
+          {t:'Economies of Scale', d:'Produksi skala besar menekan biaya per unit'},
+          {t:'Brand Strength', d:'Merek kuat & tepercaya lebih mudah menarik pelanggan'}
+        ], cap:'Contoh Apple: produk saling terkait (network), rantai pasok efisien (skala), merek sangat kuat, & kekayaan intelektual terdaftar.'},
+        {t:'callout', k:'warn', judul:'Pentingnya kekayaan intelektual', x:'Ada kasus sengketa merek besar (mis. rebutan nama merek ayam geprek) yang berujung kekalahan karena nama dipakai tanpa hak. Pelajaran: <b>daftarkan merek</b>-mu agar tak jadi masalah besar di kemudian hari.'},
+        {t:'callout', k:'key', judul:'Kesimpulan bisnis kompetitif', x:'Di tahap awal, jangan dulu pusing harga/profit — fokus buat <b>good product</b>: (1) solusi untuk kebutuhan manusia, (2) nilai & keunikan (USP), (3) parit pertahanan (moat).'}
+      ]
+    },
+    { id:'m4l4', judul:'Produk yang profitable', durasi:'12 mnt',
+      ringkas:'3 level produk, unit economics, & rantai nilai produksi.',
+      blocks:[
+        {t:'h', x:'3 level produk (Core–Actual–Augmented)'},
+        {t:'diagram', kind:'pyramid', judul:'Lapisan nilai produk', nodes:[
+          {t:'Core', d:'Manfaat inti — alasan utama beli (sumber pendapatan utama)'},
+          {t:'Actual', d:'Wujud nyata: kualitas, desain, fitur'},
+          {t:'Augmented', d:'Paket total: garansi, purna jual, poin loyalti'}
+        ], cap:'Contoh IKEA: core=kebutuhan rumah tangga; actual=meja/kursi/lemari; augmented=bantuan rakit, pengalaman belanja, kafe. Makin besar bisnis, makin lebar variasinya.'},
+        {t:'h', x:'Unit economics'},
+        {t:'p', x:'Keuntungan bersih dari <b>setiap unit</b> produk setelah dikurangi biaya produksi & operasional. Menggambarkan seberapa efisien bisnis menghasilkan untung per unit — fondasi sebelum menggenjot volume.'},
+        {t:'h', x:'Empat penopang penciptaan produk'},
+        {t:'table', head:['Aspek','Arti'], rows:[
+          ['Economies of Scale','Biaya per unit turun saat jumlah produksi naik'],
+          ['Supply Chain','Alur bahan mentah → produksi → packaging → pengiriman (supplier, manufaktur, distributor, retailer)'],
+          ['Barrier of Production','Seberapa sulit produk dibuat & bertahan/berkembang di pasar'],
+          ['Feedback Loop','Bagaimana & kapan produk diiterasi ulang sesuai keinginan pelanggan & pasar']
+        ], cap:'Empat hal ini menentukan produk bisa profitable & bertahan.'},
+        {t:'quiz', q:'“Biaya per unit turun saat produksi naik” disebut…', opts:['Supply Chain','Economies of Scale','Feedback Loop'], a:1, exp:'Itu Economies of Scale (skala ekonomi).'}
       ]
     }
   ]
@@ -390,13 +537,13 @@ var KELAS_DATA = [
 /* ============ CHAPTER 5 — BRANDING, SALES & MARKETING ============ */
 {
   id:'m5', judul:'Branding, Sales & Marketing', ikon:'i-store', label:'Chapter 5',
-  ringkas:'Perkenalkan & jual produk dengan efektif — dari STP, konten viral, sampai funnel.',
+  ringkas:'Perkenalkan & jual produk dengan efektif — dari STP, kanal, konten viral, sampai funnel.',
   lessons:[
     { id:'m5l1', judul:'Branding vs Marketing vs Sales & STP', durasi:'12 mnt',
       ringkas:'Bedakan tiga konsep inti & petakan pelanggan dengan STP.',
       blocks:[
         {t:'video', src:'', poster:'', cap:'Rekaman sesi (menyusul).'},
-        {t:'callout', k:'warn', judul:'Kenapa penting?', x:'Produk bagus tanpa pemasaran tetap sepi. Sebagian bisnis gagal karena pemasaran yang lemah — kemampuan menjual adalah keterampilan wajib founder.'},
+        {t:'callout', k:'warn', judul:'Kenapa penting?', x:'Produk bagus tanpa pemasaran tetap sepi. Sebagian bisnis gagal karena pemasaran lemah — menjual adalah keterampilan wajib founder.'},
         {t:'table', head:['Konsep','Definisi','Fokus'], rows:[
           ['Branding','Membangun citra & identitas merek','Persepsi, nilai, pengalaman merek'],
           ['Marketing','Mengenalkan produk ke pasar','Kebutuhan konsumen, strategi promosi'],
@@ -404,15 +551,16 @@ var KELAS_DATA = [
         ]},
         {t:'h', x:'STP — Segmenting, Targeting, Positioning'},
         {t:'diagram', kind:'flow', judul:'Alur STP', nodes:[
-          {t:'Segmenting', d:'Bagi pelanggan jadi kelompok (demografi, psikografi, geografi, perilaku)'},
+          {t:'Segmenting', d:'Bagi pelanggan (demografi, psikografi, geografi, perilaku)'},
           {t:'Targeting', d:'Pilih segmen paling menarik (ukuran, pertumbuhan, profit, kecocokan)'},
           {t:'Positioning', d:'Tanam citra unik di benak pelanggan'}
-        ], cap:'Tipe positioning: berbasis layanan, kenyamanan, harga, atau kualitas. Visualkan dengan perceptual map.'},
+        ], cap:'Pertimbangan targeting: ukuran & pertumbuhan segmen, profit margin, kompetitor, kanal distribusi, kesesuaian tujuan & sumber daya.'},
+        {t:'p', x:'<b>Tipe positioning:</b> berbasis layanan, kenyamanan, harga, atau kualitas. Visualkan posisimu vs pesaing dengan <b>perceptual map</b> (dua sumbu).'},
         {t:'quiz', q:'Memilih segmen paling potensial untuk dilayani = tahap…', opts:['Segmenting','Targeting','Positioning'], a:1, exp:'Targeting = memilih segmen; Positioning = menanam citra.'}
       ]
     },
-    { id:'m5l2', judul:'Strategi & kanal pemasaran', durasi:'12 mnt',
-      ringkas:'Outbound vs inbound, ATL/BTL/TTL, dan pilihan kanal.',
+    { id:'m5l2', judul:'Strategi & kanal pemasaran', durasi:'13 mnt',
+      ringkas:'Outbound vs inbound, ATL/BTL/TTL, OOH/DOOH, UGC & KOL, kanal.',
       blocks:[
         {t:'table', head:['Strategi','Cara kerja','Contoh'], rows:[
           ['Outbound','Aktif menjangkau (proaktif)','Iklan TV/radio, cold call, email blast, baliho'],
@@ -424,15 +572,17 @@ var KELAS_DATA = [
           '<b>ATL</b> (Above The Line) — media massa (TV, radio, billboard); jangkauan luas, mahal, untuk brand awareness.',
           '<b>BTL</b> (Below The Line) — aktivitas langsung (promosi, event, sampling); target spesifik, biaya lebih terukur.',
           '<b>TTL</b> (Through The Line) — kombinasi ATL & BTL.',
-          '<b>OOH/DOOH</b> — iklan luar ruang (baliho / layar digital) di lokasi ramai.'
+          '<b>OOH</b> — iklan luar ruang (baliho/spanduk) di lokasi ramai; <b>DOOH</b> — versi digital (layar LED, video wall).'
         ]},
+        {t:'h', x:'UGC & KOL'},
+        {t:'p', x:'<b>UGC (User Generated Content)</b> — konten dari pengguna (review, testimoni, diskusi) memperkuat kepercayaan. <b>KOL (Key Opinion Leader)</b> — kerja sama dengan influencer. Pilih KOL berdasar: tujuan, kecocokan audiens, kredibilitas, kualitas konten, budget, & metrik (mis. engagement rate).'},
         {t:'h', x:'Kanal pemasaran'},
         {t:'table', head:['Kanal','Contoh'], rows:[
-          ['Direct','Komunitas, affiliate, display ads, email marketing'],
-          ['Indirect','Word of mouth, community building, event, speaking'],
-          ['Gabungan','Marketing online (e-commerce, sosmed), advertisement']
-        ], cap:'UGC (konten dari pengguna) & KOL (influencer) memperkuat kepercayaan. Pilih KOL berdasar tujuan, audiens, kredibilitas, konten, budget, & metrik.'},
-        {t:'callout', k:'tip', judul:'Winning strategy penjualan', x:'Formula 10/30/60: fokuskan 60% upaya ke pelanggan yang sudah ada, 30% ke yang cocok target, 10% ke pasar umum — mempertahankan lebih murah daripada mencari baru.'}
+          ['Langsung (Direct)','Komunitas, affiliate program, display ads, email marketing'],
+          ['Tidak langsung (Indirect)','Word of mouth, community building, offline event, speaking engagement'],
+          ['Gabungan','Marketing online (e-commerce, sosmed) + advertisement (online/offline)']
+        ], cap:'Direct = kendali penuh tapi mahal. Indirect = jangkauan luas tapi kendali kurang. Gabungan = keterlibatan & awareness lebih kuat.'},
+        {t:'callout', k:'tip', judul:'Winning strategy penjualan', x:'Formula <b>10/30/60</b>: fokuskan 60% upaya ke pelanggan yang sudah ada, 30% ke yang cocok target, 10% ke pasar umum — mempertahankan lebih murah daripada mencari baru.'}
       ]
     },
     { id:'m5l3', judul:'Konten viral (STEPPS) & funnel (AIDA)', durasi:'13 mnt',
@@ -441,11 +591,17 @@ var KELAS_DATA = [
         {t:'h', x:'STEPPS Framework (Jonah Berger) — kenapa konten menyebar'},
         {t:'list', items:[
           '<b>Social Currency</b> — konten yang membuat pembagi terlihat “keren”/update tren.',
-          '<b>Triggers</b> — pemicu di lingkungan yang mengingatkan orang pada produkmu.',
+          '<b>Triggers</b> — pemicu di lingkungan yang mengingatkan orang pada produkmu (top of mind).',
           '<b>Emotions</b> — emosi kuat (kagum, gembira) mendorong berbagi.',
           '<b>Public</b> — mudah dilihat & ditiru publik; hindari hal sensitif.',
           '<b>Practical Value</b> — informatif & berguna.',
           '<b>Stories</b> — dibungkus cerita agar mudah diserap & diingat.'
+        ]},
+        {t:'h', x:'Go-To-Market: kenali hambatan masuk'},
+        {t:'list', items:[
+          '<b>Predatory pricing</b> — pemain lama sengaja pasang harga sangat rendah untuk mengusir pesaing.',
+          '<b>Limit pricing</b> — harga rendah + volume tinggi menyulitkan pemain baru untung.',
+          '<b>Switching cost</b> — semudah/sesulit apa pelanggan pindah ke produk lain.'
         ]},
         {t:'h', x:'Marketing Funnel & AIDA'},
         {t:'diagram', kind:'funnel', judul:'Perjalanan pelanggan', nodes:[
@@ -454,7 +610,7 @@ var KELAS_DATA = [
           {t:'Conversion', d:'Memutuskan membeli'},
           {t:'Loyalty', d:'Beli berulang'},
           {t:'Advocacy', d:'Merekomendasikan ke orang lain'}
-        ], cap:'AIDA (Attention → Interest → Desire → Action) adalah versi ringkas untuk merancang pesan tiap tahap.'},
+        ], cap:'AIDA (Attention → Interest → Desire → Action) = versi ringkas untuk merancang pesan tiap tahap. Catatan: funnel B2B & B2C berbeda — B2C dibantu rekomendasi teman/keluarga, B2B berinteraksi langsung dengan sales sejak awal.'},
         {t:'h', x:'7P Marketing Mix (winning strategy)'},
         {t:'list', items:[
           '<b>Product</b> · <b>Price</b> · <b>Place</b> · <b>Promotion</b> — bauran klasik.',
@@ -462,7 +618,7 @@ var KELAS_DATA = [
           '<b>Process</b> — alur dari pesanan sampai pengiriman.',
           '<b>Physical Evidence</b> — bukti fisik/visual yang memengaruhi persepsi.'
         ]},
-        {t:'callout', k:'key', judul:'Tindakan', x:'Rancang 1 ide konten memakai minimal 3 elemen STEPPS, dan petakan pesanmu ke tahap AIDA.'}
+        {t:'callout', k:'key', judul:'Tindakan', x:'Rancang 1 ide konten memakai minimal 3 elemen STEPPS, & petakan pesanmu ke tahap AIDA.'}
       ]
     }
   ]
@@ -473,29 +629,31 @@ var KELAS_DATA = [
   id:'m6', judul:'Operasional Lean', ikon:'i-layers', label:'Chapter 6',
   ringkas:'Jalankan bisnis rapi & efisien — proses, organisasi, keuangan, legal & pajak.',
   lessons:[
-    { id:'m6l1', judul:'Business Process Mapping & flowchart', durasi:'11 mnt',
-      ringkas:'Memetakan aktivitas bisnis agar efisien & bisa diperbaiki.',
+    { id:'m6l1', judul:'Fungsi operasional & process mapping', durasi:'12 mnt',
+      ringkas:'Lima fungsi operasional dasar & cara memetakan proses.',
       blocks:[
         {t:'video', src:'', poster:'', cap:'Rekaman sesi (menyusul).'},
-        {t:'p', x:'<b>Business Process Mapping</b> memvisualkan aktivitas bisnis: apa, siapa, kapan, bagaimana. Terbagi <b>Core Function</b> (langsung menghasilkan produk) & <b>Supporting Function</b> (mendukung: standarisasi, kualitas, komunikasi, pelatihan).'},
+        {t:'h', x:'5 fungsi operasional dasar'},
+        {t:'list', items:[
+          '<b>Planning</b> — rancang strategi & sasaran dari visi/misi.',
+          '<b>Organizing</b> — bagi tugas, wewenang, & sumber daya.',
+          '<b>Staffing</b> — rekrut, kembangkan, & pertahankan tim.',
+          '<b>Leading</b> — arahkan & motivasi tim ke tujuan sama.',
+          '<b>Controlling</b> — pantau & evaluasi kinerja terhadap KPI.'
+        ]},
+        {t:'h', x:'Business Process Mapping'},
+        {t:'p', x:'Memvisualkan aktivitas bisnis: apa, siapa, kapan, bagaimana. Terbagi <b>Core Function</b> (langsung menghasilkan produk) & <b>Supporting Function</b> (mendukung: standarisasi proses, tingkatkan kualitas, komunikasi, & pelatihan).'},
         {t:'diagram', kind:'flow', judul:'4 tahap sebuah proses', nodes:[
           {t:'Input', d:'Data, bahan, SDM, alat, kebijakan'},
           {t:'Process', d:'Aktivitas mengubah input jadi output'},
           {t:'Output', d:'Produk/jasa/informasi akhir'},
           {t:'Feedback', d:'Tanggapan untuk perbaikan'}
-        ], cap:'Flowchart memakai simbol: kotak = aktivitas, oval = mulai/selesai, segitiga/wajik = keputusan.'},
-        {t:'h', x:'5 fungsi operasional dasar'},
-        {t:'list', items:[
-          '<b>Planning</b> — rancang strategi & sasaran.',
-          '<b>Organizing</b> — bagi tugas & sumber daya.',
-          '<b>Staffing</b> — rekrut & kembangkan tim.',
-          '<b>Leading</b> — arahkan & motivasi.',
-          '<b>Controlling</b> — pantau & evaluasi terhadap KPI.'
-        ]},
+        ], cap:'Flowchart pakai simbol: kotak = aktivitas, oval = mulai/selesai, wajik = keputusan.'},
+        {t:'callout', k:'tip', judul:'Standarisasi lewat SOP', x:'Buat SOP tiap langkah proses → kurangi ketergantungan pada orang tertentu, jaga konsistensi, & permudah pengukuran kinerja.'},
         {t:'quiz', q:'“Tanggapan untuk perbaikan proses” disebut…', opts:['Input','Output','Feedback'], a:2, exp:'Feedback menutup siklus agar proses terus membaik.'}
       ]
     },
-    { id:'m6l2', judul:'Organisasi & SDM dasar', durasi:'9 mnt',
+    { id:'m6l2', judul:'Organisasi & SDM dasar', durasi:'10 mnt',
       ringkas:'Struktur organisasi & kapan/bagaimana merekrut.',
       blocks:[
         {t:'h', x:'Jenis organisasi'},
@@ -506,28 +664,29 @@ var KELAS_DATA = [
           '<b>Koperasi</b> — dimiliki & dikendalikan anggota.',
           '<b>Hybrid</b> — gabungan beberapa jenis.'
         ]},
+        {t:'callout', k:'tip', judul:'Strategic Operating Framework', x:'Selaraskan strategi, tujuan, nilai, struktur, budaya, & SDM agar semua bergerak ke arah yang sama.'},
         {t:'h', x:'Basic Human Resources'},
         {t:'p', x:'Di UMKM umumnya <i>small</i> (1–5 orang) & <i>medium</i> (5–20 orang). <b>Kapan merekrut?</b> saat tim kelebihan beban, permintaan naik, keuangan sulit dikelola, atau bisnis tumbuh cepat.'},
         {t:'list', items:[
           '<b>Tentukan gaji</b> lewat riset rata-rata industri, tanggung jawab, & kemampuan bayar.',
-          '<b>Rekrut</b> dengan job description jelas, sumber terpercaya, seleksi (wawancara/tes).',
+          '<b>Rekrut</b> dengan job description jelas, sumber terpercaya, seleksi (wawancara/tes), plus pelatihan & kompensasi wajar.',
           '<b>Pendekatan proaktif</b> (preventif, jangka panjang) vs <b>reaktif</b> (menangani masalah yang muncul).'
-        ]},
-        {t:'callout', k:'tip', judul:'Strategic Operating Framework', x:'Selaraskan strategi, tujuan, nilai, struktur, budaya, & SDM agar semua bergerak ke arah yang sama.'}
+        ]}
       ]
     },
     { id:'m6l3', judul:'Keuangan, legal & pajak', durasi:'12 mnt',
       ringkas:'Dasar akuntansi, badan usaha, dan kewajiban pajak.',
       blocks:[
         {t:'h', x:'Cash Basis vs Accrual'},
-        {t:'table', head:['Metode','Kapan dicatat','Untuk siapa'], rows:[
-          ['Cash basis','Saat uang diterima/dibayar','Disarankan untuk bisnis kecil — sederhana, jelas cash in/out'],
+        {t:'table', head:['Metode','Kapan dicatat','Untuk'], rows:[
+          ['Cash basis','Saat uang diterima/dibayar','Bisnis kecil — sederhana, jelas cash in/out'],
           ['Accrual','Saat transaksi terjadi (walau belum dibayar)','Bisnis lebih besar/kompleks']
         ]},
         {t:'h', x:'Unit dasar akuntansi'},
         {t:'list', items:[
           '<b>Aktiva</b> (aset) · <b>Kewajiban</b> (hutang) · <b>Ekuitas</b> (aset − kewajiban).',
-          '<b>Pendapatan</b> · <b>Biaya</b> · <b>COGS</b> (harga pokok penjualan) · <b>Laba/Rugi</b> · <b>Arus Kas</b>.'
+          '<b>Pendapatan</b> · <b>Biaya</b> · <b>COGS/HPP</b> · <b>Laba/Rugi</b> · <b>Arus Kas</b>.',
+          'Prinsip akuntansi: kesetaraan, keberlanjutan, pengakuan pendapatan, & konsistensi.'
         ]},
         {t:'h', x:'Badan usaha'},
         {t:'table', head:['Bentuk','Catatan'], rows:[
@@ -535,9 +694,9 @@ var KELAS_DATA = [
           ['CV','Masih menyatu dengan pribadi, tapi memisahkan keuangan lebih baik'],
           ['Firma','Perjanjian antar-partner'],
           ['PT','Memisahkan tegas keuangan & entitas; pemegang saham terlindungi']
-        ], cap:'Lengkapi: izin usaha, akta pendirian, NPWP, NIB, dan dokumen legal lain (mis. sertifikat halal untuk F&B).'},
-        {t:'p', x:'<b>Jenis pajak</b> yang umum: pajak penghasilan, pajak penjualan, pajak properti, pajak ketenagakerjaan, cukai, serta impor/ekspor.'},
-        {t:'callout', k:'key', judul:'Tindakan', x:'Buat flowchart 1 proses inti bisnismu (mis. dari pesanan sampai kirim) & pilih bentuk badan usaha yang paling cocok.'}
+        ], cap:'Lengkapi: izin usaha, akta pendirian, NPWP, NIB, paten, & dokumen legal lain (mis. sertifikat halal untuk F&B).'},
+        {t:'p', x:'<b>Jenis pajak</b> umum: pajak penghasilan, pajak penjualan, pajak properti, pajak ketenagakerjaan, cukai, serta impor/ekspor.'},
+        {t:'callout', k:'key', judul:'Tindakan', x:'Buat flowchart 1 proses inti bisnismu (pesanan → kirim) & pilih bentuk badan usaha yang paling cocok.'}
       ]
     }
   ]
@@ -548,36 +707,69 @@ var KELAS_DATA = [
   id:'m7', judul:'Skill Fondasi & Metrik Pertumbuhan', ikon:'i-chart', label:'Chapter 7',
   ringkas:'Ukur bisnis dengan metrik yang tepat lalu besarkan secara terukur.',
   lessons:[
-    { id:'m7l1', judul:'Metrik kunci: CAC, CLTV, churn & retensi', durasi:'12 mnt',
-      ringkas:'Angka-angka yang menentukan sehat-tidaknya pertumbuhan.',
+    { id:'m7l1', judul:'Business dashboard & metrik keuangan', durasi:'13 mnt',
+      ringkas:'Melacak angka kunci keuangan bisnis.',
       blocks:[
         {t:'video', src:'', poster:'', cap:'Rekaman sesi (menyusul).'},
         {t:'callout', k:'quote', judul:'', x:'“Life is change. Growth is optional.” Pertumbuhan tidak otomatis — ia dikelola lewat metrik yang tepat.'},
-        {t:'h', x:'Metrik performa bisnis'},
-        {t:'table', head:['Metrik','Arti'], rows:[
-          ['CAC (Customer Acquisition Cost)','Biaya mendapatkan satu pelanggan baru'],
-          ['CLTV (Customer Lifetime Value)','Total nilai yang diberikan satu pelanggan sepanjang “hidup”-nya'],
+        {t:'p', x:'<b>Business dashboard</b> melacak metrik keuangan (pendapatan/pengeluaran) & operasional (produksi, kepuasan pelanggan, produktivitas). Alurnya: kumpulkan data → breakdown jadi key metrics → pelaporan & tracking. Tool umum: spreadsheet (gratis) sampai alat visualisasi data (berbayar).'},
+        {t:'h', x:'Metrik keuangan kunci'},
+        {t:'table', head:['Metrik','Definisi'], rows:[
+          ['Pendapatan (Revenue)','Uang dari penjualan pada periode tertentu'],
+          ['Gross Profit Margin','Selisih pendapatan & biaya produksi (relatif ke pendapatan)'],
+          ['Net Profit Margin','Laba setelah semua biaya termasuk pajak'],
+          ['ROI','Efektivitas investasi menghasilkan keuntungan'],
+          ['Break-Even Point','Titik pendapatan = biaya'],
+          ['Debt-to-Equity','Rasio utang terhadap ekuitas'],
+          ['Current / Quick Ratio','Kemampuan bayar utang jangka pendek']
+        ]},
+        {t:'formula', x:'Gross Profit Margin = (Pendapatan − Biaya Produksi) ÷ Pendapatan × 100%', cap:'Contoh: pendapatan 10 M, biaya produksi 6 M → 40%.'},
+        {t:'formula', x:'Net Profit Margin = Laba Bersih ÷ Pendapatan × 100%', cap:'Laba bersih = pendapatan − semua biaya (produksi, operasional, pajak).'},
+        {t:'formula', x:'ROI = (Hasil − Biaya Investasi) ÷ Biaya Investasi × 100%', cap:'Contoh: beli 10 jt, jual 12 jt + dividen 0,5 jt → 25%.'},
+        {t:'quiz', q:'Gross Profit Margin membandingkan…', opts:['Laba kotor terhadap pendapatan','Utang terhadap ekuitas','Aset lancar terhadap utang'], a:0, exp:'Gross Profit Margin = laba kotor ÷ pendapatan × 100%.'}
+      ]
+    },
+    { id:'m7l2', judul:'Metrik performa bisnis', durasi:'12 mnt',
+      ringkas:'CAC, CLTV, churn, NPS, conversion, & kawan-kawan.',
+      blocks:[
+        {t:'table', head:['Metrik','Definisi'], rows:[
+          ['MRR','Pendapatan langganan bulanan berulang'],
+          ['CAC','Biaya mendapatkan satu pelanggan baru'],
+          ['CLTV','Total nilai satu pelanggan selama jadi pelanggan'],
           ['Churn Rate','Persentase pelanggan yang berhenti dalam periode'],
-          ['Retention Rate','Persentase pelanggan yang bertahan']
-        ], cap:'Sehat bila CLTV jauh lebih besar dari CAC, dan churn rendah.'},
+          ['NPS','Kemungkinan pelanggan merekomendasikan produk'],
+          ['Active Users','Jumlah pengguna aktif pada periode tertentu'],
+          ['Conversion Rate','Persentase pengunjung yang mengambil tindakan'],
+          ['GMV','Total nilai produk terjual lewat platform'],
+          ['Engagement Rate','Persentase pengguna yang berinteraksi'],
+          ['Market Share','Pangsa pasar yang dimiliki bisnis']
+        ], cap:'Sehat bila CLTV jauh lebih besar dari CAC, & churn rendah.'},
+        {t:'formula', x:'NPS = %Promotor (skor 9–10) − %Detraktor (skor 0–8)', cap:'Contoh: 70 responden, 60 promotor & 10 detraktor → 85,7% − 14,3% = 71,4.'},
+        {t:'formula', x:'Conversion Rate = Jumlah pembeli ÷ total pengunjung × 100%', cap:'Contoh: 10.000 pengunjung, 500 beli → 5%.'},
         {t:'callout', k:'tip', judul:'Retensi > akuisisi', x:'Mempertahankan pelanggan lama umumnya jauh lebih murah daripada mencari baru. Naikkan retensi sebelum menggenjot akuisisi.'},
         {t:'quiz', q:'Bisnis sehat idealnya…', opts:['CAC jauh lebih besar dari CLTV','CLTV jauh lebih besar dari CAC','CAC = CLTV, churn tinggi'], a:1, exp:'Nilai seumur hidup pelanggan (CLTV) harus melampaui biaya mendapatkannya (CAC).'}
       ]
     },
-    { id:'m7l2', judul:'North Star Metric & irama evaluasi', durasi:'11 mnt',
-      ringkas:'Satu metrik utama + kebiasaan meninjau harian/mingguan/bulanan.',
+    { id:'m7l3', judul:'North Star Metric & tracking', durasi:'12 mnt',
+      ringkas:'Satu metrik utama + irama pemantauan harian/mingguan/bulanan.',
       blocks:[
-        {t:'lead', x:'<b>North Star Metric</b> = satu angka utama yang paling mencerminkan nilai yang kamu berikan ke pelanggan. Ia menyatukan arah seluruh tim.'},
-        {t:'p', x:'Contoh sederhana: untuk toko online, bisa “jumlah pesanan selesai per minggu”; untuk aplikasi, “pengguna aktif yang kembali”. Pilih yang benar-benar menandakan pelanggan mendapat manfaat — bukan sekadar angka besar tanpa makna.'},
-        {t:'h', x:'Irama evaluasi metrik'},
+        {t:'lead', x:'<b>North Star Metric</b> (One Metric That Matters) = satu angka utama yang paling mencerminkan nilai inti bisnismu bagi pelanggan. Ia menyatukan fokus tim pada tujuan jangka panjang.'},
+        {t:'table', head:['Perusahaan','North Star Metric'], rows:[
+          ['Penyewaan penginapan','Jumlah malam yang dipesan'],
+          ['Media sosial','Pengguna aktif harian'],
+          ['Platform tanya-jawab','Jumlah pertanyaan yang dijawab'],
+          ['Aplikasi pesan','Jumlah pesan terkirim'],
+          ['Super-app','% repeat order tiap produk']
+        ], cap:'Pilih yang menandakan pelanggan benar-benar mendapat manfaat — bukan angka besar tanpa makna.'},
+        {t:'h', x:'Tracking: irama pemantauan'},
         {t:'table', head:['Rentang','Contoh yang dipantau'], rows:[
-          ['Harian','Klik, chat masuk, penjualan harian'],
-          ['Mingguan','Retensi, CAC rata-rata, engagement'],
-          ['Bulanan','Pertumbuhan pendapatan, churn, CLTV']
-        ], cap:'Buat KPI yang bisa dieksekusi; tinjau berkala & sesuaikan strategi.'},
+          ['Harian','Penjualan, stok, DAU, traffic, komplain/feedback'],
+          ['Mingguan','Performa penjualan, progress proyek, performa karyawan'],
+          ['Bulanan','Pendapatan & pengeluaran, MAU, tingkat retensi, efektivitas pemasaran']
+        ], cap:'Tracking bisa berbasis analisa (finansial/operasional) & berbasis sistem (manual/otomatis).'},
         {t:'diagram', kind:'cycle', judul:'Siklus bertumbuh', nodes:[
           {t:'Tetapkan North Star', d:'Satu metrik utama'},
-          {t:'Buat KPI', d:'Turunan yang bisa dikerjakan'},
+          {t:'Buat KPI', d:'Turunan yang bisa dieksekusi'},
           {t:'Ukur & evaluasi', d:'Harian/mingguan/bulanan'},
           {t:'Sesuaikan', d:'Perbaiki strategi & ulangi'}
         ], cap:'Pertumbuhan datang dari perputaran ukur → belajar → perbaiki yang konsisten.'},
@@ -595,7 +787,7 @@ var KELAS_DATA = [
     { id:'m8l1', judul:'Daftar bacaan pilihan', durasi:'5 mnt',
       ringkas:'Buku per bidang untuk melanjutkan belajar.',
       blocks:[
-        {t:'p', x:'Kelas ini hanya pintu masuk. Perdalam tiap bidang lewat bacaan berikut — dikelompokkan per tema.'},
+        {t:'p', x:'Kelas ini hanya pintu masuk. Perdalam tiap bidang lewat bacaan berikut, dikelompokkan per tema.'},
         {t:'h', x:'Manajemen SDM'},
         {t:'books', items:[
           {judul:'The One Minute Manager', penulis:'Kenneth Blanchard & Spencer Johnson', ket:'Teknik manajemen sederhana lewat cerita pendek.'},
@@ -622,7 +814,7 @@ var KELAS_DATA = [
           {judul:'How to Win Friends and Influence People', penulis:'Dale Carnegie', ket:'Membangun hubungan & memengaruhi secara positif.'},
           {judul:'Steve Jobs', penulis:'Walter Isaacson', ket:'Biografi pemimpin yang mengandalkan inovasi.'}
         ]},
-        {t:'callout', k:'tip', judul:'Cara memakai', x:'Pilih satu buku sesuai bab yang paling ingin kamu perkuat sekarang — jangan baca semua sekaligus.'}
+        {t:'callout', k:'tip', judul:'Cara memakai', x:'Pilih satu buku sesuai chapter yang paling ingin kamu perkuat sekarang — jangan baca semua sekaligus.'}
       ]
     }
   ]
