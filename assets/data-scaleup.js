@@ -485,7 +485,14 @@ var KELAS_DATA = [
           {t:'Lead & Lag', d:'Tindakan (lead) & hasil akhir (lag)'},
           {t:'Key Results', d:'Ukuran spesifik keberhasilan OKR'}
         ], cap:'Tiap bulan tetapkan KPI & OKR jelas agar bisa belajar & memperbaiki.'},
-        {t:'callout', k:'tip', judul:'Personalization = Value × Relevance × Timeliness × Trust', x:'Kurangi dengan Loss of Privacy (risiko data). Lengkapi dengan analisis 4C (Consumer, Company, Competitors, Collaborators) & 4P (Product, Price, Place, Promotion).'},
+        {t:'callout', k:'tip', judul:'Personalization', x:'<b>Value × Relevance × Timeliness × Trust</b>, lalu dikurangi <b>Loss of Privacy</b> (risiko: penyebaran info pribadi, pengumpulan data tak sesuai, keamanan data lemah). Value = manfaat bagi pelanggan; Relevance = kecocokan dengan kebutuhan; Timeliness = ketepatan waktu; Trust = tingkat kepercayaan pada merek.'},
+        {t:'h', x:'Konsep marketing pelengkap'},
+        {t:'table', head:['Kerangka','Isi'], rows:[
+          ['4C','Consumer · Company · Competitors · Collaborators'],
+          ['4P','Product · Price · Place · Promotion'],
+          ['Contribution Analysis','Unit Contribution · Break-Even Volume · Break-Even Market Share · Total Contribution · Net Profit'],
+          ['Sizing & Segmentation','Market Sizing · Market Share']
+        ], cap:'Dipakai untuk menilai kelayakan finansial & posisi pasar sebelum menaikkan akuisisi.'},
         {t:'quiz', q:'CAC dihitung dari…', opts:['Konversi ÷ pengunjung','(Total sales + marketing) ÷ pelanggan baru','Pendapatan × lama hubungan'], a:1, exp:'CAC = total biaya sales+marketing dibagi jumlah pelanggan baru.'}
       ]
     }
@@ -536,9 +543,17 @@ var KELAS_DATA = [
         {t:'h', x:'Implementasi SOP'},
         {t:'steps', items:['Identifikasi proses.','Dokumentasikan (PIC, tugas, alat, hasil).','Tinjau & revisi (akurat, lengkap, konsisten).','Komunikasikan & latih.','Monitor & evaluasi efektivitas.','Tegakkan kepatuhan.']},
         {t:'h', x:'Growth Hacking: Cost Leadership'},
-        {t:'p', x:'Capai keunggulan kompetitif dengan biaya produksi lebih rendah dari pesaing → bisa jual lebih murah & rebut pangsa pasar. Caranya: peramalan permintaan akurat, economies of scale, standardisasi, sasar pelanggan rata-rata, teknologi hemat biaya.'},
+        {t:'p', x:'Capai keunggulan kompetitif dengan biaya produksi lebih rendah dari pesaing → bisa jual lebih murah & rebut pangsa pasar. Ada <b>6 cara</b> mencapai kepemimpinan biaya:'},
+        {t:'list', items:[
+          '<b>Peramalan permintaan yang akurat</b> — perkirakan permintaan dengan tepat agar produksi & stok efisien, tidak berlebih atau kurang.',
+          '<b>Economies of scale</b> — biaya per unit turun saat volume produksi naik.',
+          '<b>Standardisasi</b> — seragamkan proses & produk agar lebih murah dan mudah diskalakan.',
+          '<b>Menyasar pelanggan rata-rata (average customer)</b> — bidik pasar massal, bukan segmen niche yang mahal dilayani.',
+          '<b>Teknologi hemat biaya (cost saving technology)</b> — pakai teknologi/otomatisasi untuk memangkas biaya.',
+          '<b>Menahan diferensiasi (differentiation withholding)</b> — jangan menambah fitur/atribut mahal yang tak dihargai pasar; tetap fokus pada harga.'
+        ]},
         {t:'h', x:'Kualitas, performa & kematangan organisasi'},
-        {t:'p', x:'Fokus <b>kualitas di atas kuantitas</b>: layani pelanggan terbaik, pantau kualitas (standar & audit rutin), analisis data. Tingkat kematangan organisasi diukur dengan <b>CMMI</b> — Level 0 Incomplete → 1 Initial → 2 Managed → 3 Defined → 4 Quantitatively Managed → 5 Optimizing.'},
+        {t:'p', x:'Fokus <b>kualitas di atas kuantitas</b>. Tiga tips menjaga kualitas: (1) <b>layani pelanggan terbaik</b> — kenali & prioritaskan pelanggan paling bernilai; (2) <b>pantau kualitas</b> — tetapkan standar dan lakukan audit rutin; (3) <b>analisis data</b> — gunakan data untuk terus memperbaiki produk & layanan. Tingkat kematangan organisasi diukur dengan <b>CMMI</b> — Level 0 Incomplete → 1 Initial → 2 Managed → 3 Defined → 4 Quantitatively Managed → 5 Optimizing.'},
         {t:'quiz', q:'Level CMMI tertinggi (terus berkembang & cari peluang) adalah…', opts:['Managed','Defined','Optimizing'], a:2, exp:'Level 5 Optimizing — perbaikan berkelanjutan.'}
       ]
     },
