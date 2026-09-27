@@ -45,6 +45,18 @@
     sym('i-flag','<path d="M5 21V4h11l-1.5 4L16 12H5"/>') +
     sym('i-shield-check','<path d="M12 3l7 3v6c0 4-3 7-7 9-4-2-7-5-7-9V6l7-3z"/><polyline points="9 12 11 14 15 10"/>') +
     sym('i-refresh','<polyline points="21 4 21 10 15 10"/><path d="M20 14a8 8 0 1 1-2-8l3 4"/>') +
+    sym('i-briefcase','<rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M3 13h18"/>') +
+    sym('i-calculator','<rect x="5" y="3" width="14" height="18" rx="2"/><path d="M8 7h8M8 12h2M12 12h2M16 12h0M8 16h2M12 16h2M16 16h0"/>') +
+    sym('i-wallet','<path d="M3 7a2 2 0 0 1 2-2h14v4"/><rect x="3" y="7" width="18" height="12" rx="2"/><circle cx="16" cy="13" r="1.5"/>') +
+    sym('i-building','<rect x="4" y="3" width="16" height="18" rx="1"/><path d="M9 21v-4h6v4M8 7h2M14 7h2M8 11h2M14 11h2M8 15h2M14 15h2"/>') +
+    sym('i-file-text','<path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><polyline points="14 3 14 9 20 9"/><path d="M8 13h8M8 17h6"/>') +
+    sym('i-database','<ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v14c0 1.7 3.6 3 8 3s8-1.3 8-3V5M4 12c0 1.7 3.6 3 8 3s8-1.3 8-3"/>') +
+    sym('i-compass','<circle cx="12" cy="12" r="9"/><polygon points="16 8 14 14 8 16 10 10 16 8"/>') +
+    sym('i-pen','<path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/>') +
+    sym('i-code','<polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/>') +
+    sym('i-laptop','<rect x="4" y="5" width="16" height="11" rx="2"/><path d="M2 19h20"/>') +
+    sym('i-mic','<rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3M9 21h6"/>') +
+    sym('i-scan','<path d="M3 7V5a2 2 0 0 1 2-2h2M17 3h2a2 2 0 0 1 2 2v2M21 17v2a2 2 0 0 1-2 2h-2M7 21H5a2 2 0 0 1-2-2v-2"/><path d="M7 12h10"/>') +
     '</svg>';
   function sym(id, inner){ return '<symbol id="'+id+'" viewBox="0 0 24 24">'+inner+'</symbol>'; }
 
