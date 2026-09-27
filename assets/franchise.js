@@ -185,6 +185,7 @@
       listBox('Perlu diwaspadai', f.kekurangan) +
       '<div class="fr-lbox"><h5>Catatan</h5><p style="color:var(--muted-strong);font-size:13px;line-height:1.55;margin:0">' + esc(f.catatan) + '</p></div>' +
       '</div>' +
+      '<div class="fr-lbox" style="margin-top:14px"><h5>Top 5 kota/kabupaten paling cocok (estimasi)</h5>' + topCitiesHtml(f) + '</div>' +
       '<div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:16px">' +
       '<button class="btn btn-primary btn-sm" data-hitung="' + f.id + '">🧮 Hitung kelayakan (BEP/ROI)</button>' +
       '<button class="btn btn-ghost btn-sm" data-kota="' + f.id + '">📍 Cek kota yang cocok</button>' +
@@ -203,6 +204,20 @@
   }
   function dbox(k, v, pri) { return '<div class="fr-dbox"><div class="k">' + esc(k) + '</div><div class="v' + (pri ? ' pri' : '') + '">' + v + '</div></div>'; }
   function drow(k, v) { return '<div class="fr-drow"><span>' + esc(k) + '</span><b>' + esc(v) + '</b></div>'; }
+  function segFor(f) { return (f.tier === 'korporat' || f.tier === 'besar') ? 'mid' : (f.ticket >= 25000 ? 'mid' : 'mass'); }
+  function topCitiesHtml(f) {
+    var seg = segFor(f);
+    var ranked = FR_CITIES.map(function (c) { return { c: c, s: cityScore(c, f.ticket, seg) }; })
+      .sort(function (a, b) { return b.s - a.s; }).slice(0, 5);
+    return ranked.map(function (o, i) {
+      var col = o.s >= 65 ? 'var(--up)' : o.s >= 45 ? '#f5a623' : 'var(--down)';
+      return '<div class="fr-crow" style="padding:6px 0">' +
+        '<div class="fr-crank">' + (i + 1) + '</div>' +
+        '<div><div class="fr-cname">' + esc(o.c.nama) + '</div><div class="fr-cmeta">' + esc(o.c.prov) + ' · UMK ≈ ' + rpShort(o.c.umk) + '</div></div>' +
+        '<div class="fr-cbar"><div class="fr-cfill" style="width:' + o.s + '%;background:' + col + '"></div></div>' +
+        '<span class="fr-cscore" style="color:' + col + '">' + o.s + '</span></div>';
+    }).join('') + '<p class="fr-cap" style="margin-top:8px;font-size:11px">Kota besar cenderung skor tinggi (pasar besar). Untuk usaha mikro, kota kecil dengan biaya rendah pun bisa sangat cocok — cek tab "Daya Beli" &amp; pilih kotamu sendiri.</p>';
+  }
 
   /* ---------- HITUNG (BEP/ROI) ---------- */
   function prefillHitung(id) {
@@ -301,12 +316,30 @@
 
   /* ---------- COCOK-KAH: franchise + kota tertentu ---------- */
   var cityById = {}; FR_CITIES.forEach(function (c) { cityById[c.id] = c; });
+  // Provinsi dropdown
   (function () {
-    var sel = $('ktCity'); if (!sel) return;
-    var list = FR_CITIES.slice().sort(function (a, b) { return a.nama < b.nama ? -1 : 1; });
-    sel.innerHTML = '<option value="">— lihat peringkat semua kota —</option>' +
-      list.map(function (c) { return '<option value="' + c.id + '">' + esc(c.nama) + ' — ' + esc(c.prov) + '</option>'; }).join('');
+    var pv = $('ktProv'); if (!pv) return;
+    var provs = []; FR_CITIES.forEach(function (c) { if (provs.indexOf(c.prov) < 0) provs.push(c.prov); });
+    provs.sort();
+    pv.innerHTML = '<option value="">Semua provinsi</option>' + provs.map(function (p) { return '<option value="' + esc(p) + '">' + esc(p) + '</option>'; }).join('');
   })();
+  function populateCities() {
+    var sel = $('ktCity'); if (!sel) return;
+    var prov = $('ktProv') ? $('ktProv').value : '';
+    var q = ($('ktSearch') ? $('ktSearch').value : '').toLowerCase().trim();
+    var keep = sel.value;
+    var list = FR_CITIES.filter(function (c) {
+      if (prov && c.prov !== prov) return false;
+      if (q && (c.nama + ' ' + c.prov).toLowerCase().indexOf(q) < 0) return false;
+      return true;
+    }).sort(function (a, b) { return a.nama < b.nama ? -1 : 1; });
+    sel.innerHTML = '<option value="">— ' + (list.length) + ' kota/kabupaten — pilih untuk skor detail —</option>' +
+      list.map(function (c) { return '<option value="' + c.id + '"' + (c.id === keep ? ' selected' : '') + '>' + esc(c.nama) + ' — ' + esc(c.prov) + '</option>'; }).join('');
+    if (sel.value !== keep) renderMatch();
+  }
+  populateCities();
+  if ($('ktProv')) $('ktProv').addEventListener('change', populateCities);
+  if ($('ktSearch')) $('ktSearch').addEventListener('input', populateCities);
   function subScores(c, price, seg) {
     var disc = c.umk / 30 * 0.15, afford = clamp01(disc / (Math.max(price, 1) * 4)), normUMK = clamp01(c.umk / 5700000);
     var bpf; if (seg === 'premium') bpf = 0.7 * normUMK + 0.3 * afford; else if (seg === 'mid') bpf = 0.5 * afford + 0.5 * normUMK; else bpf = afford;
