@@ -314,6 +314,282 @@ var KELAS_DATA = [
       ]
     }
   ]
+},
+
+/* ============ CHAPTER 5 — MODEL BISNIS YANG MENGUNTUNGKAN ============ */
+{
+  id:'s5', judul:'Model Bisnis yang Menguntungkan', ikon:'i-layers', label:'Chapter 5',
+  ringkas:'Rancang cara bisnismu membuat, menyampaikan, & menangkap nilai secara profitabel.',
+  lessons:[
+    { id:'s5l1', judul:'Apa itu model bisnis & jenisnya', durasi:'11 mnt',
+      ringkas:'Model bisnis = cara membuat, menyampaikan, & menangkap value.',
+      blocks:[
+        {t:'video', src:'', poster:'', cap:'Rekaman sesi (menyusul).'},
+        {t:'callout', k:'warn', judul:'Kenapa penting', x:'Bisnis yang berinovasi pada <b>model bisnis</b> tumbuh jauh lebih cepat daripada yang hanya berinovasi pada produk/operasi. Banyak perusahaan jatuh karena tumbuh terlalu cepat tanpa model bisnis sehat (profit tak sebanding pengeluaran).'},
+        {t:'lead', x:'<b>Model bisnis</b> = cara perusahaan merancang, mengelola, & menghasilkan keuntungan dari produk/layanannya. Ia menjelaskan bagaimana bisnis <b>membuat, menyampaikan, & menangkap value</b>.'},
+        {t:'h', x:'Jenis model bisnis'},
+        {t:'table', head:['Jenis','Arti','Contoh'], rows:[
+          ['B2B','Menjual ke perusahaan lain','Produsen mesin → pabrik'],
+          ['B2C','Menjual langsung ke konsumen akhir','Toko online → pembeli'],
+          ['B2B2C','Ke perusahaan lain, lalu diteruskan ke konsumen','Produsen kosmetik → retail → konsumen'],
+          ['B2A','Menjual ke lembaga pemerintah/publik','Perusahaan software → instansi']
+        ], cap:'Top innovators rata-rata menggabungkan 3 model bisnis atau lebih.'},
+        {t:'quiz', q:'Menjual produk ke retail yang lalu menjualnya ke konsumen adalah…', opts:['B2C','B2B2C','B2A'], a:1, exp:'B2B2C = business-to-business-to-consumer.'}
+      ]
+    },
+    { id:'s5l2', judul:'3 pilar: Value Creation, Proposition & Capture', durasi:'13 mnt',
+      ringkas:'Tiga nilai yang membentuk model bisnis.',
+      blocks:[
+        {t:'diagram', kind:'flow', judul:'Tiga pilar nilai', nodes:[
+          {t:'Value Creation', d:'Menciptakan nilai (People, Partner, Aset)'},
+          {t:'Value Proposition', d:'Menawarkan manfaat & menentukan harga'},
+          {t:'Value Capture', d:'Mendapat & mempertahankan pelanggan'}
+        ], cap:'Pahami bisnismu lewat ketiga nilai ini.'},
+        {t:'h', x:'1) Value Creation — dari 3 komponen'},
+        {t:'list', items:[
+          '<b>People</b> — karyawan di aktivitas utama (pengadaan, logistik, marketing, sales) & sekunder (HR, manajemen).',
+          '<b>Partner</b> — supplier & mitra strategis (mentor, brand).',
+          '<b>Aset</b> — terlihat (bangunan, mesin) & tak terlihat (brand, kekayaan intelektual, nama baik).'
+        ]},
+        {t:'p', x:'Cara menciptakan nilai tambah: inovasi produk, efisiensi operasional, diferensiasi, & customization.'},
+        {t:'h', x:'2) Value Proposition'},
+        {t:'p', x:'Empat proposisi nilai sederhana: <b>lebih mudah</b> (usaha lebih sedikit), <b>lebih baik</b> (kualitas), <b>lebih cepat</b>, <b>lebih murah</b>.'},
+        {t:'table', head:['Strategi harga','Cara'], rows:[
+          ['Cost-based','Hitung biaya + margin'],
+          ['Competitor-based','Benchmark ke harga pesaing'],
+          ['Value-based','Harga optimal dari kesediaan bayar pelanggan (paling optimal)']
+        ]},
+        {t:'h', x:'3) Value Capture'},
+        {t:'diagram', kind:'flow', judul:'Get–Keep–Growth', nodes:[
+          {t:'Get', d:'Dapatkan pelanggan baru (iklan, sosmed)'},
+          {t:'Keep', d:'Pertahankan (customer experience, loyalty)'},
+          {t:'Growth', d:'Tumbuhkan (up-selling & cross-selling)'}
+        ], cap:'Rangkum semuanya dalam Business Model Canvas.'},
+        {t:'callout', k:'key', judul:'Tindakan', x:'Isi Business Model Canvas bisnismu — mulai dari value proposition, lalu segmen, saluran, revenue, & cost.'}
+      ]
+    },
+    { id:'s5l3', judul:'Skala ekonomis, rantai pasok & 10 tipe inovasi', durasi:'13 mnt',
+      ringkas:'Tekan biaya & inovasikan model bisnis agar makin profitabel.',
+      blocks:[
+        {t:'h', x:'Skala ekonomis'},
+        {t:'p', x:'Biaya produksi per unit menurun saat volume produksi naik (produksi massal) — mis. beli bahan baku dalam jumlah besar dapat diskon.'},
+        {t:'table', head:['Tipe','Penjelasan'], rows:[
+          ['Teknikal','Bisnis besar mampu investasi teknologi hemat biaya'],
+          ['Spesialisasi','Pembagian kerja lebih efisien dengan output tinggi'],
+          ['Pembelian massal','Biaya rata-rata lebih rendah karena beli banyak'],
+          ['Marketing','Campaign skala besar lebih efisien menghasilkan sales'],
+          ['Risk bearing','Perusahaan besar lebih tahan penurunan ekonomi'],
+          ['Financial','Perusahaan besar dapat suku bunga bank lebih baik']
+        ]},
+        {t:'h', x:'Rantai pasok (supply chain)'},
+        {t:'p', x:'Alur dari pengadaan bahan baku → produksi → pengemasan → penyimpanan → transportasi → sampai ke pelanggan. Tingkatkan dengan: cek kapasitas gudang/inventory, pilih supplier tepat, bangun hubungan baik dengan supplier, rencanakan produksi berdasar permintaan, adopsi teknologi/tools, & rutin monitor-evaluasi.'},
+        {t:'h', x:'10 tipe inovasi model bisnis'},
+        {t:'list', items:[
+          '<b>Profit model</b> — cara baru menghasilkan pendapatan.',
+          '<b>Network</b> — kemitraan/jaringan yang saling menguntungkan.',
+          '<b>Structure</b> — struktur organisasi (mis. flat/matriks).',
+          '<b>Process</b> — proses produksi/pengiriman lebih efisien.',
+          '<b>Product performance</b> — tingkatkan kinerja produk.',
+          '<b>Product system</b> — perluas/kaitkan sistem produk.',
+          '<b>Service</b> — layanan pelanggan lebih baik/baru.',
+          '<b>Channel</b> — kembangkan saluran distribusi.',
+          '<b>Brand</b> — bangun citra/merek.',
+          '<b>Customer engagement</b> — tingkatkan interaksi & keterlibatan pelanggan.'
+        ]},
+        {t:'callout', k:'key', judul:'Tindakan', x:'Pilih 2 dari 10 tipe inovasi yang paling bisa kamu terapkan tahun ini.'}
+      ]
+    }
+  ]
+},
+
+/* ============ CHAPTER 6 — AKUISISI PELANGGAN & SALES FUNNEL ============ */
+{
+  id:'s6', judul:'Akuisisi Pelanggan & Sales Funnel', ikon:'i-store', label:'Chapter 6',
+  ringkas:'Naikkan akuisisi lewat marketing funnel, loyalitas, tim sales, & KPI/OKR.',
+  lessons:[
+    { id:'s6l1', judul:'Marketing funnel & brand awareness', durasi:'13 mnt',
+      ringkas:'Perjalanan pelanggan dari kenal sampai jadi pendukung.',
+      blocks:[
+        {t:'video', src:'', poster:'', cap:'Rekaman sesi (menyusul).'},
+        {t:'diagram', kind:'funnel', judul:'Marketing funnel', nodes:[
+          {t:'Awareness', d:'Mengenal merek & nilaimu (offline/hyperlocal & online)'},
+          {t:'Consideration', d:'Mencari info & membandingkan'},
+          {t:'Conversion', d:'Memutuskan membeli'},
+          {t:'Loyalty', d:'Membeli berulang & memilihmu'},
+          {t:'Advocacy', d:'Merekomendasikan ke orang lain'}
+        ], cap:'Tujuannya: ubah calon → pelanggan → pelanggan setia.'},
+        {t:'h', x:'4 level brand awareness'},
+        {t:'table', head:['Level','Kondisi','Strategi'], rows:[
+          ['Recognition','Pernah melihat/mengenal merek','Visual kuat, jelas, mudah dibaca'],
+          ['Recall','Ingat saat melihat merek','Repetisi, slogan, jingle'],
+          ['Top of Mind','Merek pertama yang teringat','Jaga hubungan (mis. newsletter)'],
+          ['Brand Preference','Lebih memilihmu dari pesaing','Layanan terbaik yang konsisten']
+        ]},
+        {t:'callout', k:'tip', judul:'Perjalanan keputusan konsumen', x:'Initial consideration → active evaluation (riset & bandingkan) → closure (putuskan) → beli → post-purchase (evaluasi pengalaman). Puas → rekomendasi & setia; tak puas → pindah merek.'}
+      ]
+    },
+    { id:'s6l2', judul:'Loyalitas pelanggan & strategi B2C/B2B/B2A', durasi:'12 mnt',
+      ringkas:'Pertahankan pelanggan — jauh lebih murah dari mencari baru.',
+      blocks:[
+        {t:'callout', k:'quote', judul:'', x:'75% orang tidak percaya iklan, tapi 92% percaya rekomendasi merek dari teman. Perusahaan rata-rata kehilangan 10–30% pelanggan tiap tahun bila tak dijaga.'},
+        {t:'h', x:'Tingkatkan loyalitas lewat after-sales'},
+        {t:'list', items:[
+          'Free upgrade · minta testimoni · survei kepuasan.',
+          'Kartu member & loyalty points (mis. 3× beli gratis produk).',
+          'Layanan chat/CS yang selalu siap · pelatihan penggunaan produk · promo khusus.'
+        ]},
+        {t:'table', head:['Divisi','Strategi loyalitas'], rows:[
+          ['Sales','Loyalty program & promo spesial pelanggan setia'],
+          ['Customer Service','Ramah, sabar, penyelesaian cepat & efisien'],
+          ['Marketing','Bangun komunitas khusus pelanggan setia'],
+          ['Product Dev','Dengar masukan; akses eksklusif produk baru'],
+          ['Operation','Retur lebih fleksibel; pastikan pengalaman memuaskan']
+        ]},
+        {t:'h', x:'Strategi per model'},
+        {t:'list', items:[
+          '<b>B2C</b> — prioritaskan <b>end-to-end customer experience</b> & kenyamanan belanja.',
+          '<b>B2B</b> — alur: cari calon → nilai kecocokan → hubungi → pastikan minat → negosiasi → closing.',
+          '<b>B2A</b> — kontrak dengan lembaga pemerintah/publik (mis. layanan berbasis langganan software).'
+        ]},
+        {t:'callout', k:'tip', judul:'Success Plan (sales deck)', x:'Sales deck jelas menuju win-win: judul, company profile, timeline, konteks masalah, business road map, sales goals & KPI, action plan, budget/pricing, & demo. Ukur retensi dengan CSAT, EBR/QBR.'}
+      ]
+    },
+    { id:'s6l3', judul:'Tim sales, KPI & OKR', durasi:'12 mnt',
+      ringkas:'Bisnis bukan hanya kamu — tim & target yang jelas kunci penjualan.',
+      blocks:[
+        {t:'h', x:'Tim sales yang solid'},
+        {t:'p', x:'Tetapkan goals & ekspektasi jelas, berdayakan karyawan, beri kompensasi kompetitif, & bangun hubungan kuat dengan pelanggan. Alat ukur produktivitas: <b>CRM</b>, <b>sales enablement</b>, <b>training</b>, & platform <b>komunikasi & kolaborasi</b>.'},
+        {t:'h', x:'KPI (Key Performance Indicator)'},
+        {t:'table', head:['KPI','Arti'], rows:[
+          ['Sales Revenue','Total pendapatan penjualan periode'],
+          ['Sales Growth','(Penjualan kini − sebelumnya) ÷ sebelumnya'],
+          ['Conversion Rate','Jumlah konversi ÷ total pengunjung'],
+          ['CAC','(Total sales + marketing cost) ÷ pelanggan baru'],
+          ['CLV','(Rata-rata pendapatan/th × lama hubungan) − biaya akuisisi']
+        ]},
+        {t:'h', x:'OKR (Objectives and Key Results)'},
+        {t:'diagram', kind:'flow', judul:'Kanvas OKR', nodes:[
+          {t:'Vision & Why', d:'Tujuan jangka panjang & alasannya'},
+          {t:'Objective', d:'Tujuan spesifik & terukur'},
+          {t:'Lead & Lag', d:'Tindakan (lead) & hasil akhir (lag)'},
+          {t:'Key Results', d:'Ukuran spesifik keberhasilan OKR'}
+        ], cap:'Tiap bulan tetapkan KPI & OKR jelas agar bisa belajar & memperbaiki.'},
+        {t:'callout', k:'tip', judul:'Personalization = Value × Relevance × Timeliness × Trust', x:'Kurangi dengan Loss of Privacy (risiko data). Lengkapi dengan analisis 4C (Consumer, Company, Competitors, Collaborators) & 4P (Product, Price, Place, Promotion).'},
+        {t:'quiz', q:'CAC dihitung dari…', opts:['Konversi ÷ pengunjung','(Total sales + marketing) ÷ pelanggan baru','Pendapatan × lama hubungan'], a:1, exp:'CAC = total biaya sales+marketing dibagi jumlah pelanggan baru.'}
+      ]
+    }
+  ]
+},
+
+/* ============ CHAPTER 7 — KEPEMIMPINAN & STRUKTUR TIM ============ */
+{
+  id:'s7', judul:'Kepemimpinan & Struktur Tim', ikon:'i-user', label:'Chapter 7',
+  ringkas:'Bangun tim, budaya, & sistem agar bisnis bisa dibesarkan dengan sehat.',
+  lessons:[
+    { id:'s7l1', judul:'Struktur organisasi, budaya & SDM', durasi:'13 mnt',
+      ringkas:'Kunci keberhasilan dimulai dari organisasi yang sehat.',
+      blocks:[
+        {t:'video', src:'', poster:'', cap:'Rekaman sesi (menyusul).'},
+        {t:'callout', k:'key', judul:'Prinsip', x:'Perlakukan karyawan seperti kamu ingin mereka memperlakukan pelanggan terbaikmu. Tiga aspek utama: <b>Human Resource, Process, & Finance</b>. <b>Kultur > proses.</b>'},
+        {t:'h', x:'Jenis struktur organisasi'},
+        {t:'table', head:['Struktur','Ciri','Kelemahan'], rows:[
+          ['Fungsional','Dikelompokkan per fungsi (keuangan, marketing, produksi)','Komunikasi antar-departemen kurang'],
+          ['Divisional','Dibagi per produk/wilayah/pasar','Duplikasi fungsi & biaya tinggi'],
+          ['Matriks','Per proyek + fungsi; punya >1 atasan','Pengambilan keputusan kompleks']
+        ]},
+        {t:'p', x:'<b>Budaya</b> membentuk sikap & perilaku secara luas dan bertahan — 4 sifat: <b>shared, pervasive, enduring, implicit</b>. Ukur dengan <b>survei employee engagement</b> (anonim).'},
+        {t:'h', x:'Manpower planning & rekrutmen'},
+        {t:'diagram', kind:'flow', judul:'6 proses rekrutmen', nodes:[
+          {t:'Planning', d:'Perencanaan kebutuhan'},
+          {t:'Sourcing', d:'Cari kandidat'},
+          {t:'Screening', d:'Penyaringan'},
+          {t:'Selecting', d:'Memilih'},
+          {t:'Hiring', d:'Mempekerjakan'},
+          {t:'Onboarding', d:'Penyambutan & adaptasi'}
+        ], cap:'Rekrut secara terstruktur — meningkatkan kualitas seleksi jauh lebih menguntungkan daripada sekadar memperbanyak kandidat.'},
+        {t:'callout', k:'tip', judul:'Interview terstruktur', x:'Identifikasi skill yang dibutuhkan → buat rubrik penilaian → pilih teknik (pengalaman/kasus) → buat guideline → pilih pewawancara tepat → latihan terstruktur.'}
+      ]
+    },
+    { id:'s7l2', judul:'Kepemimpinan, SOP & growth hacking', durasi:'12 mnt',
+      ringkas:'Pimpin tim, standarkan proses, & kejar keunggulan biaya.',
+      blocks:[
+        {t:'h', x:'Gaya kepemimpinan'},
+        {t:'table', head:['Gaya','Cocok untuk'], rows:[
+          ['Practical Skills','Langsung mempraktikkan ide sebagai eksperimen ke tim'],
+          ['Radical Honesty','Terbuka & apa adanya (atur cara menyampaikan agar tak menyinggung)'],
+          ['Collaborative Problem Solving','Pengamat yang fokus menyelesaikan masalah tanpa tergesa']
+        ]},
+        {t:'p', x:'Nilai kinerja tim lewat tingkat pengaruh: <b>Primary</b> (learning & development, senior leadership, image & reputation), <b>Secondary</b> (terbuka pada saran & kritik), <b>Tertiary</b> (beri kepercayaan & dorong inisiatif tim).'},
+        {t:'h', x:'Implementasi SOP'},
+        {t:'steps', items:['Identifikasi proses.','Dokumentasikan (PIC, tugas, alat, hasil).','Tinjau & revisi (akurat, lengkap, konsisten).','Komunikasikan & latih.','Monitor & evaluasi efektivitas.','Tegakkan kepatuhan.']},
+        {t:'h', x:'Growth Hacking: Cost Leadership'},
+        {t:'p', x:'Capai keunggulan kompetitif dengan biaya produksi lebih rendah dari pesaing → bisa jual lebih murah & rebut pangsa pasar. Caranya: peramalan permintaan akurat, economies of scale, standardisasi, sasar pelanggan rata-rata, teknologi hemat biaya.'},
+        {t:'h', x:'Kualitas, performa & kematangan organisasi'},
+        {t:'p', x:'Fokus <b>kualitas di atas kuantitas</b>: layani pelanggan terbaik, pantau kualitas (standar & audit rutin), analisis data. Tingkat kematangan organisasi diukur dengan <b>CMMI</b> — Level 0 Incomplete → 1 Initial → 2 Managed → 3 Defined → 4 Quantitatively Managed → 5 Optimizing.'},
+        {t:'quiz', q:'Level CMMI tertinggi (terus berkembang & cari peluang) adalah…', opts:['Managed','Defined','Optimizing'], a:2, exp:'Level 5 Optimizing — perbaikan berkelanjutan.'}
+      ]
+    },
+    { id:'s7l3', judul:'Manajemen kinerja & keuangan', durasi:'12 mnt',
+      ringkas:'Ukur kinerja dengan KPI/OKR & jaga kesehatan keuangan.',
+      blocks:[
+        {t:'p', x:'<b>Manajemen kinerja</b> = tetapkan tujuan, ukur kemajuan, beri umpan balik & dukungan, lalu tinjau & sesuaikan tujuan. Dipandu <b>KPI</b> (sales revenue, sales growth, conversion, CAC, CLV) & <b>OKR</b> (vision → objective → lead/lag measures → key results).'},
+        {t:'h', x:'Manajemen keuangan'},
+        {t:'list', items:[
+          '<b>Manajemen arus kas</b> — kelola uang masuk/keluar; cegah kekurangan kas & kebangkrutan.',
+          '<b>Metrik keuangan</b> — Profit Margin, ROI, Revenue Growth (juga ROA, ROE, Quick Ratio, Payback Period, Inventory Turnover, dll).',
+          '<b>Income statement</b> — pendapatan, HPP, laba kotor, biaya operasional, laba operasi, bunga, pajak, laba bersih, EBIT, dividen.'
+        ]},
+        {t:'h', x:'Pajak (Indonesia)'},
+        {t:'table', head:['Jenis','Dikenakan atas'], rows:[
+          ['PPh 21','Penghasilan karyawan dari pemberi kerja'],
+          ['PPh 22','Kegiatan usaha tertentu (perdagangan/jasa) & pengadaan barang/jasa'],
+          ['PPh 23','Penghasilan seperti sewa atau royalti']
+        ], cap:'Tiap jenis punya tarif & jangka pelaporan berbeda — pahami kewajibanmu.'},
+        {t:'callout', k:'key', judul:'Tindakan', x:'Tetapkan 1 KPI + 1 OKR bulan ini, dan susun income statement sederhana bisnismu (pendapatan − biaya = laba).'}
+      ]
+    }
+  ]
+},
+
+/* ============ CHAPTER 8 — REKOMENDASI BUKU ============ */
+{
+  id:'s8', judul:'Rekomendasi Buku', ikon:'i-book', label:'Chapter 8',
+  ringkas:'Bacaan lanjutan untuk memperdalam tiap bidang scale-up.',
+  lessons:[
+    { id:'s8l1', judul:'Daftar bacaan pilihan', durasi:'5 mnt',
+      ringkas:'Buku per bidang untuk melanjutkan belajar.',
+      blocks:[
+        {t:'p', x:'Perdalam tiap bidang scale-up lewat bacaan berikut, dikelompokkan per tema.'},
+        {t:'h', x:'Manajemen SDM & Tim'},
+        {t:'books', items:[
+          {judul:'The One Minute Manager', penulis:'Kenneth Blanchard & Spencer Johnson', ket:'Teknik manajemen sederhana lewat cerita pendek.'},
+          {judul:'The Talent Delusion', penulis:'Tomas Chamorro-Premuzic', ket:'Mengukur & mengembangkan talenta secara jujur.'},
+          {judul:'The Culture Code', penulis:'Daniel Coyle', ket:'Rahasia membangun kelompok yang sangat efektif.'},
+          {judul:'Managing Oneself', penulis:'Peter F. Drucker', ket:'Mengelola diri sebelum mengelola orang lain.'}
+        ]},
+        {t:'h', x:'Kewirausahaan & Model Bisnis'},
+        {t:'books', items:[
+          {judul:'The Personal MBA', penulis:'Josh Kaufman', ket:'Peta lengkap dunia bisnis, dari marketing sampai strategi.'},
+          {judul:'Zero to One', penulis:'Peter Thiel', ket:'Menciptakan sesuatu yang benar-benar baru.'},
+          {judul:'The Art of Possibility', penulis:'Rosamund & Benjamin Zander', ket:'Melihat peluang dari sudut pandang baru.'}
+        ]},
+        {t:'h', x:'Marketing & Sales'},
+        {t:'books', items:[
+          {judul:'DotCom Secrets', penulis:'Russell Brunson', ket:'Strategi membangun sales funnel online yang menarik & mempertahankan pelanggan.'},
+          {judul:'Never Lose a Customer Again', penulis:'Joey Coleman', ket:'Membangun loyalitas pelanggan yang kuat dalam 100 hari.'},
+          {judul:'Building a StoryBrand', penulis:'Donald Miller', ket:'7 poin storytelling merek yang menjual.'}
+        ]},
+        {t:'h', x:'Kepemimpinan'},
+        {t:'books', items:[
+          {judul:'The 21 Irrefutable Laws of Leadership', penulis:'John C. Maxwell', ket:'21 hukum kepemimpinan + ilustrasi kasus nyata.'},
+          {judul:'Start With Why', penulis:'Simon Sinek', ket:'Konsep Golden Circle: Why–How–What.'},
+          {judul:'Good to Great', penulis:'Jim Collins', ket:'Langkah perusahaan mencapai keunggulan jangka panjang.'},
+          {judul:'Leaders Eat Last', penulis:'Simon Sinek', ket:'Memimpin dengan mengutamakan tim.'}
+        ]},
+        {t:'callout', k:'tip', judul:'Cara memakai', x:'Pilih satu buku sesuai chapter yang paling ingin kamu perkuat sekarang — jangan baca semua sekaligus.'}
+      ]
+    }
+  ]
 }
 
 ];
