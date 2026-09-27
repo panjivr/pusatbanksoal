@@ -113,6 +113,7 @@
     var fav = isFav(f.id);
     return '<article class="fr-card" tabindex="0" role="button" data-id="' + f.id + '" aria-label="' + esc(f.nama) + '">' +
       '<button class="fr-fav' + (fav ? ' on' : '') + '" data-fav="' + f.id + '" title="Simpan ke shortlist" aria-label="Simpan ke shortlist"><svg class="i" aria-hidden="true"><use href="#i-bookmark"></use></svg></button>' +
+      '<a class="fr-link' + (f.situs ? '' : ' srch') + '" href="' + (f.situs ? situsUrl(f.situs) : cariUrl(f)) + '" target="_blank" rel="noopener nofollow" title="' + (f.situs ? 'Situs resmi ' : 'Cari info kemitraan ') + esc(f.nama) + '" aria-label="' + (f.situs ? 'Buka situs resmi ' : 'Cari info kemitraan ') + esc(f.nama) + '" data-ext="1"><svg class="i" aria-hidden="true"><use href="#i-' + (f.situs ? 'globe' : 'search') + '"></use></svg></a>' +
       '<div class="top"><div><div class="nm">' + esc(f.nama) + '</div><div class="cat">' + esc(FR_CATS[f.kategori]) + ' · ' + esc(f.asal || '') + '</div></div>' +
       '<span class="fr-tier tier-' + f.tier + '">' + esc(TIER[f.tier].label) + '</span></div>' +
       '<div><div class="inv">' + invRange(f) + '</div><div class="invl">Estimasi investasi awal</div></div>' +
@@ -143,6 +144,7 @@
   $('frGrid').addEventListener('click', function (e) {
     var favBtn = e.target.closest('[data-fav]');
     if (favBtn) { e.stopPropagation(); var on = toggleFav(favBtn.getAttribute('data-fav')); favBtn.classList.toggle('on', on); return; }
+    if (e.target.closest('[data-ext]')) return;
     var card = e.target.closest('.fr-card'); if (card) openDetail(card.getAttribute('data-id'));
   });
   $('frGrid').addEventListener('keydown', function (e) {
@@ -177,7 +179,7 @@
       drow('Kontrak', f.kontrak) +
       drow('Kebutuhan daya listrik', f.daya) +
       drow('Titik impas (BEP)', f.bepText) +
-      (f.situs ? drow('Situs resmi', f.situs) : '') +
+      (f.situs ? '<div class="fr-drow"><span>Situs resmi</span><b><a class="fr-ext" href="' + situsUrl(f.situs) + '" target="_blank" rel="noopener nofollow">' + esc(f.situs) + ' ↗</a></b></div>' : '') +
       '</div>' +
       listBox('Kelebihan', f.kelebihan) +
       '</div>' +
@@ -189,6 +191,7 @@
       '<div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:16px">' +
       '<button class="btn btn-primary btn-sm" data-hitung="' + f.id + '">🧮 Hitung kelayakan (BEP/ROI)</button>' +
       '<button class="btn btn-ghost btn-sm" data-kota="' + f.id + '">📍 Cek kota yang cocok</button>' +
+      (f.situs ? '<a class="btn btn-ghost btn-sm" href="' + situsUrl(f.situs) + '" target="_blank" rel="noopener nofollow">🔗 Kunjungi situs resmi</a>' : '<a class="btn btn-ghost btn-sm" href="' + cariUrl(f) + '" target="_blank" rel="noopener nofollow">🔍 Cari info kemitraan</a>') +
       '</div>' +
       '<p class="fr-cap" style="margin-top:12px;font-size:11.5px">Angka adalah kisaran referensi (2024–2025), bukan penawaran resmi. Verifikasi ke pihak franchisor.</p>' +
       '</div>';
@@ -203,6 +206,8 @@
     box.querySelector('[data-kota]').addEventListener('click', function () { $('ktPick').value = f.id; prefillKota(); showTab('kota'); window.scrollTo({ top: 0, behavior: 'smooth' }); });
   }
   function dbox(k, v, pri) { return '<div class="fr-dbox"><div class="k">' + esc(k) + '</div><div class="v' + (pri ? ' pri' : '') + '">' + v + '</div></div>'; }
+  function cariUrl(f) { return 'https://www.google.com/search?q=' + encodeURIComponent(String(f.nama).replace(/\s*\(.*?\)\s*/g, ' ').trim() + ' kemitraan franchise resmi'); }
+  function situsUrl(d) { d = String(d || '').trim(); return /^https?:\/\//i.test(d) ? d : 'https://' + d.replace(/^\/+/, ''); }
   function drow(k, v) { return '<div class="fr-drow"><span>' + esc(k) + '</span><b>' + esc(v) + '</b></div>'; }
   function segFor(f) { return (f.tier === 'korporat' || f.tier === 'besar') ? 'mid' : (f.ticket >= 25000 ? 'mid' : 'mass'); }
   function topCitiesHtml(f) {
