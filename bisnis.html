@@ -1000,6 +1000,39 @@ input[type=range]{accent-color:var(--primary);height:6px}
     $('bpType').addEventListener('change',function(){ $('prType').value=this.value; renderBP(); updateHeader(); }); renderBP();
     $('prType').addEventListener('change',function(){ $('bpType').value=this.value; renderBP(); updateHeader(); });
   })();
+  /* Katalog Model Bisnis A-Z — grid telusur dari data BP */
+  (function(){
+    function li(a){return '<ul style="margin:4px 0 0 16px;font-size:12px;color:var(--muted)">'+a.map(function(x){return '<li style="margin-bottom:2px">'+esc(x)+'</li>';}).join('')+'</ul>';}
+    var keys=[]; for(var k in BP) keys.push(k);
+    keys.sort(function(a,b){return BP[a].name<BP[b].name?-1:1;});
+    var cards=keys.map(function(k){var b=BP[k];
+      return '<details class="glass-card" style="padding:16px"><summary style="cursor:pointer;list-style:none;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:center">'+
+        '<b style="color:var(--on-dark);font-size:14.5px">'+esc(b.name)+'</b>'+
+        '<span style="display:flex;gap:5px;flex-wrap:wrap">'+(b.modalRange?'<span class="chip" style="font-size:10.5px">Modal '+esc(b.modalRange.split('(')[0].trim())+'</span>':'')+(b.margin?'<span class="chip" style="font-size:10.5px">Margin '+esc(b.margin)+'</span>':'')+'</span></summary>'+
+        '<p class="bz-note" style="font-size:12.5px;margin-top:10px"><b>Model.</b> '+esc(b.model)+'</p>'+
+        (b.cocok?'<p class="bz-note" style="font-size:12.5px"><b>Cocok untuk / di mana.</b> '+esc(b.cocok)+'</p>':'')+
+        '<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:10px">'+
+          '<div><b style="font-size:12px;color:var(--on-dark)">KPI kunci</b>'+li(b.kpi)+'</div>'+
+          '<div><b style="font-size:12px;color:var(--on-dark)">Risiko utama</b>'+li(b.risiko)+'</div>'+
+          '<div><b style="font-size:12px;color:var(--on-dark)">Tips</b>'+li(b.tips)+'</div>'+
+          '<div><b style="font-size:12px;color:var(--on-dark)">Pendanaan</b><p style="font-size:12px;color:var(--muted);margin-top:4px">'+esc(b.funding)+'</p></div>'+
+        '</div>'+
+        '<p style="margin-top:10px"><a href="#" class="bz-open" data-bp="'+k+'" style="font-size:12.5px;color:var(--primary);font-weight:600">Buka di kalkulator Blueprint &rarr;</a></p>'+
+        '</details>';
+    }).join('');
+    var sec=document.createElement('section');
+    sec.className='section'; sec.id='katalog-bisnis';
+    sec.innerHTML='<div class="wrap"><span class="section-eyebrow">Katalog model bisnis</span>'+
+      '<h2 class="mt">Telusuri <span class="gradient-text">'+keys.length+' model bisnis</span> A–Z</h2>'+
+      '<p class="lead mt">Dari F&amp;B, kos-kosan, coworking space, cloud kitchen, sampai micro-SaaS &amp; ekspor UMKM — lihat konsep, cocok di mana, estimasi modal, margin, KPI, risiko, dan tips tiap model. Klik untuk detail, atau buka di kalkulator Blueprint.</p>'+
+      '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px;margin-top:22px">'+cards+'</div></div>';
+    var f=document.querySelector('footer'); if(f&&f.parentNode) f.parentNode.insertBefore(sec,f);
+    sec.addEventListener('click',function(e){var a=e.target.closest?e.target.closest('.bz-open'):null; if(!a)return; e.preventDefault();
+      var v=a.getAttribute('data-bp'); if($('bpType')){$('bpType').value=v; renderBP(); if(typeof updateHeader==='function')updateHeader();}
+      if(typeof showCat==='function'){try{showCat('blueprint');}catch(err){}}
+      var t=document.querySelector('[data-panel="blueprint"]'); if(t&&t.scrollIntoView)t.scrollIntoView({behavior:'smooth'});
+    });
+  })();
   function ul(a){return '<ul>'+a.map(function(x){return '<li>'+esc(x)+'</li>';}).join('')+'</ul>';}
   function renderBP(){
     var b=BP[$('bpType').value]; if(!b)return;
