@@ -503,3 +503,9 @@ button,summary,.pill-tab button,[role="radio"],[role="button"],.admin-nav,label[
 :root[data-theme="light"] .brand-logo.brand-dark{display:none}
 :root[data-theme="light"] .brand-logo.brand-light{display:block}
 .footer .brand-logo{height:28px}
+
+/* ===== Hero Bekal color logo (sticker on both themes) ===== */
+.hero-logo{height:76px;width:auto;display:inline-block;background:#fbfaf5;border-radius:18px;
+  padding:12px 20px;box-shadow:0 10px 34px -14px rgba(0,0,0,.45);margin-bottom:20px}
+:root[data-theme="light"] .hero-logo{box-shadow:0 8px 22px -14px rgba(20,30,60,.28);background:#fff}
+@media(max-width:600px){.hero-logo{height:60px;padding:10px 16px}}
