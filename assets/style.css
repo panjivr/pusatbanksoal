@@ -104,6 +104,13 @@
 
 *{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
+/* === Anti-overflow universal (responsif di semua device) === */
+html,body{overflow-x:clip;max-width:100%}
+img,svg,video,canvas,iframe{max-width:100%;height:auto}
+/* grid & flex item boleh menyusut di bawah min-content → cegah overflow horizontal */
+.grid>*,.flex>*{min-width:0}
+h1,h2,h3,h4,h5,p,span,a,li,b,summary,label{overflow-wrap:break-word}
+pre,code{overflow-x:auto;max-width:100%}
 body{font-family:var(--font);background:var(--canvas);color:var(--body);
   font-size:14px;line-height:1.55;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
   transition:background-color .2s,color .2s}
@@ -305,6 +312,10 @@ h4{font-size:16px;font-weight:700;letter-spacing:-.2px}
 .divider{height:1px;background:var(--hair-dark);border:none;margin:var(--s-sec) 0}
 .hide{display:none}
 .text-up{color:var(--up)} .text-down{color:var(--down)}
+
+/* Padding wrap menyusut di layar mungil biar muat konten */
+@media(max-width:430px){.wrap{padding:0 var(--s-md)}}
+@media(max-width:340px){.wrap{padding:0 var(--s-sm)}}
 
 /* Admin panel responsive */
 @media(max-width:780px){
