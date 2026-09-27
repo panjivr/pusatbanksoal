@@ -749,5 +749,86 @@
 })();
 </script>
 <script src="assets/app.js" defer></script>
+<script>
+/* Panduan Karier Remote per kategori — konten kurasi (kisaran gaji = estimasi remote 2026, IDR/bulan). */
+(function(){
+  var CAREER=[
+    {c:'Asisten Virtual & Admin',ic:'i-user',g:['Rp2–4 jt','Rp4–8 jt','Rp8–18 jt'],
+     skill:['Manajemen email & kalender','Riset & entri data','Komunikasi tertulis rapi','Tools produktivitas'],
+     tugas:['Atur jadwal & inbox klien','Riset, rekap, & input data','Koordinasi vendor/tim','Dukungan operasional harian'],
+     tools:['Google Workspace','Notion / Trello','Slack','Canva dasar'],
+     mulai:['Kuasai 1 niche (real estate/e-commerce)','Buat profil di Upwork/OnlineJobs.ph','Tawarkan paket jam/bulanan','Kumpulkan testimoni awal']},
+    {c:'Customer Support',ic:'i-chat',g:['Rp3–6 jt','Rp6–12 jt','Rp12–25 jt'],
+     skill:['Empati & komunikasi','Bahasa Inggris (chat/email)','Problem solving','Kesabaran & ketelitian'],
+     tugas:['Jawab tiket chat/email/telepon','Selesaikan keluhan pelanggan','Dokumentasi & eskalasi','Jaga rating kepuasan (CSAT)'],
+     tools:['Zendesk / Intercom','Freshdesk','Slack','Help center / KB'],
+     mulai:['Latih bahasa Inggris tulis','Pelajari 1 tool helpdesk','Lamar ke startup SaaS global','Tunjukkan CSAT/QA yang baik']},
+    {c:'Penulisan & Konten',ic:'i-doc',g:['Rp2–5 jt','Rp5–12 jt','Rp12–30 jt'],
+     skill:['Menulis persuasif & SEO','Riset topik','Copywriting','Editing & konsistensi gaya'],
+     tugas:['Artikel blog & SEO','Copy landing page & iklan','Naskah email & sosmed','Ghostwriting'],
+     tools:['Google Docs','Surfer/SEO tools','Grammarly','WordPress'],
+     mulai:['Bangun portofolio 3–5 tulisan','Pilih niche (tech/finance/health)','Daftar Contra/Upwork','Naik ke retainer bulanan']},
+    {c:'Sosmed & Community',ic:'i-users',g:['Rp3–6 jt','Rp6–12 jt','Rp12–25 jt'],
+     skill:['Strategi konten','Copy pendek & hook','Analitik & tren','Manajemen komunitas'],
+     tugas:['Kelola akun & kalender konten','Balas DM/komentar','Kelola grup/Discord','Laporan performa'],
+     tools:['Meta Suite','Buffer/Later','Canva','Discord/Telegram'],
+     mulai:['Kelola akunmu sendiri dulu','Ambil 1–2 klien kecil','Tunjukkan pertumbuhan (angka)','Spesialisasi platform (TikTok/IG)']},
+    {c:'Data & Anotasi AI',ic:'i-chart',g:['Rp3–6 jt','Rp6–12 jt','Rp12–22 jt'],
+     skill:['Ketelitian tinggi','Ikuti panduan ketat','Excel/Sheets','Dasar Python (nilai plus)'],
+     tugas:['Anotasi teks/gambar/audio','Kurasi & pembersihan data','Evaluasi output AI (RLHF)','QA label'],
+     tools:['Label Studio','Sheets/Excel','Platform data (Scale/Appen)','Python (opsional)'],
+     mulai:['Daftar platform anotasi (Remotasks/Appen)','Lolos tes kualitas','Naik ke QA/reviewer','Belajar data analysis untuk naik kelas']},
+    {c:'Desain',ic:'i-sparkles',g:['Rp4–8 jt','Rp8–18 jt','Rp18–40 jt'],
+     skill:['UI/UX atau grafis','Sistem desain','Tipografi & layout','Riset pengguna (UX)'],
+     tugas:['Desain UI produk','Aset brand & sosmed','Prototype & handoff','Iterasi dari feedback'],
+     tools:['Figma','Adobe CC','Framer','Notion'],
+     mulai:['Bangun portofolio (Behance/Dribbble)','Kuasai Figma','Ambil proyek kecil dulu','Fokus 1 bidang (product/brand)']},
+    {c:'Coding & Vibe Coding',ic:'i-brain',g:['Rp6–15 jt','Rp15–35 jt','Rp35–100+ jt'],
+     skill:['1 bahasa kuat (JS/Python)','Git & kolaborasi','Frontend/Backend/Fullstack','AI-assisted coding'],
+     tugas:['Bangun fitur & API','Perbaikan bug & review','Deploy & maintain','Kolaborasi via PR'],
+     tools:['VS Code / Cursor','GitHub','React/Node/Next','Cloud (Vercel/AWS)'],
+     mulai:['Bangun 2–3 proyek nyata','Kontribusi open-source','Profil GitHub kuat','Lamar startup remote/Wellfound']},
+    {c:'Web3 & Crypto',ic:'i-globe',g:['Rp5–12 jt','Rp12–30 jt','Rp30–80+ jt'],
+     skill:['Paham blockchain & DeFi','Solidity (dev) / riset','Komunitas & moderasi','Manajemen risiko'],
+     tugas:['Dev smart contract / audit','Community & mod Discord','Riset & konten kripto','Growth/partnership'],
+     tools:['Solidity/Hardhat','Etherscan','Discord','Dune Analytics'],
+     mulai:['Pelajari dasar & keamanan dulu','Ikut komunitas/DAO','Bangun reputasi on-chain','Waspada scam — verifikasi proyek']},
+    {c:'Marketing & Sales',ic:'i-trend',g:['Rp4–8 jt','Rp8–20 jt','Rp20–50 jt'],
+     skill:['Funnel & copywriting','Iklan berbayar (Meta/Google)','Analitik & CRO','Negosiasi (sales)'],
+     tugas:['Kelola kampanye iklan','SEO/email/growth','Kualifikasi & closing leads','Laporan & optimasi ROAS'],
+     tools:['Meta/Google Ads','HubSpot','GA4','Email tools'],
+     mulai:['Sertifikasi Google/Meta Ads','Jalankan kampanye kecil','Tunjukkan hasil (ROAS/leads)','Naik ke growth/head of marketing']},
+    {c:'Video & Audio',ic:'i-play',g:['Rp3–7 jt','Rp7–15 jt','Rp15–35 jt'],
+     skill:['Editing video','Motion/subtitle','Audio & mixing','Storytelling'],
+     tugas:['Edit konten YouTube/TikTok','Podcast & voice-over','Motion graphics','Repurpose konten'],
+     tools:['Premiere/CapCut','After Effects','DaVinci Resolve','Audacity'],
+     mulai:['Bangun reel/portofolio','Kuasai 1 editor pro','Ambil klien kreator','Spesialisasi (short-form/motion)']},
+    {c:'Pengajaran & Bahasa',ic:'i-grad',g:['Rp3–6 jt','Rp6–12 jt','Rp12–25 jt'],
+     skill:['Penguasaan materi/bahasa','Public speaking','Kurikulum & kesabaran','Sertifikasi (TEFL dll)'],
+     tugas:['Kelas privat/kelompok online','Susun materi & kuis','Koreksi & feedback','Rekam kelas rekaman'],
+     tools:['Zoom','Google Classroom','Canva','Cambly/Preply'],
+     mulai:['Ambil sertifikasi (TEFL/TESOL)','Daftar Cambly/Preply/italki','Kumpulkan ulasan siswa','Buat kelas rekaman (pasif)']}
+  ];
+  function ul(a){return '<ul style="margin:4px 0 0 16px;font-size:12.5px;color:var(--muted)">'+a.map(function(x){return '<li style="margin-bottom:2px">'+x+'</li>';}).join('')+'</ul>';}
+  var cards=CAREER.map(function(r){
+    return '<details class="glass-card" style="padding:18px"><summary style="cursor:pointer;list-style:none;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap">'+
+      '<span style="display:flex;align-items:center;gap:10px"><span class="ico" style="width:38px;height:38px"><svg class="i" aria-hidden="true"><use href="#'+r.ic+'"></use></svg></span><b style="color:var(--on-dark);font-size:15px">'+r.c+'</b></span>'+
+      '<span style="display:flex;gap:5px;flex-wrap:wrap"><span class="chip" style="font-size:11px">Pemula '+r.g[0]+'</span><span class="chip" style="font-size:11px">Menengah '+r.g[1]+'</span><span class="chip" style="font-size:11px">Senior '+r.g[2]+'</span></span></summary>'+
+      '<div class="grid g2" style="margin-top:14px;gap:14px">'+
+        '<div><b style="font-size:12.5px;color:var(--on-dark)">Skill inti</b>'+ul(r.skill)+'</div>'+
+        '<div><b style="font-size:12.5px;color:var(--on-dark)">Tugas umum</b>'+ul(r.tugas)+'</div>'+
+        '<div><b style="font-size:12.5px;color:var(--on-dark)">Tools</b>'+ul(r.tools)+'</div>'+
+        '<div><b style="font-size:12.5px;color:var(--on-dark)">Cara mulai</b>'+ul(r.mulai)+'</div>'+
+      '</div></details>';
+  }).join('');
+  var sec=document.createElement('section');
+  sec.className='section'; sec.id='panduan-karier';
+  sec.innerHTML='<div class="wrap"><span class="section-eyebrow">Panduan karier remote</span>'+
+    '<h2 class="mt">Skill, tugas &amp; <span class="gradient-text">jenjang gaji</span> tiap jalur</h2>'+
+    '<p class="lead mt">Pilih jalur yang cocok denganmu, lihat skill inti, tugas harian, tools, dan langkah memulainya. Kisaran gaji adalah estimasi kerja remote (dibayar rate global) — anggap sebagai gambaran, bukan patokan pasti.</p>'+
+    '<div class="grid g2 mt-lg" style="gap:14px">'+cards+'</div></div>';
+  var f=document.querySelector('footer'); if(f&&f.parentNode) f.parentNode.insertBefore(sec,f);
+})();
+</script>
 </body>
 </html>
