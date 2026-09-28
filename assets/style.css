@@ -647,3 +647,33 @@ body.bp-doc-open #bpDoc{display:block;position:fixed;inset:0;z-index:200;backgro
   .doc-h2,.doc-h3{page-break-after:avoid}
   .doc-f,.doc-table{page-break-inside:avoid}
 }
+
+/* ============ Kampus & Karier guide sections (kk-*) ============ */
+.kk-h2{font-size:clamp(19px,3vw,25px);color:var(--on-dark);margin:28px 0 4px}
+.kk-lead{font-size:15px;line-height:1.7;color:var(--body);max-width:72ch;margin:6px 0 16px}
+.kk-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:14px;margin-top:10px}
+.kk-card{border:1px solid var(--hair-dark);border-radius:16px;padding:18px;background:var(--card)}
+.kk-card-h{display:flex;gap:10px;align-items:center;margin-bottom:9px;flex-wrap:wrap}
+.kk-emo{font-size:24px;line-height:1}
+.kk-card h3{font-size:16px;color:var(--on-dark);margin:0}
+.kk-badge{display:inline-block;font-size:10.5px;font-weight:800;letter-spacing:.3px;padding:3px 9px;border-radius:99px;background:var(--primary-soft);color:var(--accent-ink)}
+.kk-card p{font-size:13.5px;line-height:1.6;color:var(--body);margin:0 0 8px}
+.kk-card ul{margin:6px 0 0;padding-left:18px}
+.kk-card li{font-size:13px;color:var(--muted-strong);margin:5px 0;line-height:1.5}
+.kk-steps{list-style:none;margin:10px 0 0;padding:0;counter-reset:kk}
+.kk-steps li{counter-increment:kk;position:relative;padding:0 0 16px 40px;border-left:2px solid var(--hair-dark);margin-left:14px}
+.kk-steps li:last-child{border-left-color:transparent;padding-bottom:0}
+.kk-steps li:before{content:counter(kk);position:absolute;left:-14px;top:-2px;width:28px;height:28px;border-radius:50%;background:var(--primary);color:#fff;font-family:var(--num);font-weight:800;font-size:12px;display:grid;place-items:center}
+.kk-steps b{display:block;color:var(--on-dark);font-size:14px;margin-bottom:2px}
+.kk-steps span{font-size:13px;color:var(--muted-strong);line-height:1.5}
+.kk-note{border:1px solid var(--hair-dark);border-left:3px solid var(--primary);border-radius:12px;padding:14px 16px;background:var(--card);margin-top:14px}
+.kk-note h4{margin:0 0 6px;font-size:14px;color:var(--on-dark)}
+.kk-note p{margin:0;font-size:13.5px;color:var(--body);line-height:1.6}
+.kk-faq details{border:1px solid var(--hair-dark);border-radius:12px;padding:2px 14px;margin-top:10px;background:var(--card)}
+.kk-faq summary{cursor:pointer;font-weight:600;color:var(--on-dark);font-size:14px;padding:12px 0}
+.kk-faq p{margin:0 0 12px;font-size:13.5px;color:var(--body);line-height:1.6}
+.kk-tablewrap{overflow-x:auto;border:1px solid var(--hair-dark);border-radius:12px;margin-top:10px}
+.kk-table{width:100%;border-collapse:collapse;font-size:13px;min-width:480px}
+.kk-table th,.kk-table td{text-align:left;padding:9px 11px;border-bottom:1px solid var(--hair-soft);vertical-align:top;line-height:1.45}
+.kk-table thead th{background:var(--elevated);color:var(--on-dark);font-weight:700;font-size:12px}
+.kk-table .kk-th{color:var(--on-dark);font-weight:700;background:var(--card)}
