@@ -1,7 +1,8 @@
 /* ============================================================
    Bekal — THE BUSINESS BLUEPRINT (generator isian)
    Template akhir untuk "Kelas Bisnis dari Nol".
-   Kerangka 7 chapter Framework Sevenpreneur (7preneur).
+   Kerangka 7 chapter: Foundation, Ideation, Research & Validation,
+   Product, Sales & Marketing, Business Operations, Launch & Grow.
    ============================================================ */
 (function () {
   var META = {
@@ -9,7 +10,7 @@
     tag: 'BEKAL BLUEPRINT PROGRAM',
     sub: 'Rancang bisnis pertamamu secara holistik — dari fondasi diri sampai rencana peluncuran.',
     ls: 'bekal_blueprint_binol_v1',
-    kredit: 'Kerangka diadaptasi dari Framework Sevenpreneur (7preneur).',
+    kredit: 'Dibuat gratis dengan Bekal — pusatbanksoal.id',
     back: { href: 'kelas.html', label: 'Kelas Bisnis dari Nol' }
   };
 

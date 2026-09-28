@@ -9,7 +9,7 @@
     tag: 'BEKAL — SCALE UP',
     sub: 'Rangkum seluruh rencana bisnismu jadi pitch deck yang siap dipresentasikan.',
     ls: 'bekal_blueprint_scaleup_v1',
-    kredit: 'Kerangka diadaptasi dari program Sevenpreneur (7preneur).',
+    kredit: 'Dibuat gratis dengan Bekal — pusatbanksoal.id',
     back: { href: 'scaleup.html', label: 'Scale Up Bisnis' }
   };
 
@@ -94,7 +94,7 @@
 
     /* ---------- SEGMENTASI & PERSONA (Assignment 2) ---------- */
     { id: 'd7', no: 'Bagian 7', judul: 'Segmentasi & Persona', ikon: 'i-users',
-      intro: 'Kenali pelangganmu lebih dalam (Individual Assignment 2).',
+      intro: 'Kenali pelangganmu lebih dalam: segmentasi, MASDA, user persona, dan pain points.',
       sections: [
         { judul: 'MASDA Analysis', desc: '<b>M</b>easurable, <b>A</b>ccessible, <b>S</b>ubstantial, <b>A</b>ctionable, <b>D</b>ifferentiable — setelah punya 2–3 segmen, pilih yang paling menjanjikan.',
           fields: [

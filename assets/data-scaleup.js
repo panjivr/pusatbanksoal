@@ -7,7 +7,6 @@
    testing, SCAMPER, pivot, segmentasi/MASDA, market sizing,
    BEP/ROI, ekspansi vertikal/horizontal) — disusun dengan bahasa
    & contoh sendiri + grafik. Tiap chapter punya slot video.
-   Kerangka materi diadaptasi dari program Sevenpreneur (7preneur).
 
    Skema blok (dirender kelas.js): lead|p|h · callout(key|tip|warn|
    quote) · list|steps · diagram(flow|funnel|pyramid|cycle|quad|
@@ -17,8 +16,7 @@ var KELAS_META = {
   judul: 'Scale Up Bisnis',
   batch: 'Batch 1',
   ringkas: 'Kelas membesarkan bisnis — inovasi ide lanjutan, MVP & Product-Market Fit, persiapan ekspansi ide, sampai rencana ekspansi pasar (segmentasi, market sizing, BEP/ROI, vertikal/horizontal). Belajar seperti kuliah online: teks, diagram, dan video.',
-  catatan: 'Materi menjelaskan kerangka bisnis standar dengan bahasa & contoh sendiri + grafik. Kerangka diadaptasi dari program Sevenpreneur (7preneur); penyampaian mendetail ada di video kelas.',
-  kredit: 'Kerangka materi diadaptasi dari program Sevenpreneur (7preneur).'
+  catatan: 'Materi menjelaskan kerangka bisnis standar dengan bahasa & contoh sendiri, dilengkapi diagram dan slot video di tiap chapter.'
 };
 
 var KELAS_DATA = [
