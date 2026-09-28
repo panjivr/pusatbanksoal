@@ -667,22 +667,6 @@
   }
 
 
-  /* ---------- IDE sub-tabs (Non-Franchise / Boring / Luar Negeri) ---------- */
-  (function(){
-    var st = $('ideSubTabs'); if(!st) return;
-    st.addEventListener('click', function(e){
-      var b = e.target.closest('.fr-subtab'); if(!b) return;
-      var sub = b.getAttribute('data-sub');
-      Array.prototype.forEach.call(st.querySelectorAll('.fr-subtab'), function(x){ var on=x===b; x.classList.toggle('on',on); x.setAttribute('aria-selected', on?'true':'false'); });
-      Array.prototype.forEach.call(document.querySelectorAll('.fr-sub'), function(s){ s.classList.toggle('on', s.getAttribute('data-sub')===sub); });
-    });
-  })();
-  function showIdeSub(sub){
-    var st=$('ideSubTabs'); if(!st) return;
-    Array.prototype.forEach.call(st.querySelectorAll('.fr-subtab'), function(x){ var on=x.getAttribute('data-sub')===sub; x.classList.toggle('on',on); x.setAttribute('aria-selected', on?'true':'false'); });
-    Array.prototype.forEach.call(document.querySelectorAll('.fr-sub'), function(s){ s.classList.toggle('on', s.getAttribute('data-sub')===sub); });
-  }
-
   /* ---------- init ---------- */
   renderGrid();
   renderIde('minim');
@@ -692,6 +676,6 @@
     var fid = qp.get('f');
     if (fid && byId[fid]) openDetail(fid);
     var h = (location.hash || '').replace('#', '');
-    if (/^tab=/.test(h)) { var t = h.split('=')[1]; if (t === 'boring' || t === 'luar') { showTab('ide'); showIdeSub(t); } else if (document.querySelector('.fr-panel[data-panel="' + t + '"]')) showTab(t); }
+    if (/^tab=/.test(h)) { var t = h.split('=')[1]; if (document.querySelector('.fr-panel[data-panel="' + t + '"]')) showTab(t); }
   } catch (e) {}
 })();
