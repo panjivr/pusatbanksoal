@@ -78,6 +78,7 @@
 .kh-bar-track{height:9px;border-radius:99px;background:var(--elevated);overflow:hidden}
 .kh-bar-fill{height:100%;border-radius:99px;background:linear-gradient(90deg,var(--primary),var(--accent2,var(--primary)))}
 .kh-bar-fill.over{background:linear-gradient(90deg,var(--down),#f97316)}
+.kh-bar-fill.done{background:linear-gradient(90deg,var(--up),#16a34a)}
 .kh-stat-row{display:flex;justify-content:space-between;gap:12px;padding:8px 0;border-bottom:1px solid var(--hair-soft);font-size:13px;color:var(--muted-strong)}
 .kh-stat-row:last-child{border-bottom:0}
 .kh-stat-row b{font-family:var(--num);color:var(--on-dark)}
@@ -194,7 +195,9 @@
         <div class="kh-field" style="margin:0"><label>Dari</label><input type="date" class="kh-in-el" id="khFrom"></div>
         <div class="kh-field" style="margin:0"><label>Sampai</label><input type="date" class="kh-in-el" id="khTo"></div>
       </div>
-      <h3 style="font-size:13px;color:var(--muted);margin:4px 0 6px;text-transform:uppercase;letter-spacing:.4px">Pengeluaran per kategori</h3>
+      <h3 style="font-size:13px;color:var(--muted);margin:4px 0 6px;text-transform:uppercase;letter-spacing:.4px">Grafik arus kas harian</h3>
+      <div id="khTrend"></div>
+      <h3 style="font-size:13px;color:var(--muted);margin:16px 0 6px;text-transform:uppercase;letter-spacing:.4px">Pengeluaran per kategori</h3>
       <div id="khBreakdown"></div>
       <h3 style="font-size:13px;color:var(--muted);margin:16px 0 6px;text-transform:uppercase;letter-spacing:.4px">Statistik</h3>
       <div id="khStats"></div>
@@ -215,6 +218,39 @@
     <div id="khBudget"></div>
   </div>
 
+  <div class="kh-grid">
+    <!-- TRANSAKSI BERULANG -->
+    <div class="kh-box">
+      <h2>🔁 Transaksi berulang</h2>
+      <p style="font-size:12.5px;color:var(--muted);margin:-6px 0 12px;line-height:1.6">Otomatis dicatat tiap hari/minggu/bulan — cocok untuk gaji, uang saku, cicilan, sewa/kos, atau langganan.</p>
+      <div class="kh-field"><label>Jumlah</label><div class="kh-amt"><span>Rp</span><input type="text" id="khRecAmt" inputmode="numeric" placeholder="0"></div></div>
+      <div class="kh-row2">
+        <div class="kh-field"><label>Kategori</label><select class="kh-sel" id="khRecKat"></select></div>
+        <div class="kh-field"><label>Frekuensi</label><select class="kh-sel" id="khRecFreq"><option value="bulanan">Tiap bulan</option><option value="mingguan">Tiap minggu</option><option value="harian">Tiap hari</option></select></div>
+      </div>
+      <div class="kh-row2">
+        <div class="kh-field"><label>Sumber dana</label><select class="kh-sel" id="khRecSumber"></select></div>
+        <div class="kh-field"><label>Mulai tanggal</label><input type="date" class="kh-in-el" id="khRecMulai"></div>
+      </div>
+      <div class="kh-field"><label>Catatan (opsional)</label><input type="text" class="kh-in-el" id="khRecCat" placeholder="mis. gaji kantor, cicilan motor"></div>
+      <button type="button" class="kh-submit" id="khRecAdd">Tambah jadwal</button>
+      <div id="khRecList" style="margin-top:14px"></div>
+    </div>
+
+    <!-- TARGET MENABUNG -->
+    <div class="kh-box">
+      <h2>🎯 Target menabung</h2>
+      <p style="font-size:12.5px;color:var(--muted);margin:-6px 0 12px;line-height:1.6">Tetapkan target &amp; pantau progресnya (diukur dari saldo totalmu). Beri tenggat untuk melihat berapa harus ditabung per bulan.</p>
+      <div class="kh-field"><label>Nama target</label><input type="text" class="kh-in-el" id="khGoalName" placeholder="mis. Dana darurat, Beli HP, Umrah"></div>
+      <div class="kh-row2">
+        <div class="kh-field"><label>Target (Rp)</label><div class="kh-amt"><span>Rp</span><input type="text" id="khGoalAmt" inputmode="numeric" placeholder="0"></div></div>
+        <div class="kh-field"><label>Tenggat (opsional)</label><input type="date" class="kh-in-el" id="khGoalDate"></div>
+      </div>
+      <button type="button" class="kh-submit" id="khGoalSet">Simpan target</button>
+      <div id="khGoalWrap" style="margin-top:14px"></div>
+    </div>
+  </div>
+
   <!-- JURNAL -->
   <div class="kh-box kh-full">
     <h2>📒 Riwayat transaksi</h2>
@@ -227,6 +263,7 @@
   </div>
 
   <div class="kh-actions">
+    <button type="button" class="btn btn-primary btn-sm" data-act="xlsx">📊 Ekspor Excel (.xlsx)</button>
     <button type="button" class="btn btn-ghost btn-sm" data-act="csv">⬇️ Ekspor CSV</button>
     <button type="button" class="btn btn-ghost btn-sm" data-act="json">💾 Cadangkan (JSON)</button>
     <button type="button" class="btn btn-ghost btn-sm" data-act="import">📤 Impor (JSON)</button>
