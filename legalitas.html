@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Legalitas & Pajak Usaha — Panduan NIB, OSS, PT, CV, PIRT & Pajak untuk Pemula | Bekal</title>
-<meta name="description" content="Panduan lengkap legalitas & pajak usaha di Indonesia untuk pemula: pilih badan usaha (UD, PT Perorangan, CV, PT, Yayasan), urus NIB lewat OSS, KBLI, izin PIRT & Halal, jenis & tarif pajak (PPh Final UMKM 0,5%, PPh Badan, PPN/PKP), logika pajak PT vs CV, simulasi pajak, dan kalender pelaporan.">
+<meta name="description" content="Panduan lengkap legalitas & pajak usaha Indonesia untuk pemula: badan usaha (UD, PT Perorangan, CV, PT, Yayasan), NIB/OSS, KBLI, izin PIRT/Halal/PSE/lingkungan, merek & HAKI, karyawan & BPJS, pajak pusat (PPh UMKM 0,5%, PPh Badan, PPN) & pajak daerah (PBJT), KUR & insentif, simulasi pajak + BPJS, kalender & sanksi.">
 <meta name="robots" content="index,follow,max-image-preview:large">
 <meta name="theme-color" content="#0a0e17">
 <link rel="canonical" href="https://pusatbanksoal.id/legalitas.html">
@@ -32,7 +32,9 @@
   {"@type":"Question","name":"Apa bedanya PT, CV, dan PT Perorangan?","acceptedAnswer":{"@type":"Answer","text":"PT adalah badan hukum dengan tanggung jawab terbatas dan minimal 2 pemegang saham. PT Perorangan khusus UMK, cukup 1 orang tanpa notaris, tetap badan hukum yang melindungi harta pribadi. CV bukan badan hukum, minimal 2 orang (sekutu aktif & pasif); sekutu aktif bertanggung jawab sampai harta pribadi, tetapi pembagian labanya tidak dikenai pajak dividen."}},
   {"@type":"Question","name":"Berapa tarif pajak untuk UMKM?","acceptedAnswer":{"@type":"Answer","text":"UMKM dengan omzet sampai Rp4,8 miliar/tahun dapat memakai PPh Final 0,5% dari omzet (PP 55/2022). Untuk orang pribadi, omzet Rp500 juta pertama per tahun bebas pajak, dan tarif 0,5% kini berlaku permanen (PP 20/2026). Badan usaha (PT/CV) tidak mendapat fasilitas bebas Rp500 juta dan hanya boleh memakai 0,5% untuk jangka waktu tertentu."}},
   {"@type":"Question","name":"Kapan usaha wajib menjadi PKP dan memungut PPN?","acceptedAnswer":{"@type":"Answer","text":"Usaha wajib dikukuhkan sebagai Pengusaha Kena Pajak (PKP) dan memungut PPN bila omzetnya melebihi Rp4,8 miliar per tahun. Di bawah itu boleh non-PKP sehingga tidak memungut PPN. Tarif PPN efektif 11% untuk barang/jasa umum dan 12% untuk barang mewah."}},
-  {"@type":"Question","name":"Apa itu KBLI?","acceptedAnswer":{"@type":"Answer","text":"KBLI (Klasifikasi Baku Lapangan Usaha Indonesia) adalah kode 5 digit yang menggambarkan jenis kegiatan usaha. Kode ini dipakai saat mendaftar NIB di OSS dan menentukan tingkat risiko serta izin yang dibutuhkan usahamu. Satu usaha bisa memilih lebih dari satu KBLI."}}
+  {"@type":"Question","name":"Apa itu KBLI?","acceptedAnswer":{"@type":"Answer","text":"KBLI (Klasifikasi Baku Lapangan Usaha Indonesia) adalah kode 5 digit yang menggambarkan jenis kegiatan usaha. Kode ini dipakai saat mendaftar NIB di OSS dan menentukan tingkat risiko serta izin yang dibutuhkan usahamu. Satu usaha bisa memilih lebih dari satu KBLI."}},
+  {"@type":"Question","name":"Berapa biaya mendaftarkan merek usaha?","acceptedAnswer":{"@type":"Answer","text":"Pendaftaran merek online di DJKI dikenakan biaya per kelas barang/jasa: UMK sekitar Rp500.000 per kelas dan pemohon umum Rp2.800.000 per kelas. Sertifikat merek berlaku 10 tahun dan dapat diperpanjang. Sebaiknya daftar lebih dini karena Indonesia menganut asas first to file."}},
+  {"@type":"Question","name":"Apa saja kewajiban saat mempekerjakan karyawan?","acceptedAnswer":{"@type":"Answer","text":"Mendaftarkan karyawan ke BPJS Ketenagakerjaan (JKK, JKM, JHT, JP, JKP) dan BPJS Kesehatan (iuran 5 persen: 4 persen perusahaan dan 1 persen karyawan), membuat kontrak kerja (PKWT atau PKWTT), membayar minimal upah minimum dan THR, serta melaporkan ketenagakerjaan (WLKP) setiap tahun."}}
  ]}
 ]}
 </script>
@@ -192,9 +194,13 @@
     <button class="lg-tab" data-ltab="nib" role="tab" aria-selected="false">🆔 NIB &amp; OSS</button>
     <button class="lg-tab" data-ltab="kbli" role="tab" aria-selected="false">🔢 KBLI</button>
     <button class="lg-tab" data-ltab="izin" role="tab" aria-selected="false">📋 Izin Khusus</button>
+    <button class="lg-tab" data-ltab="haki" role="tab" aria-selected="false">🏷️ Merek &amp; HAKI</button>
+    <button class="lg-tab" data-ltab="karyawan" role="tab" aria-selected="false">👷 Karyawan &amp; BPJS</button>
     <button class="lg-tab" data-ltab="pajak" role="tab" aria-selected="false">🧾 Pajak</button>
-    <button class="lg-tab" data-ltab="simulasi" role="tab" aria-selected="false">🧮 Simulasi Pajak</button>
-    <button class="lg-tab" data-ltab="kalender" role="tab" aria-selected="false">📅 Kalender &amp; Checklist</button>
+    <button class="lg-tab" data-ltab="daerah" role="tab" aria-selected="false">🏛️ Pajak Daerah</button>
+    <button class="lg-tab" data-ltab="simulasi" role="tab" aria-selected="false">🧮 Simulasi</button>
+    <button class="lg-tab" data-ltab="insentif" role="tab" aria-selected="false">💸 Insentif &amp; Modal</button>
+    <button class="lg-tab" data-ltab="kalender" role="tab" aria-selected="false">📅 Kalender &amp; Sanksi</button>
   </div>
 
   <!-- MULAI -->
@@ -226,6 +232,14 @@
     <div id="lgBadanTable"></div>
     <h2 class="lg-h2">Detail tiap badan usaha</h2>
     <div class="lg-grid" id="lgBadan"></div>
+
+    <h2 class="lg-h2">Struktur modal &amp; organ PT (yang perlu dipahami)</h2>
+    <div class="lg-note"><h4>Modal PT: dasar, ditempatkan, disetor</h4><p><b>Modal dasar</b> = total nilai saham maksimal perusahaan. <b>Modal ditempatkan</b> = bagian yang "diambil"/dimiliki para pendiri (minimal 25% dari modal dasar). <b>Modal disetor</b> = uang/aset yang benar-benar sudah disetorkan (harus 100% dari yang ditempatkan). UU Cipta Kerja menghapus minimum Rp50 juta, tapi nominal tetap harus wajar dengan skala usaha.</p></div>
+    <div class="lg-note"><h4>Organ PT</h4><p><b>RUPS</b> (Rapat Umum Pemegang Saham) = pemegang kekuasaan tertinggi. <b>Direksi</b> = menjalankan perusahaan sehari-hari &amp; mewakili di luar. <b>Komisaris</b> = mengawasi Direksi. PT Perorangan lebih sederhana (1 orang merangkap pemilik &amp; pengurus).</p></div>
+
+    <h2 class="lg-h2">Ubah data &amp; membubarkan usaha</h2>
+    <div class="lg-note"><h4>Perubahan</h4><p>Perubahan alamat, bidang usaha (KBLI), modal, pengurus, atau nama diurus lewat OSS (data usaha) dan — untuk badan hukum — akta perubahan di notaris + persetujuan/pemberitahuan Kemenkumham.</p></div>
+    <div class="lg-note"><h4>Pembubaran / tutup usaha</h4><p>Usaha yang berhenti sebaiknya <b>ditutup resmi</b>: nonaktifkan NIB di OSS, dan untuk PT/CV lakukan pembubaran (RUPS/akta, likuidasi, pelunasan pajak) serta <b>penghapusan NPWP</b>. Kalau tidak, kewajiban lapor pajak &amp; sanksi bisa terus berjalan.</p></div>
   </section>
 
   <!-- NIB & OSS -->
@@ -268,9 +282,33 @@
     <div class="lg-note"><h4>Alur cepat untuk usaha makanan/minuman</h4><p>NIB (OSS) → <b>PIRT</b> (produk rumahan tahan lama) atau <b>BPOM MD</b> (skala pabrik) → <b>Sertifikat Halal</b> (untuk UMK ada jalur self-declare gratis) → untuk warung/resto tambah <b>Sertifikat Laik Sehat</b>. Selalu cek kewajiban yang muncul otomatis di akun OSS-mu.</p></div>
   </section>
 
+  <!-- MEREK & HAKI -->
+  <section class="lg-panel" data-lpanel="haki">
+    <p class="lg-intro">Kekayaan Intelektual (HAKI) melindungi aset tak-benda usahamu: <b>nama/logo brand, karya, penemuan, desain, &amp; rahasia dagang</b>. Yang paling penting untuk hampir semua usaha adalah <b>mendaftarkan merek</b> — supaya nama &amp; logomu tidak bisa diklaim atau ditiru orang lain.</p>
+    <div class="lg-note"><h4>Kenapa merek wajib didaftar lebih dulu?</h4><p>Indonesia menganut asas <b>"first to file"</b> — siapa yang mendaftar duluan, dialah pemilik sah merek itu. Banyak UMKM sukses lalu mereknya "dicuri" (didaftarkan orang lain) sehingga harus ganti nama atau berperkara. Daftarkan sejak dini, apalagi sebelum brand membesar.</p></div>
+    <div class="lg-grid" id="lgHaki"></div>
+    <div class="lg-cta"><a class="btn btn-ghost btn-sm" href="https://merek.dgip.go.id" target="_blank" rel="noopener nofollow">🔎 Cek & daftar merek (DJKI) ↗</a></div>
+  </section>
+
+  <!-- KARYAWAN & BPJS -->
+  <section class="lg-panel" data-lpanel="karyawan">
+    <p class="lg-intro">Saat mulai <b>mempekerjakan orang</b>, ada kewajiban tambahan: mendaftarkan <b>BPJS Ketenagakerjaan &amp; BPJS Kesehatan</b>, membuat <b>kontrak kerja</b>, membayar <b>minimal upah minimum &amp; THR</b>, serta lapor ketenagakerjaan. Ini melindungi karyawan sekaligus usahamu dari sengketa.</p>
+    <div class="lg-grid" id="lgKaryawan"></div>
+    <div class="lg-note"><h4>Hitung iuran BPJS</h4><p>Pakai <b>Simulasi → Iuran BPJS</b> untuk melihat berapa yang ditanggung perusahaan &amp; dipotong dari gaji karyawan.</p></div>
+  </section>
+
   <!-- PAJAK -->
   <section class="lg-panel" data-lpanel="pajak">
     <p class="lg-intro">Setelah punya NPWP (orang pribadi kini pakai <b>NIK</b>), kamu punya kewajiban pajak. Sistem pelaporan terbaru DJP adalah <b>Coretax</b> (berlaku sejak 1 Januari 2025). Kenali jenis pajak yang relevan dengan usahamu:</p>
+
+    <h2 class="lg-h2">NPWP &amp; akun pajak (langkah awal)</h2>
+    <ol class="lg-timeline">
+      <li><b>Pastikan punya NPWP</b><span>Orang pribadi: NIK sudah berfungsi sebagai NPWP (aktivasi di akun pajak). Badan (PT/CV): daftar NPWP badan setelah akta/NIB terbit.</span></li>
+      <li><b>Aktifkan akun Coretax / DJP Online</b><span>Buat/masuk akun di coretaxdjp.pajak.go.id (atau djponline.pajak.go.id). Butuh email &amp; nomor HP aktif.</span></li>
+      <li><b>Punya EFIN bila diminta</b><span>EFIN (Electronic Filing Identification Number) dipakai untuk aktivasi/registrasi akun pelaporan elektronik — ajukan sekali ke KPP/online.</span></li>
+      <li><b>Kukuhkan PKP bila wajib</b><span>Bila omzet > Rp4,8 M/tahun, ajukan pengukuhan PKP agar bisa membuat e-Faktur &amp; memungut PPN.</span></li>
+    </ol>
+
     <h2 class="lg-h2">Jenis &amp; tarif pajak usaha</h2>
     <div class="lg-grid" id="lgPajak"></div>
 
@@ -282,6 +320,24 @@
 
     <h2 class="lg-h2">Kapan wajib jadi PKP (memungut PPN)?</h2>
     <p class="lg-intro">Bila <b>omzet melebihi Rp4,8 miliar/tahun</b>, kamu <b>wajib</b> dikukuhkan sebagai <b>Pengusaha Kena Pajak (PKP)</b> dan memungut PPN dari pembeli (efektif <b>11%</b> untuk barang/jasa umum, 12% untuk barang mewah). Di bawah Rp4,8 M boleh <b>non-PKP</b> — harga jualmu bisa lebih kompetitif karena tanpa PPN.</p>
+
+    <h2 class="lg-h2">Cara bayar &amp; lapor pajak (ringkas)</h2>
+    <ol class="lg-timeline">
+      <li><b>Hitung pajak terutang</b><span>Mis. PPh Final UMKM = 0,5% × omzet bulan itu. Pakai tab <b>Simulasi</b> untuk memperkirakan.</span></li>
+      <li><b>Buat kode billing &amp; bayar</b><span>Buat ID Billing di Coretax/DJP Online, bayar lewat bank/e-wallet/kantor pos. Simpan bukti (BPN/NTPN).</span></li>
+      <li><b>Lapor SPT</b><span>SPT Masa (bulanan) &amp; SPT Tahunan (setahun) via Coretax. Bila nihil pun tetap lapor.</span></li>
+      <li><b>Arsipkan</b><span>Simpan bukti bayar &amp; lapor minimal beberapa tahun untuk keperluan pemeriksaan.</span></li>
+    </ol>
+
+    <h2 class="lg-h2">Bea Meterai &amp; e-Meterai</h2>
+    <p class="lg-intro">Tarif bea meterai kini <b>Rp10.000</b> (meterai Rp3.000 &amp; Rp6.000 sudah tidak berlaku). Dibutuhkan pada dokumen yang menyatakan nilai/perjanjian di atas <b>Rp5 juta</b> serta dokumen yang dipakai sebagai alat bukti (kontrak, surat pernyataan, kwitansi tertentu). Untuk dokumen digital gunakan <b>e-Meterai</b> resmi (e-meterai.co.id / POS). Menempel meterai tidak membuat dokumen "lebih sah", tapi memenuhi kewajiban bea meterai atas dokumen tersebut.</p>
+  </section>
+
+  <!-- PAJAK DAERAH -->
+  <section class="lg-panel" data-lpanel="daerah">
+    <p class="lg-intro">Selain pajak pusat (DJP), ada <b>pajak daerah</b> yang dipungut pemerintah kota/kabupaten (diatur <b>UU HKPD No. 1/2022</b>). Yang paling sering menyangkut usaha: <b>PBJT Makanan &amp; Minuman</b> (dulu "Pajak Restoran", sering tampil sebagai <b>PB1</b> di struk), <b>reklame</b> (papan nama/iklan), dan <b>PBB</b> (tanah &amp; bangunan). Tarif final ditetapkan Peraturan Daerah masing-masing — angka di bawah adalah <b>batas maksimal</b> menurut UU.</p>
+    <div id="lgPajakDaerah"></div>
+    <div class="lg-note"><h4>Penting untuk kuliner &amp; ritel</h4><p>Kalau kamu buka restoran/kafe, kemungkinan besar kena <b>PBJT Makanan &amp; Minuman</b> (mis. 10%) yang <b>dibebankan ke pelanggan</b> (tertera di struk), lalu kamu setor ke pemda. Ini berbeda dari PPN pusat. Cek Perda &amp; daftar di badan pendapatan daerah (Bapenda) kotamu.</p></div>
   </section>
 
   <!-- SIMULASI -->
@@ -292,6 +348,7 @@
       <button class="lg-simtab" data-smode="badan">PPh Badan (PT/CV) + 31E</button>
       <button class="lg-simtab" data-smode="ppn">PPN &amp; status PKP</button>
       <button class="lg-simtab" data-smode="pph21">PPh 21 (gaji)</button>
+      <button class="lg-simtab" data-smode="bpjs">Iuran BPJS (karyawan)</button>
     </div>
     <div class="lg-simcard">
       <div class="lg-simfields" id="lgSimFields"></div>
@@ -300,11 +357,20 @@
     <div class="lg-cta"><a class="btn btn-primary btn-sm" href="finansial.html">📊 Kalkulator keuangan lain</a><a class="btn btn-ghost btn-sm" href="blueprint.html">📝 Susun rencana bisnis (Blueprint)</a></div>
   </section>
 
+  <!-- INSENTIF & MODAL -->
+  <section class="lg-panel" data-lpanel="insentif">
+    <p class="lg-intro">Negara memberi banyak <b>kemudahan &amp; insentif</b> untuk UMKM — dari pembiayaan murah sampai keringanan pajak. Manfaatkan yang sesuai skala usahamu.</p>
+    <div class="lg-grid" id="lgInsentif"></div>
+    <div class="lg-note"><h4>Tips memakai KUR</h4><p>Siapkan: NIB &amp; legalitas usaha, rekening bank, catatan penjualan (bukti usaha berjalan ≥6 bulan), dan rencana penggunaan dana. Ajukan ke bank penyalur (BRI/Mandiri/BNI/BSI). Rencana keuangannya bisa kamu susun di <a class="fr-ext" href="blueprint.html" style="color:var(--accent-ink);font-weight:600">Business Blueprint</a> &amp; <a class="fr-ext" href="finansial.html" style="color:var(--accent-ink);font-weight:600">Finansial</a>.</p></div>
+  </section>
+
   <!-- KALENDER -->
   <section class="lg-panel" data-lpanel="kalender">
     <p class="lg-intro">Telat setor/lapor pajak bisa kena <b>denda &amp; bunga</b>. Simpan tanggal-tanggal ini. Bila jatuh tempo di hari libur, mundur ke hari kerja berikutnya.</p>
     <h2 class="lg-h2">Batas waktu setor &amp; lapor</h2>
     <div id="lgKalender"></div>
+    <h2 class="lg-h2">Sanksi &amp; denda bila lalai</h2>
+    <div id="lgSanksi"></div>
     <h2 class="lg-h2">Checklist kepatuhan usaha</h2>
     <ol class="lg-timeline">
       <li><b>Bulanan</b><span>Setor pajak yang terutang (mis. PPh Final 0,5% tgl 15), lapor SPT Masa bila ada (PPh 21/PPN).</span></li>
@@ -324,6 +390,8 @@
       <details><summary>Berapa tarif pajak untuk UMKM?</summary><p>UMKM dengan omzet ≤ Rp4,8 miliar/tahun bisa memakai PPh Final 0,5% dari omzet. Untuk orang pribadi, omzet Rp500 juta pertama/tahun bebas pajak, dan tarif 0,5% kini permanen (PP 20/2026). Badan usaha tidak dapat fasilitas bebas Rp500 juta dan hanya boleh memakai 0,5% untuk jangka waktu tertentu.</p></details>
       <details><summary>Kapan usaha wajib memungut PPN?</summary><p>Bila omzet melebihi Rp4,8 miliar/tahun, usaha wajib jadi Pengusaha Kena Pajak (PKP) dan memungut PPN (efektif 11% untuk barang/jasa umum). Di bawah itu boleh non-PKP.</p></details>
       <details><summary>Apa itu KBLI dan kenapa penting?</summary><p>KBLI adalah kode 5 digit jenis usaha yang dipakai saat mendaftar NIB. Kode ini menentukan tingkat risiko dan izin yang kamu butuhkan, jadi harus dipilih seakurat mungkin. Satu usaha bisa memakai lebih dari satu KBLI.</p></details>
+      <details><summary>Berapa biaya mendaftarkan merek usaha?</summary><p>Pendaftaran merek online di DJKI dikenakan biaya per kelas barang/jasa: UMK sekitar Rp500.000/kelas dan pemohon umum Rp2.800.000/kelas. Sertifikat merek berlaku 10 tahun dan bisa diperpanjang. Daftarkan lebih dini karena Indonesia menganut asas "first to file".</p></details>
+      <details><summary>Apa saja kewajiban saat mempekerjakan karyawan?</summary><p>Mendaftarkan karyawan ke BPJS Ketenagakerjaan (JKK, JKM, JHT, JP, JKP) dan BPJS Kesehatan (iuran 5%: 4% perusahaan + 1% karyawan), membuat kontrak kerja (PKWT/PKWTT), membayar minimal upah minimum (UMK) dan THR, serta lapor ketenagakerjaan (WLKP) tahunan.</p></details>
     </div>
   </section>
 

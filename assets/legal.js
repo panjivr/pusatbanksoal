@@ -90,6 +90,47 @@
     }).join('');
   }
 
+  /* ---------- MEREK & HAKI ---------- */
+  if ($('lgHaki') && window.LG_HAKI) {
+    $('lgHaki').innerHTML = LG_HAKI.map(function(h){
+      return '<div class="lg-card"><div class="lg-card-h"><span class="lg-emo">'+h.ikon+'</span><div><h3>'+esc(h.nama)+'</h3></div></div>'+
+        '<dl class="lg-kv">'+
+        '<div class="lg-row"><dt>Melindungi</dt><dd>'+esc(h.lindungi)+'</dd></div>'+
+        '<div class="lg-row"><dt>Masa berlaku</dt><dd>'+esc(h.masa)+'</dd></div>'+
+        '<div class="lg-row"><dt>Biaya</dt><dd>'+esc(h.biaya)+'</dd></div>'+
+        '<div class="lg-row"><dt>Daftar di</dt><dd>'+esc(h.dimana)+'</dd></div>'+
+        '</dl><p class="lg-taxket" style="margin-top:10px">'+esc(h.ket)+'</p></div>';
+    }).join('');
+  }
+
+  /* ---------- KARYAWAN & BPJS ---------- */
+  if ($('lgKaryawan') && window.LG_KARYAWAN) {
+    $('lgKaryawan').innerHTML = LG_KARYAWAN.map(function(k){
+      return '<div class="lg-card lg-izin"><div class="lg-card-h"><span class="lg-emo">'+k.ikon+'</span><div><h3>'+esc(k.nama)+'</h3><span class="lg-badge lg-need">'+esc(k.wajib)+'</span></div></div><p class="lg-taxket" style="margin-top:10px">'+k.ket+'</p></div>';
+    }).join('');
+  }
+
+  /* ---------- PAJAK DAERAH ---------- */
+  if ($('lgPajakDaerah') && window.LG_PAJAKDAERAH) {
+    $('lgPajakDaerah').innerHTML = '<div class="lg-tablewrap"><table class="lg-table"><thead><tr><th>Jenis pajak daerah</th><th>Tarif maksimal</th><th>Keterangan</th></tr></thead><tbody>'+
+      LG_PAJAKDAERAH.map(function(p){ return '<tr><td class="lg-th">'+esc(p.nama)+'</td><td>'+esc(p.tarif)+'</td><td>'+esc(p.ket)+'</td></tr>'; }).join('')+
+      '</tbody></table></div>';
+  }
+
+  /* ---------- INSENTIF & MODAL ---------- */
+  if ($('lgInsentif') && window.LG_INSENTIF) {
+    $('lgInsentif').innerHTML = LG_INSENTIF.map(function(i){
+      return '<div class="lg-card lg-tax"><div class="lg-tax-h"><h3>'+esc(i.nama)+'</h3><span class="lg-tarif">'+esc(i.tag)+'</span></div><p class="lg-taxket" style="margin-top:8px">'+i.ket+'</p></div>';
+    }).join('');
+  }
+
+  /* ---------- SANKSI ---------- */
+  if ($('lgSanksi') && window.LG_SANKSI) {
+    $('lgSanksi').innerHTML = '<div class="lg-tablewrap"><table class="lg-table"><thead><tr><th>Pelanggaran</th><th>Sanksi</th></tr></thead><tbody>'+
+      LG_SANKSI.map(function(s){ return '<tr><td class="lg-th">'+esc(s.hal)+'</td><td>'+esc(s.sanksi)+'</td></tr>'; }).join('')+
+      '</tbody></table></div>';
+  }
+
   /* ---------- WIZARD: badan usaha mana? ---------- */
   var WQ = [
     { q:'Berapa orang pendiri usahanya?', o:[['Sendiri (1 orang)','solo'],['Berdua atau lebih (partner)','tim']] },
@@ -133,6 +174,7 @@
     if (simMode==='badan') return f('sOmzet','Omzet setahun (Rp)',3000000000) + f('sLaba','Laba bersih / penghasilan kena pajak setahun (Rp)',400000000);
     if (simMode==='ppn') return f('sOmzet','Omzet setahun (Rp)',6000000000) + f('sHarga','Harga jual satu transaksi (Rp, opsional)',1000000);
     if (simMode==='pph21') return f('sGaji','Gaji / penghasilan per bulan (Rp)',8000000) + radio('sPtkp',[['Belum kawin (TK/0)','tk0'],['Kawin (K/0)','k0'],['Kawin 2 anak (K/2)','k2']],'tk0');
+    if (simMode==='bpjs') return f('sUpah','Upah / gaji karyawan per bulan (Rp)',5000000);
     return '';
   }
   function f(id,label,val){ return '<label class="lg-cinput"><span>'+label+'</span><input type="number" id="'+id+'" value="'+val+'" min="0" inputmode="numeric"></label>'; }
@@ -189,6 +231,21 @@
           orow('PPh 21 / tahun', rp(pph), true) +
           orow('Potongan / bulan (± )', rp(pph/12)) +
           '<div class="lg-cap">Estimasi metode tahunan disederhanakan (biaya jabatan 5% maks Rp6 jt, tarif progresif Pasal 17). Angka riil pakai TER bulanan & komponen lain (BPJS, dll).</div>';
+    } else if (simMode==='bpjs') {
+      var upah=num('sUpah');
+      var jpCap=Math.min(upah,10547400), kesCap=Math.min(upah,12000000);
+      // employer
+      var e_jkk=upah*0.0024, e_jkm=upah*0.003, e_jht=upah*0.037, e_jp=jpCap*0.02, e_kes=kesCap*0.04;
+      // employee
+      var w_jht=upah*0.02, w_jp=jpCap*0.01, w_kes=kesCap*0.01;
+      var totEmp=e_jkk+e_jkm+e_jht+e_jp+e_kes, totWrk=w_jht+w_jp+w_kes;
+      h = orow('Ditanggung PERUSAHAAN', rp(totEmp), true) +
+          '<div class="lg-cap">JKK 0,24% + JKM 0,3% + JHT 3,7% + JP 2% + Kesehatan 4%. (JKK bervariasi 0,24%–1,74% sesuai risiko usaha.)</div>' +
+          orow('Dipotong dari GAJI karyawan', rp(totWrk), true) +
+          '<div class="lg-cap">JHT 2% + JP 1% + Kesehatan 1%.</div>' +
+          orow('Total iuran / bulan', rp(totEmp+totWrk)) +
+          orow('Gaji bersih diterima karyawan (± )', rp(upah-totWrk)) +
+          '<div class="lg-cap">Estimasi memakai tarif umum. Batas upah JP ± Rp10,55 jt & Kesehatan Rp12 jt. Termasuk JKP bila berlaku.</div>';
     }
     out.innerHTML = h;
   }
