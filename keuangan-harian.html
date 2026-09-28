@@ -159,7 +159,7 @@
 <section><div class="wrap">
   <div class="kh-grid">
     <!-- FORM -->
-    <div class="kh-box">
+    <div class="kh-box" data-screen="tambah">
       <h2 id="khFormTitle">➕ Tambah transaksi</h2>
       <form id="khForm" autocomplete="off">
         <div class="kh-tipe">
@@ -182,7 +182,7 @@
     </div>
 
     <!-- RINGKASAN PERIODE -->
-    <div class="kh-box">
+    <div class="kh-box" data-screen="ringkasan">
       <h2>📊 Ringkasan &amp; statistik</h2>
       <div class="kh-periodbar" id="khPeriod">
         <button type="button" class="kh-pbtn" data-period="today">Hari ini</button>
@@ -207,7 +207,7 @@
   </div>
 
   <!-- ANGGARAN -->
-  <div class="kh-box kh-full">
+  <div class="kh-box kh-full" data-screen="kelola">
     <h2>🎯 Anggaran bulanan per kategori</h2>
     <p style="font-size:12.5px;color:var(--muted);margin:-6px 0 12px;line-height:1.6">Tetapkan batas pengeluaran per kategori tiap bulan. Bar akan berubah merah bila mendekati/melebihi batas.</p>
     <div class="kh-budget-add">
@@ -218,7 +218,7 @@
     <div id="khBudget"></div>
   </div>
 
-  <div class="kh-grid">
+  <div class="kh-grid" data-screen="kelola">
     <!-- TRANSAKSI BERULANG -->
     <div class="kh-box">
       <h2>🔁 Transaksi berulang</h2>
@@ -252,7 +252,7 @@
   </div>
 
   <!-- JURNAL -->
-  <div class="kh-box kh-full">
+  <div class="kh-box kh-full" data-screen="riwayat">
     <h2>📒 Riwayat transaksi</h2>
     <div class="kh-filters">
       <input type="search" class="kh-in-el" id="khSearch" placeholder="Cari catatan / kategori…">
@@ -262,7 +262,7 @@
     <div id="khList"></div>
   </div>
 
-  <div class="kh-actions">
+  <div class="kh-actions" data-screen="kelola">
     <button type="button" class="btn btn-primary btn-sm" data-act="xlsx">📊 Ekspor Excel (.xlsx)</button>
     <button type="button" class="btn btn-ghost btn-sm" data-act="csv">⬇️ Ekspor CSV</button>
     <button type="button" class="btn btn-ghost btn-sm" data-act="json">💾 Cadangkan (JSON)</button>
@@ -272,7 +272,7 @@
     <input type="file" id="khFile" accept="application/json,.json" style="display:none">
   </div>
 
-  <div class="kh-note">🔒 <b>Privasi:</b> semua catatan hanya tersimpan di browser perangkat ini (localStorage) — tidak dikirim ke server mana pun &amp; tidak bisa kami lihat. Bersihkan data browser = catatan hilang, jadi <b>cadangkan (JSON)</b> secara berkala. Butuh alat hitung lain? Lihat <a href="finansial.html" style="color:var(--accent-ink);font-weight:600">Finansial</a>.</div>
+  <div class="kh-note" data-screen="kelola">🔒 <b>Privasi:</b> semua catatan hanya tersimpan di browser perangkat ini (localStorage) — tidak dikirim ke server mana pun &amp; tidak bisa kami lihat. Bersihkan data browser = catatan hilang, jadi <b>cadangkan (JSON)</b> secara berkala. Butuh alat hitung lain? Lihat <a href="finansial.html" style="color:var(--accent-ink);font-weight:600">Finansial</a>.</div>
 </div></section>
 </main>
 

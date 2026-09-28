@@ -710,3 +710,16 @@ body.mnav-lock{overflow:hidden}
   #khSaved,#bpSaved{bottom:74px}
 }
 @media print{.mnav,.mnav-back,.mnav-sheet{display:none !important}}
+
+/* raised primary (+) tab in bottom nav */
+@media(max-width:640px){
+  .mnav-primary .mnav-ic{width:46px;height:46px;margin-top:-20px;margin-bottom:1px;border-radius:50%;background:var(--primary);color:#fff;display:grid;place-items:center;font-size:26px;font-weight:700;box-shadow:0 8px 18px -5px var(--primary);border:3px solid var(--card)}
+  .mnav-primary{color:var(--accent-ink)}
+  .mnav-primary.on .mnav-ic{transform:none}
+  /* app-screen switching (used by feature pages, e.g. Catatan Keuangan) */
+  body[data-kh-screen] [data-screen]{display:none}
+  body[data-kh-screen="ringkasan"] [data-screen~="ringkasan"],
+  body[data-kh-screen="tambah"] [data-screen~="tambah"],
+  body[data-kh-screen="riwayat"] [data-screen~="riwayat"],
+  body[data-kh-screen="kelola"] [data-screen~="kelola"]{display:block}
+}

@@ -470,9 +470,24 @@
     w.document.close(); setTimeout(function () { w.print(); }, 300);
   }
 
+  /* ---------- app-mode bottom nav (mobile) ---------- */
+  function showScreen(s) { document.body.setAttribute('data-kh-screen', s); try { window.scrollTo({ top: 0, behavior: 'smooth' }); } catch (e) { window.scrollTo(0, 0); } }
+  function installAppNav() {
+    if (!(window.PBSNav && window.PBSNav.setTabs)) return;
+    window.PBSNav.setTabs([
+      { ic: '📊', lb: 'Ringkasan', act: function () { showScreen('ringkasan'); } },
+      { ic: '📒', lb: 'Riwayat', act: function () { showScreen('riwayat'); } },
+      { ic: '+', lb: 'Tambah', primary: true, act: function () { showScreen('tambah'); var j = $('khJumlah'); if (j) setTimeout(function () { j.focus(); }, 300); } },
+      { ic: '🎯', lb: 'Kelola', act: function () { showScreen('kelola'); } },
+      window.PBSNav.menuTab
+    ], 0);
+    showScreen('ringkasan');
+  }
+
   /* ---------- boot ---------- */
   fillStatic(); setTipe('out');
   if ($('khRecMulai')) $('khRecMulai').value = isoToday();
   applyRecurring();
   renderAll();
+  installAppNav();
 })();
