@@ -387,9 +387,181 @@
   if ($('ktCity')) $('ktCity').addEventListener('change', renderMatch);
   ['ktPick', 'ktPrice', 'ktSeg'].forEach(function (id) { if ($(id)) $(id).addEventListener('change', renderMatch); if ($(id)) $(id).addEventListener('input', renderMatch); });
 
+  /* ========== IDEA DETAIL: playbook, RAB & BEP ========== */
+  function rpFull(n){ n=Math.round(n||0); return 'Rp'+(''+n).replace(/\B(?=(\d{3})+(?!\d))/g,'.'); }
+  function rpShortN(n){ n=n||0; if(n>=1e9) return 'Rp'+(n/1e9).toFixed((n%1e9)?1:0).replace('.',',')+' M'; if(n>=1e6) return 'Rp'+Math.round(n/1e6)+' jt'; if(n>=1e3) return 'Rp'+Math.round(n/1e3)+' rb'; return 'Rp'+Math.round(n); }
+  function unitMul(u){ u=(u||'').toLowerCase(); if(/mili/.test(u)||u==='m') return 1e9; if(/jt|juta/.test(u)) return 1e6; if(/rb|ribu/.test(u)) return 1e3; return 1; }
+  function parseModal(str){
+    str=(''+str).toLowerCase().replace(/rp/g,'').replace(/\/.*$/,'');
+    var parts=str.split(/[–—-]/);
+    function seg(s,sib){ s=(s||'').trim(); if(!s) return null; if(/mili/.test(s)&&!/\d/.test(s)) return 2e9;
+      var m=s.match(/([\d.,]+)\s*(miliar|jt|juta|m|rb|ribu)?/); if(!m) return null;
+      var num=parseFloat(m[1].replace(/\./g,'').replace(',','.')); var u=m[2]||'';
+      if(!u&&sib){ var sm=sib.match(/(miliar|jt|juta|m|rb|ribu)/); if(sm) u=sm[1]; }
+      return num*unitMul(u); }
+    var a=seg(parts[0],parts[1]), b=parts.length>1?seg(parts[1],parts[0]):a;
+    if(a==null) a=b; if(b==null) b=a; if(a==null) return {min:5e6,max:20e6};
+    return {min:Math.min(a,b), max:Math.max(a,b)};
+  }
+  function catOf(n){ n=(''+n).toLowerCase();
+    if(/kos|kontrak|villa|homestay|coworking|co-?living|capsule|kapsul|hotel|hunian|properti|ruang kerja/.test(n)) return 'properti';
+    if(/game|arcade|capit|claw|board ?game|escape|trampoline|karaoke|pc bang|padel|court|playground/.test(n)) return 'hiburan';
+    if(/motor|mobil|bengkel|steam|detailing|otomotif|kendaraan|charging|battery|\bev\b/.test(n)) return 'otomotif';
+    if(/ternak|tani|lele|budidaya|hidroponik|aquascape|kebun|ikan hias/.test(n)) return 'agri';
+    if(/kopi|coffee|makan|resto|kue|kater|frozen|ayam|roti|bakery|bake|dessert|matcha|boba|bubble|\btea\b|\bteh\b|ramen|bbq|kebab|shawarma|dim ?sum|es krim|bingsu|takoyaki|sourdough|croffle|poke|bowl|gelato|yogurt|donut|mochi|juice|smooth|waffle|taiyaki|bagel|sandwich|minuman|snack|noodle|grill|acai|bak kut|sambal|nasi|\bmie\b|jajan|camilan|dapur|kitchen|meal|catering/.test(n)) return 'kuliner';
+    if(/laundry|laundromat|cuci|setrika|jasa|service|servis|desain|design|edit|admin|grooming|nail|lash|pilates|fitness|foto|photo|print|cleaning|potong|pijat|\bles\b|kursus|salon|barber|studio|reformer|roast|sepatu/.test(n)) return 'jasa';
+    if(/toko|jual|dropship|reseller|thrift|preloved|vintage|curah|refill|isi ulang|sembako|jastip|merch|vending|curated|store|ritel|depot air|galon|\bgas\b|pom mini/.test(n)) return 'ritel';
+    return 'umum';
+  }
+  var TPL = {
+    kuliner:{ic:'🍽️',model:'Jual porsi/menu — laba dari selisih harga jual dikurangi HPP bahan (food cost).',
+      rab:[['Peralatan masak & etalase/booth',35],['Bahan baku awal (stok)',18],['Sewa tempat & deposit',20],['Perizinan (NIB, PIRT/Halal)',5],['Branding, menu & promosi awal',10],['Dana darurat (±1 bln operasional)',12]],
+      steps:['Pilih 1 menu signature & tentukan target pasar (kampus/kantor/perumahan).','Uji resep ke 10–20 orang, kunci rasa & ukuran porsi.','Hitung HPP per porsi, tetapkan harga (jaga food cost ≤ 40%).','Siapkan tempat/booth + urus NIB (dan PIRT bila produk kemasan).','Buat foto menu menarik + daftar GoFood/GrabFood/Instagram.','Soft-launch + promo perkenalan, minta review, perbaiki, lalu perbanyak.'],
+      chk:['NIB via OSS (gratis, online) + PIRT/Halal bila kemasan','Lokasi dekat keramaian target (kampus/kantor/perumahan padat)','Konsistensi rasa + kebersihan & food safety','Foto menu + akun GoFood/GrabFood/Instagram'],
+      harga:20000,cost:0.5,target:30,per:30,sat:'porsi',fixed:0.12,
+      risk:'Bahan cepat rusak & harganya fluktuatif; rasa bisa tak konsisten; kompetisi padat.',
+      tip:'Kunci 1 signature yang konsisten, kelola stok agar minim terbuang, dan bangun langganan (paket/pre-order).'},
+    jasa:{ic:'🧰',model:'Jual jasa/keahlian — margin tinggi karena biaya utama adalah waktu & skill.',
+      rab:[['Alat & perlengkapan utama',40],['Bahan habis pakai awal',13],['Tempat/booth & deposit (atau home-service)',15],['Perizinan (NIB)',4],['Branding & marketing awal',15],['Dana darurat',13]],
+      steps:['Tentukan layanan inti & siapa yang paling butuh (target market).','Asah skill sampai rapi; buat portofolio before-after.','Tetapkan paket harga (per jam/proyek) berdasar nilai, bukan sekadar biaya.','Siapkan alat + kanal booking (WA/Instagram) & lokasi/home-service.','Kumpulkan 3–5 klien pertama (diskon perkenalan) untuk testimoni.','Naikkan harga & kapasitas seiring reputasi; tawarkan langganan.'],
+      chk:['NIB via OSS bila sudah rutin','Mudah dijangkau atau layani panggilan (home-service)','Skill inti terasah + portofolio before-after','Sistem booking (WA/IG) + kumpulkan testimoni'],
+      harga:60000,cost:0.3,target:6,per:30,sat:'order',fixed:0.1,
+      risk:'Sangat bergantung pada tenaga/waktu; sulit di-scale tanpa menambah orang; reputasi mudah jatuh bila hasil buruk.',
+      tip:'Naikkan tarif lewat spesialisasi & portofolio, lalu rekrut/latih tim agar bisa melayani lebih banyak klien.'},
+    ritel:{ic:'🛍️',model:'Jual barang — laba dari selisih harga beli (kulakan) dan harga jual; kunci di stok & perputaran.',
+      rab:[['Stok barang awal',45],['Etalase, rak & kemasan',15],['Sewa & deposit (atau toko online)',15],['Perizinan (NIB)',5],['Foto produk & iklan awal',10],['Dana darurat',10]],
+      steps:['Pilih niche produk & pahami siapa pembelinya.','Cari supplier terbaik (harga, kualitas, kecepatan) — bandingkan beberapa.','Hitung margin per produk & tetapkan harga kompetitif.','Buka toko: marketplace (Shopee/Tokopedia/TikTok Shop) dan/atau fisik.','Foto produk menarik + iklan/konten untuk menarik pembeli pertama.','Jaga perputaran stok (hindari dead stock) & tambah varian laris.'],
+      chk:['NIB via OSS','Etalase online (marketplace) atau toko fisik strategis','Kuasai sourcing supplier & manajemen stok','Foto produk + toko Shopee/Tokopedia/TikTok Shop'],
+      harga:75000,cost:0.7,target:12,per:30,sat:'produk',fixed:0.1,
+      risk:'Dead stock (barang tak laku) mengunci modal; perang harga; tren cepat berubah.',
+      tip:'Mulai stok kecil & cepat putar; gandakan yang laris, hentikan yang lambat. Manfaatkan pre-order untuk barang mahal.'},
+    properti:{ic:'🏠',model:'Sewakan ruang/hunian — pendapatan berulang bulanan + nilai aset yang naik.',
+      rab:[['Renovasi & furnitur',48],['Deposit/sewa awal & legal',22],['Perlengkapan & utilitas',12],['Perizinan (PBG/IMB, NIB)',6],['Dana darurat',12]],
+      steps:['Tentukan segmen (mahasiswa/pekerja/wisatawan) & lokasi yang tepat.','Hitung yield: (sewa setahun ÷ total modal) — target ≥ 8%/th.','Siapkan unit: renovasi, furnitur, utilitas, & foto yang bagus.','Urus legal & izin (akad sewa, PBG/IMB, NIB, pajak).','Pasang listing (Mamikos/OLX/Airbnb) + kelola review & okupansi.','Tambah layanan (wifi, laundry, kebersihan) untuk tarif premium.'],
+      chk:['Cek izin bangunan (PBG/IMB) & NIB + pahami pajak sewa','Lokasi dekat kampus/kawasan industri/wisata','Pahami akad sewa & manajemen penyewa','Listing di Mamikos/OLX/Airbnb + jaga review'],
+      harga:1200000,cost:0.15,target:8,per:1,sat:'unit/bln',fixed:0.05,
+      risk:'Modal besar & tidak likuid; okupansi bisa rendah; tunggakan penyewa; perawatan bangunan.',
+      tip:'Mulai dari 2–3 unit, kuasai listing & pelayanan agar okupansi tinggi, baru tambah unit dari arus kas.'},
+    hiburan:{ic:'🎮',model:'Jual pengalaman/waktu bermain — pendapatan dari tiket/jam + F&B, sekali beli alat cuan berulang.',
+      rab:[['Mesin/alat utama',50],['Interior, set & dekorasi',18],['Sewa & deposit',15],['Perizinan (NIB, izin tempat)',5],['Dana darurat',12]],
+      steps:['Pilih konsep & target (keluarga/anak muda/komunitas).','Survei lokasi ramai (mal/dekat sekolah-kampus) & hitung sewa.','Siapkan alat/mesin + set yang instagramable & sistem pembayaran.','Urus izin usaha & keselamatan pengunjung.','Bangun komunitas: event, turnamen, membership untuk repeat.','Tambah F&B/merch sebagai pendapatan kedua.'],
+      chk:['NIB + izin usaha tempat/hiburan','Lokasi mal/keramaian/dekat sekolah-kampus','Perawatan mesin rutin + sistem pembayaran andal','Komunitas + event untuk repeat order'],
+      harga:25000,cost:0.3,target:40,per:30,sat:'tiket/main',fixed:0.12,
+      risk:'Modal alat besar & bisa cepat usang; tren bisa jenuh; butuh keramaian konsisten.',
+      tip:'Bangun komunitas & acara rutin agar orang balik lagi; kombinasikan dengan F&B untuk margin tambahan.'},
+    otomotif:{ic:'🚗',model:'Jual jasa perawatan kendaraan — pasar besar & kebutuhan rutin; margin dari jasa & bahan.',
+      rab:[['Alat utama (kompresor/hidrolik/poles)',42],['Bahan awal (sabun, coating, dll)',13],['Sewa lahan & deposit',18],['Perizinan (NIB)',5],['Branding & promosi',10],['Dana darurat',12]],
+      steps:['Pilih fokus (cuci/steam, poles, coating) & target kendaraan.','Kuasai teknik & K3; siapkan alat + sumber air/listrik.','Tetapkan paket harga (reguler & premium/coating).','Lahan dekat jalan ramai + urus NIB.','Kartu langganan + promosi lokal untuk repeat.','Tambah layanan bernilai tinggi (coating/detailing) untuk margin.'],
+      chk:['NIB via OSS','Lahan dekat jalan ramai + akses air & listrik','Teknik (steam/poles/coating) & keselamatan kerja','Kartu langganan + promosi area sekitar'],
+      harga:35000,cost:0.35,target:15,per:30,sat:'kendaraan',fixed:0.1,
+      risk:'Bergantung cuaca & tenaga kerja; alat perlu perawatan; kompetisi harga.',
+      tip:'Naik kelas ke layanan premium (coating/detailing) untuk ticket & margin jauh lebih besar.'},
+    agri:{ic:'🌱',model:'Budidaya/panen — laba dari selisih biaya produksi & harga jual; siklus musiman.',
+      rab:[['Bibit/benih & indukan',28],['Kandang/kolam/media & instalasi',35],['Pakan/nutrisi awal',18],['Perizinan & administrasi',4],['Dana darurat',15]],
+      steps:['Pilih komoditas sesuai lahan, iklim & permintaan pasar.','Amankan calon pembeli (pengepul/pasar/resto) sejak awal.','Siapkan lahan/kolam/kandang + sumber air.','Kuasai teknik budidaya & pencegahan penyakit.','Jalankan siklus pertama skala kecil, catat biaya & hasil.','Scale bertahap dari keuntungan; efisienkan pakan/nutrisi.'],
+      chk:['NIB bila skala usaha; ikuti anjuran dinas terkait','Lahan/kolam sesuai komoditas + sumber air memadai','Teknik budidaya & pengendalian hama/penyakit','Pembeli (pengepul/pasar/resto) diamankan sejak awal'],
+      harga:20000,cost:0.55,target:400,per:1,sat:'ekor/kg per panen',fixed:0.08,
+      risk:'Gagal panen/penyakit; harga jual fluktuatif; siklus & cuaca.',
+      tip:'Amankan pembeli sebelum tanam/tebar, mulai skala kecil, lalu perbesar dari untung.'},
+    umum:{ic:'💡',model:'Jual produk/jasa — laba dari selisih harga jual dan biaya per unit.',
+      rab:[['Alat & perlengkapan',38],['Stok/bahan awal',20],['Sewa & deposit',15],['Perizinan (NIB)',5],['Marketing awal',10],['Dana darurat',12]],
+      steps:['Tentukan produk/jasa & target pasar yang spesifik.','Validasi ke calon pembeli sebelum modal besar.','Hitung biaya per unit & tetapkan harga (margin sehat).','Siapkan alat/stok + kanal jualan (online/offline) + NIB.','Cari pelanggan pertama & kumpulkan testimoni.','Evaluasi angka (BEP/ROI), perbaiki, lalu scale.'],
+      chk:['NIB via OSS (gratis, online)','Kanal/lokasi dekat target pasar','Skill/kualitas inti terjaga','Branding + kanal jualan online'],
+      harga:30000,cost:0.5,target:15,per:30,sat:'unit',fixed:0.1,
+      risk:'Permintaan belum tentu ada; kompetisi; salah hitung harga bisa rugi.',
+      tip:'Validasi dulu ke pasar kecil sebelum modal besar; ukur BEP/ROI sebelum ekspansi.'}
+  };
+  function gq(s){ return 'https://www.google.com/search?q=' + encodeURIComponent(s); }
+  function exLinks(nm){ return '<div class="fr-links">' +
+    '<a class="fr-xl" target="_blank" rel="noopener nofollow" href="' + gq(nm + ' indonesia site:instagram.com') + '">📷 Contoh di Instagram</a>' +
+    '<a class="fr-xl" target="_blank" rel="noopener nofollow" href="' + gq(nm + ' usaha indonesia') + '">🔎 Cari di Google</a>' +
+    '<a class="fr-xl" target="_blank" rel="noopener nofollow" href="https://www.google.com/maps/search/' + encodeURIComponent(nm) + '">📍 Terdekat (Maps)</a>' +
+    '</div>'; }
+  function getIdea(ref){ var p=ref.split(':'); if(p[0]==='boring') return {o:FR_BORING[+p[1]],k:'boring'}; if(p[0]==='luar') return {o:FR_LUAR[+p[1]],k:'luar'}; if(p[0]==='ide'&&FR_IDE[p[1]]) return {o:FR_IDE[p[1]].items[+p[2]],k:'ide'}; return null; }
+
+  function ideaModal(){ var m=document.getElementById('frIdeaModal');
+    if(!m){ m=document.createElement('div'); m.id='frIdeaModal'; m.className='fr-imodal';
+      m.innerHTML='<div class="fr-imodal-bg" data-iclose></div><div class="fr-imodal-card" id="frIdeaCard" role="dialog" aria-modal="true" aria-label="Detail ide bisnis"></div>';
+      document.body.appendChild(m);
+      m.querySelector('[data-iclose]').addEventListener('click', closeIdea);
+      document.addEventListener('keydown', function(e){ if(e.key==='Escape') closeIdea(); });
+    } return m; }
+  function closeIdea(){ var m=document.getElementById('frIdeaModal'); if(m){ m.classList.remove('on'); document.body.classList.remove('fr-noscroll'); } }
+
+  function openIdea(ref){
+    var g=getIdea(ref); if(!g||!g.o) return; var o=g.o, cat=catOf(o.nama), t=TPL[cat]||TPL.umum;
+    var mm=parseModal(o.modal); var mid=Math.round((mm.min+mm.max)/2)||mm.max||10e6;
+    var desc=o.why||o.catatan||''; var risk=o.risiko||t.risk; var tip=o.tips||t.tip;
+    var asal=g.k==='luar'?('Adaptasi dari '+esc(o.asal)):(g.k==='boring'?'Boring business (repeat order tinggi)':'Ide bisnis non-franchise');
+    var H=[];
+    H.push('<div class="fr-imodal-head"><div><span class="fr-ic-lg">'+t.ic+'</span><h2>'+esc(o.nama)+'</h2><div class="sub">'+asal+' · <b>'+esc(TPL[cat]?cat:'umum')+'</b></div></div><button class="fr-dclose" data-iclose>Tutup ✕</button></div>');
+    // badges
+    H.push('<div class="fr-dgrid">'+
+      '<div class="fr-dbox on"><span>Modal awal (est.)</span><b>'+esc(o.modal)+'</b></div>'+
+      '<div class="fr-dbox"><span>Margin (est.)</span><b>'+esc(o.margin)+'</b></div>'+
+      (o.repeat?'<div class="fr-dbox"><span>Repeat order</span><b>'+esc(o.repeat)+'</b></div>':'')+
+      '</div>');
+    // what & why
+    H.push('<div class="fr-lbox" style="margin-top:14px"><h5>Apa ini & kenapa bisa cuan</h5><p class="fr-ptext">'+esc(desc)+'</p><p class="fr-ptext" style="margin-top:8px"><b>Model bisnis:</b> '+esc(t.model)+'</p>'+(o.contoh&&o.contoh.length?'<div style="margin-top:8px;display:flex;flex-wrap:wrap;gap:6px">'+o.contoh.map(function(c){return '<span class="tag" style="margin:0">'+esc(c)+'</span>';}).join('')+'</div>':'')+(o.contohID?'<p class="fr-ptext" style="margin-top:8px"><b style="color:var(--accent-ink)">Sudah di Indonesia:</b> '+esc(o.contohID)+'</p>':'')+'</div>');
+    // ilmu (course link)
+    H.push('<div class="fr-lbox fr-ilmu" style="margin-top:12px"><h5>📚 Ilmu di baliknya</h5><p class="fr-ptext">Pakai kerangka dari <a class="fr-ext" href="kelas.html">Kelas Bisnis dari Nol</a>: tentukan <b>target market</b> (segmentasi), rumuskan <b>USP</b> (keunggulan unik), hitung <b>unit economics &amp; BEP</b>, lalu susun <b>marketing funnel</b>. Rapikan semuanya jadi rencana lengkap di <a class="fr-ext" href="blueprint.html">Business Blueprint</a>.</p></div>');
+    // playbook
+    H.push('<div class="fr-lbox" style="margin-top:12px"><h5>🚀 Langkah memulai</h5><ol class="fr-steps">'+t.steps.map(function(s){return '<li>'+esc(s)+'</li>';}).join('')+'</ol></div>');
+    // RAB
+    var rabRows=t.rab.map(function(r){ var amt=Math.round(mid*r[1]/100); return '<tr><td>'+esc(r[0])+'</td><td class="num">'+r[1]+'%</td><td class="num">'+rpFull(amt)+'</td></tr>'; }).join('');
+    H.push('<div class="fr-lbox" style="margin-top:12px"><h5>💰 Contoh RAB (Rencana Anggaran Biaya)</h5><p class="fr-cap" style="margin:0 0 8px">Alokasi contoh dari modal tengah <b>'+rpShortN(mid)+'</b> (rentang '+esc(o.modal)+'). Sesuaikan dengan skala &amp; kotamu.</p><div class="fr-tablewrap"><table class="fr-rab"><thead><tr><th>Komponen</th><th class="num">%</th><th class="num">Contoh (Rp)</th></tr></thead><tbody>'+rabRows+'<tr class="tot"><td>Total modal awal (contoh)</td><td class="num">100%</td><td class="num">'+rpFull(mid)+'</td></tr></tbody></table></div></div>');
+    // BEP calculator
+    var hInit=t.harga, cInit=Math.round(t.harga*t.cost), tgtInit=t.target, fxInit=Math.round(mid*t.fixed), perLbl=t.per===30?'hari':'bulan';
+    H.push('<div class="fr-lbox fr-calc" style="margin-top:12px"><h5>🧮 Kalkulator BEP &amp; ROI (ubah angkanya)</h5><div class="fr-calcgrid">'+
+      calcInput('ciModal','Modal awal (Rp)',mid)+
+      calcInput('ciHarga','Harga jual / '+t.sat+' (Rp)',hInit)+
+      calcInput('ciCost','Biaya / '+t.sat+' (Rp)',cInit)+
+      calcInput('ciTarget','Penjualan / '+perLbl+' ('+t.sat+')',tgtInit)+
+      calcInput('ciFixed','Biaya tetap / bulan (Rp)',fxInit)+
+      '</div><div class="fr-calcout" id="frCalcOut"></div>'+
+      '<p class="fr-cap" style="margin-top:8px">Biaya tetap = sewa + gaji + listrik/air + internet dll per bulan. BEP = kondisi tidak untung tidak rugi.</p></div>');
+    // risk / checklist / tips
+    H.push('<div class="fr-cols" style="margin-top:12px">'+
+      '<div class="fr-lbox"><h5>⚠️ Risiko &amp; mitigasi</h5><p class="fr-ptext">'+esc(risk)+'</p><p class="fr-ptext" style="margin-top:8px"><b style="color:var(--up)">Mitigasi/Tips:</b> '+esc(tip)+'</p></div>'+
+      '<div class="fr-lbox"><h5>✅ Checklist persiapan</h5><ul class="fr-chk">'+t.chk.map(function(c){return '<li>'+esc(c)+'</li>';}).join('')+'</ul></div>'+
+      '</div>');
+    // examples + CTA
+    H.push('<div class="fr-lbox" style="margin-top:12px"><h5>👀 Lihat contoh nyata</h5>'+exLinks(o.nama)+'</div>');
+    H.push('<div class="fr-imodal-cta"><a class="btn btn-primary btn-sm" href="blueprint.html">📝 Susun rencana lengkap (Business Blueprint)</a><a class="btn btn-ghost btn-sm" href="kelas.html">🎓 Pelajari ilmunya</a></div>');
+    H.push('<p class="fr-cap" style="margin-top:10px;font-size:11.5px">Semua angka RAB &amp; kalkulator adalah <b>estimasi/contoh</b> untuk memandu — sesuaikan dengan harga &amp; kondisi kotamu, dan verifikasi sebelum eksekusi.</p>');
+
+    var m=ideaModal(); var card=document.getElementById('frIdeaCard');
+    card.innerHTML=H.join(''); card.scrollTop=0;
+    m.classList.add('on'); document.body.classList.add('fr-noscroll');
+    Array.prototype.forEach.call(card.querySelectorAll('[data-iclose]'), function(b){ b.addEventListener('click', closeIdea); });
+    var per=t.per; function num(id){ var v=parseFloat((document.getElementById(id)||{}).value); return isNaN(v)?0:v; }
+    function recalc(){
+      var modal=num('ciModal'), harga=num('ciHarga'), cost=num('ciCost'), tgt=num('ciTarget'), fixed=num('ciFixed');
+      var labaUnit=harga-cost;
+      var omzetBln=harga*tgt*per, labaKotorBln=labaUnit*tgt*per, labaBersih=labaKotorBln-fixed;
+      var bepUnit=labaUnit>0?Math.ceil(fixed/labaUnit):0;
+      var balik=labaBersih>0?(modal/labaBersih):0;
+      var roi=modal>0?(labaBersih*12/modal*100):0;
+      var pos=labaBersih>=0;
+      document.getElementById('frCalcOut').innerHTML=
+        row('Laba kotor / '+t.sat, rpFull(labaUnit)) +
+        row('Omzet / bulan', rpFull(omzetBln)) +
+        row('Laba bersih / bulan', '<b style="color:var(--'+(pos?'up':'down')+')">'+rpFull(labaBersih)+'</b>') +
+        row('BEP (agar tutup biaya tetap)', (labaUnit>0? (bepUnit+' '+t.sat+' / bulan') : '—')) +
+        row('Balik modal', (labaBersih>0? (balik<1?'< 1 bulan':(Math.round(balik*10)/10)+' bulan') : 'belum balik')) +
+        row('Estimasi ROI / tahun', '<b style="color:var(--'+(roi>=0?'primary':'down')+')">'+(Math.round(roi))+'%</b>');
+    }
+    function row(k,v){ return '<div class="fr-orow"><span>'+k+'</span><b>'+v+'</b></div>'; }
+    ['ciModal','ciHarga','ciCost','ciTarget','ciFixed'].forEach(function(id){ var el=document.getElementById(id); if(el){ el.addEventListener('input',recalc); } });
+    recalc();
+  }
+  function calcInput(id,label,val){ return '<label class="fr-cinput"><span>'+label+'</span><input type="number" id="'+id+'" value="'+val+'" min="0" inputmode="numeric"></label>'; }
+
+  document.addEventListener('click', function(e){ var b=e.target.closest('[data-idea]'); if(b){ e.preventDefault(); openIdea(b.getAttribute('data-idea')); } });
+
   /* ---------- BORING ---------- */
   (function () {
-    $('boringList').innerHTML = FR_BORING.map(function (b) {
+    $('boringList').innerHTML = FR_BORING.map(function (b, i) {
       return '<div class="fr-item"><div class="nm">' + esc(b.nama) + '</div>' +
         '<span class="tag">Repeat order: ' + esc(b.repeat) + '</span>' +
         '<p>' + esc(b.why) + '</p>' +
@@ -397,6 +569,7 @@
         '<div class="kv"><span>Margin</span><b>' + esc(b.margin) + '</b></div>' +
         '<ul><li><b style="color:var(--down)">Risiko:</b> ' + esc(b.risiko) + '</li>' +
         '<li><b style="color:var(--up)">Tips:</b> ' + esc(b.tips) + '</li></ul>' +
+        '<button class="fr-more" data-idea="boring:' + i + '">Detail, RAB &amp; kalkulator →</button>' +
         '</div>';
     }).join('');
   })();
@@ -419,8 +592,8 @@
   /* ---------- IDE LUAR NEGERI (adaptasi) ---------- */
   (function () {
     if (typeof FR_LUAR === 'undefined') return;
-    $('luarList').innerHTML = FR_LUAR.map(function (b) {
-      return '<div class="fr-item"><div class="nm">' + esc(b.nama) + '</div>' +
+    $('luarList').innerHTML = FR_LUAR.map(function (b, i) {
+      return '<div class="fr-item"><div class="nm"><span class="fr-ic">' + ((TPL[catOf(b.nama)] || TPL.umum).ic) + '</span> ' + esc(b.nama) + '</div>' +
         '<span class="tag">Asal: ' + esc(b.asal) + '</span>' +
         '<p>' + esc(b.why) + '</p>' +
         '<div class="kv"><span>Modal (est.)</span><b>' + esc(b.modal) + '</b></div>' +
@@ -428,6 +601,8 @@
         '<ul><li><b style="color:var(--accent-ink)">Sudah di ID:</b> ' + esc(b.contohID) + '</li>' +
         '<li><b style="color:var(--down)">Risiko:</b> ' + esc(b.risiko) + '</li>' +
         '<li><b style="color:var(--up)">Tips:</b> ' + esc(b.tips) + '</li></ul>' +
+        exLinks(b.nama) +
+        '<button class="fr-more" data-idea="luar:' + i + '">Detail, RAB &amp; kalkulator →</button>' +
         '</div>';
     }).join('');
   })();
@@ -449,12 +624,13 @@
     var g = FR_IDE[k];
     var html = '<div class="fr-sectlabel">' + esc(g.label) + ' <span style="color:var(--muted);font-size:13px;font-weight:600">(' + esc(g.range) + ')</span></div>' +
       '<p class="fr-cap" style="margin-top:2px">' + esc(g.desc) + '</p>' +
-      '<div class="fr-list">' + g.items.map(function (it) {
-        return '<div class="fr-item"><div class="nm">' + esc(it.nama) + '</div>' +
+      '<div class="fr-list">' + g.items.map(function (it, i) {
+        return '<div class="fr-item"><div class="nm"><span class="fr-ic">' + ((TPL[catOf(it.nama)] || TPL.umum).ic) + '</span> ' + esc(it.nama) + '</div>' +
           '<p>' + esc(it.catatan) + '</p>' +
           '<div class="kv"><span>Modal</span><b>' + esc(it.modal) + '</b></div>' +
           '<div class="kv"><span>Margin (est.)</span><b>' + esc(it.margin) + '</b></div>' +
           '<div style="margin-top:8px;display:flex;flex-wrap:wrap;gap:6px">' + it.contoh.map(function (c) { return '<span class="tag" style="margin:0">' + esc(c) + '</span>'; }).join('') + '</div>' +
+          '<button class="fr-more" data-idea="ide:' + k + ':' + i + '">Detail, RAB &amp; kalkulator →</button>' +
           '</div>';
       }).join('') + '</div>';
     $('ideWrap').innerHTML = html;
@@ -489,6 +665,7 @@
     var op = e.target.closest('[data-open]');
     if (op) { showTab('jelajah'); openDetail(op.getAttribute('data-open')); }
   }
+
 
   /* ---------- init ---------- */
   renderGrid();
