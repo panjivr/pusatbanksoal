@@ -131,6 +131,61 @@
       '</tbody></table></div>';
   }
 
+  /* ---------- KBLI SEARCH ---------- */
+  if ($('lgKbliResults') && window.KBLI_DATA) {
+    function renderKbli(q){
+      q = (q||'').toLowerCase().trim();
+      var list = KBLI_DATA.filter(function(x){ return !q || x.k.indexOf(q)>-1 || x.j.toLowerCase().indexOf(q)>-1 || x.s.toLowerCase().indexOf(q)>-1; });
+      if (!list.length){ $('lgKbliResults').innerHTML = '<p class="lg-cap">Tidak ada kode yang cocok. Coba kata kunci lain (mis. "kopi", "online", "salon") atau cari langsung di OSS.</p>'; return; }
+      $('lgKbliResults').innerHTML = '<p class="lg-cap" style="margin:0 0 8px">Menampilkan '+list.length+' kode. Klik "cek resmi" untuk memastikan detail &amp; tingkat risiko di OSS.</p>' +
+        list.map(function(x){
+          return '<div class="lg-kbli"><div class="lg-kbli-code">'+esc(x.k)+'</div><div class="lg-kbli-body"><b>'+esc(x.j)+'</b><span>'+esc(x.s)+'</span></div>'+
+            '<a class="fr-xl lg-kbli-link" target="_blank" rel="noopener nofollow" href="https://www.google.com/search?q='+encodeURIComponent('KBLI '+x.k+' '+x.j+' oss.go.id')+'">cek resmi ↗</a></div>';
+        }).join('');
+    }
+    renderKbli('');
+    var ki = $('lgKbliSearch'); if (ki) ki.addEventListener('input', function(){ renderKbli(this.value); });
+  }
+
+  /* ---------- PANDUAN LANGKAH ---------- */
+  if ($('lgPanduan') && window.LG_PANDUAN) {
+    $('lgPanduan').innerHTML = LG_PANDUAN.map(function(p){
+      return '<div class="lg-card lg-guide"><div class="lg-card-h"><span class="lg-emo">'+p.ikon+'</span><div><h3>'+esc(p.judul)+'</h3><p class="lg-guide-k">'+esc(p.ket)+'</p></div></div>'+
+        '<ol class="lg-timeline lg-timeline-sm">'+p.langkah.map(function(s){ return '<li><b>'+esc(s.t)+'</b><span>'+s.d+'</span></li>'; }).join('')+'</ol></div>';
+    }).join('');
+  }
+
+  /* ---------- TEMPLATE DOKUMEN ---------- */
+  if ($('lgTplList') && window.LG_TEMPLATE) {
+    $('lgTplList').innerHTML = LG_TEMPLATE.map(function(t,i){
+      return '<button type="button" class="lg-tpl-item'+(i===0?' on':'')+'" data-tpl="'+i+'"><b>'+esc(t.nama)+'</b><span>'+esc(t.ket)+'</span></button>';
+    }).join('');
+    function showTpl(i){
+      var t = LG_TEMPLATE[i]; if(!t) return;
+      Array.prototype.forEach.call($('lgTplList').children, function(c,j){ c.classList.toggle('on', j===i); });
+      $('lgTplViewer').innerHTML = '<div class="lg-tpl-head"><h3>'+esc(t.nama)+'</h3><div class="lg-tpl-act">'+
+        '<button type="button" class="btn btn-primary btn-sm" data-tplcopy="'+i+'">📋 Salin</button>'+
+        '<button type="button" class="btn btn-ghost btn-sm" data-tpldl="'+i+'">⬇️ Unduh .txt</button></div></div>'+
+        '<p class="lg-cap">Ganti bagian <b>{{...}}</b> dengan datamu. Ini draf umum — sesuaikan dengan kebutuhan &amp; untuk dokumen penting mintakan review ahli.</p>'+
+        '<pre class="lg-tpl-pre" id="lgTplPre">'+esc(t.isi)+'</pre>';
+      var cp = $('lgTplViewer').querySelector('[data-tplcopy]');
+      if (cp) cp.addEventListener('click', function(){
+        var txt = LG_TEMPLATE[i].isi;
+        function done(){ cp.textContent='✓ Tersalin!'; setTimeout(function(){ cp.textContent='📋 Salin'; },1500); }
+        if (navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(txt).then(done, fallbackCopy); } else fallbackCopy();
+        function fallbackCopy(){ try{ var ta=document.createElement('textarea'); ta.value=txt; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta); done(); }catch(e){} }
+      });
+      var dl = $('lgTplViewer').querySelector('[data-tpldl]');
+      if (dl) dl.addEventListener('click', function(){
+        try{ var blob=new Blob([LG_TEMPLATE[i].isi], {type:'text/plain;charset=utf-8'}); var url=URL.createObjectURL(blob);
+          var a=document.createElement('a'); a.href=url; a.download=LG_TEMPLATE[i].file; document.body.appendChild(a); a.click(); document.body.removeChild(a); setTimeout(function(){ URL.revokeObjectURL(url); },2000);
+        }catch(e){}
+      });
+    }
+    $('lgTplList').addEventListener('click', function(e){ var b=e.target.closest('[data-tpl]'); if(b) showTpl(+b.getAttribute('data-tpl')); });
+    showTpl(0);
+  }
+
   /* ---------- WIZARD: badan usaha mana? ---------- */
   var WQ = [
     { q:'Berapa orang pendiri usahanya?', o:[['Sendiri (1 orang)','solo'],['Berdua atau lebih (partner)','tim']] },

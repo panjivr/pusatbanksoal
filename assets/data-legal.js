@@ -236,12 +236,83 @@ var LG_GLOSARIUM = [
   ['Deductible','Biaya yang boleh mengurangi laba kena pajak.']
 ];
 
+/* ---------- PANDUAN LANGKAH-DEMI-LANGKAH ---------- */
+var LG_PANDUAN = [
+  { id:'oss', judul:'Daftar NIB di OSS', ikon:'🆔', ket:'Dapatkan izin dasar usaha (NIB) secara online & gratis.',
+    langkah:[
+      { t:'Siapkan berkas', d:'NIK/KTP, email &amp; nomor HP aktif, NPWP (bila ada), titik lokasi usaha, dan perkiraan modal usaha.' },
+      { t:'Buat akun OSS', d:'Buka oss.go.id → Daftar → pilih skala (UMK perseorangan / badan usaha) → verifikasi lewat email/HP.' },
+      { t:'Isi data usaha', d:'Masuk, klik "Perizinan Berusaha" → isi data pelaku usaha, bidang usaha, dan lokasi.' },
+      { t:'Pilih KBLI', d:'Masukkan kode KBLI yang sesuai kegiatan usahamu (boleh lebih dari satu). Sistem menampilkan tingkat risiko.' },
+      { t:'Terbitkan NIB', d:'Centang pernyataan mandiri, proses, lalu NIB terbit &amp; bisa diunduh. Untuk risiko rendah, NIB = izin operasional.' },
+      { t:'Lengkapi izin lanjutan', d:'Bila risikonya menengah/tinggi, penuhi Sertifikat Standar / Izin sesuai instruksi OSS.' }
+    ] },
+  { id:'merek', judul:'Daftar Merek di DJKI', ikon:'🏷️', ket:'Lindungi nama & logo brand-mu agar tak bisa diklaim orang lain.',
+    langkah:[
+      { t:'Cek ketersediaan', d:'Buka merek.dgip.go.id → Penelusuran → pastikan nama/logo belum didaftarkan pihak lain di kelas yang sama.' },
+      { t:'Siapkan berkas', d:'Logo (format sesuai ketentuan), data pemohon, tanda tangan, dan Surat Pernyataan UMK bermaterai (untuk tarif UMK). Lihat tab Template.' },
+      { t:'Buat akun & ajukan', d:'Daftar akun di merek.dgip.go.id → ajukan permohonan → pilih kelas barang/jasa (Klasifikasi Nice).' },
+      { t:'Bayar PNBP', d:'UMK ± Rp500 rb/kelas, umum ± Rp2,8 jt/kelas. Bayar via kode billing.' },
+      { t:'Proses pemeriksaan', d:'Ada masa pengumuman &amp; pemeriksaan substantif (beberapa bulan). Pantau status di akun.' },
+      { t:'Sertifikat terbit', d:'Bila disetujui, sertifikat merek terbit &amp; berlaku 10 tahun (bisa diperpanjang).' }
+    ] },
+  { id:'npwp', judul:'Buat NPWP & Akun Pajak (Coretax)', ikon:'🧾', ket:'Siapkan identitas & akun untuk bayar/lapor pajak.',
+    langkah:[
+      { t:'Orang pribadi', d:'NIK kini berfungsi sebagai NPWP. Aktifkan/validasi di akun pajak. Badan: daftar NPWP badan setelah akta/NIB terbit.' },
+      { t:'Aktifkan akun', d:'Masuk ke coretaxdjp.pajak.go.id (atau djponline.pajak.go.id) dengan email/HP aktif.' },
+      { t:'Ambil EFIN bila perlu', d:'EFIN dipakai untuk aktivasi layanan elektronik — ajukan sekali ke KPP/online.' },
+      { t:'Kukuhkan PKP (bila omzet > Rp4,8 M)', d:'Agar bisa buat e-Faktur &amp; memungut PPN.' }
+    ] },
+  { id:'bpjs', judul:'Daftarkan Karyawan ke BPJS', ikon:'🛡️', ket:'Wajib saat mempekerjakan orang.',
+    langkah:[
+      { t:'Daftar badan usaha', d:'Daftarkan usaha sebagai pemberi kerja di BPJS Ketenagakerjaan (bpjsketenagakerjaan.go.id) &amp; BPJS Kesehatan (bpjs-kesehatan.go.id).' },
+      { t:'Daftarkan karyawan', d:'Input data karyawan &amp; upah. Sistem menghitung iuran tiap program.' },
+      { t:'Bayar iuran rutin', d:'Setor iuran bulanan (sebagian dipotong dari gaji, sebagian ditanggung perusahaan). Cek estimasi di Simulasi → Iuran BPJS.' },
+      { t:'Lapor perubahan', d:'Perbarui bila ada karyawan masuk/keluar atau perubahan upah.' }
+    ] },
+  { id:'kur', judul:'Ajukan KUR (Modal Usaha)', ikon:'🏦', ket:'Pinjaman modal bunga rendah (6%/tahun).',
+    langkah:[
+      { t:'Pastikan syarat', d:'WNI, usaha produktif berjalan ≥6 bulan, tidak sedang menerima kredit produktif lain, punya NIB/legalitas.' },
+      { t:'Siapkan berkas', d:'KTP, KK, NIB/izin usaha, catatan penjualan/keuangan, &amp; rencana penggunaan dana.' },
+      { t:'Pilih bank penyalur', d:'BRI, Mandiri, BNI, BSI, dll. Ajukan online atau ke kantor cabang.' },
+      { t:'Survei & pencairan', d:'Petugas menilai usaha; bila disetujui dana cair. Pilih plafon &amp; tenor (s.d. 5 tahun) sesuai kemampuan.' }
+    ] },
+  { id:'pajak', judul:'Bayar & Lapor Pajak', ikon:'💳', ket:'Rutin bulanan & tahunan agar tak kena denda.',
+    langkah:[
+      { t:'Hitung pajak', d:'Mis. PPh Final UMKM = 0,5% × omzet bulan itu. Gunakan tab Simulasi.' },
+      { t:'Buat kode billing', d:'Di Coretax/DJP Online, buat ID Billing untuk jenis pajak yang mau dibayar.' },
+      { t:'Bayar', d:'Lewat bank / e-wallet / kantor pos. Simpan bukti (NTPN/BPN).' },
+      { t:'Lapor SPT', d:'Lapor SPT Masa (bulanan) &amp; SPT Tahunan (OP 31 Maret, Badan 30 April). Nihil pun tetap lapor.' }
+    ] }
+];
+
+/* ---------- TEMPLATE DOKUMEN (draf umum, sesuaikan kebutuhan) ---------- */
+var LG_TEMPLATE = [
+  { id:'umk', nama:'Surat Pernyataan UMK', ket:'Untuk mendapatkan tarif UMK saat daftar merek/izin.', file:'surat-pernyataan-umk.txt',
+    isi:'SURAT PERNYATAAN USAHA MIKRO KECIL (UMK)\n\nYang bertanda tangan di bawah ini:\nNama\t\t: {{NAMA}}\nNIK\t\t: {{NIK}}\nAlamat\t\t: {{ALAMAT}}\nNama Usaha\t: {{NAMA_USAHA}}\nJabatan\t\t: Pemilik\n\nDengan ini menyatakan dengan sebenar-benarnya bahwa usaha saya termasuk dalam kategori Usaha Mikro Kecil (UMK) sesuai ketentuan peraturan perundang-undangan yang berlaku.\n\nSurat pernyataan ini saya buat dengan sadar, tanpa paksaan, dan untuk digunakan sebagai kelengkapan permohonan {{KEPERLUAN}}. Apabila di kemudian hari pernyataan ini tidak benar, saya bersedia menanggung akibat hukumnya.\n\n{{KOTA}}, {{TANGGAL}}\nYang menyatakan,\n\n\n(materai Rp10.000)\n{{NAMA}}' },
+  { id:'pkwt', nama:'Perjanjian Kerja (PKWT)', ket:'Kontrak karyawan waktu tertentu.', file:'perjanjian-kerja-pkwt.txt',
+    isi:'PERJANJIAN KERJA WAKTU TERTENTU (PKWT)\n\nPada hari ini {{TANGGAL}}, yang bertanda tangan di bawah ini:\n\n1. {{NAMA_PERUSAHAAN}}, diwakili oleh {{NAMA_PEMBERI_KERJA}} selaku {{JABATAN_PEMBERI}}, beralamat di {{ALAMAT_PERUSAHAAN}} — selanjutnya disebut PIHAK PERTAMA (Pemberi Kerja).\n2. {{NAMA_KARYAWAN}}, NIK {{NIK_KARYAWAN}}, beralamat di {{ALAMAT_KARYAWAN}} — selanjutnya disebut PIHAK KEDUA (Pekerja).\n\nKedua pihak sepakat mengadakan perjanjian kerja dengan ketentuan:\n\nPasal 1 — Jabatan & Tugas\nPihak Kedua bekerja sebagai {{POSISI}} dengan tugas {{URAIAN_TUGAS}}.\n\nPasal 2 — Jangka Waktu\nPerjanjian berlaku {{DURASI}}, terhitung {{TGL_MULAI}} sampai {{TGL_SELESAI}}.\n\nPasal 3 — Waktu Kerja\nHari & jam kerja: {{JAM_KERJA}}.\n\nPasal 4 — Upah & Hak\nUpah sebesar Rp{{UPAH}} per bulan, dibayar setiap {{TGL_GAJIAN}}. Pihak Kedua diikutsertakan dalam BPJS Ketenagakerjaan & BPJS Kesehatan sesuai ketentuan, serta berhak atas THR keagamaan.\n\nPasal 5 — Kewajiban Pekerja\nMenjalankan tugas dengan baik, menjaga nama baik & rahasia perusahaan, serta menaati peraturan yang berlaku.\n\nPasal 6 — Berakhirnya Perjanjian\nPerjanjian berakhir sesuai jangka waktu, atau lebih awal sesuai ketentuan peraturan ketenagakerjaan. Pihak Kedua berhak atas kompensasi akhir PKWT sesuai aturan.\n\nPasal 7 — Penutup\nHal yang belum diatur diselesaikan secara musyawarah & mengacu pada peraturan perundang-undangan.\n\nDemikian perjanjian ini dibuat rangkap dua bermaterai cukup.\n\nPIHAK PERTAMA\t\t\tPIHAK KEDUA\n\n\n{{NAMA_PEMBERI_KERJA}}\t\t{{NAMA_KARYAWAN}}' },
+  { id:'nda', nama:'Perjanjian Kerahasiaan (NDA)', ket:'Melindungi rahasia dagang/informasi bisnis.', file:'perjanjian-kerahasiaan-nda.txt',
+    isi:'PERJANJIAN KERAHASIAAN (NON-DISCLOSURE AGREEMENT)\n\nPada tanggal {{TANGGAL}}, para pihak:\n1. {{PIHAK_1}} — Pihak yang mengungkapkan informasi (Pengungkap).\n2. {{PIHAK_2}} — Pihak yang menerima informasi (Penerima).\n\nPasal 1 — Informasi Rahasia\nMeliputi seluruh informasi bisnis, teknis, keuangan, resep/formula, data pelanggan, strategi, dan dokumen yang diungkapkan Pengungkap kepada Penerima, baik lisan maupun tertulis.\n\nPasal 2 — Kewajiban\nPenerima wajib: (a) menjaga kerahasiaan informasi; (b) tidak mengungkapkan ke pihak ketiga tanpa izin tertulis; (c) memakai informasi hanya untuk tujuan {{TUJUAN}}.\n\nPasal 3 — Pengecualian\nKewajiban tidak berlaku atas informasi yang telah menjadi milik publik bukan karena kelalaian Penerima, atau wajib dibuka berdasarkan hukum.\n\nPasal 4 — Jangka Waktu\nKewajiban kerahasiaan berlaku selama {{DURASI}} sejak tanggal perjanjian, termasuk setelah kerja sama berakhir.\n\nPasal 5 — Akibat Pelanggaran\nPelanggaran menimbulkan tanggung jawab ganti rugi sesuai peraturan yang berlaku.\n\nDemikian perjanjian dibuat rangkap dua bermaterai cukup.\n\nPENGUNGKAP\t\t\tPENERIMA\n\n\n{{PIHAK_1}}\t\t\t{{PIHAK_2}}' },
+  { id:'kerjasama', nama:'Perjanjian Kerja Sama Usaha', ket:'Kesepakatan kemitraan / bagi hasil.', file:'perjanjian-kerja-sama.txt',
+    isi:'SURAT PERJANJIAN KERJA SAMA USAHA\n\nPada tanggal {{TANGGAL}}, para pihak:\n1. {{PIHAK_1}}, {{PERAN_1}} — PIHAK PERTAMA.\n2. {{PIHAK_2}}, {{PERAN_2}} — PIHAK KEDUA.\n\nsepakat bekerja sama dalam usaha {{NAMA_USAHA}} dengan ketentuan:\n\nPasal 1 — Bentuk Kerja Sama\n{{DESKRIPSI_KERJASAMA}}.\n\nPasal 2 — Modal & Kontribusi\nPihak Pertama menyetor {{KONTRIBUSI_1}}. Pihak Kedua menyetor {{KONTRIBUSI_2}}.\n\nPasal 3 — Pembagian Hasil\nKeuntungan/kerugian dibagi dengan porsi {{PORSI}} (mis. 60:40) setelah dikurangi biaya operasional.\n\nPasal 4 — Hak & Kewajiban\n{{HAK_KEWAJIBAN}}.\n\nPasal 5 — Jangka Waktu & Evaluasi\nBerlaku {{DURASI}} dan dievaluasi setiap {{PERIODE_EVALUASI}}.\n\nPasal 6 — Penyelesaian Sengketa\nDiselesaikan secara musyawarah; bila gagal, sesuai hukum yang berlaku.\n\nDemikian perjanjian dibuat rangkap dua bermaterai cukup.\n\nPIHAK PERTAMA\t\t\tPIHAK KEDUA\n\n\n{{PIHAK_1}}\t\t\t{{PIHAK_2}}' },
+  { id:'invoice', nama:'Invoice / Faktur', ket:'Tagihan penjualan ke pelanggan/klien.', file:'invoice.txt',
+    isi:'INVOICE\n\n{{NAMA_USAHA}}\n{{ALAMAT_USAHA}} — {{KONTAK}}\n\nNo. Invoice\t: {{NO_INVOICE}}\nTanggal\t\t: {{TANGGAL}}\nJatuh Tempo\t: {{JATUH_TEMPO}}\n\nKepada\t\t: {{NAMA_PELANGGAN}}\nAlamat\t\t: {{ALAMAT_PELANGGAN}}\n\n---------------------------------------------\nNo | Deskripsi | Qty | Harga | Subtotal\n1  | {{ITEM_1}} | {{QTY_1}} | {{HARGA_1}} | {{SUB_1}}\n2  | {{ITEM_2}} | {{QTY_2}} | {{HARGA_2}} | {{SUB_2}}\n---------------------------------------------\nSubtotal\t: Rp{{SUBTOTAL}}\nPPN (bila PKP)\t: Rp{{PPN}}\nTOTAL\t\t: Rp{{TOTAL}}\n\nPembayaran ke: {{BANK}} a.n. {{NAMA_REKENING}} No. {{NO_REKENING}}\n\nTerima kasih atas kepercayaan Anda.' },
+  { id:'kwitansi', nama:'Kwitansi', ket:'Bukti terima pembayaran.', file:'kwitansi.txt',
+    isi:'KWITANSI\n\nNo\t\t: {{NO}}\nTelah terima dari\t: {{DARI}}\nUang sejumlah\t: Rp{{JUMLAH}} ({{TERBILANG}})\nUntuk pembayaran\t: {{KEPERLUAN}}\n\n{{KOTA}}, {{TANGGAL}}\nPenerima,\n\n\n(materai bila > Rp5 juta)\n{{NAMA_PENERIMA}}' },
+  { id:'kuasa', nama:'Surat Kuasa', ket:'Memberi wewenang mengurus sesuatu atas nama Anda.', file:'surat-kuasa.txt',
+    isi:'SURAT KUASA\n\nYang bertanda tangan di bawah ini:\nNama\t: {{PEMBERI}}\nNIK\t: {{NIK_PEMBERI}}\nAlamat\t: {{ALAMAT_PEMBERI}}\nselanjutnya disebut PEMBERI KUASA.\n\nDengan ini memberi kuasa kepada:\nNama\t: {{PENERIMA}}\nNIK\t: {{NIK_PENERIMA}}\nAlamat\t: {{ALAMAT_PENERIMA}}\nselanjutnya disebut PENERIMA KUASA.\n\n--------- KHUSUS ---------\nUntuk mengurus/menandatangani/mengambil {{KEPERLUAN}} di {{INSTANSI}} atas nama Pemberi Kuasa.\n\nDemikian surat kuasa ini dibuat untuk digunakan sebagaimana mestinya.\n\n{{KOTA}}, {{TANGGAL}}\nPenerima Kuasa,\t\t\tPemberi Kuasa,\n\n\n{{PENERIMA}}\t\t\t(materai Rp10.000)\n\t\t\t\t{{PEMBERI}}' },
+  { id:'domisili', nama:'Surat Keterangan Domisili Usaha', ket:'Keterangan lokasi usaha (bila diminta; sebagian daerah).', file:'surat-domisili-usaha.txt',
+    isi:'SURAT KETERANGAN DOMISILI USAHA\n\nYang bertanda tangan di bawah ini, {{JABATAN_PEJABAT}} {{WILAYAH}}, menerangkan bahwa:\n\nNama Usaha\t: {{NAMA_USAHA}}\nPemilik\t\t: {{NAMA_PEMILIK}}\nBidang Usaha\t: {{BIDANG}}\nAlamat Usaha\t: {{ALAMAT_USAHA}}\n\nbenar berdomisili dan menjalankan kegiatan usaha di alamat tersebut di wilayah kami.\n\nSurat keterangan ini dibuat untuk keperluan {{KEPERLUAN}}.\n\n{{KOTA}}, {{TANGGAL}}\n{{JABATAN_PEJABAT}},\n\n\n{{NAMA_PEJABAT}}\n\nCatatan: Beberapa daerah tidak lagi mewajibkan SKDU karena sudah tergantikan NIB. Konfirmasi ke kelurahan/OSS setempat.' }
+];
+
 if (typeof window !== 'undefined') {
   window.LG_BADAN = LG_BADAN; window.LG_RISIKO = LG_RISIKO; window.LG_PAJAK = LG_PAJAK;
   window.LG_IZIN = LG_IZIN; window.LG_KALENDER = LG_KALENDER; window.LG_GLOSARIUM = LG_GLOSARIUM;
   window.LG_HAKI = LG_HAKI; window.LG_KARYAWAN = LG_KARYAWAN; window.LG_PAJAKDAERAH = LG_PAJAKDAERAH;
   window.LG_INSENTIF = LG_INSENTIF; window.LG_SANKSI = LG_SANKSI;
+  window.LG_PANDUAN = LG_PANDUAN; window.LG_TEMPLATE = LG_TEMPLATE;
 }
 if (typeof module !== 'undefined' && module.exports) {
-  module.exports = { LG_BADAN:LG_BADAN, LG_RISIKO:LG_RISIKO, LG_PAJAK:LG_PAJAK, LG_IZIN:LG_IZIN, LG_KALENDER:LG_KALENDER, LG_GLOSARIUM:LG_GLOSARIUM, LG_HAKI:LG_HAKI, LG_KARYAWAN:LG_KARYAWAN, LG_PAJAKDAERAH:LG_PAJAKDAERAH, LG_INSENTIF:LG_INSENTIF, LG_SANKSI:LG_SANKSI };
+  module.exports = { LG_BADAN:LG_BADAN, LG_RISIKO:LG_RISIKO, LG_PAJAK:LG_PAJAK, LG_IZIN:LG_IZIN, LG_KALENDER:LG_KALENDER, LG_GLOSARIUM:LG_GLOSARIUM, LG_HAKI:LG_HAKI, LG_KARYAWAN:LG_KARYAWAN, LG_PAJAKDAERAH:LG_PAJAKDAERAH, LG_INSENTIF:LG_INSENTIF, LG_SANKSI:LG_SANKSI, LG_PANDUAN:LG_PANDUAN, LG_TEMPLATE:LG_TEMPLATE };
 }
