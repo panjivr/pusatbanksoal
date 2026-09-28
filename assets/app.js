@@ -65,7 +65,74 @@
       var d = document.createElement('div'); d.id = 'pbs-sprite'; d.innerHTML = SPRITE;
       document.body.insertBefore(d, document.body.firstChild);
     }
-    initReveal(); initCounters(); initNav(); initYear();
+    initReveal(); initCounters(); initNav(); initYear(); initBottomNav();
+  }
+
+  // ---- Mobile bottom navigation (app-like, phones/portrait) ----
+  function initBottomNav(){
+    if (document.querySelector('.mnav')) return;
+    if (!document.querySelector('.nav-links')) return; // pages without nav (e.g. admin)
+    var TABS = [
+      { mn:'home', ic:'🏠', lb:'Beranda', href:'index.html' },
+      { mn:'belajar', ic:'📚', lb:'Belajar', grp:'menu-belajar' },
+      { mn:'kampus', ic:'🎓', lb:'Kampus', grp:'menu-kampus' },
+      { mn:'usaha', ic:'💼', lb:'Usaha', grp:'menu-usaha' },
+      { mn:'menu', ic:'☰', lb:'Menu' }
+    ];
+    var bar = document.createElement('nav');
+    bar.className = 'mnav'; bar.setAttribute('aria-label','Navigasi cepat');
+    bar.innerHTML = TABS.map(function(t){
+      var inner = '<span class="mnav-ic" aria-hidden="true">'+t.ic+'</span><span class="mnav-lb">'+t.lb+'</span>';
+      if (t.href) return '<a class="mnav-item" href="'+t.href+'" data-mn="'+t.mn+'">'+inner+'</a>';
+      return '<button type="button" class="mnav-item" data-mn="'+t.mn+'"'+(t.grp?' data-grp="'+t.grp+'"':'')+'>'+inner+'</button>';
+    }).join('');
+    document.body.appendChild(bar);
+
+    var back = document.createElement('div'); back.className = 'mnav-back'; document.body.appendChild(back);
+    var sheet = document.createElement('div'); sheet.className = 'mnav-sheet'; sheet.setAttribute('role','dialog'); sheet.setAttribute('aria-modal','true');
+    sheet.innerHTML = '<div class="mnav-sheet-in"><span class="mnav-handle"></span><div class="mnav-sheet-body"></div></div>';
+    document.body.appendChild(sheet);
+    var body = sheet.querySelector('.mnav-sheet-body');
+
+    function openSheet(html){ body.innerHTML = html; sheet.classList.add('on'); back.classList.add('on'); document.body.classList.add('mnav-lock'); }
+    function closeSheet(){ sheet.classList.remove('on'); back.classList.remove('on'); document.body.classList.remove('mnav-lock'); }
+    back.addEventListener('click', closeSheet);
+    document.addEventListener('keydown', function(e){ if (e.key === 'Escape') closeSheet(); });
+    sheet.addEventListener('click', function(e){ if (e.target.closest('a')) closeSheet(); });
+
+    function grpItems(id){ var m = document.getElementById(id); return m ? m.innerHTML : ''; }
+    function grpTitle(id){ var b = document.querySelector('[aria-controls="'+id+'"]'); return b ? (b.textContent || '').replace(/\s+/g,' ').trim() : ''; }
+
+    bar.addEventListener('click', function(e){
+      var b = e.target.closest('.mnav-item'); if (!b) return;
+      var mn = b.getAttribute('data-mn');
+      if (mn === 'home') return;
+      if (mn === 'menu'){
+        var html = '<div class="mnav-t">Menu</div>';
+        ['menu-belajar','menu-kampus','menu-usaha','menu-studio'].forEach(function(g){
+          var t = grpTitle(g), items = grpItems(g);
+          if (items) html += '<div class="mnav-sec">'+t+'</div><div class="mnav-list">'+items+'</div>';
+        });
+        html += '<div class="mnav-sec">Akun</div><div class="mnav-list">' +
+          '<a class="nav-menu-item" href="auth.html"><span class="nav-menu-ic"><svg class="i" aria-hidden="true"><use href="#i-user"></use></svg></span><span class="nav-menu-tx"><b>Masuk / Daftar</b><small>Gratis</small></span></a>' +
+          '<a class="nav-menu-item" href="verifikasi.html"><span class="nav-menu-ic"><svg class="i" aria-hidden="true"><use href="#i-scan"></use></svg></span><span class="nav-menu-tx"><b>Verifikasi Sertifikat</b><small>Cek keaslian sertifikat</small></span></a></div>';
+        openSheet(html);
+      } else {
+        var grp = b.getAttribute('data-grp');
+        openSheet('<div class="mnav-t">'+grpTitle(grp)+'</div><div class="mnav-list">'+grpItems(grp)+'</div>');
+      }
+    });
+
+    // active tab based on current page
+    var here = (location.pathname.split('/').pop() || 'index.html'); if (!here) here = 'index.html';
+    var active = 'home';
+    if (here !== 'index.html') {
+      [['belajar','menu-belajar'],['kampus','menu-kampus'],['usaha','menu-usaha']].forEach(function(pr){
+        var m = document.getElementById(pr[1]); if (m && m.querySelector('a[href="'+here+'"]')) active = pr[0];
+      });
+      var st = document.getElementById('menu-studio'); if (st && st.querySelector('a[href="'+here+'"]')) active = 'menu';
+    }
+    var el = bar.querySelector('[data-mn="'+active+'"]'); if (el) el.classList.add('on');
   }
 
   var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
