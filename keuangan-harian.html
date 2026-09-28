@@ -1,0 +1,254 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Catatan Keuangan Harian — Pencatat Pemasukan &amp; Pengeluaran Pribadi | Bekal</title>
+<meta name="description" content="Aplikasi catatan keuangan pribadi harian gratis: catat pemasukan &amp; pengeluaran per kategori (makan, rokok, bensin, kopi, pulsa, tagihan, gaji, usaha, dll), pantau saldo, atur anggaran bulanan, lihat statistik pengeluaran, dan ekspor laporan. Tersimpan otomatis di perangkatmu, tanpa login.">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<meta name="theme-color" content="#0a0e17">
+<link rel="canonical" href="https://pusatbanksoal.id/keuangan-harian.html">
+<link rel="icon" type="image/png" href="assets/bekal-favicon.png">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<link rel="manifest" href="site.webmanifest">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@600;700;800&family=IBM+Plex+Mono:wght@500;600;700&display=swap" media="print" onload="this.media='all'"><noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@600;700;800&family=IBM+Plex+Mono:wght@500;600;700&display=swap"></noscript>
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Bekal">
+<meta property="og:locale" content="id_ID">
+<meta property="og:url" content="https://pusatbanksoal.id/keuangan-harian.html">
+<meta property="og:title" content="Catatan Keuangan Harian — Bekal">
+<meta property="og:description" content="Catat pemasukan & pengeluaran harian per kategori, pantau saldo & anggaran, lihat statistik, ekspor laporan. Gratis, tersimpan di perangkatmu.">
+<meta property="og:image" content="https://pusatbanksoal.id/assets/og-bekal.png">
+<link rel="stylesheet" href="assets/style.css">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@graph":[
+ {"@type":"WebApplication","name":"Catatan Keuangan Harian Bekal","applicationCategory":"FinanceApplication","operatingSystem":"Web","url":"https://pusatbanksoal.id/keuangan-harian.html","description":"Pencatat pemasukan dan pengeluaran pribadi harian dengan kategori lengkap, anggaran bulanan, statistik, dan ekspor laporan. Data tersimpan lokal di perangkat.","offers":{"@type":"Offer","price":"0","priceCurrency":"IDR"},"inLanguage":"id-ID","isAccessibleForFree":true},
+ {"@type":"BreadcrumbList","itemListElement":[
+  {"@type":"ListItem","position":1,"name":"Beranda","item":"https://pusatbanksoal.id/"},
+  {"@type":"ListItem","position":2,"name":"Catatan Keuangan Harian","item":"https://pusatbanksoal.id/keuangan-harian.html"}]},
+ {"@type":"FAQPage","mainEntity":[
+  {"@type":"Question","name":"Apakah aplikasi catatan keuangan ini gratis?","acceptedAnswer":{"@type":"Answer","text":"Ya, gratis dan tanpa login. Semua catatan tersimpan otomatis di browser perangkatmu sendiri (localStorage), tidak dikirim ke server mana pun."}},
+  {"@type":"Question","name":"Apakah data keuangan saya aman?","acceptedAnswer":{"@type":"Answer","text":"Data hanya tersimpan di perangkatmu, tidak diunggah ke internet. Kamu bisa mengekspornya sebagai file cadangan (JSON/CSV) kapan saja."}},
+  {"@type":"Question","name":"Kategori pengeluaran apa saja yang tersedia?","acceptedAnswer":{"@type":"Answer","text":"Makan & minum, rokok, bensin & transport, kopi & jajan, belanja harian, pulsa & internet, tagihan, sewa/kos, kesehatan, pendidikan, hiburan, pakaian, sedekah, cicilan/utang, parkir & tol, dan lain-lain. Pemasukan meliputi gaji, usaha, freelance, bonus, hadiah, investasi, dan lainnya."}}
+ ]}
+]}
+</script>
+<script>(function(){try{var t=localStorage.getItem('pbs_theme');if(t==='light'||t==='dark')document.documentElement.setAttribute('data-theme',t);else if(window.matchMedia&&matchMedia('(prefers-color-scheme: light)').matches)document.documentElement.setAttribute('data-theme','light');}catch(e){}})();</script>
+<script src="assets/auth.js" defer></script>
+<style>
+.kh-hero{padding:26px 0 6px}
+.kh-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:14px}
+@media(max-width:600px){.kh-cards{grid-template-columns:1fr}}
+.kh-card{border:1px solid var(--hair-dark);border-radius:16px;padding:16px 18px;background:var(--card)}
+.kh-card .lbl{font-size:12px;color:var(--muted);font-weight:600}
+.kh-card .val{font-family:var(--num);font-weight:800;font-size:clamp(20px,4vw,26px);margin-top:4px;line-height:1.1}
+.kh-card.saldo{border-color:var(--primary);background:radial-gradient(120% 100% at 0 0,var(--primary-soft),transparent 60%),var(--card)}
+.kh-card.saldo .val{color:var(--accent-ink)}
+.kh-card .val.pos{color:var(--up)}.kh-card .val.neg{color:var(--down)}
+.kh-in .val{color:var(--up)}.kh-out .val{color:var(--down)}
+.kh-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px;align-items:start}
+@media(max-width:820px){.kh-grid{grid-template-columns:1fr}}
+.kh-box{border:1px solid var(--hair-dark);border-radius:16px;padding:18px;background:var(--card)}
+.kh-box h2{font-size:16px;color:var(--on-dark);margin:0 0 12px}
+.kh-tipe{display:flex;gap:8px;margin-bottom:12px}
+.kh-tipe button{flex:1;font:inherit;font-weight:700;font-size:14px;padding:11px;border-radius:11px;border:1px solid var(--hair-dark);background:var(--elevated);color:var(--muted-strong);cursor:pointer;transition:.15s}
+.kh-tipe button.on[data-tipe="out"]{background:rgba(239,68,68,.14);border-color:var(--down);color:var(--down)}
+.kh-tipe button.on[data-tipe="in"]{background:rgba(34,197,94,.14);border-color:var(--up);color:var(--up)}
+.kh-field{margin-bottom:11px}
+.kh-field label{display:block;font-size:12.5px;color:var(--muted-strong);margin-bottom:5px;font-weight:600}
+.kh-amt{display:flex;align-items:center;border:1px solid var(--hair-dark);border-radius:12px;background:var(--elevated);overflow:hidden}
+.kh-amt span{padding:0 12px;color:var(--muted);font-weight:700;font-family:var(--num)}
+.kh-amt input{flex:1;border:0;background:transparent;padding:13px 12px 13px 0;color:var(--on-dark);font:inherit;font-family:var(--num);font-weight:700;font-size:20px;outline:none;min-width:0}
+.kh-in-el,.kh-sel{width:100%;box-sizing:border-box;background:var(--elevated);border:1px solid var(--hair-dark);border-radius:11px;padding:11px 12px;color:var(--on-dark);font:inherit;font-size:14px}
+.kh-in-el:focus,.kh-sel:focus{outline:none;border-color:var(--primary)}
+.kh-row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.kh-quick{display:flex;flex-wrap:wrap;gap:7px;margin:2px 0 12px}
+.kh-qchip{font:inherit;font-size:12.5px;font-weight:600;padding:7px 12px;border-radius:99px;border:1px solid var(--hair-dark);background:var(--card);color:var(--muted-strong);cursor:pointer;transition:.15s}
+.kh-qchip:hover{border-color:var(--primary);color:var(--accent-ink)}
+.kh-submit{width:100%;font:inherit;font-weight:700;font-size:15px;padding:13px;border-radius:12px;border:0;background:var(--primary);color:#fff;cursor:pointer;margin-top:4px}
+.kh-cancel{width:100%;font:inherit;font-weight:600;font-size:13px;padding:10px;border-radius:10px;border:1px solid var(--hair-dark);background:var(--elevated);color:var(--muted-strong);cursor:pointer;margin-top:8px}
+.kh-periodbar{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px}
+.kh-pbtn{font:inherit;font-size:12.5px;font-weight:600;padding:7px 12px;border-radius:99px;border:1px solid var(--hair-dark);background:var(--elevated);color:var(--muted-strong);cursor:pointer}
+.kh-pbtn.on{background:var(--primary);border-color:var(--primary);color:#fff}
+.kh-bar{margin:9px 0}
+.kh-bar-top{display:flex;justify-content:space-between;font-size:12.5px;margin-bottom:4px}
+.kh-bar-top .k{color:var(--on-dark);font-weight:600}
+.kh-bar-top .v{font-family:var(--num);color:var(--muted-strong)}
+.kh-bar-track{height:9px;border-radius:99px;background:var(--elevated);overflow:hidden}
+.kh-bar-fill{height:100%;border-radius:99px;background:linear-gradient(90deg,var(--primary),var(--accent2,var(--primary)))}
+.kh-bar-fill.over{background:linear-gradient(90deg,var(--down),#f97316)}
+.kh-stat-row{display:flex;justify-content:space-between;gap:12px;padding:8px 0;border-bottom:1px solid var(--hair-soft);font-size:13px;color:var(--muted-strong)}
+.kh-stat-row:last-child{border-bottom:0}
+.kh-stat-row b{font-family:var(--num);color:var(--on-dark)}
+.kh-empty{text-align:center;color:var(--muted);font-size:13.5px;padding:26px 10px;border:1px dashed var(--hair-dark);border-radius:12px}
+.kh-daygroup{margin-top:16px}
+.kh-dayhead{display:flex;justify-content:space-between;align-items:baseline;gap:10px;padding:6px 2px;border-bottom:1px solid var(--hair-dark);margin-bottom:6px}
+.kh-dayhead b{font-size:13px;color:var(--on-dark)}
+.kh-dayhead span{font-family:var(--num);font-size:12.5px;color:var(--muted)}
+.kh-item{display:flex;align-items:center;gap:11px;padding:10px 6px;border-bottom:1px solid var(--hair-soft)}
+.kh-item:last-child{border-bottom:0}
+.kh-ic{flex:0 0 auto;width:38px;height:38px;border-radius:11px;display:grid;place-items:center;font-size:19px;background:var(--elevated)}
+.kh-it-body{flex:1 1 auto;min-width:0}
+.kh-it-body b{display:block;font-size:14px;color:var(--on-dark);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.kh-it-body span{display:block;font-size:11.5px;color:var(--muted);margin-top:1px}
+.kh-it-amt{flex:0 0 auto;font-family:var(--num);font-weight:700;font-size:14.5px;text-align:right}
+.kh-it-amt.in{color:var(--up)}.kh-it-amt.out{color:var(--down)}
+.kh-it-act{flex:0 0 auto;display:flex;gap:4px}
+.kh-it-act button{width:30px;height:30px;border-radius:8px;border:1px solid var(--hair-dark);background:var(--card);color:var(--muted-strong);cursor:pointer;font-size:13px}
+.kh-it-act button:hover{border-color:var(--primary);color:var(--accent-ink)}
+.kh-filters{display:grid;grid-template-columns:1fr auto auto;gap:8px;margin-bottom:6px}
+@media(max-width:600px){.kh-filters{grid-template-columns:1fr}}
+.kh-budget-add{display:grid;grid-template-columns:1fr 1fr auto;gap:8px;margin-bottom:12px}
+@media(max-width:600px){.kh-budget-add{grid-template-columns:1fr}}
+.kh-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+.kh-note{border:1px solid var(--hair-dark);border-left:3px solid var(--primary);border-radius:12px;padding:13px 15px;background:var(--card);margin-top:16px;font-size:12.5px;color:var(--muted-strong);line-height:1.6}
+#khSaved{position:fixed;bottom:18px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--on-dark);color:var(--card);font-size:12.5px;font-weight:600;padding:8px 16px;border-radius:99px;opacity:0;pointer-events:none;transition:.25s;z-index:80}
+#khSaved.on{opacity:1;transform:translateX(-50%) translateY(0)}
+.kh-full{margin-top:16px}
+</style>
+</head>
+<body>
+<nav class="nav"><div class="nav-in">
+<a class="brand" href="index.html"><img class="brand-logo brand-dark" src="assets/bekal-logo-white.png" alt="Bekal" width="56" height="30"><img class="brand-logo brand-light" src="assets/bekal-logo-green.png" alt="" aria-hidden="true" width="56" height="30"></a>
+<div class="nav-links" id="navLinks">
+<a href="index.html" class="nav-link">Beranda</a>
+<div class="nav-group">
+<button type="button" class="nav-group-btn" aria-expanded="false" aria-haspopup="true" aria-controls="menu-belajar">Belajar<svg class="i nav-caret" aria-hidden="true"><use href="#i-chevron-down"></use></svg></button>
+<div class="nav-menu" id="menu-belajar" role="menu">
+<a href="tryout.html" class="nav-menu-item" role="menuitem"><span class="nav-menu-ic"><svg class="i" aria-hidden="true"><use href="#i-target"></use></svg></span><span class="nav-menu-tx"><b>Tryout</b><small>Simulasi ujian &amp; latihan soal</small></span></a>
+<a href="pembahasan.html" class="nav-menu-item" role="menuitem"><span class="nav-menu-ic"><svg class="i" aria-hidden="true"><use href="#i-book"></use></svg></span><span class="nav-menu-tx"><b>Bank Soal &amp; Pembahasan</b><small>Soal lengkap dengan pembahasan</small></span></a>
+<a href="dashboard.html" class="nav-menu-item" role="menuitem"><span class="nav-menu-ic"><svg class="i" aria-hidden="true"><use href="#i-chart"></use></svg></span><span class="nav-menu-tx"><b>Dashboard</b><small>Progres &amp; statistik belajar</small></span></a>
+<a href="analisis.html" class="nav-menu-item" role="menuitem"><span class="nav-menu-ic"><svg class="i" aria-hidden="true"><use href="#i-brain"></use></svg></span><span class="nav-menu-tx"><b>AI Analisis</b><small>Analisis kelemahan berbasis AI</small></span></a>
+</div></div>
+<div class="nav-group">
+<button type="button" class="nav-group-btn" aria-expanded="false" aria-haspopup="true" aria-controls="menu-kampus">Kampus &amp; Karier<svg class="i nav-caret" aria-hidden="true"><use href="#i-chevron-down"></use></svg></button>
+<div class="nav-menu" id="menu-kampus" role="menu">
+<a href="kuliah.html" class="nav-menu-item" role="menuitem"><span class="nav-menu-ic"><svg class="i" aria-hidden="true"><use href="#i-grad"></use></svg></span><span class="nav-menu-tx"><b>Kuliah</b><small>1161 prodi di 290 kampus</small></span></a>
+<a href="beasiswa.html" class="nav-menu-item" role="menuitem"><span class="nav-menu-ic"><svg class="i" aria-hidden="true"><use href="#i-money"></use></svg></span><span class="nav-menu-tx"><b>Beasiswa</b><small>90 beasiswa dalam &amp; luar negeri</small></span></a>
+<a href="kerja-remote.html" class="nav-menu-item" role="menuitem"><span class="nav-menu-ic"><svg class="i" aria-hidden="true"><use href="#i-globe"></use></svg></span><span class="nav-menu-tx"><b>Kerja Remote</b><small>Lowongan remote ID &amp; luar negeri</small></span></a>
+<a href="skripsi.html" class="nav-menu-item" role="menuitem"><span class="nav-menu-ic"><svg class="i" aria-hidden="true"><use href="#i-doc"></use></svg></span><span class="nav-menu-tx"><b>Riset &amp; Skripsi</b><small>Asisten riset &amp; penulisan</small></span></a>
+</div></div>
+<div class="nav-group">
+<button type="button" class="nav-group-btn" aria-expanded="false" aria-haspopup="true" aria-controls="menu-usaha">Usaha<svg class="i nav-caret" aria-hidden="true"><use href="#i-chevron-down"></use></svg></button>
+<div class="nav-menu" id="menu-usaha" role="menu"><a href="kelas.html" class="nav-menu-item" role="menuitem"><span class="nav-menu-ic"><svg class="i" aria-hidden="true"><use href="#i-grad"></use></svg></span><span class="nav-menu-tx"><b>Kelas Bisnis dari Nol</b><small>Kuliah online 7 chapter</small></span></a><a href="scaleup.html" class="nav-menu-item" role="menuitem"><span class="nav-menu-ic"><svg class="i" aria-hidden="true"><use href="#i-trend"></use></svg></span><span class="nav-menu-tx"><b>Scale Up Bisnis</b><small>MVP, PMF &amp; ekspansi</small></span></a><a href="legalitas.html" class="nav-menu-item" role="menuitem"><span class="nav-menu-ic"><svg class="i" aria-hidden="true"><use href="#i-shield"></use></svg></span><span class="nav-menu-tx"><b>Legalitas &amp; Pajak</b><small>NIB, PT/CV, PIRT &amp; pajak</small></span></a><a href="bisnis.html" class="nav-menu-item" role="menuitem"><span class="nav-menu-ic"><svg class="i" aria-hidden="true"><use href="#i-bolt"></use></svg></span><span class="nav-menu-tx"><b>Studio Bisnis</b><small>Alat bisnis &amp; monetisasi</small></span></a><a href="franchise.html" class="nav-menu-item" role="menuitem"><span class="nav-menu-ic"><svg class="i" aria-hidden="true"><use href="#i-store"></use></svg></span><span class="nav-menu-tx"><b>Franchise &amp; Peluang</b><small>Direktori franchise &amp; ide bisnis</small></span></a><a href="finansial.html" class="nav-menu-item" role="menuitem"><span class="nav-menu-ic"><svg class="i" aria-hidden="true"><use href="#i-money"></use></svg></span><span class="nav-menu-tx"><b>Finansial</b><small>Kalkulator keuangan &amp; investasi</small></span></a></div></div>
+<div class="nav-group">
+<button type="button" class="nav-group-btn" aria-expanded="false" aria-haspopup="true" aria-controls="menu-studio">Studio AI<svg class="i nav-caret" aria-hidden="true"><use href="#i-chevron-down"></use></svg></button>
+<div class="nav-menu" id="menu-studio" role="menu">
+<a href="prompt-studio.html" class="nav-menu-item" role="menuitem"><span class="nav-menu-ic"><svg class="i" aria-hidden="true"><use href="#i-sparkles"></use></svg></span><span class="nav-menu-tx"><b>Prompt Studio</b><small>Generator prompt AI</small></span></a>
+<a href="keuangan-harian.html" class="nav-menu-item" role="menuitem" aria-current="page"><span class="nav-menu-ic"><svg class="i" aria-hidden="true"><use href="#i-wallet"></use></svg></span><span class="nav-menu-tx"><b>Catatan Keuangan Harian</b><small>Pemasukan &amp; pengeluaran</small></span></a>
+</div></div>
+</div>
+<div class="nav-right"><a href="auth.html" class="hide-sm" style="font-weight:600">Masuk</a><a href="auth.html" class="btn btn-primary btn-sm">Daftar Gratis</a><button class="nav-toggle" data-nav-toggle aria-label="Buka menu" aria-expanded="false"><svg class="i" aria-hidden="true"><use href="#i-menu"></use></svg></button></div>
+</div></nav>
+
+<main>
+<section class="section-sm kh-hero"><div class="wrap">
+  <span class="section-eyebrow">Studio · Keuangan <span class="badge-new">Baru</span></span>
+  <h1 class="mt"><span class="gradient-text">Catatan Keuangan</span> Harian</h1>
+  <p class="lead mt" style="max-width:64ch">Catat <b style="color:var(--on-dark)">pemasukan &amp; pengeluaran</b> harianmu — makan, rokok, bensin, kopi, gaji, usaha, dan lainnya. Pantau <b style="color:var(--on-dark)">saldo</b>, atur <b style="color:var(--on-dark)">anggaran bulanan</b>, lihat statistik, lalu ekspor laporan. <b style="color:var(--on-dark)">Gratis, tanpa login</b>, tersimpan otomatis di perangkatmu.</p>
+
+  <div class="kh-cards">
+    <div class="kh-card saldo"><div class="lbl">Saldo total</div><div class="val" id="khSaldo">Rp0</div></div>
+    <div class="kh-card kh-in"><div class="lbl">Pemasukan <span id="khPeriodLbl2">(bulan ini)</span></div><div class="val" id="khIn">Rp0</div></div>
+    <div class="kh-card kh-out"><div class="lbl">Pengeluaran <span id="khPeriodLbl3">(bulan ini)</span></div><div class="val" id="khOut">Rp0</div></div>
+  </div>
+</div></section>
+
+<section><div class="wrap">
+  <div class="kh-grid">
+    <!-- FORM -->
+    <div class="kh-box">
+      <h2 id="khFormTitle">➕ Tambah transaksi</h2>
+      <form id="khForm" autocomplete="off">
+        <div class="kh-tipe">
+          <button type="button" class="on" data-tipe="out">− Pengeluaran</button>
+          <button type="button" data-tipe="in">+ Pemasukan</button>
+        </div>
+        <div class="kh-field"><label>Jumlah</label>
+          <div class="kh-amt"><span>Rp</span><input type="text" id="khJumlah" inputmode="numeric" placeholder="0"></div>
+        </div>
+        <div class="kh-quick" id="khQuick"></div>
+        <div class="kh-field"><label>Kategori</label><select class="kh-sel" id="khKat"></select></div>
+        <div class="kh-row2">
+          <div class="kh-field"><label>Sumber dana</label><select class="kh-sel" id="khSumber"></select></div>
+          <div class="kh-field"><label>Tanggal</label><input type="date" class="kh-in-el" id="khTanggal"></div>
+        </div>
+        <div class="kh-field"><label>Catatan (opsional)</label><input type="text" class="kh-in-el" id="khCatatan" placeholder="mis. makan siang warteg, beli rokok 1 bungkus"></div>
+        <button type="submit" class="kh-submit" id="khSubmit">Tambah</button>
+        <button type="button" class="kh-cancel" id="khCancel" style="display:none">Batalkan edit</button>
+      </form>
+    </div>
+
+    <!-- RINGKASAN PERIODE -->
+    <div class="kh-box">
+      <h2>📊 Ringkasan &amp; statistik</h2>
+      <div class="kh-periodbar" id="khPeriod">
+        <button type="button" class="kh-pbtn" data-period="today">Hari ini</button>
+        <button type="button" class="kh-pbtn" data-period="week">Minggu ini</button>
+        <button type="button" class="kh-pbtn on" data-period="month">Bulan ini</button>
+        <button type="button" class="kh-pbtn" data-period="all">Semua</button>
+        <button type="button" class="kh-pbtn" data-period="custom">Rentang…</button>
+      </div>
+      <div class="kh-row2" id="khCustomRange" style="display:none;margin-bottom:12px">
+        <div class="kh-field" style="margin:0"><label>Dari</label><input type="date" class="kh-in-el" id="khFrom"></div>
+        <div class="kh-field" style="margin:0"><label>Sampai</label><input type="date" class="kh-in-el" id="khTo"></div>
+      </div>
+      <h3 style="font-size:13px;color:var(--muted);margin:4px 0 6px;text-transform:uppercase;letter-spacing:.4px">Pengeluaran per kategori</h3>
+      <div id="khBreakdown"></div>
+      <h3 style="font-size:13px;color:var(--muted);margin:16px 0 6px;text-transform:uppercase;letter-spacing:.4px">Statistik</h3>
+      <div id="khStats"></div>
+      <h3 style="font-size:13px;color:var(--muted);margin:16px 0 6px;text-transform:uppercase;letter-spacing:.4px">Saldo per sumber dana</h3>
+      <div id="khSources"></div>
+    </div>
+  </div>
+
+  <!-- ANGGARAN -->
+  <div class="kh-box kh-full">
+    <h2>🎯 Anggaran bulanan per kategori</h2>
+    <p style="font-size:12.5px;color:var(--muted);margin:-6px 0 12px;line-height:1.6">Tetapkan batas pengeluaran per kategori tiap bulan. Bar akan berubah merah bila mendekati/melebihi batas.</p>
+    <div class="kh-budget-add">
+      <select class="kh-sel" id="khBudKat"></select>
+      <div class="kh-amt"><span>Rp</span><input type="text" id="khBudAmt" inputmode="numeric" placeholder="Batas / bulan"></div>
+      <button type="button" class="kh-submit" id="khBudSet" style="margin:0;width:auto;padding:0 20px">Simpan</button>
+    </div>
+    <div id="khBudget"></div>
+  </div>
+
+  <!-- JURNAL -->
+  <div class="kh-box kh-full">
+    <h2>📒 Riwayat transaksi</h2>
+    <div class="kh-filters">
+      <input type="search" class="kh-in-el" id="khSearch" placeholder="Cari catatan / kategori…">
+      <select class="kh-sel" id="khFilterTipe"><option value="">Semua tipe</option><option value="in">Pemasukan</option><option value="out">Pengeluaran</option></select>
+      <select class="kh-sel" id="khFilterKat"><option value="">Semua kategori</option></select>
+    </div>
+    <div id="khList"></div>
+  </div>
+
+  <div class="kh-actions">
+    <button type="button" class="btn btn-ghost btn-sm" data-act="csv">⬇️ Ekspor CSV</button>
+    <button type="button" class="btn btn-ghost btn-sm" data-act="json">💾 Cadangkan (JSON)</button>
+    <button type="button" class="btn btn-ghost btn-sm" data-act="import">📤 Impor (JSON)</button>
+    <button type="button" class="btn btn-ghost btn-sm" data-act="print">🖨️ Cetak laporan</button>
+    <button type="button" class="btn btn-ghost btn-sm" data-act="reset" style="color:var(--down)">🗑️ Reset semua</button>
+    <input type="file" id="khFile" accept="application/json,.json" style="display:none">
+  </div>
+
+  <div class="kh-note">🔒 <b>Privasi:</b> semua catatan hanya tersimpan di browser perangkat ini (localStorage) — tidak dikirim ke server mana pun &amp; tidak bisa kami lihat. Bersihkan data browser = catatan hilang, jadi <b>cadangkan (JSON)</b> secara berkala. Butuh alat hitung lain? Lihat <a href="finansial.html" style="color:var(--accent-ink);font-weight:600">Finansial</a>.</div>
+</div></section>
+</main>
+
+<div id="khSaved">Tersimpan ✓</div>
+
+<footer class="footer"><div class="wrap"><div class="cols">
+<div><a class="brand" href="index.html" style="color:var(--ink)"><img class="brand-logo brand-dark" src="assets/bekal-logo-white.png" alt="Bekal" width="56" height="30"><img class="brand-logo brand-light" src="assets/bekal-logo-green.png" alt="" aria-hidden="true" width="56" height="30"></a><p style="color:#5b6672;font-size:13px;margin-top:14px;max-width:34ch">Bekal lengkap menuju masa depan — belajar, kampus, karier, dan usaha dalam satu platform untuk pelajar &amp; fresh grad Indonesia.</p></div>
+<div><h5>Belajar</h5><a href="tryout.html">Tryout</a><a href="pembahasan.html">Bank Soal &amp; Pembahasan</a><a href="dashboard.html">Dashboard</a><a href="analisis.html">AI Analisis</a></div>
+<div><h5>Kampus &amp; Karier</h5><a href="kuliah.html">Kuliah</a><a href="beasiswa.html">Beasiswa</a><a href="kerja-remote.html">Kerja Remote</a><a href="skripsi.html">Riset &amp; Skripsi</a></div>
+<div><h5>Usaha</h5><a href="kelas.html">Kelas Bisnis dari Nol</a><a href="scaleup.html">Scale Up Bisnis</a><a href="legalitas.html">Legalitas &amp; Pajak</a><a href="franchise.html">Franchise &amp; Peluang</a><a href="finansial.html">Finansial</a></div>
+<div><h5>Studio AI</h5><a href="prompt-studio.html">Prompt Studio</a><a href="keuangan-harian.html">Catatan Keuangan Harian</a><a href="verifikasi.html">Verifikasi Sertifikat</a></div>
+</div><div class="bottom"><span>&copy; <span data-year>2026</span> Bekal &mdash; Seluruh hak cipta dilindungi.</span><span>Dibuat untuk pelajar &amp; fresh grad Indonesia 🇮🇩</span></div></div></footer>
+<script src="assets/app.js" defer></script>
+<script src="assets/keuangan.js" defer></script>
+</body>
+</html>
