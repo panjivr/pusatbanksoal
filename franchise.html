@@ -48,6 +48,12 @@
 :root[data-theme="light"] .fr-tab{background:#fff;border-color:#d9e1ee}
 :root[data-theme="light"] .fr-tab:hover{border-color:#2f6bed;color:#1d4ed8}
 :root[data-theme="light"] .fr-tab.on{background:var(--primary);border-color:var(--primary);color:var(--on-primary)}
+.fr-subtabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+.fr-subtab{background:var(--elevated);border:1px solid var(--hair-dark);color:var(--muted-strong);border-radius:99px;padding:8px 14px;font:inherit;font-size:13px;font-weight:600;cursor:pointer;transition:.15s}
+.fr-subtab:hover{border-color:var(--primary);color:var(--on-dark)}
+.fr-subtab.on{background:var(--primary-soft);border-color:var(--primary);color:var(--accent-ink)}
+.fr-sub{display:none}
+.fr-sub.on{display:block;animation:frFade .25s ease}
 :root[data-theme="light"] .fr-sub{border-bottom:1px solid #e2e8f2}
 .fr-panel{display:none}
 .fr-panel.on{display:block;animation:frFade .28s ease}
@@ -233,11 +239,7 @@ body.fr-noscroll{overflow:hidden}
 </div></div>
 <div class="nav-group">
 <button type="button" class="nav-group-btn" aria-expanded="false" aria-haspopup="true" aria-controls="menu-usaha">Usaha<svg class="i nav-caret" aria-hidden="true"><use href="#i-chevron-down"></use></svg></button>
-<div class="nav-menu" id="menu-usaha" role="menu">
-<a href="kelas.html" class="nav-menu-item" role="menuitem"><span class="nav-menu-ic"><svg class="i" aria-hidden="true"><use href="#i-grad"></use></svg></span><span class="nav-menu-tx"><b>Kelas Bisnis dari Nol</b><small>Kuliah online 7 chapter</small></span></a>
-<a href="scaleup.html" class="nav-menu-item" role="menuitem"><span class="nav-menu-ic"><svg class="i" aria-hidden="true"><use href="#i-trend"></use></svg></span><span class="nav-menu-tx"><b>Scale Up Bisnis</b><small>MVP, PMF &amp; ekspansi</small></span></a><a href="legalitas.html" class="nav-menu-item" role="menuitem"><span class="nav-menu-ic"><svg class="i" aria-hidden="true"><use href="#i-shield"></use></svg></span><span class="nav-menu-tx"><b>Legalitas &amp; Pajak</b><small>NIB, PT/CV, PIRT &amp; pajak</small></span></a>
-<a href="bisnis.html" class="nav-menu-item" role="menuitem"><span class="nav-menu-ic"><svg class="i" aria-hidden="true"><use href="#i-bolt"></use></svg></span><span class="nav-menu-tx"><b>Studio Bisnis</b><small>Alat bisnis &amp; monetisasi</small></span></a><a href="franchise.html" class="nav-menu-item" role="menuitem"><span class="nav-menu-ic"><svg class="i" aria-hidden="true"><use href="#i-store"></use></svg></span><span class="nav-menu-tx"><b>Franchise &amp; Peluang</b><small>Direktori franchise &amp; ide bisnis</small></span></a><a href="finansial.html" class="nav-menu-item" role="menuitem"><span class="nav-menu-ic"><svg class="i" aria-hidden="true"><use href="#i-money"></use></svg></span><span class="nav-menu-tx"><b>Finansial</b><small>Kalkulator keuangan &amp; investasi</small></span></a>
-</div></div>
+<div class="nav-menu" id="menu-usaha" role="menu"><a href="kelas.html" class="nav-menu-item" role="menuitem"><span class="nav-menu-ic"><svg class="i" aria-hidden="true"><use href="#i-grad"></use></svg></span><span class="nav-menu-tx"><b>Kelas Bisnis dari Nol</b><small>Kuliah online 7 chapter</small></span></a><a href="scaleup.html" class="nav-menu-item" role="menuitem"><span class="nav-menu-ic"><svg class="i" aria-hidden="true"><use href="#i-trend"></use></svg></span><span class="nav-menu-tx"><b>Scale Up Bisnis</b><small>MVP, PMF &amp; ekspansi</small></span></a><a href="legalitas.html" class="nav-menu-item" role="menuitem"><span class="nav-menu-ic"><svg class="i" aria-hidden="true"><use href="#i-shield"></use></svg></span><span class="nav-menu-tx"><b>Legalitas &amp; Pajak</b><small>NIB, PT/CV, PIRT &amp; pajak</small></span></a><a href="bisnis.html" class="nav-menu-item" role="menuitem"><span class="nav-menu-ic"><svg class="i" aria-hidden="true"><use href="#i-bolt"></use></svg></span><span class="nav-menu-tx"><b>Studio Bisnis</b><small>Alat bisnis &amp; monetisasi</small></span></a><a href="franchise.html" class="nav-menu-item" role="menuitem" aria-current="page"><span class="nav-menu-ic"><svg class="i" aria-hidden="true"><use href="#i-store"></use></svg></span><span class="nav-menu-tx"><b>Franchise &amp; Peluang</b><small>Direktori franchise &amp; ide bisnis</small></span></a><a href="finansial.html" class="nav-menu-item" role="menuitem"><span class="nav-menu-ic"><svg class="i" aria-hidden="true"><use href="#i-money"></use></svg></span><span class="nav-menu-tx"><b>Finansial</b><small>Kalkulator keuangan &amp; investasi</small></span></a></div></div>
 <div class="nav-group">
 <button type="button" class="nav-group-btn" aria-expanded="false" aria-haspopup="true" aria-controls="menu-studio">Studio AI<svg class="i nav-caret" aria-hidden="true"><use href="#i-chevron-down"></use></svg></button>
 <div class="nav-menu" id="menu-studio" role="menu">
@@ -263,9 +265,7 @@ body.fr-noscroll{overflow:hidden}
     <button class="fr-tab on" data-tab="jelajah" role="tab" aria-selected="true">Franchise</button>
     <button class="fr-tab" data-tab="hitung" role="tab" aria-selected="false">Kalkulator</button>
     <button class="fr-tab" data-tab="kota" role="tab" aria-selected="false">Daya Beli Kota</button>
-    <button class="fr-tab" data-tab="boring" role="tab" aria-selected="false">Boring Business</button>
-    <button class="fr-tab" data-tab="ide" role="tab" aria-selected="false">Ide Bisnis</button>
-    <button class="fr-tab" data-tab="luar" role="tab" aria-selected="false">Ide Luar Negeri</button>
+    <button class="fr-tab" data-tab="ide" role="tab" aria-selected="false">Ide Usaha</button>
     <button class="fr-tab" data-tab="sukses" role="tab" aria-selected="false">Kisah Sukses</button>
     <button class="fr-tab" data-tab="shortlist" role="tab" aria-selected="false">Shortlist</button>
   </nav>
@@ -354,22 +354,26 @@ body.fr-noscroll{overflow:hidden}
   </section>
 
   <!-- ================= BORING ================= -->
-  <section class="fr-panel" data-panel="boring">
-    <p class="fr-cap"><b>"Boring is profitable."</b> Saat ekonomi goyang orang tetap cuci baju, isi galon, ngekos, dan beli sembako. Bisnis ini tidak keren di Instagram, tapi punya <b>pelanggan berulang</b>, margin stabil, dan persaingan tren yang lebih santai.</p>
-    <div class="fr-list" id="boringList"></div>
-  </section>
-
-  <!-- ================= IDE ================= -->
+  <!-- ================= IDE USAHA (gabungan) ================= -->
   <section class="fr-panel" data-panel="ide">
-    <p class="fr-cap">Ide bisnis <b>di luar franchise</b> — kamu pegang kendali penuh dan tanpa fee merek. Dikelompokkan per <b>tingkat modal</b>: dari receh sampai ratusan juta.</p>
-    <div class="fr-chips" id="ideChips" aria-label="Filter tingkat modal ide bisnis"></div>
-    <div id="ideWrap"></div>
-  </section>
-
-  <!-- ================= IDE LUAR NEGERI ================= -->
-  <section class="fr-panel" data-panel="luar">
-    <p class="fr-cap">Model bisnis yang <b>terbukti jalan di luar negeri</b> dan cocok diadaptasi ke Indonesia — dari photobox Korea, vending machine Jepang, sampai cloud kitchen &amp; laundromat swalayan. Banyak sudah mulai masuk; sisanya masih <b>ruang kosong</b> yang bisa kamu isi lebih dulu.</p>
-    <div class="fr-list" id="luarList"></div>
+    <div class="fr-subtabs" id="ideSubTabs" role="tablist" aria-label="Kategori ide usaha">
+      <button class="fr-subtab on" data-sub="nonfr" role="tab" aria-selected="true">💡 Non-Franchise (per modal)</button>
+      <button class="fr-subtab" data-sub="boring" role="tab" aria-selected="false">🔁 Boring Business</button>
+      <button class="fr-subtab" data-sub="luar" role="tab" aria-selected="false">🌍 Ide Luar Negeri</button>
+    </div>
+    <div class="fr-sub on" data-sub="nonfr">
+      <p class="fr-cap">Ide bisnis <b>di luar franchise</b> — kamu pegang kendali penuh dan tanpa fee merek. Dikelompokkan per <b>tingkat modal</b>: dari receh sampai ratusan juta.</p>
+      <div class="fr-chips" id="ideChips" aria-label="Filter tingkat modal ide bisnis"></div>
+      <div id="ideWrap"></div>
+    </div>
+    <div class="fr-sub" data-sub="boring">
+      <p class="fr-cap"><b>"Boring is profitable."</b> Saat ekonomi goyang orang tetap cuci baju, isi galon, ngekos, dan beli sembako. Bisnis ini tidak keren di Instagram, tapi punya <b>pelanggan berulang</b>, margin stabil, dan persaingan tren yang lebih santai.</p>
+      <div class="fr-list" id="boringList"></div>
+    </div>
+    <div class="fr-sub" data-sub="luar">
+      <p class="fr-cap">Model bisnis yang <b>terbukti jalan di luar negeri</b> dan cocok diadaptasi ke Indonesia — dari photobox Korea, vending machine Jepang, sampai cloud kitchen &amp; laundromat swalayan. Banyak sudah mulai masuk; sisanya masih <b>ruang kosong</b> yang bisa kamu isi lebih dulu.</p>
+      <div class="fr-list" id="luarList"></div>
+    </div>
   </section>
 
   <!-- ================= KISAH SUKSES ================= -->
