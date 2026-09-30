@@ -59,11 +59,21 @@
 
   /* ---------- state ---------- */
   var st = {
-    mode: 'qr', text: 'https://pusatbanksoal.id',
+    mode: 'qr', sym: 'code128', text: 'https://pusatbanksoal.id',
     fg: '#0b0e11', bg: '#ffffff', size: 512, margin: 4,
     ec: 'M', shape: 'kotak', frame: 'none', label: 'SCAN ME', logo: null
   };
   var LOGO_FRAC = { L: 0.14, M: 0.16, Q: 0.20, H: 0.24 };
+  var SYM_META = {
+    code128: { lb: 'Teks / kode (huruf & angka)', ph: 'mis. BEKAL-2026-XYZ', hint: 'Serba-guna: huruf, angka & simbol. Cocok untuk SKU, kode internal, tiket.' },
+    datamatrix: { lb: 'Teks / link / kode', ph: 'mis. https://pusatbanksoal.id atau SN-000123', hint: '2D paling padat — banyak data dalam kotak kecil. Ideal untuk serial, part kecil, kemasan.' },
+    ean13: { lb: '12–13 digit angka', ph: 'mis. 590123412345', hint: 'Barcode produk ritel global. 12 digit (cek otomatis) atau 13 digit lengkap.' },
+    upca: { lb: '11–12 digit angka', ph: 'mis. 036000291452', hint: 'Barcode ritel Amerika Utara. 11 digit (cek otomatis) atau 12 digit.' },
+    ean8: { lb: '7–8 digit angka', ph: 'mis. 9638507', hint: 'Versi ringkas EAN untuk kemasan kecil. 7 atau 8 digit.' },
+    code39: { lb: 'Huruf besar & angka', ph: 'mis. ASET-001', hint: 'Industri/inventaris. Mendukung A-Z, 0-9 dan - . spasi $ / + %.' },
+    itf: { lb: 'Angka (dibuat genap)', ph: 'mis. 12345678', hint: 'Interleaved 2 of 5 untuk karton & logistik. Jumlah digit dibuat genap otomatis.' },
+    codabar: { lb: 'Angka & simbol', ph: 'mis. 12345670', hint: 'Perpustakaan, bank darah, lab. Mendukung 0-9 dan - $ : / . +.' }
+  };
   var currentLayout = null;
 
   /* ---------- color helpers ---------- */
@@ -124,11 +134,24 @@
     return { type: 'qr', W: W, H: H, bg: st.bg, fg: st.fg, shape: st.shape, mod: mod, cells: cells, finders: finders, logo: logo, texts: texts, frame: frame };
   }
 
+  function bitsFromElems(elems) {
+    var s = '', i;
+    for (i = 0; i < elems.length; i++) { var ch = elems[i].b ? '1' : '0'; for (var w = 0; w < elems[i].w; w++) s += ch; }
+    return s;
+  }
   function layoutBar() {
-    var elems = encodeCode128B(st.text);
-    var N = 0, i;
-    for (i = 0; i < elems.length; i++) N += elems[i].w;
-    var quiet = 10;
+    var sym = st.sym || 'code128';
+    if (sym === 'datamatrix') return layout2D();
+    var bits, human;
+    if (sym === 'code128') { bits = bitsFromElems(encodeCode128B(st.text)); human = st.text; }
+    else {
+      if (!window.BEKAL_BC || !window.BEKAL_BC[sym]) throw new Error('Simbologi belum termuat. Muat ulang halaman.');
+      var r = window.BEKAL_BC[sym](st.text); bits = r.bits; human = r.text;
+    }
+    return build1D(bits, human);
+  }
+  function build1D(bits, human) {
+    var N = bits.length, quiet = 10;
     var mw = Math.max(1, Math.floor(st.size / (N + quiet * 2)));
     var codeW = (N + quiet * 2) * mw;
     var barH = Math.max(mw * 20, Math.round(codeW * 0.30));
@@ -141,15 +164,33 @@
     var top = pad + labelH;
     var H = top + barH + textH + pad;
 
-    var cells = [], x = pad + quiet * mw;
-    for (i = 0; i < elems.length; i++) {
-      if (elems[i].b) cells.push({ x: x, y: top, w: elems[i].w * mw, h: barH });
-      x += elems[i].w * mw;
+    var cells = [], i = 0;
+    while (i < N) {
+      if (bits.charAt(i) === '1') { var j = i; while (j < N && bits.charAt(j) === '1') j++; cells.push({ x: pad + (quiet + i) * mw, y: top, w: (j - i) * mw, h: barH }); i = j; }
+      else i++;
     }
-    var texts = [{ x: W / 2, y: top + barH + textH * 0.58, size: fontPx, text: st.text, align: 'center', color: st.fg }];
+    var texts = [{ x: W / 2, y: top + barH + textH * 0.58, size: fontPx, text: human, align: 'center', color: st.fg }];
     if (st.frame === 'label') texts.push({ x: W / 2, y: pad + labelH * 0.5, size: Math.round(fontPx * 0.95), text: (st.label || '').toUpperCase(), align: 'center', color: st.fg, bold: true });
     if (st.frame === 'border') frame = { type: 'border', x: pad * 0.4, y: pad * 0.4, w: W - pad * 0.8, h: H - pad * 0.8, r: Math.round(pad * 0.5), color: st.fg, sw: Math.max(2, Math.round(mw * 1.2)) };
     return { type: 'bar', W: W, H: H, bg: st.bg, fg: st.fg, shape: 'kotak', mod: mw, cells: cells, finders: [], logo: null, texts: texts, frame: frame };
+  }
+  function layout2D() {
+    if (!window.BEKAL_BC || !window.BEKAL_BC.datamatrix) throw new Error('Modul Data Matrix gagal dimuat. Muat ulang halaman.');
+    var r = window.BEKAL_BC.datamatrix(st.text); /* {w,h,data} */
+    var margin = Math.max(st.margin, 1);
+    var totalW = r.w + margin * 2, totalH = r.h + margin * 2;
+    var mod = Math.max(1, Math.floor(st.size / Math.max(totalW, totalH)));
+    var codeW = mod * totalW, codeH = mod * totalH;
+    var pad = 0, labelH = 0, frame = null;
+    if (st.frame === 'border') pad = Math.max(mod * 2, Math.round(codeW * 0.04));
+    else if (st.frame === 'label') { pad = Math.round(codeW * 0.055); labelH = Math.round(codeW * 0.145); }
+    var W = codeW + pad * 2, H = codeH + pad * 2 + labelH, ox = pad, oy = pad;
+    var cells = [], x, y;
+    for (y = 0; y < r.h; y++) for (x = 0; x < r.w; x++) if (r.data[y * r.w + x]) cells.push({ x: ox + (margin + x) * mod, y: oy + (margin + y) * mod, w: mod, h: mod });
+    var texts = [];
+    if (st.frame === 'label') texts.push({ x: W / 2, y: codeH + pad * 2 + labelH / 2, size: Math.round(labelH * 0.5), text: (st.label || '').toUpperCase(), align: 'center', color: st.fg, bold: true });
+    if (st.frame === 'border') frame = { type: 'border', x: pad * 0.4, y: pad * 0.4, w: W - pad * 0.8, h: H - pad * 0.8, r: Math.round(pad * 0.6), color: st.fg, sw: Math.max(2, Math.round(mod * 0.8)) };
+    return { type: 'dm', W: W, H: H, bg: st.bg, fg: st.fg, shape: 'kotak', mod: mod, cells: cells, finders: [], logo: null, texts: texts, frame: frame };
   }
 
   /* ---------- CANVAS renderer ---------- */
@@ -350,7 +391,8 @@
   }
 
   /* ---------- download / clipboard / toast ---------- */
-  function baseName() { return st.mode === 'qr' ? 'qr-code' : 'barcode'; }
+  function baseName() { return st.mode === 'qr' ? 'qr-code' : (st.sym === 'datamatrix' ? 'datamatrix' : (st.sym === 'code128' ? 'barcode' : st.sym)); }
+  function kindLabel() { return st.mode === 'qr' ? 'QR code' : (st.sym === 'datamatrix' ? 'Data Matrix' : 'Barcode'); }
   function dl(data, filename, mime) {
     var blob = (data instanceof Blob) ? data : new Blob([data], { type: mime || 'application/octet-stream' });
     var url = URL.createObjectURL(blob);
@@ -392,7 +434,7 @@
   function updateEmbed(L) {
     var ta = $('qsEmbed'); if (!ta) return;
     var du = previewDataURL(L);
-    ta.value = '<img src="' + du + '" alt="' + esc(st.mode === 'qr' ? 'QR code' : 'Barcode') + '" width="' + Math.min(320, L.W) + '">';
+    ta.value = '<img src="' + du + '" alt="' + esc(kindLabel()) + '" width="' + Math.min(320, L.W) + '">';
   }
   function previewDataURL(L) {
     try {
@@ -424,11 +466,11 @@
     if (!currentLayout) { toast('Belum ada kode'); return; }
     var L = currentLayout, snip;
     if (kind === 'svg') snip = buildSVG(L);
-    else if (kind === 'img') snip = '<img src="' + previewDataURL(L) + '" alt="' + esc(st.mode === 'qr' ? 'QR code' : 'Barcode') + '" width="' + Math.min(320, L.W) + '">';
+    else if (kind === 'img') snip = '<img src="' + previewDataURL(L) + '" alt="' + esc(kindLabel()) + '" width="' + Math.min(320, L.W) + '">';
     else { /* iframe */
       var svg = buildSVG(L).replace(/"/g, '&quot;');
       var dispW = Math.min(300, L.W), dispH = Math.round(dispW * (L.H / L.W));
-      snip = '<iframe srcdoc="' + svg + '" width="' + dispW + '" height="' + dispH + '" style="border:0" title="' + esc(st.mode === 'qr' ? 'QR code' : 'Barcode') + '"></iframe>';
+      snip = '<iframe srcdoc="' + svg + '" width="' + dispW + '" height="' + dispH + '" style="border:0" title="' + esc(kindLabel()) + '"></iframe>';
     }
     var ta = $('qsEmbed'); if (ta) ta.value = snip;
     copyText(snip);
@@ -441,10 +483,22 @@
     for (i = 0; i < btns.length; i++) btns[i].classList.toggle('on', btns[i].getAttribute('data-mode') === m);
     var only = document.querySelectorAll('.qs-only-qr');
     for (i = 0; i < only.length; i++) only[i].classList.toggle('hide', m !== 'qr');
-    var lbl = $('qsInLabel'), inp = $('qsText');
-    if (m === 'bar') { if (lbl) lbl.textContent = 'Teks / kode (huruf & angka)'; if (inp) inp.setAttribute('placeholder', 'mis. BEKAL-2026 atau 123456789'); }
-    else { if (lbl) lbl.textContent = 'Link atau teks'; if (inp) inp.setAttribute('placeholder', 'Tempel link di sini… mis. https://pusatbanksoal.id'); }
+    var onlyB = document.querySelectorAll('.qs-only-bar');
+    for (i = 0; i < onlyB.length; i++) onlyB[i].classList.toggle('hide', m !== 'bar');
+    if (m === 'bar') applySym();
+    else {
+      var lbl = $('qsInLabel'), inp = $('qsText');
+      if (lbl) lbl.textContent = 'Link atau teks';
+      if (inp) inp.setAttribute('placeholder', 'Tempel link di sini… mis. https://pusatbanksoal.id');
+    }
     render();
+  }
+  function applySym() {
+    var meta = SYM_META[st.sym] || SYM_META.code128;
+    var lbl = $('qsInLabel'), inp = $('qsText'), hint = $('qsSymHint');
+    if (lbl) lbl.textContent = meta.lb;
+    if (inp) inp.setAttribute('placeholder', meta.ph);
+    if (hint) hint.textContent = meta.hint;
   }
   function seg(id, attr, val, key) {
     var btns = document.querySelectorAll('#' + id + ' button'), i;
@@ -466,6 +520,9 @@
     /* mode */
     var mbtns = document.querySelectorAll('#qsModes button'), i;
     for (i = 0; i < mbtns.length; i++) (function (b) { b.addEventListener('click', function () { setMode(b.getAttribute('data-mode')); }); })(mbtns[i]);
+    /* symbology */
+    var symSel = $('qsSym');
+    if (symSel) { st.sym = symSel.value; symSel.addEventListener('change', function () { st.sym = symSel.value; applySym(); render(); }); }
     /* text */
     var txt = $('qsText');
     if (txt) { st.text = txt.value; txt.addEventListener('input', function () { st.text = txt.value; render(); }); }
