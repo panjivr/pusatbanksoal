@@ -152,7 +152,7 @@ textarea.qs-in{resize:vertical;min-height:64px;line-height:1.5}
 <section class="section-sm qs-hero"><div class="wrap">
   <span class="section-eyebrow">Studio AI · Alat <span class="badge-new">Baru</span></span>
   <h1 class="mt"><span class="gradient-text">QR &amp; Barcode</span> Generator</h1>
-  <p class="lead mt" style="max-width:66ch">Tempel <b style="color:var(--on-dark)">link atau teks</b> → langsung jadi <b style="color:var(--on-dark)">QR code</b>, <b style="color:var(--on-dark)">Data Matrix</b>, <b style="color:var(--on-dark)">PDF417</b>, atau barcode <b style="color:var(--on-dark)">EAN-13, UPC-A, Code 39, Code 128, ITF &amp; Codabar</b>. Atur warna, bentuk modul, bingkai, sampai logo di tengah. Unduh sebagai <b style="color:var(--on-dark)">PNG, JPG, SVG, atau PDF</b>, plus kode <b style="color:var(--on-dark)">embed</b>. Gratis, tanpa login.</p>
+  <p class="lead mt" style="max-width:66ch">Tempel <b style="color:var(--on-dark)">link atau teks</b> → langsung jadi <b style="color:var(--on-dark)">QR code</b>, <b style="color:var(--on-dark)">Data Matrix</b>, <b style="color:var(--on-dark)">Aztec</b>, <b style="color:var(--on-dark)">PDF417</b>, atau barcode <b style="color:var(--on-dark)">EAN-13, UPC-A, Code 39, Code 128, ITF &amp; Codabar</b>. Atur warna, bentuk modul, bingkai, sampai logo di tengah. Unduh sebagai <b style="color:var(--on-dark)">PNG, JPG, SVG, atau PDF</b>, plus kode <b style="color:var(--on-dark)">embed</b>. Gratis, tanpa login.</p>
 
   <div class="qs-grid">
     <!-- KONTROL -->
@@ -165,6 +165,7 @@ textarea.qs-in{resize:vertical;min-height:64px;line-height:1.5}
         <select class="qs-sel" id="qsSym">
           <optgroup label="2D — kotak sedikit, informasi banyak">
             <option value="datamatrix">Data Matrix (ECC200) — paling padat</option>
+            <option value="aztec">Aztec — ringkas, tanpa zona kosong (e-ticket)</option>
             <option value="pdf417">PDF417 — kapasitas besar (KTP, boarding pass)</option>
           </optgroup>
           <optgroup label="1D — garis (linear)">
@@ -273,7 +274,7 @@ textarea.qs-in{resize:vertical;min-height:64px;line-height:1.5}
     <details><summary>Bagaimana cara membuat QR code dari link?</summary><p>Tempel link/teks di kolom input — QR langsung muncul di pratinjau. Sesuaikan warna, bentuk, bingkai, atau tambah logo, lalu unduh (PNG/JPG/SVG/PDF) atau salin kode embed.</p></details>
     <details><summary>Apakah gratis dan tidak kedaluwarsa?</summary><p>Ya. Ini QR <b>statis</b> — datanya tertanam di dalam pola QR, jadi berlaku selamanya, gratis, tanpa login, dan tidak bergantung pada layanan apa pun.</p></details>
     <details><summary>Format ekspor apa saja?</summary><p>PNG &amp; JPG (gambar), SVG (vektor, tajam di segala ukuran untuk desain/percetakan), dan PDF (siap cetak). Ada juga kode embed SVG, &lt;img&gt;, dan iframe.</p></details>
-    <details><summary>Barcode apa saja yang didukung?</summary><p><b>2D:</b> QR Code, <b>Data Matrix</b> &amp; <b>PDF417</b> (bertumpuk, kapasitas besar — dipakai di KTP &amp; boarding pass). <b>1D (garis):</b> EAN-13 &amp; UPC-A (produk ritel), EAN-8 (kemasan kecil), Code 128 (huruf+angka serba-guna), Code 39 (industri/aset), ITF/Interleaved 2 of 5 (karton &amp; logistik), dan Codabar (perpustakaan, bank darah, lab). Pilih jenisnya lewat menu <b>Jenis barcode</b> saat mode Barcode/Matrix.</p></details>
+    <details><summary>Barcode apa saja yang didukung?</summary><p><b>2D:</b> QR Code, <b>Data Matrix</b>, <b>Aztec</b> (ringkas tanpa zona kosong — e-ticket kereta/pesawat) &amp; <b>PDF417</b> (bertumpuk, kapasitas besar — KTP &amp; boarding pass). <b>1D (garis):</b> EAN-13 &amp; UPC-A (produk ritel), EAN-8 (kemasan kecil), Code 128 (huruf+angka serba-guna), Code 39 (industri/aset), ITF/Interleaved 2 of 5 (karton &amp; logistik), dan Codabar (perpustakaan, bank darah, lab). Pilih jenisnya lewat menu <b>Jenis barcode</b> saat mode Barcode/Matrix.</p></details>
     <details><summary>Apa itu Data Matrix — "kotak sedikit tapi info banyak"?</summary><p>Data Matrix (ECC200) adalah barcode 2D <b>paling padat</b>: dua digit disimpan dalam satu <i>codeword</i> dan ada koreksi error Reed-Solomon, jadi banyak data muat di kotak sangat kecil — dipakai untuk menandai komponen elektronik, alat medis, &amp; obat. Cocok saat ruang cetak terbatas tapi butuh menyimpan serial/kode panjang. Dukungan sampai ~174 byte / 348 digit; untuk data lebih besar pakai QR.</p></details>
     <details><summary>Beda QR, Data Matrix, dan barcode 1D?</summary><p>QR (2D) menyimpan banyak data termasuk link, dipindai kamera HP. Data Matrix (2D) paling ringkas untuk data pendek di ruang kecil. Barcode 1D/garis (EAN, UPC, Code 39/128, ITF, Codabar) untuk kode produk/SKU/aset, dipindai scanner laser toko &amp; gudang.</p></details>
   </section>
@@ -294,6 +295,7 @@ textarea.qs-in{resize:vertical;min-height:64px;line-height:1.5}
 <script src="assets/barcodes.js"></script>
 <script src="assets/pdf417-data.js"></script>
 <script src="assets/barcodes-2d.js"></script>
+<script src="assets/aztec.js"></script>
 <script src="assets/qr-studio.js" defer></script>
 </body>
 </html>
