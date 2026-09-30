@@ -1,0 +1,253 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>QR &amp; Barcode Generator — Buat QR Code dari Link, Unduh PNG/JPG/SVG/PDF | Bekal</title>
+<meta name="description" content="Generator QR Code &amp; barcode gratis: tempel link atau teks, langsung jadi QR code. Atur warna, bentuk modul, bingkai, logo tengah, tingkat koreksi error. Unduh sebagai PNG, JPG, SVG, atau PDF, plus kode embed untuk website. Tanpa login, jalan di browser.">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<meta name="theme-color" content="#0a0e17">
+<link rel="canonical" href="https://pusatbanksoal.id/qr-studio.html">
+<link rel="icon" type="image/png" href="assets/bekal-favicon.png">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<link rel="manifest" href="site.webmanifest">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@600;700;800&family=IBM+Plex+Mono:wght@500;600;700&display=swap" media="print" onload="this.media='all'"><noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@600;700;800&family=IBM+Plex+Mono:wght@500;600;700&display=swap"></noscript>
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Bekal">
+<meta property="og:locale" content="id_ID">
+<meta property="og:url" content="https://pusatbanksoal.id/qr-studio.html">
+<meta property="og:title" content="QR &amp; Barcode Generator — Bekal">
+<meta property="og:description" content="Tempel link → jadi QR code. Atur warna, bentuk, bingkai, logo. Unduh PNG/JPG/SVG/PDF + kode embed. Gratis di browser.">
+<meta property="og:image" content="https://pusatbanksoal.id/assets/og-bekal.png">
+<link rel="stylesheet" href="assets/style.css">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@graph":[
+ {"@type":"WebApplication","name":"QR & Barcode Generator Bekal","applicationCategory":"UtilitiesApplication","operatingSystem":"Web","url":"https://pusatbanksoal.id/qr-studio.html","description":"Generator QR code dan barcode dari link atau teks, dengan opsi warna, bentuk, bingkai, logo, dan ekspor PNG/JPG/SVG/PDF serta kode embed.","offers":{"@type":"Offer","price":"0","priceCurrency":"IDR"},"inLanguage":"id-ID","isAccessibleForFree":true},
+ {"@type":"BreadcrumbList","itemListElement":[
+  {"@type":"ListItem","position":1,"name":"Beranda","item":"https://pusatbanksoal.id/"},
+  {"@type":"ListItem","position":2,"name":"QR & Barcode Generator","item":"https://pusatbanksoal.id/qr-studio.html"}]},
+ {"@type":"FAQPage","mainEntity":[
+  {"@type":"Question","name":"Bagaimana cara membuat QR code dari link?","acceptedAnswer":{"@type":"Answer","text":"Tempel (paste) link atau teks di kolom input, QR code langsung muncul. Atur warna, bentuk, bingkai, atau tambahkan logo bila mau, lalu unduh sebagai PNG, JPG, SVG, atau PDF."}},
+  {"@type":"Question","name":"Apakah QR code yang dibuat gratis dan tanpa kedaluwarsa?","acceptedAnswer":{"@type":"Answer","text":"Ya. QR code dibuat langsung di browser (statis), gratis, tanpa login, dan tidak akan kedaluwarsa karena isinya tertanam di dalam gambar QR itu sendiri."}},
+  {"@type":"Question","name":"Format ekspor apa saja yang didukung?","acceptedAnswer":{"@type":"Answer","text":"PNG dan JPG (gambar), SVG (vektor untuk desain), dan PDF (siap cetak). Tersedia juga kode embed untuk ditempel di website."}},
+  {"@type":"Question","name":"Apakah bisa menambahkan logo di tengah QR?","acceptedAnswer":{"@type":"Answer","text":"Bisa. Unggah logo dan akan diletakkan di tengah QR. Tingkat koreksi error otomatis dinaikkan agar tetap bisa dipindai."}}
+ ]}
+]}
+</script>
+<script>(function(){try{var t=localStorage.getItem('pbs_theme');if(t==='light'||t==='dark')document.documentElement.setAttribute('data-theme',t);else if(window.matchMedia&&matchMedia('(prefers-color-scheme: light)').matches)document.documentElement.setAttribute('data-theme','light');}catch(e){}})();</script>
+<script src="assets/auth.js" defer></script>
+<style>
+.qs-hero{padding:26px 0 6px}
+.qs-grid{display:grid;grid-template-columns:1fr 360px;gap:20px;align-items:start;margin-top:16px}
+@media(max-width:860px){.qs-grid{grid-template-columns:1fr}}
+.qs-box{border:1px solid var(--hair-dark);border-radius:16px;padding:18px;background:var(--card)}
+.qs-box h2{font-size:15px;color:var(--on-dark);margin:0 0 12px}
+.qs-modes{display:flex;gap:8px;margin-bottom:14px}
+.qs-modes button{flex:1;font:inherit;font-weight:700;font-size:13.5px;padding:10px;border-radius:11px;border:1px solid var(--hair-dark);background:var(--elevated);color:var(--muted-strong);cursor:pointer;transition:.15s}
+.qs-modes button.on{background:var(--primary);border-color:var(--primary);color:#fff}
+.qs-field{margin-bottom:13px}
+.qs-field label{display:block;font-size:12.5px;color:var(--muted-strong);margin-bottom:5px;font-weight:600}
+.qs-in,.qs-sel,textarea.qs-in{width:100%;box-sizing:border-box;background:var(--elevated);border:1px solid var(--hair-dark);border-radius:11px;padding:11px 12px;color:var(--on-dark);font:inherit;font-size:14px}
+textarea.qs-in{resize:vertical;min-height:64px;line-height:1.5}
+.qs-in:focus,.qs-sel:focus{outline:none;border-color:var(--primary)}
+.qs-chips{display:flex;flex-wrap:wrap;gap:6px;margin:2px 0 12px}
+.qs-chip{font:inherit;font-size:11.5px;font-weight:600;padding:6px 11px;border-radius:99px;border:1px solid var(--hair-dark);background:var(--card);color:var(--muted-strong);cursor:pointer}
+.qs-chip:hover{border-color:var(--primary);color:var(--accent-ink)}
+.qs-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.qs-color{display:flex;align-items:center;gap:8px;background:var(--elevated);border:1px solid var(--hair-dark);border-radius:11px;padding:6px 10px}
+.qs-color input[type=color]{width:34px;height:30px;border:0;background:none;padding:0;cursor:pointer}
+.qs-color input[type=text]{flex:1;min-width:0;border:0;background:none;color:var(--on-dark);font:inherit;font-family:var(--num);font-size:13px;text-transform:uppercase}
+.qs-color input[type=text]:focus{outline:none}
+.qs-seg{display:flex;gap:6px;flex-wrap:wrap}
+.qs-seg button{font:inherit;font-size:12.5px;font-weight:600;padding:8px 12px;border-radius:9px;border:1px solid var(--hair-dark);background:var(--elevated);color:var(--muted-strong);cursor:pointer}
+.qs-seg button.on{background:var(--primary-soft);border-color:var(--primary);color:var(--accent-ink)}
+.qs-range{display:flex;align-items:center;gap:10px}
+.qs-range input[type=range]{flex:1}
+.qs-range b{font-family:var(--num);font-size:13px;color:var(--on-dark);min-width:56px;text-align:right}
+.qs-preview{position:sticky;top:78px}
+.qs-canvas-wrap{border:1px solid var(--hair-dark);border-radius:16px;background:repeating-conic-gradient(#8883 0% 25%, transparent 0% 50%) 0 0/18px 18px,var(--card);padding:16px;display:flex;align-items:center;justify-content:center;min-height:220px}
+:root[data-theme="light"] .qs-canvas-wrap{background:repeating-conic-gradient(#0001 0% 25%, transparent 0% 50%) 0 0/18px 18px,#fff}
+#qsOut{max-width:100%;height:auto;border-radius:6px}
+.qs-dl{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:14px}
+.qs-dl button{font:inherit;font-weight:700;font-size:13.5px;padding:11px;border-radius:11px;border:1px solid var(--hair-dark);background:var(--elevated);color:var(--on-dark);cursor:pointer;transition:.15s}
+.qs-dl button:hover{border-color:var(--primary);color:var(--accent-ink)}
+.qs-dl button.pri{grid-column:span 2;background:var(--primary);border-color:var(--primary);color:#fff}
+.qs-embed{margin-top:12px}
+.qs-embed textarea{width:100%;box-sizing:border-box;background:var(--elevated);border:1px solid var(--hair-dark);border-radius:10px;padding:10px;color:var(--body);font-family:var(--mono,monospace);font-size:11.5px;min-height:66px;resize:vertical}
+.qs-embed .row{display:flex;gap:8px;margin-top:6px}
+.qs-embed .row button{flex:1;font:inherit;font-size:12px;font-weight:600;padding:8px;border-radius:9px;border:1px solid var(--hair-dark);background:var(--card);color:var(--muted-strong);cursor:pointer}
+.qs-note{border:1px solid var(--hair-dark);border-left:3px solid var(--primary);border-radius:12px;padding:13px 15px;background:var(--card);margin-top:16px;font-size:12.5px;color:var(--muted-strong);line-height:1.6}
+.qs-err{color:var(--down);font-size:12.5px;margin-top:8px;display:none}
+.qs-logo-row{display:flex;gap:8px;align-items:center}
+.qs-logo-row button{font:inherit;font-size:12px;font-weight:600;padding:9px 12px;border-radius:9px;border:1px solid var(--hair-dark);background:var(--elevated);color:var(--muted-strong);cursor:pointer}
+.qs-faq{margin-top:22px}
+.qs-faq details{border:1px solid var(--hair-dark);border-radius:12px;padding:2px 14px;margin-top:10px;background:var(--card)}
+.qs-faq summary{cursor:pointer;font-weight:600;color:var(--on-dark);font-size:14px;padding:12px 0}
+.qs-faq p{margin:0 0 12px;font-size:13.5px;color:var(--body);line-height:1.6}
+.qs-only-qr.hide{display:none}
+#qsSaved{position:fixed;bottom:18px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--on-dark);color:var(--card);font-size:12.5px;font-weight:600;padding:8px 16px;border-radius:99px;opacity:0;pointer-events:none;transition:.25s;z-index:80}
+#qsSaved.on{opacity:1;transform:translateX(-50%) translateY(0)}
+</style>
+</head>
+<body>
+<nav class="nav"><div class="nav-in">
+<a class="brand" href="index.html"><img class="brand-logo brand-dark" src="assets/bekal-logo-white.png" alt="Bekal" width="56" height="30"><img class="brand-logo brand-light" src="assets/bekal-logo-green.png" alt="" aria-hidden="true" width="56" height="30"></a>
+<div class="nav-links" id="navLinks">
+<a href="index.html" class="nav-link">Beranda</a>
+<div class="nav-group">
+<button type="button" class="nav-group-btn" aria-expanded="false" aria-haspopup="true" aria-controls="menu-belajar">Belajar<svg class="i nav-caret" aria-hidden="true"><use href="#i-chevron-down"></use></svg></button>
+<div class="nav-menu" id="menu-belajar" role="menu">
+<a href="tryout.html" class="nav-menu-item" role="menuitem"><span class="nav-menu-ic"><svg class="i" aria-hidden="true"><use href="#i-target"></use></svg></span><span class="nav-menu-tx"><b>Tryout</b><small>Simulasi ujian &amp; latihan soal</small></span></a>
+<a href="pembahasan.html" class="nav-menu-item" role="menuitem"><span class="nav-menu-ic"><svg class="i" aria-hidden="true"><use href="#i-book"></use></svg></span><span class="nav-menu-tx"><b>Bank Soal &amp; Pembahasan</b><small>Soal lengkap dengan pembahasan</small></span></a>
+<a href="dashboard.html" class="nav-menu-item" role="menuitem"><span class="nav-menu-ic"><svg class="i" aria-hidden="true"><use href="#i-chart"></use></svg></span><span class="nav-menu-tx"><b>Dashboard</b><small>Progres &amp; statistik belajar</small></span></a>
+<a href="analisis.html" class="nav-menu-item" role="menuitem"><span class="nav-menu-ic"><svg class="i" aria-hidden="true"><use href="#i-brain"></use></svg></span><span class="nav-menu-tx"><b>AI Analisis</b><small>Analisis kelemahan berbasis AI</small></span></a>
+</div></div>
+<div class="nav-group">
+<button type="button" class="nav-group-btn" aria-expanded="false" aria-haspopup="true" aria-controls="menu-kampus">Kampus &amp; Karier<svg class="i nav-caret" aria-hidden="true"><use href="#i-chevron-down"></use></svg></button>
+<div class="nav-menu" id="menu-kampus" role="menu">
+<a href="kuliah.html" class="nav-menu-item" role="menuitem"><span class="nav-menu-ic"><svg class="i" aria-hidden="true"><use href="#i-grad"></use></svg></span><span class="nav-menu-tx"><b>Kuliah</b><small>1161 prodi di 290 kampus</small></span></a>
+<a href="beasiswa.html" class="nav-menu-item" role="menuitem"><span class="nav-menu-ic"><svg class="i" aria-hidden="true"><use href="#i-money"></use></svg></span><span class="nav-menu-tx"><b>Beasiswa</b><small>90 beasiswa dalam &amp; luar negeri</small></span></a>
+<a href="kerja-remote.html" class="nav-menu-item" role="menuitem"><span class="nav-menu-ic"><svg class="i" aria-hidden="true"><use href="#i-globe"></use></svg></span><span class="nav-menu-tx"><b>Kerja Remote</b><small>Lowongan remote ID &amp; luar negeri</small></span></a>
+<a href="skripsi.html" class="nav-menu-item" role="menuitem"><span class="nav-menu-ic"><svg class="i" aria-hidden="true"><use href="#i-doc"></use></svg></span><span class="nav-menu-tx"><b>Riset &amp; Skripsi</b><small>Asisten riset &amp; penulisan</small></span></a>
+</div></div>
+<div class="nav-group">
+<button type="button" class="nav-group-btn" aria-expanded="false" aria-haspopup="true" aria-controls="menu-usaha">Usaha<svg class="i nav-caret" aria-hidden="true"><use href="#i-chevron-down"></use></svg></button>
+<div class="nav-menu" id="menu-usaha" role="menu"><a href="kelas.html" class="nav-menu-item" role="menuitem"><span class="nav-menu-ic"><svg class="i" aria-hidden="true"><use href="#i-grad"></use></svg></span><span class="nav-menu-tx"><b>Kelas Bisnis dari Nol</b><small>Kuliah online 7 chapter</small></span></a><a href="scaleup.html" class="nav-menu-item" role="menuitem"><span class="nav-menu-ic"><svg class="i" aria-hidden="true"><use href="#i-trend"></use></svg></span><span class="nav-menu-tx"><b>Scale Up Bisnis</b><small>MVP, PMF &amp; ekspansi</small></span></a><a href="legalitas.html" class="nav-menu-item" role="menuitem"><span class="nav-menu-ic"><svg class="i" aria-hidden="true"><use href="#i-shield"></use></svg></span><span class="nav-menu-tx"><b>Legalitas &amp; Pajak</b><small>NIB, PT/CV, PIRT &amp; pajak</small></span></a><a href="bisnis.html" class="nav-menu-item" role="menuitem"><span class="nav-menu-ic"><svg class="i" aria-hidden="true"><use href="#i-bolt"></use></svg></span><span class="nav-menu-tx"><b>Studio Bisnis</b><small>Alat bisnis &amp; monetisasi</small></span></a><a href="franchise.html" class="nav-menu-item" role="menuitem"><span class="nav-menu-ic"><svg class="i" aria-hidden="true"><use href="#i-store"></use></svg></span><span class="nav-menu-tx"><b>Franchise &amp; Peluang</b><small>Direktori franchise &amp; ide bisnis</small></span></a><a href="finansial.html" class="nav-menu-item" role="menuitem"><span class="nav-menu-ic"><svg class="i" aria-hidden="true"><use href="#i-money"></use></svg></span><span class="nav-menu-tx"><b>Finansial</b><small>Kalkulator keuangan &amp; investasi</small></span></a></div></div>
+<div class="nav-group">
+<button type="button" class="nav-group-btn" aria-expanded="false" aria-haspopup="true" aria-controls="menu-studio">Studio AI<svg class="i nav-caret" aria-hidden="true"><use href="#i-chevron-down"></use></svg></button>
+<div class="nav-menu" id="menu-studio" role="menu">
+<a href="prompt-studio.html" class="nav-menu-item" role="menuitem"><span class="nav-menu-ic"><svg class="i" aria-hidden="true"><use href="#i-sparkles"></use></svg></span><span class="nav-menu-tx"><b>Prompt Studio</b><small>Generator prompt AI</small></span></a>
+<a href="keuangan-harian.html" class="nav-menu-item" role="menuitem"><span class="nav-menu-ic"><svg class="i" aria-hidden="true"><use href="#i-wallet"></use></svg></span><span class="nav-menu-tx"><b>Catatan Keuangan Harian</b><small>Pemasukan &amp; pengeluaran</small></span></a>
+<a href="qr-studio.html" class="nav-menu-item" role="menuitem" aria-current="page"><span class="nav-menu-ic"><svg class="i" aria-hidden="true"><use href="#i-scan"></use></svg></span><span class="nav-menu-tx"><b>QR &amp; Barcode</b><small>Generator QR &amp; barcode</small></span></a>
+</div></div>
+</div>
+<div class="nav-right"><a href="auth.html" class="hide-sm" style="font-weight:600">Masuk</a><a href="auth.html" class="btn btn-primary btn-sm">Daftar Gratis</a><button class="nav-toggle" data-nav-toggle aria-label="Buka menu" aria-expanded="false"><svg class="i" aria-hidden="true"><use href="#i-menu"></use></svg></button></div>
+</div></nav>
+
+<main>
+<section class="section-sm qs-hero"><div class="wrap">
+  <span class="section-eyebrow">Studio AI · Alat <span class="badge-new">Baru</span></span>
+  <h1 class="mt"><span class="gradient-text">QR &amp; Barcode</span> Generator</h1>
+  <p class="lead mt" style="max-width:64ch">Tempel <b style="color:var(--on-dark)">link atau teks</b> → langsung jadi <b style="color:var(--on-dark)">QR code</b>. Atur warna, bentuk modul, bingkai, sampai logo di tengah. Unduh sebagai <b style="color:var(--on-dark)">PNG, JPG, SVG, atau PDF</b>, plus kode <b style="color:var(--on-dark)">embed</b> untuk website. Gratis, tanpa login.</p>
+
+  <div class="qs-grid">
+    <!-- KONTROL -->
+    <div class="qs-box">
+      <div class="qs-modes" id="qsModes">
+        <button type="button" class="on" data-mode="qr">🔳 QR Code</button>
+        <button type="button" data-mode="bar">▮▏ Barcode (Code128)</button>
+      </div>
+      <div class="qs-field">
+        <label id="qsInLabel">Link atau teks</label>
+        <textarea class="qs-in" id="qsText" placeholder="Tempel link di sini… mis. https://pusatbanksoal.id">https://pusatbanksoal.id</textarea>
+        <div class="qs-chips" id="qsChips">
+          <button type="button" class="qs-chip" data-tpl="https://">🔗 URL</button>
+          <button type="button" class="qs-chip" data-tpl="https://wa.me/62">💬 WhatsApp</button>
+          <button type="button" class="qs-chip" data-tpl="mailto:">✉️ Email</button>
+          <button type="button" class="qs-chip" data-tpl="tel:+62">📞 Telepon</button>
+          <button type="button" class="qs-chip" data-tpl="WIFI:T:WPA;S:NamaWiFi;P:Password;;">📶 WiFi</button>
+        </div>
+        <div class="qs-err" id="qsErr"></div>
+      </div>
+
+      <div class="qs-row">
+        <div class="qs-field"><label>Warna depan</label>
+          <div class="qs-color"><input type="color" id="qsFg" value="#0b0e11"><input type="text" id="qsFgHex" value="#0B0E11" maxlength="7"></div>
+        </div>
+        <div class="qs-field"><label>Warna belakang</label>
+          <div class="qs-color"><input type="color" id="qsBg" value="#ffffff"><input type="text" id="qsBgHex" value="#FFFFFF" maxlength="7"></div>
+        </div>
+      </div>
+
+      <div class="qs-field"><label>Ukuran <span id="qsSizeLbl" style="color:var(--muted)">(512 px)</span></label>
+        <div class="qs-range"><input type="range" id="qsSize" min="128" max="2048" step="32" value="512"><b id="qsSizeVal">512px</b></div>
+      </div>
+      <div class="qs-field"><label>Margin / quiet zone <span style="color:var(--muted)">(modul)</span></label>
+        <div class="qs-range"><input type="range" id="qsMargin" min="0" max="8" step="1" value="4"><b id="qsMarginVal">4</b></div>
+      </div>
+
+      <div class="qs-field qs-only-qr"><label>Tingkat koreksi error</label>
+        <div class="qs-seg" id="qsEc">
+          <button type="button" data-ec="L">L · 7%</button>
+          <button type="button" data-ec="M" class="on">M · 15%</button>
+          <button type="button" data-ec="Q">Q · 25%</button>
+          <button type="button" data-ec="H">H · 30%</button>
+        </div>
+      </div>
+      <div class="qs-field qs-only-qr"><label>Bentuk modul</label>
+        <div class="qs-seg" id="qsShape">
+          <button type="button" data-shape="kotak" class="on">▪ Kotak</button>
+          <button type="button" data-shape="titik">● Titik</button>
+          <button type="button" data-shape="membulat">▢ Membulat</button>
+        </div>
+      </div>
+      <div class="qs-field"><label>Bingkai</label>
+        <div class="qs-seg" id="qsFrame">
+          <button type="button" data-frame="none" class="on">Tanpa</button>
+          <button type="button" data-frame="border">Garis</button>
+          <button type="button" data-frame="label">Kartu + Label</button>
+        </div>
+      </div>
+      <div class="qs-field" id="qsLabelField" style="display:none"><label>Teks label bingkai</label>
+        <input type="text" class="qs-in" id="qsLabel" value="SCAN ME" maxlength="24">
+      </div>
+      <div class="qs-field qs-only-qr"><label>Logo tengah (opsional)</label>
+        <div class="qs-logo-row">
+          <button type="button" id="qsLogoBtn">📁 Pilih logo…</button>
+          <button type="button" id="qsLogoClear" style="display:none">✕ Hapus</button>
+          <input type="file" id="qsLogoFile" accept="image/*" style="display:none">
+        </div>
+      </div>
+    </div>
+
+    <!-- PREVIEW & UNDUH -->
+    <div class="qs-preview">
+      <div class="qs-box">
+        <h2>Pratinjau</h2>
+        <div class="qs-canvas-wrap"><canvas id="qsOut" width="300" height="300"></canvas></div>
+        <div class="qs-dl">
+          <button type="button" class="pri" data-exp="png">⬇️ Unduh PNG</button>
+          <button type="button" data-exp="jpg">JPG</button>
+          <button type="button" data-exp="svg">SVG</button>
+          <button type="button" data-exp="pdf" style="grid-column:span 2">📄 Unduh PDF</button>
+        </div>
+        <div class="qs-embed">
+          <label style="font-size:12px;color:var(--muted-strong);font-weight:600;display:block;margin-bottom:5px">Kode embed untuk website</label>
+          <textarea id="qsEmbed" readonly></textarea>
+          <div class="row">
+            <button type="button" data-embed="svg">📋 Salin SVG</button>
+            <button type="button" data-embed="img">📋 Salin &lt;img&gt;</button>
+            <button type="button" data-embed="iframe">📋 Salin iframe</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="qs-note">🔒 <b>Statis &amp; privat.</b> QR/barcode dibuat sepenuhnya di browsermu — isinya tertanam langsung di gambar, jadi <b>tidak kedaluwarsa</b> &amp; tidak melewati server mana pun. Untuk QR dengan logo, gunakan koreksi error <b>H</b> agar tetap terbaca. Uji pindai sebelum dicetak besar.</div>
+
+  <section class="qs-faq">
+    <h2 class="mt-lg">Pertanyaan yang sering diajukan</h2>
+    <details><summary>Bagaimana cara membuat QR code dari link?</summary><p>Tempel link/teks di kolom input — QR langsung muncul di pratinjau. Sesuaikan warna, bentuk, bingkai, atau tambah logo, lalu unduh (PNG/JPG/SVG/PDF) atau salin kode embed.</p></details>
+    <details><summary>Apakah gratis dan tidak kedaluwarsa?</summary><p>Ya. Ini QR <b>statis</b> — datanya tertanam di dalam pola QR, jadi berlaku selamanya, gratis, tanpa login, dan tidak bergantung pada layanan apa pun.</p></details>
+    <details><summary>Format ekspor apa saja?</summary><p>PNG &amp; JPG (gambar), SVG (vektor, tajam di segala ukuran untuk desain/percetakan), dan PDF (siap cetak). Ada juga kode embed SVG, &lt;img&gt;, dan iframe.</p></details>
+    <details><summary>Beda QR code dan barcode Code128?</summary><p>QR code (2D) menyimpan banyak data termasuk link, dipindai kamera HP. Code128 (1D/garis) cocok untuk kode produk/SKU berisi huruf &amp; angka, dipindai scanner barcode.</p></details>
+  </section>
+</div></section>
+</main>
+
+<div id="qsSaved">Tersalin ✓</div>
+
+<footer class="footer"><div class="wrap"><div class="cols">
+<div><a class="brand" href="index.html" style="color:var(--ink)"><img class="brand-logo brand-dark" src="assets/bekal-logo-white.png" alt="Bekal" width="56" height="30"><img class="brand-logo brand-light" src="assets/bekal-logo-green.png" alt="" aria-hidden="true" width="56" height="30"></a><p style="color:#5b6672;font-size:13px;margin-top:14px;max-width:34ch">Bekal lengkap menuju masa depan — belajar, kampus, karier, dan usaha dalam satu platform untuk pelajar &amp; fresh grad Indonesia.</p></div>
+<div><h5>Belajar</h5><a href="tryout.html">Tryout</a><a href="pembahasan.html">Bank Soal &amp; Pembahasan</a><a href="dashboard.html">Dashboard</a><a href="analisis.html">AI Analisis</a></div>
+<div><h5>Kampus &amp; Karier</h5><a href="kuliah.html">Kuliah</a><a href="beasiswa.html">Beasiswa</a><a href="kerja-remote.html">Kerja Remote</a><a href="skripsi.html">Riset &amp; Skripsi</a></div>
+<div><h5>Usaha</h5><a href="kelas.html">Kelas Bisnis dari Nol</a><a href="scaleup.html">Scale Up Bisnis</a><a href="legalitas.html">Legalitas &amp; Pajak</a><a href="franchise.html">Franchise &amp; Peluang</a><a href="finansial.html">Finansial</a></div>
+<div><h5>Studio AI</h5><a href="prompt-studio.html">Prompt Studio</a><a href="keuangan-harian.html">Catatan Keuangan Harian</a><a href="qr-studio.html">QR &amp; Barcode</a></div>
+</div><div class="bottom"><span>&copy; <span data-year>2026</span> Bekal &mdash; Seluruh hak cipta dilindungi.</span><span>Dibuat untuk pelajar &amp; fresh grad Indonesia 🇮🇩</span></div></div></footer>
+<script src="assets/app.js" defer></script>
+<script src="assets/qr.js"></script>
+<script src="assets/qr-studio.js" defer></script>
+</body>
+</html>
