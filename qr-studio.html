@@ -88,6 +88,26 @@ textarea.qs-in{resize:vertical;min-height:64px;line-height:1.5}
 .qs-only-qr.hide{display:none}
 #qsSaved{position:fixed;bottom:18px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--on-dark);color:var(--card);font-size:12.5px;font-weight:600;padding:8px 16px;border-radius:99px;opacity:0;pointer-events:none;transition:.25s;z-index:80}
 #qsSaved.on{opacity:1;transform:translateX(-50%) translateY(0)}
+/* --- responsive hardening: let grid/flex children shrink instead of clipping --- */
+.qs-grid>*{min-width:0}
+.qs-modes button{min-width:0;white-space:normal;line-height:1.25}
+.qs-row>.qs-field,.qs-dl button,.qs-embed .row button,.qs-seg button,.qs-color{min-width:0}
+.qs-embed textarea{max-width:100%}
+#qsOut{width:auto}
+@media(max-width:640px){
+  .qs-box{padding:15px}
+  .qs-modes button{font-size:12.5px;padding:11px 8px}
+  .qs-chip{padding:9px 12px;font-size:12px}
+  .qs-dl button{padding:13px 8px}
+  .qs-embed .row{flex-wrap:wrap}
+  .qs-embed .row button{flex:1 1 40%;padding:10px 6px}
+  .qs-logo-row{flex-wrap:wrap}
+  .qs-preview{position:static}
+}
+@media(max-width:380px){
+  .qs-row{grid-template-columns:1fr}
+  .qs-dl{grid-template-columns:1fr 1fr}
+}
 </style>
 </head>
 <body>
