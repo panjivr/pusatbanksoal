@@ -67,6 +67,8 @@
   var SYM_META = {
     code128: { lb: 'Teks / kode (huruf & angka)', ph: 'mis. BEKAL-2026-XYZ', hint: 'Serba-guna: huruf, angka & simbol. Cocok untuk SKU, kode internal, tiket.' },
     datamatrix: { lb: 'Teks / link / kode', ph: 'mis. https://pusatbanksoal.id atau SN-000123', hint: '2D paling padat — banyak data dalam kotak kecil. Ideal untuk serial, part kecil, kemasan.' },
+    pdf417: { lb: 'Teks / link / dokumen', ph: 'mis. https://pusatbanksoal.id/tryout', hint: '2D bertumpuk (stacked) berkapasitas besar. Dipakai di KTP, boarding pass, kartu identitas & dokumen.' },
+    aztec: { lb: 'Teks / link / tiket', ph: 'mis. https://pusatbanksoal.id', hint: '2D ringkas tanpa zona kosong. Populer untuk e-ticket kereta & pesawat.' },
     ean13: { lb: '12–13 digit angka', ph: 'mis. 590123412345', hint: 'Barcode produk ritel global. 12 digit (cek otomatis) atau 13 digit lengkap.' },
     upca: { lb: '11–12 digit angka', ph: 'mis. 036000291452', hint: 'Barcode ritel Amerika Utara. 11 digit (cek otomatis) atau 12 digit.' },
     ean8: { lb: '7–8 digit angka', ph: 'mis. 9638507', hint: 'Versi ringkas EAN untuk kemasan kecil. 7 atau 8 digit.' },
@@ -141,7 +143,7 @@
   }
   function layoutBar() {
     var sym = st.sym || 'code128';
-    if (sym === 'datamatrix') return layout2D();
+    if (sym === 'datamatrix' || sym === 'pdf417' || sym === 'aztec') return layout2D(sym);
     var bits, human;
     if (sym === 'code128') { bits = bitsFromElems(encodeCode128B(st.text)); human = st.text; }
     else {
@@ -174,10 +176,11 @@
     if (st.frame === 'border') frame = { type: 'border', x: pad * 0.4, y: pad * 0.4, w: W - pad * 0.8, h: H - pad * 0.8, r: Math.round(pad * 0.5), color: st.fg, sw: Math.max(2, Math.round(mw * 1.2)) };
     return { type: 'bar', W: W, H: H, bg: st.bg, fg: st.fg, shape: 'kotak', mod: mw, cells: cells, finders: [], logo: null, texts: texts, frame: frame };
   }
-  function layout2D() {
-    if (!window.BEKAL_BC || !window.BEKAL_BC.datamatrix) throw new Error('Modul Data Matrix gagal dimuat. Muat ulang halaman.');
-    var r = window.BEKAL_BC.datamatrix(st.text); /* {w,h,data} */
-    var margin = Math.max(st.margin, 1);
+  function layout2D(sym) {
+    sym = sym || 'datamatrix';
+    if (!window.BEKAL_BC || !window.BEKAL_BC[sym]) throw new Error('Modul barcode 2D gagal dimuat. Muat ulang halaman.');
+    var r = window.BEKAL_BC[sym](st.text); /* {w,h,data} */
+    var margin = Math.max(st.margin, sym === 'pdf417' ? 2 : 1);
     var totalW = r.w + margin * 2, totalH = r.h + margin * 2;
     var mod = Math.max(1, Math.floor(st.size / Math.max(totalW, totalH)));
     var codeW = mod * totalW, codeH = mod * totalH;
@@ -391,8 +394,9 @@
   }
 
   /* ---------- download / clipboard / toast ---------- */
-  function baseName() { return st.mode === 'qr' ? 'qr-code' : (st.sym === 'datamatrix' ? 'datamatrix' : (st.sym === 'code128' ? 'barcode' : st.sym)); }
-  function kindLabel() { return st.mode === 'qr' ? 'QR code' : (st.sym === 'datamatrix' ? 'Data Matrix' : 'Barcode'); }
+  var TWO_D = { datamatrix: 'Data Matrix', pdf417: 'PDF417', aztec: 'Aztec' };
+  function baseName() { return st.mode === 'qr' ? 'qr-code' : (TWO_D[st.sym] ? st.sym : (st.sym === 'code128' ? 'barcode' : st.sym)); }
+  function kindLabel() { return st.mode === 'qr' ? 'QR code' : (TWO_D[st.sym] || 'Barcode'); }
   function dl(data, filename, mime) {
     var blob = (data instanceof Blob) ? data : new Blob([data], { type: mime || 'application/octet-stream' });
     var url = URL.createObjectURL(blob);
