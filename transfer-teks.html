@@ -1,0 +1,214 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Transfer Teks via QR — Pindah Teks Antar HP &amp; Laptop Tanpa Server | Bekal</title>
+<meta name="description" content="Pindahkan teks antar perangkat (HP ke laptop atau sebaliknya) lewat QR code — tanpa kabel, tanpa login, tanpa server. Tempel teks di satu perangkat, pindai QR-nya dengan kamera perangkat lain, teks langsung tersalin. 100% berjalan di browser & privat.">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<meta name="theme-color" content="#0a0e17">
+<link rel="canonical" href="https://pusatbanksoal.id/transfer-teks.html">
+<link rel="icon" type="image/png" href="assets/bekal-favicon.png">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<link rel="manifest" href="site.webmanifest">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@600;700;800&family=IBM+Plex+Mono:wght@500;600;700&display=swap" media="print" onload="this.media='all'"><noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@600;700;800&family=IBM+Plex+Mono:wght@500;600;700&display=swap"></noscript>
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Bekal">
+<meta property="og:locale" content="id_ID">
+<meta property="og:url" content="https://pusatbanksoal.id/transfer-teks.html">
+<meta property="og:title" content="Transfer Teks via QR — Bekal">
+<meta property="og:description" content="Pindah teks antar HP & laptop lewat QR. Tempel di satu layar, pindai dengan kamera perangkat lain. Tanpa server, tanpa kabel, privat.">
+<meta property="og:image" content="https://pusatbanksoal.id/assets/og-bekal.png">
+<link rel="stylesheet" href="assets/style.css">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@graph":[
+ {"@type":"WebApplication","name":"Transfer Teks via QR — Bekal","applicationCategory":"UtilitiesApplication","operatingSystem":"Web","url":"https://pusatbanksoal.id/transfer-teks.html","description":"Pindahkan teks antar perangkat lewat QR code tanpa server: tampilkan QR di satu perangkat, pindai dengan kamera perangkat lain, teks tersalin otomatis.","offers":{"@type":"Offer","price":"0","priceCurrency":"IDR"},"inLanguage":"id-ID","isAccessibleForFree":true},
+ {"@type":"BreadcrumbList","itemListElement":[
+  {"@type":"ListItem","position":1,"name":"Beranda","item":"https://pusatbanksoal.id/"},
+  {"@type":"ListItem","position":2,"name":"Transfer Teks via QR","item":"https://pusatbanksoal.id/transfer-teks.html"}]},
+ {"@type":"HowTo","name":"Cara memindahkan teks antar perangkat lewat QR","step":[
+  {"@type":"HowToStep","name":"Tampilkan QR","text":"Di perangkat yang punya teks, buka tab Kirim dan tempel teksnya — QR langsung muncul (berputar otomatis bila teks panjang)."},
+  {"@type":"HowToStep","name":"Pindai","text":"Di perangkat tujuan, buka tab Terima, nyalakan kamera, lalu arahkan ke QR perangkat pertama."},
+  {"@type":"HowToStep","name":"Salin","text":"Teks otomatis tersusun di perangkat tujuan. Tekan Salin — selesai, tanpa server."}]},
+ {"@type":"FAQPage","mainEntity":[
+  {"@type":"Question","name":"Apakah teks saya dikirim ke server?","acceptedAnswer":{"@type":"Answer","text":"Tidak. Teks diubah menjadi QR di browser dan hanya terbaca sebagai cahaya oleh kamera perangkat lain. Tidak ada data yang melewati server mana pun, jadi sepenuhnya privat."}},
+  {"@type":"Question","name":"Apakah bisa untuk teks panjang?","acceptedAnswer":{"@type":"Answer","text":"Bisa. Teks panjang otomatis dipecah menjadi beberapa QR yang berputar (animasi). Kamera penerima akan mengumpulkan semua bagian lalu menyusunnya kembali secara utuh."}},
+  {"@type":"Question","name":"Perlu aplikasi atau koneksi internet?","acceptedAnswer":{"@type":"Answer","text":"Tidak perlu aplikasi dan tidak perlu keduanya terhubung ke jaringan yang sama. Cukup dua perangkat yang sama-sama membuka halaman ini; satu menampilkan QR, satu memindai dengan kamera."}},
+  {"@type":"Question","name":"Perangkat mana yang memakai kamera?","acceptedAnswer":{"@type":"Answer","text":"Perangkat penerima (yang akan menerima teks). Untuk kirim dari laptop ke HP, HP yang memindai. Untuk kirim dari HP ke laptop, webcam laptop yang memindai."}}
+ ]}
+]}
+</script>
+<script>(function(){try{var t=localStorage.getItem('pbs_theme');if(t==='light'||t==='dark')document.documentElement.setAttribute('data-theme',t);else if(window.matchMedia&&matchMedia('(prefers-color-scheme: light)').matches)document.documentElement.setAttribute('data-theme','light');}catch(e){}})();</script>
+<script src="assets/auth.js" defer></script>
+<style>
+.tb-hero{padding:26px 0 6px}
+.tb-tabs{display:flex;gap:8px;margin:16px 0 18px;max-width:520px}
+.tb-tabs button{flex:1;font:inherit;font-weight:700;font-size:14px;padding:12px;border-radius:12px;border:1px solid var(--hair-dark);background:var(--elevated);color:var(--muted-strong);cursor:pointer;transition:.15s}
+.tb-tabs button.on{background:var(--primary);border-color:var(--primary);color:#fff}
+.tb-panel{max-width:520px}
+.tb-panel.hide{display:none}
+.tb-box{border:1px solid var(--hair-dark);border-radius:16px;padding:18px;background:var(--card)}
+.tb-box h2{font-size:15px;color:var(--on-dark);margin:0 0 12px}
+.tb-in{width:100%;box-sizing:border-box;background:var(--elevated);border:1px solid var(--hair-dark);border-radius:11px;padding:11px 12px;color:var(--on-dark);font:inherit;font-size:14px;resize:vertical;min-height:96px;line-height:1.5}
+.tb-in:focus{outline:none;border-color:var(--primary)}
+.tb-row{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
+.tb-btn{font:inherit;font-weight:700;font-size:13.5px;padding:11px 15px;border-radius:11px;border:1px solid var(--hair-dark);background:var(--elevated);color:var(--on-dark);cursor:pointer;transition:.15s}
+.tb-btn:hover{border-color:var(--primary);color:var(--accent-ink)}
+.tb-btn.pri{background:var(--primary);border-color:var(--primary);color:#fff}
+.tb-qrwrap{margin-top:14px;display:flex;flex-direction:column;align-items:center;gap:8px}
+.tb-qrcard{background:#fff;border-radius:16px;padding:14px;box-shadow:0 2px 14px rgba(0,0,0,.12);display:inline-block}
+#tbQR{display:block;width:280px;max-width:72vw;height:auto;image-rendering:pixelated}
+#tbFrameCount{font-family:var(--num);font-size:13px;color:var(--on-dark);font-weight:600}
+.tb-empty{margin-top:14px;border:1.5px dashed var(--hair-dark);border-radius:14px;padding:30px 16px;text-align:center;color:var(--muted);font-size:13.5px}
+.tb-info{margin-top:10px;font-size:12.5px;color:var(--muted-strong);line-height:1.6;text-align:center}
+.tb-speed{display:flex;align-items:center;gap:10px;margin-top:12px;font-size:12.5px;color:var(--muted-strong)}
+.tb-speed input{flex:1}
+.tb-camwrap{margin-top:14px;border-radius:16px;overflow:hidden;background:#000;position:relative;aspect-ratio:1/1;display:flex;align-items:center;justify-content:center}
+#tbVideo{width:100%;height:100%;object-fit:cover;display:block}
+.tb-camwrap:not(.live)::after{content:"📷 Kamera mati";position:absolute;color:#fff9;font-size:14px}
+.tb-reticle{position:absolute;inset:16%;border:3px solid rgba(255,255,255,.85);border-radius:16px;box-shadow:0 0 0 2000px rgba(0,0,0,.28);pointer-events:none;display:none}
+.tb-camwrap.live .tb-reticle{display:block}
+.tb-scaninfo{margin-top:10px;font-size:13px;color:var(--on-dark);font-weight:600;text-align:center;min-height:18px}
+.tb-err{margin-top:10px;color:var(--down);font-size:12.5px;line-height:1.5;display:none;border:1px solid var(--down);border-radius:10px;padding:10px 12px;background:color-mix(in srgb,var(--down) 8%,transparent)}
+.tb-result{margin-top:12px}
+.tb-result textarea{width:100%;box-sizing:border-box;background:var(--elevated);border:1px solid var(--primary);border-radius:11px;padding:11px 12px;color:var(--on-dark);font:inherit;font-size:14px;min-height:88px;resize:vertical}
+.tb-note{border:1px solid var(--hair-dark);border-left:3px solid var(--primary);border-radius:12px;padding:13px 15px;background:var(--card);margin-top:18px;font-size:12.5px;color:var(--muted-strong);line-height:1.6;max-width:640px}
+.tb-steps{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:20px;max-width:720px}
+@media(max-width:620px){.tb-steps{grid-template-columns:1fr}}
+.tb-step{border:1px solid var(--hair-dark);border-radius:14px;padding:15px;background:var(--card)}
+.tb-step b{display:block;color:var(--on-dark);font-size:14px;margin:6px 0 4px}
+.tb-step span{font-size:12.5px;color:var(--muted-strong);line-height:1.55}
+.tb-stepno{width:26px;height:26px;border-radius:8px;background:var(--primary-soft);color:var(--accent-ink);font-weight:800;font-size:13px;display:flex;align-items:center;justify-content:center;font-family:var(--num)}
+.tb-faq{margin-top:22px;max-width:720px}
+.tb-faq details{border:1px solid var(--hair-dark);border-radius:12px;padding:2px 14px;margin-top:10px;background:var(--card)}
+.tb-faq summary{cursor:pointer;font-weight:600;color:var(--on-dark);font-size:14px;padding:12px 0}
+.tb-faq p{margin:0 0 12px;font-size:13.5px;color:var(--body);line-height:1.6}
+#tbCopied{position:fixed;bottom:18px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--on-dark);color:var(--card);font-size:12.5px;font-weight:600;padding:8px 16px;border-radius:99px;opacity:0;pointer-events:none;transition:.25s;z-index:80}
+#tbCopied.on{opacity:1;transform:translateX(-50%) translateY(0)}
+</style>
+</head>
+<body>
+<nav class="nav"><div class="nav-in">
+<a class="brand" href="index.html"><img class="brand-logo brand-dark" src="assets/bekal-logo-white.png" alt="Bekal" width="56" height="30"><img class="brand-logo brand-light" src="assets/bekal-logo-green.png" alt="" aria-hidden="true" width="56" height="30"></a>
+<div class="nav-links" id="navLinks">
+<a href="index.html" class="nav-link">Beranda</a>
+<div class="nav-group">
+<button type="button" class="nav-group-btn" aria-expanded="false" aria-haspopup="true" aria-controls="menu-belajar">Belajar<svg class="i nav-caret" aria-hidden="true"><use href="#i-chevron-down"></use></svg></button>
+<div class="nav-menu" id="menu-belajar" role="menu">
+<a href="tryout.html" class="nav-menu-item" role="menuitem"><span class="nav-menu-ic"><svg class="i" aria-hidden="true"><use href="#i-target"></use></svg></span><span class="nav-menu-tx"><b>Tryout</b><small>Simulasi ujian &amp; latihan soal</small></span></a>
+<a href="pembahasan.html" class="nav-menu-item" role="menuitem"><span class="nav-menu-ic"><svg class="i" aria-hidden="true"><use href="#i-book"></use></svg></span><span class="nav-menu-tx"><b>Bank Soal &amp; Pembahasan</b><small>Soal lengkap dengan pembahasan</small></span></a>
+<a href="dashboard.html" class="nav-menu-item" role="menuitem"><span class="nav-menu-ic"><svg class="i" aria-hidden="true"><use href="#i-chart"></use></svg></span><span class="nav-menu-tx"><b>Dashboard</b><small>Progres &amp; statistik belajar</small></span></a>
+<a href="analisis.html" class="nav-menu-item" role="menuitem"><span class="nav-menu-ic"><svg class="i" aria-hidden="true"><use href="#i-brain"></use></svg></span><span class="nav-menu-tx"><b>AI Analisis</b><small>Analisis kelemahan berbasis AI</small></span></a>
+</div></div>
+<div class="nav-group">
+<button type="button" class="nav-group-btn" aria-expanded="false" aria-haspopup="true" aria-controls="menu-kampus">Kampus &amp; Karier<svg class="i nav-caret" aria-hidden="true"><use href="#i-chevron-down"></use></svg></button>
+<div class="nav-menu" id="menu-kampus" role="menu">
+<a href="kuliah.html" class="nav-menu-item" role="menuitem"><span class="nav-menu-ic"><svg class="i" aria-hidden="true"><use href="#i-grad"></use></svg></span><span class="nav-menu-tx"><b>Kuliah</b><small>1161 prodi di 290 kampus</small></span></a>
+<a href="beasiswa.html" class="nav-menu-item" role="menuitem"><span class="nav-menu-ic"><svg class="i" aria-hidden="true"><use href="#i-money"></use></svg></span><span class="nav-menu-tx"><b>Beasiswa</b><small>90 beasiswa dalam &amp; luar negeri</small></span></a>
+<a href="kerja-remote.html" class="nav-menu-item" role="menuitem"><span class="nav-menu-ic"><svg class="i" aria-hidden="true"><use href="#i-globe"></use></svg></span><span class="nav-menu-tx"><b>Kerja Remote</b><small>Lowongan remote ID &amp; luar negeri</small></span></a>
+<a href="skripsi.html" class="nav-menu-item" role="menuitem"><span class="nav-menu-ic"><svg class="i" aria-hidden="true"><use href="#i-doc"></use></svg></span><span class="nav-menu-tx"><b>Riset &amp; Skripsi</b><small>Asisten riset &amp; penulisan</small></span></a>
+</div></div>
+<div class="nav-group">
+<button type="button" class="nav-group-btn" aria-expanded="false" aria-haspopup="true" aria-controls="menu-usaha">Usaha<svg class="i nav-caret" aria-hidden="true"><use href="#i-chevron-down"></use></svg></button>
+<div class="nav-menu" id="menu-usaha" role="menu"><a href="kelas.html" class="nav-menu-item" role="menuitem"><span class="nav-menu-ic"><svg class="i" aria-hidden="true"><use href="#i-grad"></use></svg></span><span class="nav-menu-tx"><b>Kelas Bisnis dari Nol</b><small>Kuliah online 7 chapter</small></span></a><a href="scaleup.html" class="nav-menu-item" role="menuitem"><span class="nav-menu-ic"><svg class="i" aria-hidden="true"><use href="#i-trend"></use></svg></span><span class="nav-menu-tx"><b>Scale Up Bisnis</b><small>MVP, PMF &amp; ekspansi</small></span></a><a href="legalitas.html" class="nav-menu-item" role="menuitem"><span class="nav-menu-ic"><svg class="i" aria-hidden="true"><use href="#i-shield"></use></svg></span><span class="nav-menu-tx"><b>Legalitas &amp; Pajak</b><small>NIB, PT/CV, PIRT &amp; pajak</small></span></a><a href="bisnis.html" class="nav-menu-item" role="menuitem"><span class="nav-menu-ic"><svg class="i" aria-hidden="true"><use href="#i-bolt"></use></svg></span><span class="nav-menu-tx"><b>Studio Bisnis</b><small>Alat bisnis &amp; monetisasi</small></span></a><a href="franchise.html" class="nav-menu-item" role="menuitem"><span class="nav-menu-ic"><svg class="i" aria-hidden="true"><use href="#i-store"></use></svg></span><span class="nav-menu-tx"><b>Franchise &amp; Peluang</b><small>Direktori franchise &amp; ide bisnis</small></span></a><a href="finansial.html" class="nav-menu-item" role="menuitem"><span class="nav-menu-ic"><svg class="i" aria-hidden="true"><use href="#i-money"></use></svg></span><span class="nav-menu-tx"><b>Finansial</b><small>Kalkulator keuangan &amp; investasi</small></span></a></div></div>
+<div class="nav-group">
+<button type="button" class="nav-group-btn" aria-expanded="false" aria-haspopup="true" aria-controls="menu-studio">Studio AI<svg class="i nav-caret" aria-hidden="true"><use href="#i-chevron-down"></use></svg></button>
+<div class="nav-menu" id="menu-studio" role="menu">
+<a href="prompt-studio.html" class="nav-menu-item" role="menuitem"><span class="nav-menu-ic"><svg class="i" aria-hidden="true"><use href="#i-sparkles"></use></svg></span><span class="nav-menu-tx"><b>Prompt Studio</b><small>Generator prompt AI</small></span></a>
+<a href="keuangan-harian.html" class="nav-menu-item" role="menuitem"><span class="nav-menu-ic"><svg class="i" aria-hidden="true"><use href="#i-wallet"></use></svg></span><span class="nav-menu-tx"><b>Catatan Keuangan Harian</b><small>Pemasukan &amp; pengeluaran</small></span></a>
+<a href="qr-studio.html" class="nav-menu-item" role="menuitem"><span class="nav-menu-ic"><svg class="i" aria-hidden="true"><use href="#i-scan"></use></svg></span><span class="nav-menu-tx"><b>QR &amp; Barcode</b><small>Generator QR &amp; barcode</small></span></a>
+<a href="transfer-teks.html" class="nav-menu-item" role="menuitem" aria-current="page"><span class="nav-menu-ic"><svg class="i" aria-hidden="true"><use href="#i-refresh"></use></svg></span><span class="nav-menu-tx"><b>Transfer Teks</b><small>Pindah teks antar perangkat via QR</small></span></a>
+</div></div>
+</div>
+<div class="nav-right"><a href="auth.html" class="hide-sm" style="font-weight:600">Masuk</a><a href="auth.html" class="btn btn-primary btn-sm">Daftar Gratis</a><button class="nav-toggle" data-nav-toggle aria-label="Buka menu" aria-expanded="false"><svg class="i" aria-hidden="true"><use href="#i-menu"></use></svg></button></div>
+</div></nav>
+
+<main>
+<section class="section-sm tb-hero"><div class="wrap">
+  <span class="section-eyebrow">Studio AI · Alat <span class="badge-new">Baru</span></span>
+  <h1 class="mt"><span class="gradient-text">Transfer Teks</span> via QR</h1>
+  <p class="lead mt" style="max-width:62ch">Pindahkan teks antar perangkat — <b style="color:var(--on-dark)">HP ke laptop</b> atau sebaliknya — lewat QR code. Tempel teks di satu layar, <b style="color:var(--on-dark)">pindai dengan kamera</b> perangkat lain, teks langsung tersalin. Tanpa kabel, tanpa login, <b style="color:var(--on-dark)">tanpa server</b>.</p>
+
+  <div class="tb-tabs" role="tablist">
+    <button type="button" id="tbSend" class="on">📤 Kirim (tampilkan QR)</button>
+    <button type="button" id="tbRecv">📥 Terima (pindai)</button>
+  </div>
+
+  <!-- KIRIM -->
+  <div class="tb-panel" id="panelSend">
+    <div class="tb-box">
+      <h2>Teks yang mau dikirim</h2>
+      <textarea class="tb-in" id="tbText" placeholder="Tempel atau ketik teks di sini… link, catatan, kode, apa saja."></textarea>
+      <div class="tb-row">
+        <button type="button" class="tb-btn" id="tbPaste">📋 Tempel dari clipboard</button>
+      </div>
+      <div class="tb-speed">Kecepatan putar QR
+        <input type="range" id="tbSpeed" min="2" max="10" step="1" value="6"><span style="color:var(--muted)">(teks panjang)</span>
+      </div>
+      <div class="tb-empty" id="tbEmpty">Ketik atau tempel teks di atas — QR akan muncul di sini untuk dipindai perangkat lain.</div>
+      <div class="tb-qrwrap">
+        <div class="tb-qrcard"><canvas id="tbQR" width="280" height="280" style="display:none"></canvas></div>
+        <div id="tbFrameCount"></div>
+      </div>
+      <div class="tb-info" id="tbFrameInfo"></div>
+    </div>
+  </div>
+
+  <!-- TERIMA -->
+  <div class="tb-panel hide" id="panelRecv">
+    <div class="tb-box">
+      <h2>Pindai QR dari perangkat lain</h2>
+      <div class="tb-camwrap" id="tbCamWrap">
+        <video id="tbVideo" muted playsinline></video>
+        <div class="tb-reticle"></div>
+      </div>
+      <div class="tb-row">
+        <button type="button" class="tb-btn pri" id="tbStart">📷 Nyalakan kamera</button>
+        <button type="button" class="tb-btn" id="tbStop" style="display:none">⏹ Berhenti</button>
+      </div>
+      <div class="tb-scaninfo" id="tbScanInfo"></div>
+      <div class="tb-err" id="tbErr"></div>
+      <div class="tb-result">
+        <textarea id="tbResult" readonly placeholder="Teks yang diterima akan muncul di sini…"></textarea>
+        <div class="tb-row">
+          <button type="button" class="tb-btn pri" id="tbCopy">📋 Salin teks</button>
+          <button type="button" class="tb-btn" id="tbAgain" style="display:none">🔄 Pindai lagi</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tb-note">🔒 <b>100% privat &amp; tanpa server.</b> Teksmu diubah menjadi QR langsung di browser dan hanya dibaca sebagai cahaya oleh kamera perangkat lain — <b>tidak melewati internet atau server mana pun</b>. Kamera butuh izin &amp; koneksi HTTPS (otomatis di situs ini). Jaga kedua layar tetap stabil saat memindai.</div>
+
+  <div class="tb-steps">
+    <div class="tb-step"><div class="tb-stepno">1</div><b>Tampilkan QR</b><span>Di perangkat yang punya teks: tab <b>Kirim</b> → tempel teks. QR muncul (berputar otomatis bila panjang).</span></div>
+    <div class="tb-step"><div class="tb-stepno">2</div><b>Pindai</b><span>Di perangkat tujuan: tab <b>Terima</b> → nyalakan kamera → arahkan ke QR perangkat pertama.</span></div>
+    <div class="tb-step"><div class="tb-stepno">3</div><b>Salin</b><span>Teks tersusun otomatis di perangkat tujuan. Tekan <b>Salin</b> — beres, tanpa kabel.</span></div>
+  </div>
+
+  <section class="tb-faq">
+    <h2 class="mt-lg">Pertanyaan yang sering diajukan</h2>
+    <details><summary>Apakah teks saya dikirim ke server?</summary><p>Tidak. Teks diubah jadi QR di browsermu dan hanya terbaca sebagai cahaya oleh kamera perangkat lain. Tidak ada data yang melewati server — sepenuhnya privat &amp; offline.</p></details>
+    <details><summary>Bisa untuk teks panjang?</summary><p>Bisa. Teks panjang otomatis dipecah jadi beberapa QR yang berputar (animasi). Kamera penerima mengumpulkan semua bagian lalu menyusunnya kembali utuh. Atur kecepatan putar di tab Kirim bila perlu.</p></details>
+    <details><summary>Perlu aplikasi atau internet yang sama?</summary><p>Tidak. Tak perlu aplikasi, tak perlu satu jaringan. Cukup dua perangkat membuka halaman ini — satu menampilkan QR, satu memindai dengan kamera.</p></details>
+    <details><summary>Perangkat mana yang pakai kamera?</summary><p>Perangkat <b>penerima</b>. Kirim laptop→HP: HP yang memindai. Kirim HP→laptop: webcam laptop yang memindai. Kamera butuh HTTPS &amp; izin akses.</p></details>
+    <details><summary>Kenapa kamera tidak bisa dibuka?</summary><p>Pastikan kamu mengizinkan akses kamera saat diminta, dan halaman dibuka lewat <b>https://</b>. Di iPhone gunakan Safari; di Android gunakan Chrome. Jika kamera dipakai aplikasi lain, tutup dulu aplikasi itu.</p></details>
+  </section>
+</div></section>
+</main>
+
+<div id="tbCopied">Tersalin ✓</div>
+
+<footer class="footer"><div class="wrap"><div class="cols">
+<div><a class="brand" href="index.html" style="color:var(--ink)"><img class="brand-logo brand-dark" src="assets/bekal-logo-white.png" alt="Bekal" width="56" height="30"><img class="brand-logo brand-light" src="assets/bekal-logo-green.png" alt="" aria-hidden="true" width="56" height="30"></a><p style="color:#5b6672;font-size:13px;margin-top:14px;max-width:34ch">Bekal lengkap menuju masa depan — belajar, kampus, karier, dan usaha dalam satu platform untuk pelajar &amp; fresh grad Indonesia.</p></div>
+<div><h5>Belajar</h5><a href="tryout.html">Tryout</a><a href="pembahasan.html">Bank Soal &amp; Pembahasan</a><a href="dashboard.html">Dashboard</a><a href="analisis.html">AI Analisis</a></div>
+<div><h5>Kampus &amp; Karier</h5><a href="kuliah.html">Kuliah</a><a href="beasiswa.html">Beasiswa</a><a href="kerja-remote.html">Kerja Remote</a><a href="skripsi.html">Riset &amp; Skripsi</a></div>
+<div><h5>Usaha</h5><a href="kelas.html">Kelas Bisnis dari Nol</a><a href="scaleup.html">Scale Up Bisnis</a><a href="legalitas.html">Legalitas &amp; Pajak</a><a href="franchise.html">Franchise &amp; Peluang</a><a href="finansial.html">Finansial</a></div>
+<div><h5>Studio AI</h5><a href="prompt-studio.html">Prompt Studio</a><a href="keuangan-harian.html">Catatan Keuangan Harian</a><a href="qr-studio.html">QR &amp; Barcode</a><a href="transfer-teks.html">Transfer Teks</a></div>
+</div><div class="bottom"><span>&copy; <span data-year>2026</span> Bekal &mdash; Seluruh hak cipta dilindungi.</span><span>Dibuat untuk pelajar &amp; fresh grad Indonesia 🇮🇩</span></div></div></footer>
+<script src="assets/app.js" defer></script>
+<script src="assets/qr.js"></script>
+<script src="assets/transfer-teks.js" defer></script>
+</body>
+</html>
