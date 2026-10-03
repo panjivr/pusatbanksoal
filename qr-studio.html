@@ -89,6 +89,12 @@ textarea.qs-in{resize:vertical;min-height:64px;line-height:1.5}
 .qs-faq p{margin:0 0 12px;font-size:13.5px;color:var(--body);line-height:1.6}
 .qs-only-qr.hide{display:none}
 .qs-only-bar.hide{display:none}
+.qs-content.hide{display:none}
+#qsFields.hide{display:none}
+#qsFields .qs-field{margin-bottom:11px}
+#qsFields .qs-check{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--muted-strong);cursor:pointer}
+#qsFields .qs-check input{width:16px;height:16px}
+textarea.qs-in[readonly],input.qs-in[readonly]{opacity:.72}
 #qsSaved{position:fixed;bottom:18px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--on-dark);color:var(--card);font-size:12.5px;font-weight:600;padding:8px 16px;border-radius:99px;opacity:0;pointer-events:none;transition:.25s;z-index:80}
 #qsSaved.on{opacity:1;transform:translateX(-50%) translateY(0)}
 /* --- responsive hardening: let grid/flex children shrink instead of clipping --- */
@@ -180,16 +186,25 @@ textarea.qs-in{resize:vertical;min-height:64px;line-height:1.5}
         </select>
         <small class="qs-symhint" id="qsSymHint" style="display:block;margin-top:6px;font-size:11.5px;color:var(--muted);line-height:1.5">Serba-guna: huruf, angka &amp; simbol. Cocok untuk SKU, kode internal, tiket.</small>
       </div>
+      <div class="qs-field qs-content" id="qsContentWrap"><label>Tipe konten</label>
+        <select class="qs-sel" id="qsContent">
+          <option value="link">🔗 Link / URL</option>
+          <option value="text">📝 Teks biasa</option>
+          <option value="wifi">📶 WiFi</option>
+          <option value="vcard">👤 Kontak (vCard)</option>
+          <option value="whatsapp">💬 WhatsApp</option>
+          <option value="email">✉️ Email</option>
+          <option value="sms">💬 SMS</option>
+          <option value="tel">📞 Telepon</option>
+          <option value="geo">📍 Lokasi (GPS)</option>
+          <option value="event">📅 Event kalender</option>
+          <option value="social">📱 Media sosial</option>
+        </select>
+      </div>
+      <div id="qsFields"></div>
       <div class="qs-field">
         <label id="qsInLabel">Link atau teks</label>
         <textarea class="qs-in" id="qsText" placeholder="Tempel link di sini… mis. https://pusatbanksoal.id">https://pusatbanksoal.id</textarea>
-        <div class="qs-chips qs-only-qr" id="qsChips">
-          <button type="button" class="qs-chip" data-tpl="https://">🔗 URL</button>
-          <button type="button" class="qs-chip" data-tpl="https://wa.me/62">💬 WhatsApp</button>
-          <button type="button" class="qs-chip" data-tpl="mailto:">✉️ Email</button>
-          <button type="button" class="qs-chip" data-tpl="tel:+62">📞 Telepon</button>
-          <button type="button" class="qs-chip" data-tpl="WIFI:T:WPA;S:NamaWiFi;P:Password;;">📶 WiFi</button>
-        </div>
         <div class="qs-err" id="qsErr"></div>
       </div>
 

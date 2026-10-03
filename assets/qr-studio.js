@@ -59,7 +59,7 @@
 
   /* ---------- state ---------- */
   var st = {
-    mode: 'qr', sym: 'code128', text: 'https://pusatbanksoal.id',
+    mode: 'qr', sym: 'code128', content: 'link', text: 'https://pusatbanksoal.id',
     fg: '#0b0e11', bg: '#ffffff', size: 512, margin: 4,
     ec: 'M', shape: 'kotak', frame: 'none', label: 'SCAN ME', logo: null
   };
@@ -489,13 +489,12 @@
     for (i = 0; i < only.length; i++) only[i].classList.toggle('hide', m !== 'qr');
     var onlyB = document.querySelectorAll('.qs-only-bar');
     for (i = 0; i < onlyB.length; i++) onlyB[i].classList.toggle('hide', m !== 'bar');
-    if (m === 'bar') applySym();
-    else {
-      var lbl = $('qsInLabel'), inp = $('qsText');
-      if (lbl) lbl.textContent = 'Link atau teks';
-      if (inp) inp.setAttribute('placeholder', 'Tempel link di sini… mis. https://pusatbanksoal.id');
-    }
-    render();
+    syncInputMode();
+  }
+  function syncInputMode() {
+    updateContentVisibility();
+    if (contentAllowed()) { setContentType(st.content); }
+    else { var t = $('qsText'); if (t) t.removeAttribute('readonly'); applySym(); render(); }
   }
   function applySym() {
     var meta = SYM_META[st.sym] || SYM_META.code128;
@@ -503,6 +502,103 @@
     if (lbl) lbl.textContent = meta.lb;
     if (inp) inp.setAttribute('placeholder', meta.ph);
     if (hint) hint.textContent = meta.hint;
+  }
+
+  /* ---------- content-type builders (link-style payloads) ---------- */
+  var FIELDS = {
+    wifi: [{ k: 'ssid', l: 'Nama WiFi (SSID)', t: 'text' }, { k: 'pass', l: 'Password', t: 'text' }, { k: 'enc', l: 'Keamanan', t: 'select', o: [['WPA', 'WPA/WPA2'], ['WEP', 'WEP'], ['nopass', 'Tanpa password']] }, { k: 'hidden', l: 'Jaringan tersembunyi', t: 'check' }],
+    vcard: [{ k: 'name', l: 'Nama lengkap', t: 'text' }, { k: 'phone', l: 'Telepon', t: 'tel' }, { k: 'email', l: 'Email', t: 'email' }, { k: 'org', l: 'Organisasi', t: 'text' }, { k: 'title', l: 'Jabatan', t: 'text' }, { k: 'url', l: 'Website', t: 'text' }],
+    whatsapp: [{ k: 'num', l: 'Nomor (mis. 62812xxxx)', t: 'tel' }, { k: 'msg', l: 'Pesan (opsional)', t: 'text' }],
+    email: [{ k: 'to', l: 'Email tujuan', t: 'email' }, { k: 'subject', l: 'Subjek', t: 'text' }, { k: 'body', l: 'Isi pesan', t: 'textarea' }],
+    sms: [{ k: 'num', l: 'Nomor', t: 'tel' }, { k: 'msg', l: 'Pesan', t: 'text' }],
+    tel: [{ k: 'num', l: 'Nomor telepon', t: 'tel' }],
+    geo: [{ k: 'lat', l: 'Lintang (latitude)', t: 'text' }, { k: 'lng', l: 'Bujur (longitude)', t: 'text' }],
+    event: [{ k: 'title', l: 'Judul acara', t: 'text' }, { k: 'loc', l: 'Lokasi', t: 'text' }, { k: 'start', l: 'Mulai', t: 'datetime-local' }, { k: 'end', l: 'Selesai', t: 'datetime-local' }],
+    social: [{ k: 'platform', l: 'Platform', t: 'select', o: [['instagram', 'Instagram'], ['tiktok', 'TikTok'], ['youtube', 'YouTube'], ['twitter', 'X / Twitter'], ['facebook', 'Facebook'], ['linkedin', 'LinkedIn'], ['telegram', 'Telegram']] }, { k: 'user', l: 'Username (tanpa @)', t: 'text' }]
+  };
+  function wifiEsc(s) { return String(s || '').replace(/([\\;,:"])/g, '\\$1'); }
+  function icalDate(v) { if (!v) return ''; return v.replace(/[-:]/g, '').replace('T', 'T') + (v.length <= 16 ? '00' : ''); }
+  var SOCIAL_URL = { instagram: 'https://instagram.com/', tiktok: 'https://www.tiktok.com/@', youtube: 'https://youtube.com/@', twitter: 'https://x.com/', facebook: 'https://facebook.com/', linkedin: 'https://www.linkedin.com/in/', telegram: 'https://t.me/' };
+  var BUILDERS = {
+    wifi: function (f) { if (!f.ssid) return ''; var enc = f.enc || 'WPA'; return 'WIFI:T:' + (enc === 'nopass' ? 'nopass' : enc) + ';S:' + wifiEsc(f.ssid) + ';' + (enc === 'nopass' ? '' : 'P:' + wifiEsc(f.pass) + ';') + (f.hidden ? 'H:true;' : '') + ';'; },
+    vcard: function (f) {
+      var v = ['BEGIN:VCARD', 'VERSION:3.0'];
+      if (f.name) v.push('N:' + f.name + '\nFN:' + f.name);
+      if (f.org) v.push('ORG:' + f.org);
+      if (f.title) v.push('TITLE:' + f.title);
+      if (f.phone) v.push('TEL;TYPE=CELL:' + f.phone);
+      if (f.email) v.push('EMAIL:' + f.email);
+      if (f.url) v.push('URL:' + f.url);
+      v.push('END:VCARD'); return (f.name || f.phone || f.email) ? v.join('\n') : '';
+    },
+    whatsapp: function (f) { var n = (f.num || '').replace(/\D/g, ''); if (!n) return ''; return 'https://wa.me/' + n + (f.msg ? '?text=' + encodeURIComponent(f.msg) : ''); },
+    email: function (f) { if (!f.to) return ''; var q = []; if (f.subject) q.push('subject=' + encodeURIComponent(f.subject)); if (f.body) q.push('body=' + encodeURIComponent(f.body)); return 'mailto:' + f.to + (q.length ? '?' + q.join('&') : ''); },
+    sms: function (f) { var n = (f.num || '').replace(/[^\d+]/g, ''); if (!n) return ''; return 'SMSTO:' + n + ':' + (f.msg || ''); },
+    tel: function (f) { var n = (f.num || '').replace(/[^\d+]/g, ''); return n ? 'tel:' + n : ''; },
+    geo: function (f) { if (!f.lat || !f.lng) return ''; return 'geo:' + f.lat + ',' + f.lng; },
+    event: function (f) { if (!f.title) return ''; var v = ['BEGIN:VEVENT', 'SUMMARY:' + f.title]; if (f.loc) v.push('LOCATION:' + f.loc); if (f.start) v.push('DTSTART:' + icalDate(f.start)); if (f.end) v.push('DTEND:' + icalDate(f.end)); v.push('END:VEVENT'); return v.join('\n'); },
+    social: function (f) { var b = SOCIAL_URL[f.platform || 'instagram']; var u = (f.user || '').replace(/^@/, ''); return u ? b + u : ''; }
+  };
+  function readFields(type) {
+    var defs = FIELDS[type], vals = {}, i;
+    for (i = 0; i < defs.length; i++) {
+      var el = $('qf_' + defs[i].k); if (!el) continue;
+      vals[defs[i].k] = (defs[i].t === 'check') ? el.checked : el.value;
+    }
+    return vals;
+  }
+  function renderFields(type) {
+    var wrap = $('qsFields'); if (!wrap) return;
+    var defs = FIELDS[type];
+    if (!defs) { wrap.innerHTML = ''; return; }
+    var html = '';
+    for (var i = 0; i < defs.length; i++) {
+      var d = defs[i], id = 'qf_' + d.k;
+      if (d.t === 'check') { html += '<label class="qs-check"><input type="checkbox" id="' + id + '"> ' + d.l + '</label>'; continue; }
+      html += '<div class="qs-field"><label>' + d.l + '</label>';
+      if (d.t === 'select') { html += '<select class="qs-sel" id="' + id + '">'; for (var j = 0; j < d.o.length; j++) html += '<option value="' + d.o[j][0] + '">' + d.o[j][1] + '</option>'; html += '</select>'; }
+      else if (d.t === 'textarea') html += '<textarea class="qs-in" id="' + id + '" rows="2"></textarea>';
+      else html += '<input type="' + (d.t === 'datetime-local' ? 'datetime-local' : 'text') + '" class="qs-in" id="' + id + '" ' + (d.t === 'tel' ? 'inputmode="tel"' : '') + '>';
+      html += '</div>';
+    }
+    wrap.innerHTML = html;
+    for (i = 0; i < defs.length; i++) (function (el) {
+      if (!el) return;
+      el.addEventListener('input', buildFromFields);
+      el.addEventListener('change', buildFromFields);
+    })($('qf_' + defs[i].k));
+  }
+  function buildFromFields() {
+    var type = st.content, fn = BUILDERS[type];
+    if (!fn) return;
+    var payload = fn(readFields(type));
+    st.text = payload;
+    var t = $('qsText'); if (t) t.value = payload;
+    render();
+  }
+  function setContentType(type) {
+    st.content = type;
+    var fields = $('qsFields'), t = $('qsText'), lbl = $('qsInLabel');
+    var structured = (type !== 'link' && type !== 'text');
+    if (structured) {
+      renderFields(type);
+      if (fields) fields.classList.remove('hide');
+      if (t) { t.setAttribute('readonly', 'readonly'); }
+      if (lbl) lbl.textContent = 'Hasil (otomatis di-encode)';
+      buildFromFields();
+    } else {
+      if (fields) { fields.innerHTML = ''; fields.classList.add('hide'); }
+      if (t) { t.removeAttribute('readonly'); if (st.mode !== 'qr') applySym(); else { if (lbl) lbl.textContent = (type === 'text' ? 'Teks' : 'Link atau teks'); t.setAttribute('placeholder', type === 'text' ? 'Ketik teks apa saja…' : 'Tempel link… mis. https://pusatbanksoal.id'); } st.text = t.value; }
+      render();
+    }
+  }
+  function contentAllowed() { return st.mode === 'qr' || (st.mode === 'bar' && TWO_D[st.sym]); }
+  function updateContentVisibility() {
+    var wrap = $('qsContentWrap'), fields = $('qsFields');
+    var show = contentAllowed();
+    if (wrap) wrap.classList.toggle('hide', !show);
+    if (!show) { if (fields) fields.classList.add('hide'); }
+    else if (st.content !== 'link' && st.content !== 'text') { if (fields) fields.classList.remove('hide'); }
   }
   function seg(id, attr, val, key) {
     var btns = document.querySelectorAll('#' + id + ' button'), i;
@@ -526,15 +622,13 @@
     for (i = 0; i < mbtns.length; i++) (function (b) { b.addEventListener('click', function () { setMode(b.getAttribute('data-mode')); }); })(mbtns[i]);
     /* symbology */
     var symSel = $('qsSym');
-    if (symSel) { st.sym = symSel.value; symSel.addEventListener('change', function () { st.sym = symSel.value; applySym(); render(); }); }
+    if (symSel) { st.sym = symSel.value; symSel.addEventListener('change', function () { st.sym = symSel.value; syncInputMode(); }); }
     /* text */
     var txt = $('qsText');
-    if (txt) { st.text = txt.value; txt.addEventListener('input', function () { st.text = txt.value; render(); }); }
-    /* chips */
-    var chips = document.querySelectorAll('#qsChips .qs-chip');
-    for (i = 0; i < chips.length; i++) (function (ch) {
-      ch.addEventListener('click', function () { var t = $('qsText'); if (!t) return; t.value = ch.getAttribute('data-tpl'); st.text = t.value; t.focus(); try { t.setSelectionRange(t.value.length, t.value.length); } catch (e) {} render(); });
-    })(chips[i]);
+    if (txt) { st.text = txt.value; txt.addEventListener('input', function () { if (st.content === 'link' || st.content === 'text') { st.text = txt.value; render(); } }); }
+    /* content type */
+    var cSel = $('qsContent');
+    if (cSel) { st.content = cSel.value; cSel.addEventListener('change', function () { setContentType(cSel.value); }); }
     /* colors */
     syncColor('qsFg', 'qsFgHex', 'fg'); syncColor('qsBg', 'qsBgHex', 'bg');
     /* size */
@@ -568,6 +662,7 @@
     var em = document.querySelectorAll('[data-embed]');
     for (i = 0; i < em.length; i++) (function (b) { b.addEventListener('click', function () { doEmbed(b.getAttribute('data-embed')); }); })(em[i]);
 
+    updateContentVisibility();
     render();
   }
   function bindSeg(id, attr, key) {
