@@ -1,0 +1,28 @@
+{
+  "name": "bekal-file-tools-build",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Build local browser assets for Bekal PDF and image tools; not a runtime server.",
+  "scripts": {
+    "build": "node build.mjs"
+  },
+  "dependencies": {
+    "@cantoo/fontkit": "2.0.12",
+    "@cantoo/pdf-lib": "2.11.1",
+    "buffer": "6.0.3",
+    "docx": "9.5.1",
+    "docx-preview": "0.3.6",
+    "gifenc": "1.0.3",
+    "gifuct-js": "2.1.2",
+    "html2canvas": "1.4.1",
+    "jszip": "3.10.1",
+    "mammoth": "1.10.0",
+    "pdfjs-dist": "4.10.38",
+    "pptxgenjs": "3.12.0",
+    "tesseract.js": "6.0.1",
+    "utif": "3.1.0"
+  },
+  "devDependencies": {
+    "esbuild": "0.25.10"
+  }
+}

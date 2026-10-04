@@ -1,0 +1,12 @@
+[
+  {
+    "language": "eng",
+    "source": "https://raw.githubusercontent.com/tesseract-ocr/tessdata_fast/main/eng.traineddata",
+    "uncompressed_sha256": "7d4322bd2a7749724879683fc3912cb542f19906c83bcc1a52132556427170b2"
+  },
+  {
+    "language": "ind",
+    "source": "https://raw.githubusercontent.com/tesseract-ocr/tessdata_fast/main/ind.traineddata",
+    "uncompressed_sha256": "69786901da87ab8766c1ea7fbb10b28f2110c14da3f6c8f2735df131fba95d88"
+  }
+]

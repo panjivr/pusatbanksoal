@@ -138,5 +138,19 @@
     "description": "Kirim teks dan file antara HP, tablet, dan laptop melalui QR. Pilih koneksi antar perangkat untuk file atau kirim teks tanpa internet. Tidak perlu memasang aplikasi atau login.",
     "group": "alat",
     "title": "Kirim Teks dan File dari HP ke Laptop lewat QR"
+  },
+  {
+    "url": "pdf-tools.html",
+    "name": "Alat PDF Gratis",
+    "description": "Gabungkan, pisahkan, kompres, konversi, beri tanda tangan, OCR, dan lindungi PDF langsung di perangkat tanpa unggah file.",
+    "group": "studio",
+    "title": "Alat PDF Gratis: Gabung, Kompres, Konversi dan OCR PDF"
+  },
+  {
+    "url": "image-tools.html",
+    "name": "Alat Gambar Gratis",
+    "description": "Kompres foto, ubah ukuran, potong, konversi JPG PNG WebP, buat kolase, watermark, GIF, dan OCR gambar di perangkatmu.",
+    "group": "studio",
+    "title": "Alat Gambar Gratis: Kompres Foto, Edit dan Konversi JPG PNG"
   }
 ]

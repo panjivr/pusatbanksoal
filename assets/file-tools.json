@@ -1,0 +1,342 @@
+{
+  "pdf": [
+    {
+      "id": "merge",
+      "name": "Gabungkan PDF",
+      "description": "Susun beberapa PDF menjadi satu file.",
+      "group": "Halaman"
+    },
+    {
+      "id": "split",
+      "name": "Pisahkan PDF",
+      "description": "Unduh setiap halaman sebagai file tersendiri.",
+      "group": "Halaman"
+    },
+    {
+      "id": "extract",
+      "name": "Ambil Halaman PDF",
+      "description": "Simpan hanya halaman yang kamu perlukan.",
+      "group": "Halaman"
+    },
+    {
+      "id": "reorder",
+      "name": "Urutkan Halaman PDF",
+      "description": "Tentukan urutan, misalnya 3, 1, 2.",
+      "group": "Halaman"
+    },
+    {
+      "id": "delete",
+      "name": "Hapus Halaman PDF",
+      "description": "Buang halaman yang tidak diperlukan.",
+      "group": "Halaman"
+    },
+    {
+      "id": "rotate",
+      "name": "Putar PDF",
+      "description": "Putar halaman tanpa mengubah isinya.",
+      "group": "Halaman"
+    },
+    {
+      "id": "crop",
+      "name": "Potong Tampilan PDF",
+      "description": "Atur batas tampilan halaman. Isi di luar potongan tetap tersimpan.",
+      "group": "Halaman"
+    },
+    {
+      "id": "resize",
+      "name": "Ukuran PDF A4",
+      "description": "Sesuaikan halaman ke kertas A4.",
+      "group": "Halaman"
+    },
+    {
+      "id": "compress",
+      "name": "Kompres PDF",
+      "description": "Ringkas struktur atau kecilkan gambar dalam PDF.",
+      "group": "Optimasi"
+    },
+    {
+      "id": "repair",
+      "name": "Perbaiki PDF",
+      "description": "Coba pulihkan struktur PDF yang masih dapat dibaca. Periksa hasilnya.",
+      "group": "Optimasi"
+    },
+    {
+      "id": "flatten",
+      "name": "Ratakan Formulir PDF",
+      "description": "Jadikan isian formulir bagian tetap dari halaman.",
+      "group": "Optimasi"
+    },
+    {
+      "id": "metadata",
+      "name": "Info Dokumen PDF",
+      "description": "Ubah judul dan penulis atau hapus metadata dokumen.",
+      "group": "Optimasi"
+    },
+    {
+      "id": "pdf-images",
+      "name": "PDF ke JPG atau PNG",
+      "description": "Ubah halaman PDF menjadi gambar.",
+      "group": "Konversi"
+    },
+    {
+      "id": "images-pdf",
+      "name": "JPG dan Gambar ke PDF",
+      "description": "Gabungkan gambar menjadi dokumen PDF.",
+      "group": "Konversi"
+    },
+    {
+      "id": "text-pdf",
+      "name": "Teks ke PDF",
+      "description": "Buat PDF dari catatan atau file TXT.",
+      "group": "Konversi"
+    },
+    {
+      "id": "word-pdf",
+      "name": "Word ke PDF",
+      "description": "Konversi DOCX menjadi gambar halaman PDF. Periksa tata letak hasil.",
+      "group": "Konversi"
+    },
+    {
+      "id": "sheet-pdf",
+      "name": "Excel ke PDF",
+      "description": "Cetak data lembar pertama XLSX atau CSV. Grafik dan tata letak tidak disertakan.",
+      "group": "Konversi"
+    },
+    {
+      "id": "pdf-word",
+      "name": "PDF ke Word",
+      "description": "Ambil teks PDF ke DOCX yang dapat diedit. Gambar dan tata letak tidak disertakan.",
+      "group": "Konversi"
+    },
+    {
+      "id": "pdf-sheet",
+      "name": "PDF ke Excel",
+      "description": "Ekspor teks berdasarkan posisi ke XLSX. Periksa pemisahan kolom.",
+      "group": "Konversi"
+    },
+    {
+      "id": "pdf-slides",
+      "name": "PDF ke PowerPoint",
+      "description": "Jadikan setiap halaman gambar dalam slide PPTX. Isi slide tidak dapat diedit.",
+      "group": "Konversi"
+    },
+    {
+      "id": "pdf-text",
+      "name": "Ambil Teks PDF",
+      "description": "Simpan teks yang dapat dipilih sebagai TXT.",
+      "group": "Konversi"
+    },
+    {
+      "id": "ocr",
+      "name": "OCR PDF",
+      "description": "Baca PDF hasil scan dalam bahasa Indonesia dan Inggris. Hasil PDF dapat dicari, disertai TXT.",
+      "group": "Scan"
+    },
+    {
+      "id": "scan",
+      "name": "Rapikan Scan PDF",
+      "description": "Ubah scan ke abu-abu atau hitam putih.",
+      "group": "Scan"
+    },
+    {
+      "id": "watermark",
+      "name": "Watermark PDF",
+      "description": "Tambahkan tulisan penanda pada halaman.",
+      "group": "Tandai"
+    },
+    {
+      "id": "numbers",
+      "name": "Nomor Halaman PDF",
+      "description": "Tambahkan nomor halaman mulai dari angka pilihanmu.",
+      "group": "Tandai"
+    },
+    {
+      "id": "annotate",
+      "name": "Tambah Teks PDF",
+      "description": "Tambahkan catatan di posisi pilihan. Teks asli tidak diubah.",
+      "group": "Tandai"
+    },
+    {
+      "id": "sign",
+      "name": "Tanda Tangan PDF",
+      "description": "Tambahkan nama atau gambar tanda tangan. Ini tanda tangan visual, bukan sertifikat digital.",
+      "group": "Tandai"
+    },
+    {
+      "id": "redact",
+      "name": "Tutup Data PDF",
+      "description": "Tutup area sensitif dan buat ulang halaman sebagai gambar agar teks aslinya tidak tersimpan.",
+      "group": "Keamanan"
+    },
+    {
+      "id": "protect",
+      "name": "Kunci PDF",
+      "description": "Lindungi PDF dengan password baru dan enkripsi AES-256.",
+      "group": "Keamanan"
+    },
+    {
+      "id": "unlock",
+      "name": "Buka Kunci PDF",
+      "description": "Hapus password setelah membuka PDF dengan password yang benar.",
+      "group": "Keamanan"
+    }
+  ],
+  "image": [
+    {
+      "id": "compress",
+      "name": "Kompres Gambar",
+      "description": "Kecilkan ukuran file dengan pilihan kualitas.",
+      "group": "Optimasi"
+    },
+    {
+      "id": "resize",
+      "name": "Ubah Ukuran Gambar",
+      "description": "Atur lebar dan tinggi dalam piksel.",
+      "group": "Ukuran"
+    },
+    {
+      "id": "upscale",
+      "name": "Perbesar Gambar",
+      "description": "Perbesar hingga 4 kali dengan interpolasi. Detail baru tidak diciptakan oleh AI.",
+      "group": "Ukuran"
+    },
+    {
+      "id": "crop",
+      "name": "Potong Gambar",
+      "description": "Ambil bagian gambar yang kamu perlukan.",
+      "group": "Ukuran"
+    },
+    {
+      "id": "passport",
+      "name": "Pas Foto 3x4 dan 4x6",
+      "description": "Buat gambar 354×472 atau 472×709 piksel. Sesuaikan pengaturan cetak.",
+      "group": "Ukuran"
+    },
+    {
+      "id": "rotate",
+      "name": "Putar Gambar",
+      "description": "Putar gambar ke sudut pilihan.",
+      "group": "Edit"
+    },
+    {
+      "id": "flip",
+      "name": "Balik Gambar",
+      "description": "Balik kiri ke kanan atau atas ke bawah.",
+      "group": "Edit"
+    },
+    {
+      "id": "adjust",
+      "name": "Atur Warna Gambar",
+      "description": "Sesuaikan terang, kontras, dan saturasi.",
+      "group": "Edit"
+    },
+    {
+      "id": "grayscale",
+      "name": "Gambar Abu-abu",
+      "description": "Ubah foto menjadi abu-abu.",
+      "group": "Edit"
+    },
+    {
+      "id": "sepia",
+      "name": "Efek Sepia",
+      "description": "Berikan nuansa warna hangat.",
+      "group": "Edit"
+    },
+    {
+      "id": "watermark",
+      "name": "Watermark Gambar",
+      "description": "Tambahkan tulisan sekali atau berulang.",
+      "group": "Edit"
+    },
+    {
+      "id": "meme",
+      "name": "Buat Meme",
+      "description": "Tambahkan tulisan di atas dan bawah gambar.",
+      "group": "Kreasi"
+    },
+    {
+      "id": "border",
+      "name": "Bingkai Gambar",
+      "description": "Tambahkan bingkai dengan warna pilihan.",
+      "group": "Kreasi"
+    },
+    {
+      "id": "rounded",
+      "name": "Sudut Membulat",
+      "description": "Buat sudut transparan pada gambar PNG.",
+      "group": "Kreasi"
+    },
+    {
+      "id": "collage",
+      "name": "Kolase Foto",
+      "description": "Gabungkan beberapa foto dalam satu gambar.",
+      "group": "Kreasi"
+    },
+    {
+      "id": "gif",
+      "name": "Buat GIF",
+      "description": "Susun beberapa gambar menjadi animasi GIF.",
+      "group": "Kreasi"
+    },
+    {
+      "id": "sprite",
+      "name": "Buat Sprite Gambar",
+      "description": "Gabungkan aset ke gambar sprite beserta CSS.",
+      "group": "Kreasi"
+    },
+    {
+      "id": "convert",
+      "name": "Konversi Gambar",
+      "description": "Ubah ke JPG, PNG, WebP, GIF, atau TIFF. SVG hasil berupa bitmap dalam wadah SVG.",
+      "group": "Konversi"
+    },
+    {
+      "id": "images-pdf",
+      "name": "Gambar ke PDF",
+      "description": "Susun foto dan gambar menjadi PDF.",
+      "group": "Konversi"
+    },
+    {
+      "id": "ocr-image",
+      "name": "Ambil Teks dari Gambar",
+      "description": "OCR bahasa Indonesia dan Inggris ke file TXT. Periksa kembali hasilnya.",
+      "group": "Konversi"
+    },
+    {
+      "id": "blur",
+      "name": "Blur Area Gambar",
+      "description": "Samarkan area dengan efek blur. Gunakan Tutup Data untuk informasi sensitif.",
+      "group": "Privasi"
+    },
+    {
+      "id": "pixelate",
+      "name": "Pikselkan Area",
+      "description": "Samarkan area dengan kotak piksel.",
+      "group": "Privasi"
+    },
+    {
+      "id": "redact-image",
+      "name": "Tutup Data Gambar",
+      "description": "Ganti piksel pada area sensitif dengan warna solid.",
+      "group": "Privasi"
+    },
+    {
+      "id": "remove-bg",
+      "name": "Hapus Warna Latar",
+      "description": "Hapus warna latar pilihan. Cocok untuk latar polos, bukan pemisahan objek dengan AI.",
+      "group": "Privasi"
+    },
+    {
+      "id": "metadata",
+      "name": "Hapus Metadata Foto",
+      "description": "Buat ulang gambar tanpa EXIF, lokasi GPS, dan metadata sumber.",
+      "group": "Privasi"
+    },
+    {
+      "id": "palette",
+      "name": "Palet Warna Gambar",
+      "description": "Ambil delapan warna dominan sebagai gambar dan JSON.",
+      "group": "Kreasi"
+    }
+  ]
+}
