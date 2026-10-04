@@ -66,7 +66,7 @@
   var LOGO_FRAC = { L: 0.14, M: 0.16, Q: 0.20, H: 0.24 };
   var SYM_META = {
     code128: { lb: 'Teks / kode (huruf & angka)', ph: 'mis. BEKAL-2026-XYZ', hint: 'Serba-guna: huruf, angka & simbol. Cocok untuk SKU, kode internal, tiket.' },
-    datamatrix: { lb: 'Teks / link / kode', ph: 'mis. https://pusatbanksoal.id atau SN-000123', hint: '2D paling padat — banyak data dalam kotak kecil. Ideal untuk serial, part kecil, kemasan.' },
+    datamatrix: { lb: 'Teks / link / kode', ph: 'mis. https://pusatbanksoal.id atau SN-000123', hint: '2D paling padat, banyak data dalam kotak kecil. Ideal untuk serial, part kecil, kemasan.' },
     pdf417: { lb: 'Teks / link / dokumen', ph: 'mis. https://pusatbanksoal.id/tryout', hint: '2D bertumpuk (stacked) berkapasitas besar. Dipakai di KTP, boarding pass, kartu identitas & dokumen.' },
     aztec: { lb: 'Teks / link / tiket', ph: 'mis. https://pusatbanksoal.id', hint: '2D ringkas tanpa zona kosong. Populer untuk e-ticket kereta & pesawat.' },
     ean13: { lb: '12–13 digit angka', ph: 'mis. 590123412345', hint: 'Barcode produk ritel global. 12 digit (cek otomatis) atau 13 digit lengkap.' },

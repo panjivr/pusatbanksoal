@@ -1004,7 +1004,7 @@
       }
       requirements.push('Panduan wawancara/observasi & strategi pemilihan informan.');
       requirements.push('Strategi keabsahan data (triangulasi, member checking).');
-      if (hasHyp) risks.push('Hipotesis formal jarang cocok untuk desain kualitatif — pertimbangkan proposisi.');
+      if (hasHyp) risks.push('Hipotesis formal jarang cocok untuk desain kualitatif, pertimbangkan proposisi.');
     } else {
       // unknown data type -> infer from goal only, low confidence
       family = (goal === 'explore' || goal === 'develop') ? 'Qualitative' : 'Quantitative';
@@ -1114,7 +1114,7 @@
       if (project.title && st.titleAnalysis.title &&
           normTitle(project.title) !== normTitle(st.titleAnalysis.title)) {
         push('info', 'title_changed_after_draft',
-          'Judul berubah setelah bab mulai ditulis — periksa kembali keselarasan isi.',
+          'Judul berubah setelah bab mulai ditulis, periksa kembali keselarasan isi.',
           'title');
       }
     }
@@ -1680,7 +1680,7 @@
     ].join('\n');
     var lokasiWaktu = [
       'Penelitian ini dilaksanakan di ' + (lokasi || objek || ph('lokasi penelitian')) +
-        '. Lokasi tersebut dipilih dengan pertimbangan ' + ph('alasan pemilihan lokasi — relevansi dengan masalah, keterjangkauan, atau ketersediaan data') + '.',
+        '. Lokasi tersebut dipilih dengan pertimbangan ' + ph('alasan pemilihan lokasi, relevansi dengan masalah, keterjangkauan, atau ketersediaan data') + '.',
       'Kegiatan penelitian direncanakan berlangsung sejak ' + ph('bulan/tahun mulai') + ' sampai dengan ' + ph('bulan/tahun selesai') +
         '. Rentang waktu tersebut mencakup tahap persiapan dan penyusunan instrumen, pengumpulan data, pengolahan dan analisis data, hingga penyusunan laporan. Rincian tahapan beserta alokasi waktunya disajikan pada tabel jadwal berikut.',
       'Tabel 3.1 Jadwal Penelitian',
@@ -2243,7 +2243,7 @@
       { title: 'Manfaat Penelitian', bullets: ['Manfaat teoretis', 'Manfaat praktis'] },
       { title: 'Kajian Teori', bullets: x.vars.map(function (v) { return 'Konsep ' + v; }).concat(['Penelitian terdahulu']) },
       { title: quant ? 'Kerangka Berpikir & Hipotesis' : 'Kerangka Konseptual', bullets: [quant ? x.xStr + ' → ' + x.yStr : 'Alur berpikir ' + x.topik, quant ? 'Hipotesis penelitian' : 'Fokus penelitian'] },
-      { title: 'Metode Penelitian', bullets: ['Pendekatan ' + x.approach + (x.designShort ? ' — ' + x.designShort : ''), quant ? 'Populasi, sampel & instrumen' : 'Subjek, sumber data & instrumen', quant ? 'Teknik analisis statistik' : 'Analisis kualitatif (Miles & Huberman)'] },
+      { title: 'Metode Penelitian', bullets: ['Pendekatan ' + x.approach + (x.designShort ? ', ' + x.designShort : ''), quant ? 'Populasi, sampel & instrumen' : 'Subjek, sumber data & instrumen', quant ? 'Teknik analisis statistik' : 'Analisis kualitatif (Miles & Huberman)'] },
       { title: 'Hasil Penelitian', bullets: ['〔isi dengan hasil/temuan penelitian Anda〕', '〔tabel/gambar pendukung〕'] },
       { title: 'Pembahasan', bullets: ['〔kaitkan temuan dengan teori & penelitian terdahulu〕'] },
       { title: 'Simpulan & Saran', bullets: ['Simpulan menjawab rumusan masalah', 'Saran praktis & untuk penelitian lanjutan'] },
@@ -2379,7 +2379,7 @@
         'Harapan Anda ke depan mengenai ' + lc1(v) + '?'
       ] });
     }
-    return { note: 'Pedoman wawancara semi-terstruktur — kembangkan sesuai jawaban informan.', groups: groups };
+    return { note: 'Pedoman wawancara semi-terstruktur, kembangkan sesuai jawaban informan.', groups: groups };
   }
 
   // Deteksi singkatan untuk Daftar Singkatan.
@@ -2415,7 +2415,7 @@
     return { total: refs.length, withYear: withY, within5: y5, within10: y10, pct5: pct5,
       oldest: oldest, newest: newest,
       note: !refs.length ? 'Belum ada referensi.' :
-        (pct5 >= 60 ? 'Bagus — mayoritas referensi mutakhir (≤5 tahun).' :
+        (pct5 >= 60 ? 'Bagus, mayoritas referensi mutakhir (≤5 tahun).' :
          'Perbanyak referensi 5 tahun terakhir agar lebih mutakhir (' + pct5 + '% saat ini).') };
   }
 
@@ -2659,7 +2659,7 @@
     var bk = bakuCheck(text);
     if (bk.total) F('info', bk.total + ' kata tidak baku terdeteksi (mis. ' + bk.issues.slice(0, 4).map(function (x) { return x.found + '→' + x.suggestion; }).join(', ') + '). Buka alat "Cek Kata Baku".');
     var aiHits = (lower.match(/\b(di era (globalisasi|modern|digital)|tidak dapat dipungkiri|dewasa ini|sangat krusial|holistik|multifaset)\b/g) || []).length;
-    if (aiHits >= 3) F('info', aiHits + ' frasa yang sering muncul pada tulisan AI terdeteksi. Pertimbangkan alat "Parafrase & Humanize".');
+    if (aiHits >= 3) F('info', aiHits + ' frasa yang sering muncul pada tulisan AI terdeteksi. Pertimbangkan alat "Parafrase dan Rapikan Bahasa".');
 
     // 5) Statistik & skor
     var stats = countText(text);
@@ -2668,7 +2668,7 @@
     if (score < 0) score = 0;
     return { score: score, findings: findings, sections: present, hasBiblio: hasBiblio,
       citations: nCite, references: bibCount, stats: stats,
-      note: 'Audit heuristik berbasis pola — bukan pengganti pemeriksaan dosen. Skor menurun seiring temuan.' };
+      note: 'Audit heuristik berbasis pola, bukan pengganti pemeriksaan dosen. Skor menurun seiring temuan.' };
   }
 
   /* ---- 4h) Simulasi Sidang (rubrik kata kunci) -------------------------- */
@@ -2739,7 +2739,7 @@
     if (cats.length >= 1 && nums.length >= 1) sug.push('Ada variabel kategorik + numerik → uji beda rata-rata: t-test (2 kelompok) atau ANOVA (>2 kelompok).');
     if (cats.length >= 2) sug.push('Terdapat ≥2 variabel kategorik → uji Chi-Square untuk asosiasi.');
     if (!sug.length) sug.push('Sajikan statistik deskriptif; tambah variabel untuk analisis inferensial.');
-    sug.push('Lakukan uji asumsi (normalitas, homogenitas) sebelum uji parametrik. Alat ini membaca data apa adanya — tidak mengarang nilai.');
+    sug.push('Lakukan uji asumsi (normalitas, homogenitas) sebelum uji parametrik. Alat ini membaca data apa adanya, tidak mengarang nilai.');
     return { n: rows.length, columns: cols, suggestions: sug };
   }
 
@@ -2754,7 +2754,7 @@
     long.sort(function (a, b) { return b.words - a.words; });
     var avg = sents.length ? Math.round(totalW / sents.length) : 0;
     var issues = [];
-    if (long.length) issues.push('Ada ' + long.length + ' kalimat sangat panjang (>30 kata) — pertimbangkan memecahnya.');
+    if (long.length) issues.push('Ada ' + long.length + ' kalimat sangat panjang (>30 kata), pertimbangkan memecahnya.');
     if (avg > 25) issues.push('Rata-rata panjang kalimat ' + avg + ' kata (ideal 15–22).');
     if (!issues.length) issues.push('Panjang kalimat sudah wajar dan mudah dibaca.');
     return { sentences: sents.length, avgWords: avg, longSentences: long.slice(0, 8), issues: issues,
@@ -2860,9 +2860,9 @@
     var x = _ctxOf(project);
     var mottos = [
       '"Sesungguhnya bersama kesulitan ada kemudahan." (QS. Al-Insyirah: 6)',
-      '"Pendidikan adalah senjata paling ampuh untuk mengubah dunia." — Nelson Mandela',
+      '"Pendidikan adalah senjata paling ampuh untuk mengubah dunia.", Nelson Mandela',
       '"Sedikit demi sedikit, lama-lama menjadi bukit."',
-      '"Orang yang menuntut ilmu berarti menuntut rahmat." — HR. Ibnu Majah',
+      '"Orang yang menuntut ilmu berarti menuntut rahmat.", HR. Ibnu Majah',
       '"Keberhasilan adalah hasil dari kerja keras, doa, dan pantang menyerah."'
     ];
     var persembahan = 'Skripsi ini penulis persembahkan kepada:\n' +
@@ -3311,7 +3311,7 @@
       var secs = chapters[c].sections || [];
       for (var s = 0; s < secs.length; s++) {
         var ss = _sentsOf(secs[s].content);
-        for (var i = 0; i < ss.length; i++) all.push({ text: ss[i], sh: _shin(ss[i]), sec: chapters[c].code + ' — ' + secs[s].title });
+        for (var i = 0; i < ss.length; i++) all.push({ text: ss[i], sh: _shin(ss[i]), sec: chapters[c].code + ', ' + secs[s].title });
       }
     }
     var items = [], totalW = 0, flaggedW = 0;
@@ -3334,7 +3334,7 @@
     items.sort(function (x, y) { return y.overlap - x.overlap; });
     return { originalityScore: totalW ? Math.round((1 - flaggedW / totalW) * 100) : 100,
       flaggedCount: items.length, sentenceCount: all.length, sourcesChecked: srcs.length, items: items.slice(0, 40),
-      note: 'Membandingkan kalimatmu dengan abstrak referensi yang kamu muat dan kalimat lain di dokumenmu — BUKAN basis data global Turnitin. Perbaiki dengan sitasi yang benar atau menulis ulang gagasan dengan bahasamu sendiri.' };
+      note: 'Membandingkan kalimatmu dengan abstrak referensi yang kamu muat dan kalimat lain di dokumenmu, BUKAN basis data global Turnitin. Perbaiki dengan sitasi yang benar atau menulis ulang gagasan dengan bahasamu sendiri.' };
   }
 
   /* Guided paraphrase assistant: helps you restate a passage in your OWN words
@@ -3346,10 +3346,10 @@
     var out = [];
     for (var i = 0; i < sents.length; i++) {
       var s = sents[i], tips = [];
-      if (s.split(/\s+/).length > 25) tips.push('Kalimat ini panjang — pecah menjadi dua kalimat yang lebih ringkas.');
+      if (s.split(/\s+/).length > 25) tips.push('Kalimat ini panjang, pecah menjadi dua kalimat yang lebih ringkas.');
       if (/\b(adalah|merupakan|yaitu)\b/i.test(s)) tips.push('Ubah pola definisi "X adalah ..."; mulai dari inti gagasannya.');
       tips.push('Tutup sumbernya, tulis intinya dengan kata-katamu sendiri, lalu bandingkan.');
-      tips.push('Tetap cantumkan sitasi ke sumber asli — parafrase wajib disitasi.');
+      tips.push('Tetap cantumkan sitasi ke sumber asli, parafrase wajib disitasi.');
       out.push({ original: s, tips: tips, starter: starters[i % starters.length] });
     }
     return { count: out.length, items: out,

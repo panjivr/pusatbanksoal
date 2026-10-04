@@ -145,11 +145,11 @@
     this.pc.onicecandidate = function (e) { if (e.candidate) self.signal('ice', e.candidate.toJSON ? e.candidate.toJSON() : e.candidate); };
     this.pc.onconnectionstatechange = function () {
       var s = self.pc ? self.pc.connectionState : 'closed';
-      if (s === 'failed') self.status('Gagal menyambung langsung — jaringan mungkin membatasi koneksi P2P. Coba pakai hotspot HP atau jaringan lain.', 'error');
+      if (s === 'failed') self.status('Gagal menyambung langsung, jaringan mungkin membatasi koneksi P2P. Coba pakai hotspot HP atau jaringan lain.', 'error');
       else if (s === 'disconnected') self.status('Koneksi terputus.', 'warn');
     };
     this.ws = relaySubscribe(this.topic, function (m) { self.onSignal(m); }, function (ev) {
-      if (ev === 'open') self.status(self.role === 'host' ? 'Siap ✓ — pindai QR ini dari perangkat satunya.' : 'Menyambungkan…');
+      if (ev === 'open') self.status(self.role === 'host' ? 'Siap ✓, pindai QR ini dari perangkat satunya.' : 'Menyambungkan…');
       else if ((ev === 'close' || ev === 'error') && !self.closed && !self.dcOpen) self.status('Menyambung ulang ke relay…', 'warn');
     });
     if (this.role === 'guest') {
@@ -252,7 +252,7 @@
   function connCallbacks() {
     return {
       status: setConnStatus,
-      open: function () { showConn('live'); setConnStatus('Terhubung ✓ — kirim teks & file dua arah.', 'ok'); },
+      open: function () { showConn('live'); setConnStatus('Terhubung ✓, kirim teks & file dua arah.', 'ok'); },
       text: function (t) { addLogText('in', t); },
       fileStart: function (f) { f._el = addFileProgress('in', f.name, f.size); },
       fileProgress: function (dir, got, total, f) { if (f && f._el) updateProgress(f._el, got, total); },
@@ -307,7 +307,7 @@
     if (empty) empty.style.display = 'none'; if (cv) cv.style.display = 'block';
     var enc = encodeFrames(text, SLICE); send.frames = enc.frames; send.idx = 0; drawSendFrame();
     if (enc.total > 1) send.timer = setInterval(function () { send.idx = (send.idx + 1) % send.frames.length; drawSendFrame(); }, speedMs());
-    if (info) info.textContent = enc.total > 1 ? 'Teks dibagi ' + enc.total + ' bagian — QR berputar otomatis. Arahkan kamera perangkat lain ke sini.' : 'QR siap dipindai.';
+    if (info) info.textContent = enc.total > 1 ? 'Teks dibagi ' + enc.total + ' bagian, QR berputar otomatis. Arahkan kamera perangkat lain ke sini.' : 'QR siap dipindai.';
   }
   function drawSendFrame() { var cv = $('tbQR'); if (!cv) return; drawQR(cv, send.frames[send.idx], 300); var cnt = $('tbFrameCount'); if (cnt) cnt.textContent = send.frames.length > 1 ? ('Bagian ' + (send.idx + 1) + ' / ' + send.frames.length) : ''; }
   function stopSend() { if (send.timer) { clearInterval(send.timer); send.timer = null; } }

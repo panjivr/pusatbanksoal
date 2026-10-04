@@ -134,7 +134,7 @@
     var next = idx<FLAT.length-1 ? FLAT[idx+1].l : null;
     var html =
       '<div class="k-crumb">'+esc(m.label||'')+(m.label?' · ':'')+esc(m.judul)+'</div>'+
-      '<h1 class="k-title">'+esc(l.judul)+'</h1>'+
+      '<h2 class="k-title">'+esc(l.judul)+'</h2>'+
       (l.ringkas?'<p class="k-sub">'+esc(l.ringkas)+'</p>':'')+
       '<article class="k-content">'+body+'</article>'+
       '<div class="k-actions">'+

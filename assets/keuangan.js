@@ -201,7 +201,7 @@
       return '<rect x="' + x + '" y="' + y + '" width="' + bw + '" height="' + Math.max(h, 1) + '" rx="2" fill="' + col + '"><title>' + k + ': ' + (v >= 0 ? '+' : '') + rp(v) + '</title></rect>';
     }).join('');
     $('khTrend').innerHTML = '<div style="overflow-x:auto"><svg viewBox="0 0 ' + W + ' ' + H + '" width="' + W + '" height="' + H + '" style="display:block;min-width:100%"><line x1="0" y1="' + mid + '" x2="' + W + '" y2="' + mid + '" stroke="var(--hair-dark)" stroke-width="1"/>' + bars + '</svg></div>' +
-      '<p style="font-size:11.5px;color:var(--muted);margin:6px 0 0">Saldo harian (hijau = surplus, merah = defisit) — maks ' + rp(maxAbs) + '. Sentuh batang untuk detail.</p>';
+      '<p style="font-size:11.5px;color:var(--muted);margin:6px 0 0">Saldo harian (hijau = surplus, merah = defisit), maks ' + rp(maxAbs) + '. Sentuh batang untuk detail.</p>';
   }
 
   /* ---------- statistik + perbandingan bulan ---------- */
@@ -466,7 +466,7 @@
     var pin = 0, pout = 0, p = periodTx(); p.forEach(function (x) { if (x.tipe === 'in') pin += x.jumlah; else pout += x.jumlah; });
     var rows = p.slice().sort(function (a, b) { return a.tanggal < b.tanggal ? -1 : 1; }).map(function (x) { return '<tr><td>' + x.tanggal + '</td><td>' + (x.tipe === 'in' ? 'Masuk' : 'Keluar') + '</td><td>' + esc(nameOf(x.kategori)) + '</td><td>' + esc(x.catatan || '') + '</td><td style="text-align:right">' + rp(x.jumlah) + '</td></tr>'; }).join('');
     var w = window.open('', '_blank'); if (!w) return;
-    w.document.write('<!doctype html><html><head><meta charset="utf-8"><title>Laporan Keuangan</title><style>body{font-family:Arial,sans-serif;padding:24px;color:#111}h1{font-size:20px}table{width:100%;border-collapse:collapse;font-size:12px;margin-top:12px}th,td{border:1px solid #ccc;padding:6px 8px;text-align:left}th{background:#eee}.s{display:flex;gap:24px;margin:10px 0;flex-wrap:wrap}</style></head><body><h1>Laporan Keuangan (' + periodName() + ')</h1><div class="s"><div><b>Saldo total:</b> ' + rp(saldoTotal()) + '</div><div><b>Pemasukan:</b> ' + rp(pin) + '</div><div><b>Pengeluaran:</b> ' + rp(pout) + '</div></div><table><thead><tr><th>Tanggal</th><th>Tipe</th><th>Kategori</th><th>Catatan</th><th>Jumlah</th></tr></thead><tbody>' + (rows || '<tr><td colspan="5">Tidak ada data</td></tr>') + '</tbody></table><p style="margin-top:16px;font-size:11px;color:#666">Dibuat dengan Bekal — pusatbanksoal.id</p></body></html>');
+    w.document.write('<!doctype html><html><head><meta charset="utf-8"><title>Laporan Keuangan</title><style>body{font-family:Arial,sans-serif;padding:24px;color:#111}h1{font-size:20px}table{width:100%;border-collapse:collapse;font-size:12px;margin-top:12px}th,td{border:1px solid #ccc;padding:6px 8px;text-align:left}th{background:#eee}.s{display:flex;gap:24px;margin:10px 0;flex-wrap:wrap}</style></head><body><h1>Laporan Keuangan (' + periodName() + ')</h1><div class="s"><div><b>Saldo total:</b> ' + rp(saldoTotal()) + '</div><div><b>Pemasukan:</b> ' + rp(pin) + '</div><div><b>Pengeluaran:</b> ' + rp(pout) + '</div></div><table><thead><tr><th>Tanggal</th><th>Tipe</th><th>Kategori</th><th>Catatan</th><th>Jumlah</th></tr></thead><tbody>' + (rows || '<tr><td colspan="5">Tidak ada data</td></tr>') + '</tbody></table><p style="margin-top:16px;font-size:11px;color:#666">Dibuat dengan Bekal, pusatbanksoal.id</p></body></html>');
     w.document.close(); setTimeout(function () { w.print(); }, 300);
   }
 

@@ -166,7 +166,7 @@
       $('lgTplViewer').innerHTML = '<div class="lg-tpl-head"><h3>'+esc(t.nama)+'</h3><div class="lg-tpl-act">'+
         '<button type="button" class="btn btn-primary btn-sm" data-tplcopy="'+i+'">📋 Salin</button>'+
         '<button type="button" class="btn btn-ghost btn-sm" data-tpldl="'+i+'">⬇️ Unduh .txt</button></div></div>'+
-        '<p class="lg-cap">Ganti bagian <b>{{...}}</b> dengan datamu. Ini draf umum — sesuaikan dengan kebutuhan &amp; untuk dokumen penting mintakan review ahli.</p>'+
+        '<p class="lg-cap">Ganti bagian <b>{{...}}</b> dengan datamu. Ini draf umum, sesuaikan dengan kebutuhan &amp; untuk dokumen penting mintakan review ahli.</p>'+
         '<pre class="lg-tpl-pre" id="lgTplPre">'+esc(t.isi)+'</pre>';
       var cp = $('lgTplViewer').querySelector('[data-tplcopy]');
       if (cp) cp.addEventListener('click', function(){
@@ -240,7 +240,7 @@
     var out=$('lgSimOut'); if(!out) return; var h='';
     if (simMode==='umkm') {
       var omzet=num('sOmzet'), st=(radioVal('sStatus')||'op');
-      if (omzet>4800000000) { h='<div class="lg-warn-box">Omzet di atas <b>Rp4,8 M</b> — tidak boleh pakai PPh Final 0,5%. Gunakan tarif <b>PPh Badan (Pasal 17 & 31E)</b> untuk badan, atau tarif progresif untuk orang pribadi. Coba mode "PPh Badan".</div>'; }
+      if (omzet>4800000000) { h='<div class="lg-warn-box">Omzet di atas <b>Rp4,8 M</b>, tidak boleh pakai PPh Final 0,5%. Gunakan tarif <b>PPh Badan (Pasal 17 & 31E)</b> untuk badan, atau tarif progresif untuk orang pribadi. Coba mode "PPh Badan".</div>'; }
       else {
         var dpp = st==='op' ? Math.max(0, omzet-500000000) : omzet;
         var pajak = dpp*0.005;
@@ -259,7 +259,7 @@
         var bagianNormal = laba - bagianFasilitas;
         pph = bagianFasilitas*0.11 + bagianNormal*0.22;
         det = 'Sebagian laba (proporsi Rp4,8 M / omzet) kena 11%, sisanya 22%.';
-      } else { pph=laba*0.22; det='Omzet > Rp50 M — tidak dapat fasilitas 31E, tarif penuh 22%.'; }
+      } else { pph=laba*0.22; det='Omzet > Rp50 M, tidak dapat fasilitas 31E, tarif penuh 22%.'; }
       h = orow('Tarif efektif', laba>0?((pph/laba*100).toFixed(1)+'%'):'—') +
           orow('PPh Badan / tahun', rp(pph), true) +
           orow('Rata-rata / bulan (angsuran PPh 25)', rp(pph/12)) +

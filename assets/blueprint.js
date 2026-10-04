@@ -352,7 +352,7 @@
     var h = '';
     h += '<div class="doc-page doc-cover">';
     h += '<div class="doc-brand">' + esc(META.tag || 'BEKAL') + '</div>';
-    h += '<h1 class="doc-h1">' + esc(META.judul || 'Business Blueprint') + '</h1>';
+    h += '<h1 class="doc-h1">' + esc(META.judul || 'Rencana Bisnis') + '</h1>';
     h += '<div class="doc-bizname">' + esc(name) + '</div>';
     if (owner) h += '<div class="doc-owner">oleh ' + esc(owner) + '</div>';
     if (META.sub) h += '<p class="doc-tagline">' + esc(META.sub) + '</p>';
@@ -371,7 +371,7 @@
       });
       h += '</div>';
     });
-    h += '<div class="doc-end">' + esc(META.kredit || '') + ' — dibuat dengan Bekal · pusatbanksoal.id</div>';
+    h += '<div class="doc-end">' + esc(META.kredit || '') + ', dibuat dengan Bekal · pusatbanksoal.id</div>';
     return h;
   }
 

@@ -57,6 +57,16 @@ python3 -m http.server 8000
 
 Tidak ada dependensi. Semua interaksi (ujian CAT, simulasi nilai, chart) berjalan dengan JavaScript bawaan browser.
 
+UI responsif dan metadata fitur dikelola tanpa framework tambahan. Daftar 20 fitur publik ada di `assets/features.json`. Setelah mengubah nama atau deskripsi fitur, sinkronkan SEO statis dan periksa konsistensinya:
+
+```bash
+python3 scripts/sync-seo.py --lastmod YYYY-MM-DD
+python3 scripts/check-site.py
+```
+
+Gunakan tanggal perubahan konten untuk `YYYY-MM-DD`. Laporan perbaikan, hasil pengujian, dan cara menjalankan pemeriksaan browser ada di [audit UI, responsivitas, dan SEO](docs/UI-UX-AUDIT.md).
+
+
 ## Deploy (GitHub Pages + domain pusatbanksoal.id)
 
 Kode & workflow sudah siap. Langkah sekali-jalan oleh pemilik repo:

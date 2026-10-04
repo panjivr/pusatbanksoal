@@ -1,7 +1,4 @@
 User-agent: *
 Allow: /
-Disallow: /admin.html
-Disallow: /dashboard.html
-Disallow: /auth.html
 
 Sitemap: https://pusatbanksoal.id/sitemap.xml

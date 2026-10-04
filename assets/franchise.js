@@ -221,7 +221,7 @@
         '<div><div class="fr-cname">' + esc(o.c.nama) + '</div><div class="fr-cmeta">' + esc(o.c.prov) + ' · UMK ≈ ' + rpShort(o.c.umk) + '</div></div>' +
         '<div class="fr-cbar"><div class="fr-cfill" style="width:' + o.s + '%;background:' + col + '"></div></div>' +
         '<span class="fr-cscore" style="color:' + col + '">' + o.s + '</span></div>';
-    }).join('') + '<p class="fr-cap" style="margin-top:8px;font-size:11px">Kota besar cenderung skor tinggi (pasar besar). Untuk usaha mikro, kota kecil dengan biaya rendah pun bisa sangat cocok — cek tab "Daya Beli" &amp; pilih kotamu sendiri.</p>';
+    }).join('') + '<p class="fr-cap" style="margin-top:8px;font-size:11px">Kota besar cenderung skor tinggi (pasar besar). Untuk usaha mikro, kota kecil dengan biaya rendah pun bisa sangat cocok, cek tab "Daya Beli" &amp; pilih kotamu sendiri.</p>';
   }
 
   /* ---------- HITUNG (BEP/ROI) ---------- */
@@ -338,8 +338,8 @@
       if (q && (c.nama + ' ' + c.prov).toLowerCase().indexOf(q) < 0) return false;
       return true;
     }).sort(function (a, b) { return a.nama < b.nama ? -1 : 1; });
-    sel.innerHTML = '<option value="">— ' + (list.length) + ' kota/kabupaten — pilih untuk skor detail —</option>' +
-      list.map(function (c) { return '<option value="' + c.id + '"' + (c.id === keep ? ' selected' : '') + '>' + esc(c.nama) + ' — ' + esc(c.prov) + '</option>'; }).join('');
+    sel.innerHTML = '<option value="">— ' + (list.length) + ' kota/kabupaten, pilih untuk skor detail —</option>' +
+      list.map(function (c) { return '<option value="' + c.id + '"' + (c.id === keep ? ' selected' : '') + '>' + esc(c.nama) + ', ' + esc(c.prov) + '</option>'; }).join('');
     if (sel.value !== keep) renderMatch();
   }
   populateCities();
@@ -364,16 +364,16 @@
     var seg = $('ktSeg').value;
     var s = cityScore(c, price, seg), sub = subScores(c, price, seg);
     var col = s >= 65 ? 'var(--up)' : s >= 45 ? '#f5a623' : 'var(--down)';
-    var verdict = s >= 65 ? 'Cocok — layak dicoba' : s >= 45 ? 'Cukup — bisa dengan strategi tepat' : 'Kurang cocok — perlu hati-hati';
+    var verdict = s >= 65 ? 'Cocok, layak dicoba' : s >= 45 ? 'Cukup, bisa dengan strategi tepat' : 'Kurang cocok, perlu hati-hati';
     var r = [];
     if (sub.daya >= 60) r.push('Daya beli warga <b>' + esc(c.nama) + '</b> memadai untuk harga jual ' + rp(price) + '.');
-    else if (sub.daya >= 40) r.push('Daya beli terbatas untuk harga ' + rp(price) + ' — andalkan harga terjangkau &amp; volume tinggi.');
-    else r.push('Daya beli tergolong rendah dibanding harga ' + rp(price) + ' — pertimbangkan menu lebih murah / porsi hemat.');
-    if (c.size >= 4) r.push('Pasar besar &amp; ramai — potensi transaksi tinggi, tapi kompetisi ketat (diferensiasi &amp; lokasi penting).');
-    else if (c.size <= 2) r.push('Pasar relatif kecil — kompetisi mungkin lebih longgar, namun batasi ekspektasi volume harian.');
-    else r.push('Ukuran pasar menengah — cukup untuk 1–2 gerai bila lokasi tepat.');
-    if (c.cost >= 4) r.push('Biaya hidup/sewa tinggi (' + esc(c.prov) + ') — tekan biaya tetap &amp; jaga margin agar tetap untung.');
-    else r.push('Biaya operasi relatif ramah — sewa/upah tidak terlalu menekan margin.');
+    else if (sub.daya >= 40) r.push('Daya beli terbatas untuk harga ' + rp(price) + ', andalkan harga terjangkau &amp; volume tinggi.');
+    else r.push('Daya beli tergolong rendah dibanding harga ' + rp(price) + ', pertimbangkan menu lebih murah / porsi hemat.');
+    if (c.size >= 4) r.push('Pasar besar &amp; ramai, potensi transaksi tinggi, tapi kompetisi ketat (diferensiasi &amp; lokasi penting).');
+    else if (c.size <= 2) r.push('Pasar relatif kecil, kompetisi mungkin lebih longgar, namun batasi ekspektasi volume harian.');
+    else r.push('Ukuran pasar menengah, cukup untuk 1–2 gerai bila lokasi tepat.');
+    if (c.cost >= 4) r.push('Biaya hidup/sewa tinggi (' + esc(c.prov) + '), tekan biaya tetap &amp; jaga margin agar tetap untung.');
+    else r.push('Biaya operasi relatif ramah, sewa/upah tidak terlalu menekan margin.');
     if (f) r.push('<b>' + esc(f.nama) + '</b> bertipe <b>' + esc((TIER[f.tier] || {}).label || f.tier) + '</b> dengan modal ' + esc(invRange(f)) + '; ' + (f.tier === 'mikro' || f.tier === 'kecil' ? 'fleksibel untuk kota ini.' : 'pastikan pasar &amp; daya beli cukup untuk skala modalnya.'));
     out.style.display = 'block';
     out.innerHTML =
@@ -382,7 +382,7 @@
       '<div style="text-align:center"><div style="font-family:var(--num);font-size:34px;font-weight:800;color:' + col + ';line-height:1">' + s + '<span style="font-size:14px;color:var(--muted)">/100</span></div><div style="font-size:12.5px;font-weight:700;color:' + col + '">' + verdict + '</div></div></div>' +
       mbar('Daya beli (UMK vs harga)', sub.daya) + mbar('Ukuran pasar', sub.pasar) + mbar('Efisiensi biaya operasi', sub.biaya) +
       '<ul style="margin:12px 0 0 16px;font-size:13px;color:var(--muted-strong);line-height:1.55">' + r.map(function (x) { return '<li style="margin-bottom:4px">' + x + '</li>'; }).join('') + '</ul>' +
-      '<p class="fr-cap" style="margin-top:10px">Skor heuristik untuk penyaringan awal — bukan studi kelayakan. Selalu survei lokasi &amp; kompetitor langsung.</p>';
+      '<p class="fr-cap" style="margin-top:10px">Skor heuristik untuk penyaringan awal, bukan studi kelayakan. Selalu survei lokasi &amp; kompetitor langsung.</p>';
   }
   if ($('ktCity')) $('ktCity').addEventListener('change', renderMatch);
   ['ktPick', 'ktPrice', 'ktSeg'].forEach(function (id) { if ($(id)) $(id).addEventListener('change', renderMatch); if ($(id)) $(id).addEventListener('input', renderMatch); });
@@ -414,56 +414,56 @@
     return 'umum';
   }
   var TPL = {
-    kuliner:{ic:'🍽️',model:'Jual porsi/menu — laba dari selisih harga jual dikurangi HPP bahan (food cost).',
+    kuliner:{ic:'🍽️',model:'Jual porsi/menu, laba dari selisih harga jual dikurangi HPP bahan (food cost).',
       rab:[['Peralatan masak & etalase/booth',35],['Bahan baku awal (stok)',18],['Sewa tempat & deposit',20],['Perizinan (NIB, PIRT/Halal)',5],['Branding, menu & promosi awal',10],['Dana darurat (±1 bln operasional)',12]],
       steps:['Pilih 1 menu signature & tentukan target pasar (kampus/kantor/perumahan).','Uji resep ke 10–20 orang, kunci rasa & ukuran porsi.','Hitung HPP per porsi, tetapkan harga (jaga food cost ≤ 40%).','Siapkan tempat/booth + urus NIB (dan PIRT bila produk kemasan).','Buat foto menu menarik + daftar GoFood/GrabFood/Instagram.','Soft-launch + promo perkenalan, minta review, perbaiki, lalu perbanyak.'],
       chk:['NIB via OSS (gratis, online) + PIRT/Halal bila kemasan','Lokasi dekat keramaian target (kampus/kantor/perumahan padat)','Konsistensi rasa + kebersihan & food safety','Foto menu + akun GoFood/GrabFood/Instagram'],
       harga:20000,cost:0.5,target:30,per:30,sat:'porsi',fixed:0.12,
       risk:'Bahan cepat rusak & harganya fluktuatif; rasa bisa tak konsisten; kompetisi padat.',
       tip:'Kunci 1 signature yang konsisten, kelola stok agar minim terbuang, dan bangun langganan (paket/pre-order).'},
-    jasa:{ic:'🧰',model:'Jual jasa/keahlian — margin tinggi karena biaya utama adalah waktu & skill.',
+    jasa:{ic:'🧰',model:'Jual jasa/keahlian, margin tinggi karena biaya utama adalah waktu & skill.',
       rab:[['Alat & perlengkapan utama',40],['Bahan habis pakai awal',13],['Tempat/booth & deposit (atau home-service)',15],['Perizinan (NIB)',4],['Branding & marketing awal',15],['Dana darurat',13]],
       steps:['Tentukan layanan inti & siapa yang paling butuh (target market).','Asah skill sampai rapi; buat portofolio before-after.','Tetapkan paket harga (per jam/proyek) berdasar nilai, bukan sekadar biaya.','Siapkan alat + kanal booking (WA/Instagram) & lokasi/home-service.','Kumpulkan 3–5 klien pertama (diskon perkenalan) untuk testimoni.','Naikkan harga & kapasitas seiring reputasi; tawarkan langganan.'],
       chk:['NIB via OSS bila sudah rutin','Mudah dijangkau atau layani panggilan (home-service)','Skill inti terasah + portofolio before-after','Sistem booking (WA/IG) + kumpulkan testimoni'],
       harga:60000,cost:0.3,target:6,per:30,sat:'order',fixed:0.1,
       risk:'Sangat bergantung pada tenaga/waktu; sulit di-scale tanpa menambah orang; reputasi mudah jatuh bila hasil buruk.',
       tip:'Naikkan tarif lewat spesialisasi & portofolio, lalu rekrut/latih tim agar bisa melayani lebih banyak klien.'},
-    ritel:{ic:'🛍️',model:'Jual barang — laba dari selisih harga beli (kulakan) dan harga jual; kunci di stok & perputaran.',
+    ritel:{ic:'🛍️',model:'Jual barang, laba dari selisih harga beli (kulakan) dan harga jual; kunci di stok & perputaran.',
       rab:[['Stok barang awal',45],['Etalase, rak & kemasan',15],['Sewa & deposit (atau toko online)',15],['Perizinan (NIB)',5],['Foto produk & iklan awal',10],['Dana darurat',10]],
-      steps:['Pilih niche produk & pahami siapa pembelinya.','Cari supplier terbaik (harga, kualitas, kecepatan) — bandingkan beberapa.','Hitung margin per produk & tetapkan harga kompetitif.','Buka toko: marketplace (Shopee/Tokopedia/TikTok Shop) dan/atau fisik.','Foto produk menarik + iklan/konten untuk menarik pembeli pertama.','Jaga perputaran stok (hindari dead stock) & tambah varian laris.'],
+      steps:['Pilih niche produk & pahami siapa pembelinya.','Cari supplier terbaik (harga, kualitas, kecepatan), bandingkan beberapa.','Hitung margin per produk & tetapkan harga kompetitif.','Buka toko: marketplace (Shopee/Tokopedia/TikTok Shop) dan/atau fisik.','Foto produk menarik + iklan/konten untuk menarik pembeli pertama.','Jaga perputaran stok (hindari dead stock) & tambah varian laris.'],
       chk:['NIB via OSS','Etalase online (marketplace) atau toko fisik strategis','Kuasai sourcing supplier & manajemen stok','Foto produk + toko Shopee/Tokopedia/TikTok Shop'],
       harga:75000,cost:0.7,target:12,per:30,sat:'produk',fixed:0.1,
       risk:'Dead stock (barang tak laku) mengunci modal; perang harga; tren cepat berubah.',
       tip:'Mulai stok kecil & cepat putar; gandakan yang laris, hentikan yang lambat. Manfaatkan pre-order untuk barang mahal.'},
-    properti:{ic:'🏠',model:'Sewakan ruang/hunian — pendapatan berulang bulanan + nilai aset yang naik.',
+    properti:{ic:'🏠',model:'Sewakan ruang/hunian, pendapatan berulang bulanan + nilai aset yang naik.',
       rab:[['Renovasi & furnitur',48],['Deposit/sewa awal & legal',22],['Perlengkapan & utilitas',12],['Perizinan (PBG/IMB, NIB)',6],['Dana darurat',12]],
-      steps:['Tentukan segmen (mahasiswa/pekerja/wisatawan) & lokasi yang tepat.','Hitung yield: (sewa setahun ÷ total modal) — target ≥ 8%/th.','Siapkan unit: renovasi, furnitur, utilitas, & foto yang bagus.','Urus legal & izin (akad sewa, PBG/IMB, NIB, pajak).','Pasang listing (Mamikos/OLX/Airbnb) + kelola review & okupansi.','Tambah layanan (wifi, laundry, kebersihan) untuk tarif premium.'],
+      steps:['Tentukan segmen (mahasiswa/pekerja/wisatawan) & lokasi yang tepat.','Hitung yield: (sewa setahun ÷ total modal), target ≥ 8%/th.','Siapkan unit: renovasi, furnitur, utilitas, & foto yang bagus.','Urus legal & izin (akad sewa, PBG/IMB, NIB, pajak).','Pasang listing (Mamikos/OLX/Airbnb) + kelola review & okupansi.','Tambah layanan (wifi, laundry, kebersihan) untuk tarif premium.'],
       chk:['Cek izin bangunan (PBG/IMB) & NIB + pahami pajak sewa','Lokasi dekat kampus/kawasan industri/wisata','Pahami akad sewa & manajemen penyewa','Listing di Mamikos/OLX/Airbnb + jaga review'],
       harga:1200000,cost:0.15,target:8,per:1,sat:'unit/bln',fixed:0.05,
       risk:'Modal besar & tidak likuid; okupansi bisa rendah; tunggakan penyewa; perawatan bangunan.',
       tip:'Mulai dari 2–3 unit, kuasai listing & pelayanan agar okupansi tinggi, baru tambah unit dari arus kas.'},
-    hiburan:{ic:'🎮',model:'Jual pengalaman/waktu bermain — pendapatan dari tiket/jam + F&B, sekali beli alat cuan berulang.',
+    hiburan:{ic:'🎮',model:'Jual pengalaman/waktu bermain, pendapatan dari tiket/jam + F&B, sekali beli alat cuan berulang.',
       rab:[['Mesin/alat utama',50],['Interior, set & dekorasi',18],['Sewa & deposit',15],['Perizinan (NIB, izin tempat)',5],['Dana darurat',12]],
       steps:['Pilih konsep & target (keluarga/anak muda/komunitas).','Survei lokasi ramai (mal/dekat sekolah-kampus) & hitung sewa.','Siapkan alat/mesin + set yang instagramable & sistem pembayaran.','Urus izin usaha & keselamatan pengunjung.','Bangun komunitas: event, turnamen, membership untuk repeat.','Tambah F&B/merch sebagai pendapatan kedua.'],
       chk:['NIB + izin usaha tempat/hiburan','Lokasi mal/keramaian/dekat sekolah-kampus','Perawatan mesin rutin + sistem pembayaran andal','Komunitas + event untuk repeat order'],
       harga:25000,cost:0.3,target:40,per:30,sat:'tiket/main',fixed:0.12,
       risk:'Modal alat besar & bisa cepat usang; tren bisa jenuh; butuh keramaian konsisten.',
       tip:'Bangun komunitas & acara rutin agar orang balik lagi; kombinasikan dengan F&B untuk margin tambahan.'},
-    otomotif:{ic:'🚗',model:'Jual jasa perawatan kendaraan — pasar besar & kebutuhan rutin; margin dari jasa & bahan.',
+    otomotif:{ic:'🚗',model:'Jual jasa perawatan kendaraan, pasar besar & kebutuhan rutin; margin dari jasa & bahan.',
       rab:[['Alat utama (kompresor/hidrolik/poles)',42],['Bahan awal (sabun, coating, dll)',13],['Sewa lahan & deposit',18],['Perizinan (NIB)',5],['Branding & promosi',10],['Dana darurat',12]],
       steps:['Pilih fokus (cuci/steam, poles, coating) & target kendaraan.','Kuasai teknik & K3; siapkan alat + sumber air/listrik.','Tetapkan paket harga (reguler & premium/coating).','Lahan dekat jalan ramai + urus NIB.','Kartu langganan + promosi lokal untuk repeat.','Tambah layanan bernilai tinggi (coating/detailing) untuk margin.'],
       chk:['NIB via OSS','Lahan dekat jalan ramai + akses air & listrik','Teknik (steam/poles/coating) & keselamatan kerja','Kartu langganan + promosi area sekitar'],
       harga:35000,cost:0.35,target:15,per:30,sat:'kendaraan',fixed:0.1,
       risk:'Bergantung cuaca & tenaga kerja; alat perlu perawatan; kompetisi harga.',
       tip:'Naik kelas ke layanan premium (coating/detailing) untuk ticket & margin jauh lebih besar.'},
-    agri:{ic:'🌱',model:'Budidaya/panen — laba dari selisih biaya produksi & harga jual; siklus musiman.',
+    agri:{ic:'🌱',model:'Budidaya/panen, laba dari selisih biaya produksi & harga jual; siklus musiman.',
       rab:[['Bibit/benih & indukan',28],['Kandang/kolam/media & instalasi',35],['Pakan/nutrisi awal',18],['Perizinan & administrasi',4],['Dana darurat',15]],
       steps:['Pilih komoditas sesuai lahan, iklim & permintaan pasar.','Amankan calon pembeli (pengepul/pasar/resto) sejak awal.','Siapkan lahan/kolam/kandang + sumber air.','Kuasai teknik budidaya & pencegahan penyakit.','Jalankan siklus pertama skala kecil, catat biaya & hasil.','Scale bertahap dari keuntungan; efisienkan pakan/nutrisi.'],
       chk:['NIB bila skala usaha; ikuti anjuran dinas terkait','Lahan/kolam sesuai komoditas + sumber air memadai','Teknik budidaya & pengendalian hama/penyakit','Pembeli (pengepul/pasar/resto) diamankan sejak awal'],
       harga:20000,cost:0.55,target:400,per:1,sat:'ekor/kg per panen',fixed:0.08,
       risk:'Gagal panen/penyakit; harga jual fluktuatif; siklus & cuaca.',
       tip:'Amankan pembeli sebelum tanam/tebar, mulai skala kecil, lalu perbesar dari untung.'},
-    umum:{ic:'💡',model:'Jual produk/jasa — laba dari selisih harga jual dan biaya per unit.',
+    umum:{ic:'💡',model:'Jual produk/jasa, laba dari selisih harga jual dan biaya per unit.',
       rab:[['Alat & perlengkapan',38],['Stok/bahan awal',20],['Sewa & deposit',15],['Perizinan (NIB)',5],['Marketing awal',10],['Dana darurat',12]],
       steps:['Tentukan produk/jasa & target pasar yang spesifik.','Validasi ke calon pembeli sebelum modal besar.','Hitung biaya per unit & tetapkan harga (margin sehat).','Siapkan alat/stok + kanal jualan (online/offline) + NIB.','Cari pelanggan pertama & kumpulkan testimoni.','Evaluasi angka (BEP/ROI), perbaiki, lalu scale.'],
       chk:['NIB via OSS (gratis, online)','Kanal/lokasi dekat target pasar','Skill/kualitas inti terjaga','Branding + kanal jualan online'],
@@ -504,7 +504,7 @@
     // what & why
     H.push('<div class="fr-lbox" style="margin-top:14px"><h5>Apa ini & kenapa bisa cuan</h5><p class="fr-ptext">'+esc(desc)+'</p><p class="fr-ptext" style="margin-top:8px"><b>Model bisnis:</b> '+esc(t.model)+'</p>'+(o.contoh&&o.contoh.length?'<div style="margin-top:8px;display:flex;flex-wrap:wrap;gap:6px">'+o.contoh.map(function(c){return '<span class="tag" style="margin:0">'+esc(c)+'</span>';}).join('')+'</div>':'')+(o.contohID?'<p class="fr-ptext" style="margin-top:8px"><b style="color:var(--accent-ink)">Sudah di Indonesia:</b> '+esc(o.contohID)+'</p>':'')+'</div>');
     // ilmu (course link)
-    H.push('<div class="fr-lbox fr-ilmu" style="margin-top:12px"><h5>📚 Ilmu di baliknya</h5><p class="fr-ptext">Pakai kerangka dari <a class="fr-ext" href="kelas.html">Kelas Bisnis dari Nol</a>: tentukan <b>target market</b> (segmentasi), rumuskan <b>USP</b> (keunggulan unik), hitung <b>unit economics &amp; BEP</b>, lalu susun <b>marketing funnel</b>. Rapikan semuanya jadi rencana lengkap di <a class="fr-ext" href="blueprint.html">Business Blueprint</a>.</p></div>');
+    H.push('<div class="fr-lbox fr-ilmu" style="margin-top:12px"><h5>📚 Ilmu di baliknya</h5><p class="fr-ptext">Pakai kerangka dari <a class="fr-ext" href="kelas.html">Kelas Bisnis dari Nol</a>: tentukan <b>target market</b> (segmentasi), rumuskan <b>USP</b> (keunggulan unik), hitung <b>unit economics &amp; BEP</b>, lalu susun <b>marketing funnel</b>. Rapikan semuanya jadi rencana lengkap di <a class="fr-ext" href="blueprint.html">Rencana Bisnis</a>.</p></div>');
     // playbook
     H.push('<div class="fr-lbox" style="margin-top:12px"><h5>🚀 Langkah memulai</h5><ol class="fr-steps">'+t.steps.map(function(s){return '<li>'+esc(s)+'</li>';}).join('')+'</ol></div>');
     // RAB
@@ -527,8 +527,8 @@
       '</div>');
     // examples + CTA
     H.push('<div class="fr-lbox" style="margin-top:12px"><h5>👀 Lihat contoh nyata</h5>'+exLinks(o.nama)+'</div>');
-    H.push('<div class="fr-imodal-cta"><a class="btn btn-primary btn-sm" href="blueprint.html">📝 Susun rencana lengkap (Business Blueprint)</a><a class="btn btn-ghost btn-sm" href="kelas.html">🎓 Pelajari ilmunya</a></div>');
-    H.push('<p class="fr-cap" style="margin-top:10px;font-size:11.5px">Semua angka RAB &amp; kalkulator adalah <b>estimasi/contoh</b> untuk memandu — sesuaikan dengan harga &amp; kondisi kotamu, dan verifikasi sebelum eksekusi.</p>');
+    H.push('<div class="fr-imodal-cta"><a class="btn btn-primary btn-sm" href="blueprint.html">📝 Susun rencana lengkap (Rencana Bisnis)</a><a class="btn btn-ghost btn-sm" href="kelas.html">🎓 Pelajari ilmunya</a></div>');
+    H.push('<p class="fr-cap" style="margin-top:10px;font-size:11.5px">Semua angka RAB &amp; kalkulator adalah <b>estimasi/contoh</b> untuk memandu, sesuaikan dengan harga &amp; kondisi kotamu, dan verifikasi sebelum eksekusi.</p>');
 
     var m=ideaModal(); var card=document.getElementById('frIdeaCard');
     card.innerHTML=H.join(''); card.scrollTop=0;

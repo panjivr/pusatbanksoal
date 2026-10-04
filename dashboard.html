@@ -2,8 +2,8 @@
 <html lang="id">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Dashboard Belajar & Statistik Nilai | Bekal</title>
-<meta name="description" content="Dashboard belajar personalmu: grafik perkembangan skor, radar kemampuan per subtes, streak, misi harian, dan analisis kelemahan otomatis — tersimpan di perangkatmu.">
+<title>Progres Belajar Belajar & Statistik Nilai | Bekal</title>
+<meta name="description" content="Dashboard belajar personalmu: grafik perkembangan skor, radar kemampuan per subtes, streak, misi harian, dan analisis kelemahan otomatis, tersimpan di perangkatmu.">
 <meta name="robots" content="noindex,follow">
 <link rel="canonical" href="https://pusatbanksoal.id/dashboard.html">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -28,8 +28,10 @@
 <meta name="twitter:image" content="https://pusatbanksoal.id/assets/og-bekal.png">
 <link rel="stylesheet" href="assets/style.css">
 <script src="assets/auth.js"></script>
+<link rel="stylesheet" href="assets/responsive.css">
 </head>
-<body>
+<body class="page-dashboard">
+<a class="skip-link" href="#main-content">Langsung ke isi</a>
 <nav class="nav"><div class="nav-in">
 <a class="brand" href="index.html"><img class="brand-logo brand-dark" src="assets/bekal-logo-white.png" alt="Bekal" width="56" height="30"><img class="brand-logo brand-light" src="assets/bekal-logo-green.png" alt="" aria-hidden="true" width="56" height="30"></a>
 <div class="nav-links" id="navLinks">
@@ -39,8 +41,8 @@
 <div class="nav-menu" id="menu-belajar" role="menu">
 <a href="tryout.html" class="nav-menu-item" role="menuitem"><span class="nav-menu-ic"><svg class="i" aria-hidden="true"><use href="#i-target"></use></svg></span><span class="nav-menu-tx"><b>Tryout</b><small>Simulasi ujian & latihan soal</small></span></a>
 <a href="pembahasan.html" class="nav-menu-item" role="menuitem"><span class="nav-menu-ic"><svg class="i" aria-hidden="true"><use href="#i-book"></use></svg></span><span class="nav-menu-tx"><b>Bank Soal &amp; Pembahasan</b><small>Soal lengkap dengan pembahasan</small></span></a>
-<a href="dashboard.html" class="nav-menu-item" role="menuitem"><span class="nav-menu-ic"><svg class="i" aria-hidden="true"><use href="#i-chart"></use></svg></span><span class="nav-menu-tx"><b>Dashboard</b><small>Progres &amp; statistik belajar</small></span></a>
-<a href="analisis.html" class="nav-menu-item" role="menuitem"><span class="nav-menu-ic"><svg class="i" aria-hidden="true"><use href="#i-brain"></use></svg></span><span class="nav-menu-tx"><b>AI Analisis</b><small>Analisis kelemahan berbasis AI</small></span></a>
+<a href="dashboard.html" class="nav-menu-item" role="menuitem"><span class="nav-menu-ic"><svg class="i" aria-hidden="true"><use href="#i-chart"></use></svg></span><span class="nav-menu-tx"><b>Progres Belajar</b><small>Progres &amp; statistik belajar</small></span></a>
+<a href="analisis.html" class="nav-menu-item" role="menuitem"><span class="nav-menu-ic"><svg class="i" aria-hidden="true"><use href="#i-brain"></use></svg></span><span class="nav-menu-tx"><b>Analisis Nilai</b><small>Analisis kelemahan berbasis AI</small></span></a>
 </div></div>
 <div class="nav-group">
 <button type="button" class="nav-group-btn" aria-expanded="false" aria-haspopup="true" aria-controls="menu-kampus">Kampus &amp; Karier<svg class="i nav-caret" aria-hidden="true"><use href="#i-chevron-down"></use></svg></button>
@@ -52,23 +54,24 @@
 </div></div>
 <div class="nav-group">
 <button type="button" class="nav-group-btn" aria-expanded="false" aria-haspopup="true" aria-controls="menu-usaha">Usaha<svg class="i nav-caret" aria-hidden="true"><use href="#i-chevron-down"></use></svg></button>
-<div class="nav-menu" id="menu-usaha" role="menu"><a href="kelas.html" class="nav-menu-item" role="menuitem"><span class="nav-menu-ic"><svg class="i" aria-hidden="true"><use href="#i-grad"></use></svg></span><span class="nav-menu-tx"><b>Kelas Bisnis dari Nol</b><small>Kuliah online 7 chapter</small></span></a><a href="scaleup.html" class="nav-menu-item" role="menuitem"><span class="nav-menu-ic"><svg class="i" aria-hidden="true"><use href="#i-trend"></use></svg></span><span class="nav-menu-tx"><b>Scale Up Bisnis</b><small>MVP, PMF &amp; ekspansi</small></span></a><a href="legalitas.html" class="nav-menu-item" role="menuitem"><span class="nav-menu-ic"><svg class="i" aria-hidden="true"><use href="#i-shield"></use></svg></span><span class="nav-menu-tx"><b>Legalitas &amp; Pajak</b><small>NIB, PT/CV, PIRT &amp; pajak</small></span></a><a href="bisnis.html" class="nav-menu-item" role="menuitem"><span class="nav-menu-ic"><svg class="i" aria-hidden="true"><use href="#i-bolt"></use></svg></span><span class="nav-menu-tx"><b>Studio Bisnis</b><small>Alat bisnis &amp; monetisasi</small></span></a><a href="franchise.html" class="nav-menu-item" role="menuitem"><span class="nav-menu-ic"><svg class="i" aria-hidden="true"><use href="#i-store"></use></svg></span><span class="nav-menu-tx"><b>Franchise &amp; Peluang</b><small>Direktori franchise &amp; ide bisnis</small></span></a><a href="finansial.html" class="nav-menu-item" role="menuitem"><span class="nav-menu-ic"><svg class="i" aria-hidden="true"><use href="#i-money"></use></svg></span><span class="nav-menu-tx"><b>Finansial</b><small>Kalkulator keuangan &amp; investasi</small></span></a></div></div>
+<div class="nav-menu" id="menu-usaha" role="menu"><a href="kelas.html" class="nav-menu-item" role="menuitem"><span class="nav-menu-ic"><svg class="i" aria-hidden="true"><use href="#i-grad"></use></svg></span><span class="nav-menu-tx"><b>Kelas Bisnis dari Nol</b><small>Kuliah online 7 bab</small></span></a><a href="scaleup.html" class="nav-menu-item" role="menuitem"><span class="nav-menu-ic"><svg class="i" aria-hidden="true"><use href="#i-trend"></use></svg></span><span class="nav-menu-tx"><b>Kembangkan Usaha</b><small>MVP, PMF &amp; ekspansi</small></span></a><a href="legalitas.html" class="nav-menu-item" role="menuitem"><span class="nav-menu-ic"><svg class="i" aria-hidden="true"><use href="#i-shield"></use></svg></span><span class="nav-menu-tx"><b>Legalitas &amp; Pajak</b><small>NIB, PT/CV, PIRT &amp; pajak</small></span></a><a href="bisnis.html" class="nav-menu-item" role="menuitem"><span class="nav-menu-ic"><svg class="i" aria-hidden="true"><use href="#i-bolt"></use></svg></span><span class="nav-menu-tx"><b>Kalkulator Usaha</b><small>Alat bisnis &amp; monetisasi</small></span></a><a href="franchise.html" class="nav-menu-item" role="menuitem"><span class="nav-menu-ic"><svg class="i" aria-hidden="true"><use href="#i-store"></use></svg></span><span class="nav-menu-tx"><b>Franchise &amp; Peluang</b><small>Direktori franchise &amp; ide bisnis</small></span></a><a href="finansial.html" class="nav-menu-item" role="menuitem"><span class="nav-menu-ic"><svg class="i" aria-hidden="true"><use href="#i-money"></use></svg></span><span class="nav-menu-tx"><b>Keuangan &amp; Investasi</b><small>Kalkulator keuangan &amp; investasi</small></span></a></div></div>
 <div class="nav-group">
-<button type="button" class="nav-group-btn" aria-expanded="false" aria-haspopup="true" aria-controls="menu-studio">Studio AI<svg class="i nav-caret" aria-hidden="true"><use href="#i-chevron-down"></use></svg></button>
+<button type="button" class="nav-group-btn" aria-expanded="false" aria-haspopup="true" aria-controls="menu-studio">Alat Praktis<svg class="i nav-caret" aria-hidden="true"><use href="#i-chevron-down"></use></svg></button>
 <div class="nav-menu" id="menu-studio" role="menu">
-<a href="prompt-studio.html" class="nav-menu-item" role="menuitem"><span class="nav-menu-ic"><svg class="i" aria-hidden="true"><use href="#i-sparkles"></use></svg></span><span class="nav-menu-tx"><b>Prompt Studio</b><small>Generator prompt AI</small></span></a><a href="keuangan-harian.html" class="nav-menu-item" role="menuitem"><span class="nav-menu-ic"><svg class="i" aria-hidden="true"><use href="#i-wallet"></use></svg></span><span class="nav-menu-tx"><b>Catatan Keuangan Harian</b><small>Pemasukan &amp; pengeluaran</small></span></a>
+<a href="prompt-studio.html" class="nav-menu-item" role="menuitem"><span class="nav-menu-ic"><svg class="i" aria-hidden="true"><use href="#i-sparkles"></use></svg></span><span class="nav-menu-tx"><b>Prompt Banner AI</b><small>Generator prompt AI</small></span></a><a href="keuangan-harian.html" class="nav-menu-item" role="menuitem"><span class="nav-menu-ic"><svg class="i" aria-hidden="true"><use href="#i-wallet"></use></svg></span><span class="nav-menu-tx"><b>Catatan Keuangan Harian</b><small>Pemasukan &amp; pengeluaran</small></span></a>
 <a href="qr-studio.html" class="nav-menu-item" role="menuitem"><span class="nav-menu-ic"><svg class="i" aria-hidden="true"><use href="#i-scan"></use></svg></span><span class="nav-menu-tx"><b>QR &amp; Barcode</b><small>Generator QR &amp; barcode</small></span></a>
-<a href="transfer-teks.html" class="nav-menu-item" role="menuitem"><span class="nav-menu-ic"><svg class="i" aria-hidden="true"><use href="#i-refresh"></use></svg></span><span class="nav-menu-tx"><b>Transfer Teks</b><small>Pindah teks antar perangkat via QR</small></span></a>
+<a href="transfer-teks.html" class="nav-menu-item" role="menuitem"><span class="nav-menu-ic"><svg class="i" aria-hidden="true"><use href="#i-refresh"></use></svg></span><span class="nav-menu-tx"><b>Kirim Teks &amp; File</b><small>Pindah teks antar perangkat via QR</small></span></a>
 
 </div></div>
 
 </div>
 <div class="nav-right"><a href="auth.html" class="hide-sm" style="font-weight:600">Masuk</a><a href="auth.html" class="btn btn-primary btn-sm">Daftar Gratis</a><button class="nav-toggle" data-nav-toggle aria-label="Buka menu" aria-expanded="false"><svg class="i" aria-hidden="true"><use href="#i-menu"></use></svg></button></div>
 </div></nav>
+<main id="main-content" tabindex="-1">
 
 <section class="section-sm"><div class="wrap">
 
-<span class="section-eyebrow">Dashboard Belajar</span>
+<span class="section-eyebrow">Progres Belajar Belajar</span>
 
 <div class="flex between items-center wrap-flex gap mt">
 <div class="flex items-center gap">
@@ -86,7 +89,7 @@
 
 <p class="muted mt-lg" style="font-size:12.5px;display:inline-flex;align-items:center;gap:7px">
 <svg class="i" aria-hidden="true" style="color:var(--up)"><use href="#i-shield-check"></use></svg>
-Data statistikmu tersimpan lokal di perangkat ini — privat, tidak diunggah ke server.</p>
+Data statistikmu tersimpan lokal di perangkat ini, privat, tidak diunggah ke server.</p>
 
 <div class="grid g4 mt-lg">
 <div class="card reveal d1 lift">
@@ -253,7 +256,7 @@ Data statistikmu tersimpan lokal di perangkat ini — privat, tidak diunggah ke 
     <div>
       <span class="section-eyebrow">Baru <span class="badge-new">Riset &amp; Skripsi</span></span>
       <h3 class="mt"><svg class="i"><use href="#i-search"></use></svg> Riset &amp; Skripsi</h3>
-      <p class="muted mt" style="font-size:13px;max-width:56ch">Ruang kerja skripsi berbasis AI: cari sumber ilmiah nyata dari OpenAlex &amp; Crossref, sitasi otomatis (APA/IEEE/Harvard/Vancouver), dan susun kerangka BAB I–III — tanpa data palsu, tersimpan lokal.</p>
+      <p class="muted mt" style="font-size:13px;max-width:56ch">Ruang kerja skripsi berbasis AI: cari sumber ilmiah nyata dari OpenAlex &amp; Crossref, sitasi otomatis (APA/IEEE/Harvard/Vancouver), dan susun kerangka BAB I–III, tanpa data palsu, tersimpan lokal.</p>
     </div>
     <a href="skripsi.html" class="btn btn-primary btn-sm"><svg class="i"><use href="#i-arrow-right"></use></svg> Buka Workspace</a>
   </div>
@@ -358,7 +361,7 @@ Data statistikmu tersimpan lokal di perangkat ini — privat, tidak diunggah ke 
   (function(){
     var box=$('weakBody'), tip=$('weakTip'); if(!box) return;
     if (!mastery.length){
-      box.innerHTML='<p class="muted">Analisis muncul setelah kamu menyelesaikan tryout — sistem membaca performa per subtes dari jawabanmu.</p>';
+      box.innerHTML='<p class="muted">Analisis muncul setelah kamu menyelesaikan tryout, sistem membaca performa per subtes dari jawabanmu.</p>';
       tip.innerHTML=''; return;
     }
     box.innerHTML = mastery.slice(0,5).map(function(s){
@@ -369,7 +372,7 @@ Data statistikmu tersimpan lokal di perangkat ini — privat, tidak diunggah ke 
     }).join('');
     var w = mastery[0];
     tip.innerHTML='<svg class="i" style="color:var(--primary)"><use href="#i-sparkles"></use></svg> '+
-      'Fokus belajarmu minggu ini sebaiknya di <b style="color:var(--body)">'+esc(w.name)+'</b> — '+
+      'Fokus belajarmu minggu ini sebaiknya di <b style="color:var(--body)">'+esc(w.name)+'</b>, '+
       'penguasaanmu baru <b>'+w.pct+'%</b> dari '+w.n+' soal yang pernah kamu kerjakan pada subtes ini.';
   })();
 
@@ -394,13 +397,14 @@ Data statistikmu tersimpan lokal di perangkat ini — privat, tidak diunggah ke 
 })();
 </script>
 
+</main>
 <footer class="footer"><div class="wrap"><div class="cols">
-<div><a class="brand" href="index.html" style="color:var(--ink)"><img class="brand-logo brand-dark" src="assets/bekal-logo-white.png" alt="Bekal" width="56" height="30"><img class="brand-logo brand-light" src="assets/bekal-logo-green.png" alt="" aria-hidden="true" width="56" height="30"></a><p style="color:#5b6672;font-size:13px;margin-top:14px;max-width:34ch">Platform AI untuk tryout, bank soal, direktori kuliah, beasiswa &amp; riset — pendamping pejuang seleksi dan kampus di Indonesia.</p></div>
-<div><h5>Belajar</h5><a href="tryout.html">Tryout</a><a href="pembahasan.html">Bank Soal &amp; Pembahasan</a><a href="dashboard.html">Dashboard</a><a href="analisis.html">AI Analisis</a></div>
+<div><a class="brand" href="index.html" style="color:var(--ink)"><img class="brand-logo brand-dark" src="assets/bekal-logo-white.png" alt="Bekal" width="56" height="30"><img class="brand-logo brand-light" src="assets/bekal-logo-green.png" alt="" aria-hidden="true" width="56" height="30"></a><p style="color:#5b6672;font-size:13px;margin-top:14px;max-width:34ch">Platform AI untuk tryout, bank soal, direktori kuliah, beasiswa &amp; riset, pendamping pejuang seleksi dan kampus di Indonesia.</p></div>
+<div><h5>Belajar</h5><a href="tryout.html">Tryout</a><a href="pembahasan.html">Bank Soal &amp; Pembahasan</a><a href="dashboard.html">Progres Belajar</a><a href="analisis.html">Analisis Nilai</a></div>
 <div><h5>Kampus &amp; Karier</h5><a href="kuliah.html">Kuliah</a><a href="beasiswa.html">Beasiswa</a><a href="kerja-remote.html">Kerja Remote</a><a href="skripsi.html">Riset &amp; Skripsi</a></div>
-<div><h5>Studio AI</h5><a href="prompt-studio.html">Prompt Studio</a><a href="bisnis.html">Studio Bisnis</a><a href="franchise.html">Franchise &amp; Peluang</a></div>
+<div><h5>Alat Praktis</h5><a href="prompt-studio.html">Prompt Banner AI</a><a href="bisnis.html">Kalkulator Usaha</a><a href="franchise.html">Franchise &amp; Peluang</a></div>
 <div><h5>Akun &amp; Bantuan</h5><a href="auth.html">Masuk</a><a href="auth.html">Daftar Gratis</a><a href="verifikasi.html">Verifikasi Sertifikat</a></div>
-</div><div class="bottom"><span>&copy; <span data-year>2026</span> Bekal &mdash; Seluruh hak cipta dilindungi.</span><span>Dibuat untuk pejuang seleksi Indonesia 🇮🇩</span></div></div></footer>
+</div><div class="bottom"><span>&copy; <span data-year>2026</span> Bekal · Seluruh hak cipta dilindungi.</span><span>Dibuat untuk pejuang seleksi Indonesia 🇮🇩</span></div></div></footer>
 <script src="assets/qr.js"></script>
 <script src="assets/cert.js"></script>
 <script>

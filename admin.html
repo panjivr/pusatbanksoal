@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Panel Admin — Operasi Internal | Bekal</title>
+<title>Panel Admin, Operasi Internal | Bekal</title>
 <meta name="description" content="Panel admin internal Bekal untuk manajemen bank soal, review soal AI, pengguna, pembayaran, konten & SEO, serta audit log.">
 <meta name="robots" content="noindex,nofollow">
 <link rel="canonical" href="https://pusatbanksoal.id/admin.html">
@@ -15,8 +15,10 @@
 <link rel="manifest" href="/site.webmanifest">
 <meta name="theme-color" content="#0a0e17">
 <link rel="stylesheet" href="assets/style.css">
+<link rel="stylesheet" href="assets/responsive.css">
 </head>
-<body>
+<body class="page-admin">
+<a class="skip-link" href="#main-content">Langsung ke isi</a>
 
 <div class="admin-shell" style="display:flex;min-height:100vh">
 
@@ -25,7 +27,7 @@
     <div class="badge badge-y" style="margin-top:12px">Admin Panel</div>
 
     <nav style="margin-top:28px;display:flex;flex-direction:column;gap:2px">
-      <button class="admin-nav" data-view="dashboard" style="width:100%;text-align:left;display:flex;align-items:center;gap:10px;background:var(--elevated);border:none;color:var(--primary);padding:10px 12px;border-radius:8px;cursor:pointer;font-size:14px"><svg class="i"><use href="#i-chart"></use></svg> Dashboard</button>
+      <button class="admin-nav" data-view="dashboard" style="width:100%;text-align:left;display:flex;align-items:center;gap:10px;background:var(--elevated);border:none;color:var(--primary);padding:10px 12px;border-radius:8px;cursor:pointer;font-size:14px"><svg class="i"><use href="#i-chart"></use></svg> Progres Belajar</button>
       <button class="admin-nav" data-view="soal" style="width:100%;text-align:left;display:flex;align-items:center;gap:10px;background:transparent;border:none;color:var(--muted);padding:10px 12px;border-radius:8px;cursor:pointer;font-size:14px"><svg class="i"><use href="#i-book"></use></svg> Manajemen Soal</button>
       <button class="admin-nav" data-view="review" style="width:100%;text-align:left;display:flex;align-items:center;gap:10px;background:transparent;border:none;color:var(--muted);padding:10px 12px;border-radius:8px;cursor:pointer;font-size:14px"><svg class="i"><use href="#i-sparkles"></use></svg> Review Soal (AI)</button>
       <button class="admin-nav" data-view="pengguna" style="width:100%;text-align:left;display:flex;align-items:center;gap:10px;background:transparent;border:none;color:var(--muted);padding:10px 12px;border-radius:8px;cursor:pointer;font-size:14px"><svg class="i"><use href="#i-users"></use></svg> Pengguna</button>
@@ -38,7 +40,7 @@
     </nav>
   </aside>
 
-  <main class="admin-main" style="flex:1;padding:28px;min-width:0">
+  <main id="main-content" tabindex="-1" class="admin-main" style="flex:1;padding:28px;min-width:0">
 
     <div class="flex between items-center mb-lg" style="flex-wrap:wrap;gap:12px">
       <h1 id="pageTitle" style="font-size:24px">Dashboard</h1>
@@ -324,7 +326,7 @@
           <table class="tbl">
             <thead><tr><th>Halaman</th><th>Meta Title</th><th>Status Indeks</th></tr></thead>
             <tbody>
-              <tr><td>/</td><td>Bekal — Bank Soal CPNS, SNBT, PPPK Terlengkap</td><td><span class="badge badge-up">Terindeks</span></td></tr>
+              <tr><td>/</td><td>Bekal, Bank Soal CPNS, SNBT, PPPK Terlengkap</td><td><span class="badge badge-up">Terindeks</span></td></tr>
               <tr><td>/tryout/cpns</td><td>Tryout CPNS Online Gratis & Premium | Bekal</td><td><span class="badge badge-up">Terindeks</span></td></tr>
               <tr><td>/tryout/snbt</td><td>Latihan Soal SNBT 2026 Lengkap dengan Pembahasan</td><td><span class="badge badge-up">Terindeks</span></td></tr>
               <tr><td>/harga</td><td>Harga Paket Premium & Plus | Bekal</td><td><span class="badge badge-y">Diproses</span></td></tr>
@@ -336,7 +338,7 @@
       <div class="card">
         <h4 class="mb">Status Teknis SEO</h4>
         <div class="flex gap-lg wrap-flex" style="font-size:14px">
-          <div>Sitemap.xml <span class="badge badge-up" style="margin-left:6px">Valid — 5 URL</span></div>
+          <div>Sitemap.xml <span class="badge badge-up" style="margin-left:6px">Valid, 5 URL</span></div>
           <div>Robots.txt <span class="badge badge-up" style="margin-left:6px">Aktif</span></div>
           <div>Terakhir di-crawl <span class="muted" style="margin-left:6px">2 jam lalu</span></div>
         </div>

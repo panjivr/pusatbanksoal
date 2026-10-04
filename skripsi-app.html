@@ -2,7 +2,7 @@
 <html lang="id">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Workspace Riset & Skripsi | Bekal</title>
+<title>Ruang Kerja Skripsi | Bekal</title>
 <meta name="description" content="Buat proposal skripsi S1 (BAB I–III + daftar isi + daftar pustaka) hanya dengan klik-klik: jawab beberapa pilihan, judul & rujukan dibuat otomatis dari sumber ilmiah nyata.">
 <meta name="robots" content="noindex,follow">
 <link rel="canonical" href="https://pusatbanksoal.id/skripsi-app.html">
@@ -16,7 +16,7 @@
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Bekal">
 <meta property="og:locale" content="id_ID">
-<meta property="og:title" content="Workspace Riset & Skripsi | Bekal">
+<meta property="og:title" content="Ruang Kerja Skripsi | Bekal">
 <meta property="og:description" content="Buat proposal skripsi S1 dengan klik-klik: judul, rumusan, metode & daftar pustaka otomatis dari sumber ilmiah nyata.">
 <meta property="og:url" content="https://pusatbanksoal.id/skripsi-app.html">
 <meta property="og:image" content="https://pusatbanksoal.id/assets/og-bekal.png">
@@ -119,8 +119,10 @@
   .ws-card{border:1px solid #ccc;box-shadow:none;background:#fff;color:#111}
 }
 </style>
+<link rel="stylesheet" href="assets/responsive.css">
 </head>
-<body>
+<body class="page-skripsi-app">
+<a class="skip-link" href="#app">Langsung ke isi</a>
 <nav class="nav"><div class="nav-in">
 <a class="brand" href="index.html"><img class="brand-logo brand-dark" src="assets/bekal-logo-white.png" alt="Bekal" width="56" height="30"><img class="brand-logo brand-light" src="assets/bekal-logo-green.png" alt="" aria-hidden="true" width="56" height="30"></a>
 <div class="nav-links" id="navLinks">
@@ -130,8 +132,8 @@
 <div class="nav-menu" id="menu-belajar" role="menu">
 <a href="tryout.html" class="nav-menu-item" role="menuitem"><span class="nav-menu-ic"><svg class="i" aria-hidden="true"><use href="#i-target"></use></svg></span><span class="nav-menu-tx"><b>Tryout</b><small>Simulasi ujian & latihan soal</small></span></a>
 <a href="pembahasan.html" class="nav-menu-item" role="menuitem"><span class="nav-menu-ic"><svg class="i" aria-hidden="true"><use href="#i-book"></use></svg></span><span class="nav-menu-tx"><b>Bank Soal &amp; Pembahasan</b><small>Soal lengkap dengan pembahasan</small></span></a>
-<a href="dashboard.html" class="nav-menu-item" role="menuitem"><span class="nav-menu-ic"><svg class="i" aria-hidden="true"><use href="#i-chart"></use></svg></span><span class="nav-menu-tx"><b>Dashboard</b><small>Progres &amp; statistik belajar</small></span></a>
-<a href="analisis.html" class="nav-menu-item" role="menuitem"><span class="nav-menu-ic"><svg class="i" aria-hidden="true"><use href="#i-brain"></use></svg></span><span class="nav-menu-tx"><b>AI Analisis</b><small>Analisis kelemahan berbasis AI</small></span></a>
+<a href="dashboard.html" class="nav-menu-item" role="menuitem"><span class="nav-menu-ic"><svg class="i" aria-hidden="true"><use href="#i-chart"></use></svg></span><span class="nav-menu-tx"><b>Progres Belajar</b><small>Progres &amp; statistik belajar</small></span></a>
+<a href="analisis.html" class="nav-menu-item" role="menuitem"><span class="nav-menu-ic"><svg class="i" aria-hidden="true"><use href="#i-brain"></use></svg></span><span class="nav-menu-tx"><b>Analisis Nilai</b><small>Analisis kelemahan berbasis AI</small></span></a>
 </div></div>
 <div class="nav-group">
 <button type="button" class="nav-group-btn" aria-expanded="false" aria-haspopup="true" aria-controls="menu-kampus">Kampus &amp; Karier<svg class="i nav-caret" aria-hidden="true"><use href="#i-chevron-down"></use></svg></button>
@@ -143,13 +145,13 @@
 </div></div>
 <div class="nav-group">
 <button type="button" class="nav-group-btn" aria-expanded="false" aria-haspopup="true" aria-controls="menu-usaha">Usaha<svg class="i nav-caret" aria-hidden="true"><use href="#i-chevron-down"></use></svg></button>
-<div class="nav-menu" id="menu-usaha" role="menu"><a href="kelas.html" class="nav-menu-item" role="menuitem"><span class="nav-menu-ic"><svg class="i" aria-hidden="true"><use href="#i-grad"></use></svg></span><span class="nav-menu-tx"><b>Kelas Bisnis dari Nol</b><small>Kuliah online 7 chapter</small></span></a><a href="scaleup.html" class="nav-menu-item" role="menuitem"><span class="nav-menu-ic"><svg class="i" aria-hidden="true"><use href="#i-trend"></use></svg></span><span class="nav-menu-tx"><b>Scale Up Bisnis</b><small>MVP, PMF &amp; ekspansi</small></span></a><a href="legalitas.html" class="nav-menu-item" role="menuitem"><span class="nav-menu-ic"><svg class="i" aria-hidden="true"><use href="#i-shield"></use></svg></span><span class="nav-menu-tx"><b>Legalitas &amp; Pajak</b><small>NIB, PT/CV, PIRT &amp; pajak</small></span></a><a href="bisnis.html" class="nav-menu-item" role="menuitem"><span class="nav-menu-ic"><svg class="i" aria-hidden="true"><use href="#i-bolt"></use></svg></span><span class="nav-menu-tx"><b>Studio Bisnis</b><small>Alat bisnis &amp; monetisasi</small></span></a><a href="franchise.html" class="nav-menu-item" role="menuitem"><span class="nav-menu-ic"><svg class="i" aria-hidden="true"><use href="#i-store"></use></svg></span><span class="nav-menu-tx"><b>Franchise &amp; Peluang</b><small>Direktori franchise &amp; ide bisnis</small></span></a><a href="finansial.html" class="nav-menu-item" role="menuitem"><span class="nav-menu-ic"><svg class="i" aria-hidden="true"><use href="#i-money"></use></svg></span><span class="nav-menu-tx"><b>Finansial</b><small>Kalkulator keuangan &amp; investasi</small></span></a></div></div>
+<div class="nav-menu" id="menu-usaha" role="menu"><a href="kelas.html" class="nav-menu-item" role="menuitem"><span class="nav-menu-ic"><svg class="i" aria-hidden="true"><use href="#i-grad"></use></svg></span><span class="nav-menu-tx"><b>Kelas Bisnis dari Nol</b><small>Kuliah online 7 bab</small></span></a><a href="scaleup.html" class="nav-menu-item" role="menuitem"><span class="nav-menu-ic"><svg class="i" aria-hidden="true"><use href="#i-trend"></use></svg></span><span class="nav-menu-tx"><b>Kembangkan Usaha</b><small>MVP, PMF &amp; ekspansi</small></span></a><a href="legalitas.html" class="nav-menu-item" role="menuitem"><span class="nav-menu-ic"><svg class="i" aria-hidden="true"><use href="#i-shield"></use></svg></span><span class="nav-menu-tx"><b>Legalitas &amp; Pajak</b><small>NIB, PT/CV, PIRT &amp; pajak</small></span></a><a href="bisnis.html" class="nav-menu-item" role="menuitem"><span class="nav-menu-ic"><svg class="i" aria-hidden="true"><use href="#i-bolt"></use></svg></span><span class="nav-menu-tx"><b>Kalkulator Usaha</b><small>Alat bisnis &amp; monetisasi</small></span></a><a href="franchise.html" class="nav-menu-item" role="menuitem"><span class="nav-menu-ic"><svg class="i" aria-hidden="true"><use href="#i-store"></use></svg></span><span class="nav-menu-tx"><b>Franchise &amp; Peluang</b><small>Direktori franchise &amp; ide bisnis</small></span></a><a href="finansial.html" class="nav-menu-item" role="menuitem"><span class="nav-menu-ic"><svg class="i" aria-hidden="true"><use href="#i-money"></use></svg></span><span class="nav-menu-tx"><b>Keuangan &amp; Investasi</b><small>Kalkulator keuangan &amp; investasi</small></span></a></div></div>
 <div class="nav-group">
-<button type="button" class="nav-group-btn" aria-expanded="false" aria-haspopup="true" aria-controls="menu-studio">Studio AI<svg class="i nav-caret" aria-hidden="true"><use href="#i-chevron-down"></use></svg></button>
+<button type="button" class="nav-group-btn" aria-expanded="false" aria-haspopup="true" aria-controls="menu-studio">Alat Praktis<svg class="i nav-caret" aria-hidden="true"><use href="#i-chevron-down"></use></svg></button>
 <div class="nav-menu" id="menu-studio" role="menu">
-<a href="prompt-studio.html" class="nav-menu-item" role="menuitem"><span class="nav-menu-ic"><svg class="i" aria-hidden="true"><use href="#i-sparkles"></use></svg></span><span class="nav-menu-tx"><b>Prompt Studio</b><small>Generator prompt AI</small></span></a><a href="keuangan-harian.html" class="nav-menu-item" role="menuitem"><span class="nav-menu-ic"><svg class="i" aria-hidden="true"><use href="#i-wallet"></use></svg></span><span class="nav-menu-tx"><b>Catatan Keuangan Harian</b><small>Pemasukan &amp; pengeluaran</small></span></a>
+<a href="prompt-studio.html" class="nav-menu-item" role="menuitem"><span class="nav-menu-ic"><svg class="i" aria-hidden="true"><use href="#i-sparkles"></use></svg></span><span class="nav-menu-tx"><b>Prompt Banner AI</b><small>Generator prompt AI</small></span></a><a href="keuangan-harian.html" class="nav-menu-item" role="menuitem"><span class="nav-menu-ic"><svg class="i" aria-hidden="true"><use href="#i-wallet"></use></svg></span><span class="nav-menu-tx"><b>Catatan Keuangan Harian</b><small>Pemasukan &amp; pengeluaran</small></span></a>
 <a href="qr-studio.html" class="nav-menu-item" role="menuitem"><span class="nav-menu-ic"><svg class="i" aria-hidden="true"><use href="#i-scan"></use></svg></span><span class="nav-menu-tx"><b>QR &amp; Barcode</b><small>Generator QR &amp; barcode</small></span></a>
-<a href="transfer-teks.html" class="nav-menu-item" role="menuitem"><span class="nav-menu-ic"><svg class="i" aria-hidden="true"><use href="#i-refresh"></use></svg></span><span class="nav-menu-tx"><b>Transfer Teks</b><small>Pindah teks antar perangkat via QR</small></span></a>
+<a href="transfer-teks.html" class="nav-menu-item" role="menuitem"><span class="nav-menu-ic"><svg class="i" aria-hidden="true"><use href="#i-refresh"></use></svg></span><span class="nav-menu-tx"><b>Kirim Teks &amp; File</b><small>Pindah teks antar perangkat via QR</small></span></a>
 
 </div></div>
 
@@ -157,15 +159,15 @@
 <div class="nav-right"><a href="auth.html" class="hide-sm" style="font-weight:600">Masuk</a><a href="auth.html" class="btn btn-primary btn-sm">Daftar Gratis</a><button class="nav-toggle" data-nav-toggle aria-label="Buka menu" aria-expanded="false"><svg class="i" aria-hidden="true"><use href="#i-menu"></use></svg></button></div>
 </div></nav>
 
-<main id="app" class="ws-wrap" role="main"><div class="ws-empty">Memuat workspace…</div></main>
+<main tabindex="-1" id="app" class="ws-wrap" role="main"><div class="ws-empty">Memuat workspace…</div></main>
 
 <footer class="footer"><div class="wrap"><div class="cols">
-<div><a class="brand" href="index.html" style="color:var(--ink)"><img class="brand-logo brand-dark" src="assets/bekal-logo-white.png" alt="Bekal" width="56" height="30"><img class="brand-logo brand-light" src="assets/bekal-logo-green.png" alt="" aria-hidden="true" width="56" height="30"></a><p style="color:#5b6672;font-size:13px;margin-top:14px;max-width:34ch">Platform AI untuk tryout, bank soal, direktori kuliah, beasiswa &amp; riset — pendamping pejuang seleksi dan kampus di Indonesia.</p></div>
-<div><h5>Belajar</h5><a href="tryout.html">Tryout</a><a href="pembahasan.html">Bank Soal &amp; Pembahasan</a><a href="dashboard.html">Dashboard</a><a href="analisis.html">AI Analisis</a></div>
+<div><a class="brand" href="index.html" style="color:var(--ink)"><img class="brand-logo brand-dark" src="assets/bekal-logo-white.png" alt="Bekal" width="56" height="30"><img class="brand-logo brand-light" src="assets/bekal-logo-green.png" alt="" aria-hidden="true" width="56" height="30"></a><p style="color:#5b6672;font-size:13px;margin-top:14px;max-width:34ch">Platform AI untuk tryout, bank soal, direktori kuliah, beasiswa &amp; riset, pendamping pejuang seleksi dan kampus di Indonesia.</p></div>
+<div><h5>Belajar</h5><a href="tryout.html">Tryout</a><a href="pembahasan.html">Bank Soal &amp; Pembahasan</a><a href="dashboard.html">Progres Belajar</a><a href="analisis.html">Analisis Nilai</a></div>
 <div><h5>Kampus &amp; Karier</h5><a href="kuliah.html">Kuliah</a><a href="beasiswa.html">Beasiswa</a><a href="kerja-remote.html">Kerja Remote</a><a href="skripsi.html">Riset &amp; Skripsi</a></div>
-<div><h5>Studio AI</h5><a href="prompt-studio.html">Prompt Studio</a><a href="bisnis.html">Studio Bisnis</a><a href="franchise.html">Franchise &amp; Peluang</a></div>
+<div><h5>Alat Praktis</h5><a href="prompt-studio.html">Prompt Banner AI</a><a href="bisnis.html">Kalkulator Usaha</a><a href="franchise.html">Franchise &amp; Peluang</a></div>
 <div><h5>Akun &amp; Bantuan</h5><a href="auth.html">Masuk</a><a href="auth.html">Daftar Gratis</a><a href="verifikasi.html">Verifikasi Sertifikat</a></div>
-</div><div class="bottom"><span>&copy; <span data-year>2026</span> Bekal &mdash; Seluruh hak cipta dilindungi.</span><span>Dibuat untuk pejuang seleksi Indonesia 🇮🇩</span></div></div></footer>
+</div><div class="bottom"><span>&copy; <span data-year>2026</span> Bekal · Seluruh hak cipta dilindungi.</span><span>Dibuat untuk pejuang seleksi Indonesia 🇮🇩</span></div></div></footer>
 
 <script src="assets/thesis.js"></script>
 <script src="assets/wiki.js"></script>
@@ -230,8 +232,8 @@
     root.innerHTML =
       '<div class="gate-wrap"><div class="gate-card">'+
       '<div style="font-size:30px;color:var(--primary)">'+icon('i-lock')+'</div>'+
-      '<h1 style="font-size:24px;margin-top:14px">Masuk untuk membuka Workspace Riset & Skripsi</h1>'+
-      '<p class="muted" style="margin-top:12px">Workspace ini privat — proyek, sumber, dan draf tersimpan di akunmu. Masuk atau daftar gratis untuk mulai.</p>'+
+      '<h1 style="font-size:24px;margin-top:14px">Masuk untuk membuka Ruang Kerja Skripsi</h1>'+
+      '<p class="muted" style="margin-top:12px">Workspace ini privat, proyek, sumber, dan draf tersimpan di akunmu. Masuk atau daftar gratis untuk mulai.</p>'+
       '<div style="margin-top:22px"><a class="btn btn-primary btn-lg" href="auth.html">Masuk / Daftar Gratis</a></div>'+
       '<p class="muted" style="margin-top:14px;font-size:13px"><a href="index.html" style="color:var(--accent2)">Kembali ke beranda</a></p>'+
       '</div></div>';
@@ -265,7 +267,7 @@
       {id:'alat', label:'Alat Mahasiswa', icon:'i-sparkles'}
     ]},
     {group:'Fitur Pro', items:[
-      {id:'doctor', label:'Skripsi Doctor', icon:'i-shield-check'},
+      {id:'doctor', label:'Cek Draf Skripsi', icon:'i-shield-check'},
       {id:'sidang', label:'Simulasi Sidang', icon:'i-brain'},
       {id:'datalab', label:'Analisis Data', icon:'i-list'}
     ]}
@@ -434,8 +436,8 @@
         (showHyp?'<div class="f-row" style="margin-top:18px;max-width:340px"><label class="f-label" for="wzHyp">Ada hipotesis?</label><select class="f-select" id="wzHyp"><option value="no"'+(wiz.hasHyp==='no'?' selected':'')+'>Tidak / belum</option><option value="yes"'+(wiz.hasHyp==='yes'?' selected':'')+'>Ya</option></select></div>':'')+
       '</div>';
     } else {
-      hint='Identitas ini opsional — boleh dilewati dan diisi nanti di menu Identitas & Kampus. Dipakai untuk halaman sampul.';
-      body='<div class="ws-card"><p class="badge badge-b" style="display:inline-block">Opsional — boleh dilewati</p>'+
+      hint='Identitas ini opsional, boleh dilewati dan diisi nanti di menu Identitas & Kampus. Dipakai untuk halaman sampul.';
+      body='<div class="ws-card"><p class="badge badge-b" style="display:inline-block">Opsional, boleh dilewati</p>'+
         '<div class="f-grid" style="margin-top:14px">'+
           '<div class="f-row"><label class="f-label" for="wzNama">Nama</label><input class="f-input" id="wzNama" value="'+esc(wiz.nama)+'" placeholder="Nama lengkap"></div>'+
           '<div class="f-row"><label class="f-label" for="wzNim">NIM</label><input class="f-input" id="wzNim" value="'+esc(wiz.nim)+'" placeholder="NIM"></div>'+
@@ -532,7 +534,7 @@
       foundRefs[pid]=(works&&works.length)?works.slice():[];
       autoSearchErr[pid]=false;
       view='proposal'; propMode='preview'; render();
-      if(works&&works.length) toast(works.length+' rujukan ditemukan otomatis — tinggal tambahkan.');
+      if(works&&works.length) toast(works.length+' rujukan ditemukan otomatis, tinggal tambahkan.');
       else toast('Proposal dibuat. Rujukan bisa dicari kapan saja.');
     })['catch'](function(){
       foundRefs[pid]=[]; autoSearchErr[pid]=true;
@@ -573,7 +575,7 @@
 
   function viewProposal(){
     var p=THESIS.activeProject();
-    if(!p){ shell(needProject('Belum ada proyek. Buat proposal skripsi dulu — cukup klik-klik.'),'Proposal'); wireNeed(); return; }
+    if(!p){ shell(needProject('Belum ada proyek. Buat proposal skripsi dulu, cukup klik-klik.'),'Proposal'); wireNeed(); return; }
     p=ensureChapters(p);
     var st=p.state, style=p.citationStyle||'apa7';
     var rd=readiness(p);
@@ -603,7 +605,7 @@
         '</div>'+
         '<div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap;align-items:center" class="no-print">'+
           '<button class="btn btn-primary btn-sm" id="propGenFull">'+icon('i-sparkles')+' Generate Penuh (Wikipedia + AI)</button>'+
-          '<button class="btn btn-ghost btn-sm" id="propHumanize">'+icon('i-refresh')+' Humanize (anti-AI)</button>'+
+          '<button class="btn btn-ghost btn-sm" id="propHumanize">'+icon('i-refresh')+' Rapikan bahasa</button>'+
           '<span class="muted" style="font-size:12px">Isi otomatis BAB I–III dari sumber gratis, lalu di-humanize.</span>'+
         '</div>'+
         '<div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap" class="no-print">'+
@@ -660,7 +662,7 @@
       var col=res.score>=85?'var(--up)':res.score>=70?'var(--primary)':'var(--down)';
       var h='<div class="ws-card"><div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap"><b style="color:var(--on-dark)">Cek Gaya (anti-pola AI)</b><span class="badge" style="color:'+col+'">Skor '+res.score+'/100</span></div><p class="muted" style="font-size:12.5px;margin-top:6px">'+esc(res.note)+'</p>';
       if(!res.flags.length) h+='<p style="margin-top:10px;color:var(--up);font-size:13px">Tidak ada pola tulisan khas AI yang menonjol.</p>';
-      else h+='<div style="margin-top:10px">'+res.flags.map(function(f){ return '<div style="border-left:3px solid '+(f.severity==='tinggi'?'var(--down)':'var(--primary)')+';padding:6px 10px;margin-bottom:6px;background:var(--elevated);border-radius:4px;font-size:13px"><b>'+esc(f.label)+'</b> — '+f.count+'x ('+esc(f.severity)+'). '+esc(f.advice)+'</div>'; }).join('')+'</div>';
+      else h+='<div style="margin-top:10px">'+res.flags.map(function(f){ return '<div style="border-left:3px solid '+(f.severity==='tinggi'?'var(--down)':'var(--primary)')+';padding:6px 10px;margin-bottom:6px;background:var(--elevated);border-radius:4px;font-size:13px"><b>'+esc(f.label)+'</b>, '+f.count+'x ('+esc(f.severity)+'). '+esc(f.advice)+'</div>'; }).join('')+'</div>';
       out.innerHTML=h+'</div>';
     });
     byId('propPlagChk').addEventListener('click',function(){
@@ -688,7 +690,7 @@
     byId('propParaphrase').addEventListener('click',function(){
       var out=byId('propCheckOut'); out.style.display='block';
       out.innerHTML='<div class="ws-card"><b style="color:var(--on-dark)">Asisten Parafrase (bahasamu sendiri)</b>'+
-        '<p class="muted" style="font-size:12.5px;margin-top:6px">Tempel satu paragraf/kalimat dari sumber, lalu tekan Panduan. Alat ini memandu kamu menulis ulang dengan kata-katamu sendiri — bukan menulis otomatis — dan mengingatkan agar tetap memberi sitasi.</p>'+
+        '<p class="muted" style="font-size:12.5px;margin-top:6px">Tempel satu paragraf/kalimat dari sumber, lalu tekan Panduan. Alat ini memandu kamu menulis ulang dengan kata-katamu sendiri, bukan menulis otomatis, dan mengingatkan agar tetap memberi sitasi.</p>'+
         '<textarea id="paraIn" class="f-area" style="margin-top:10px" placeholder="Tempel teks yang ingin kamu parafrase di sini…"></textarea>'+
         '<button class="btn btn-primary btn-sm" id="paraGo" style="margin-top:10px">'+icon('i-sparkles')+' Panduan Parafrase</button>'+
         '<div id="paraOut" style="margin-top:12px"></div></div>';
@@ -729,7 +731,7 @@
       var proj=THESIS.activeProject(); if(!proj) return;
       var chapters=THESIS.humanizeChapters((proj.state&&proj.state.chapters)||[]);
       THESIS.updateProject(proj.id,{state:{chapters:chapters}});
-      toast('Teks di-humanize — pola & kata khas AI dikurangi.'); viewProposal();
+      toast('Teks di-humanize, pola & kata khas AI dikurangi.'); viewProposal();
     });
     byId('propDoc').addEventListener('click',function(){
       download(fileBase(p)+'.doc',buildDocDocument(THESIS.activeProject(),val('propStyle')),'application/msword'); toast('Proposal (DOCX) diunduh.');
@@ -830,7 +832,7 @@
     var st=p.state, refs=st.references||[], style=p.citationStyle||'apa7';
     var refMap={}; refs.forEach(function(r){ refMap[r.id]=r; });
     var refOptions=refs.map(function(r){ return '<option value="'+esc(r.id)+'">'+esc((r.authors&&r.authors[0]&&(r.authors[0].family||r.authors[0].name))||r.title.slice(0,30))+' ('+esc(r.year||'t.t.')+')</option>'; }).join('');
-    var intro='<div class="ws-card"><p class="muted" style="font-size:13px">Draf ini titik awal — <b>kamu</b> yang menyempurnakan. Penanda <span style="background:rgba(47,107,237,.14);border:1px dashed var(--primary);border-radius:3px;padding:0 4px">〔…〕</span> menandai bagian yang perlu diisi (data/sumber nyata). Perubahan tersimpan otomatis saat keluar dari kotak teks.</p></div>';
+    var intro='<div class="ws-card"><p class="muted" style="font-size:13px">Draf ini titik awal, <b>kamu</b> yang menyempurnakan. Penanda <span style="background:rgba(47,107,237,.14);border:1px dashed var(--primary);border-radius:3px;padding:0 4px">〔…〕</span> menandai bagian yang perlu diisi (data/sumber nyata). Perubahan tersimpan otomatis saat keluar dari kotak teks.</p></div>';
     var out=intro;
     (st.chapters||[]).forEach(function(ch,ci){
       if(!ch.sections||!ch.sections.length){
@@ -910,7 +912,7 @@
     var projects=THESIS.listProjects();
     var active=THESIS.activeProject();
     var top='<div class="ws-card" style="display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;align-items:center">'+
-      '<div><h3 style="color:var(--on-dark)">Buat skripsi baru</h3><p class="muted" style="font-size:13px;margin-top:4px">Jawab beberapa pilihan — judul, rumusan, metode & rujukan dibuat otomatis.</p></div>'+
+      '<div><h3 style="color:var(--on-dark)">Buat skripsi baru</h3><p class="muted" style="font-size:13px;margin-top:4px">Jawab beberapa pilihan, judul, rumusan, metode & rujukan dibuat otomatis.</p></div>'+
       '<button class="btn btn-primary" id="npWizard">'+icon('i-flag')+' Buat Skripsi (Cepat)</button></div>';
     var cards='';
     if(!projects.length){
@@ -1000,7 +1002,7 @@
     var p=THESIS.activeProject();
     if(!p){ shell(needProject(),'Sumber'); wireNeed(); return; }
     var inner='<h1 style="font-size:22px;color:var(--on-dark)">Sumber Ilmiah</h1>'+
-      '<p class="muted" style="margin-top:6px;margin-bottom:16px">Rujukan biasanya ditemukan otomatis saat membuat proposal. Di sini kamu bisa mencari tambahan atau menambah manual. Setiap referensi adalah data nyata — tidak ada yang direkayasa.</p>'+
+      '<p class="muted" style="margin-top:6px;margin-bottom:16px">Rujukan biasanya ditemukan otomatis saat membuat proposal. Di sini kamu bisa mencari tambahan atau menambah manual. Setiap referensi adalah data nyata, tidak ada yang direkayasa.</p>'+
       '<div class="ws-card">'+
         '<div style="display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end">'+
           '<div style="flex:1;min-width:200px"><label class="f-label" for="sQ">Kata kunci</label><input class="f-input" id="sQ" placeholder="mis. service quality customer satisfaction"></div>'+
@@ -1027,7 +1029,7 @@
         '<div class="f-row"><label class="f-label" for="emDoi">DOI (opsional)</label><input class="f-input" id="emDoi"></div>'+
         '<button class="btn btn-ghost" id="emAdd">Tambah ke Perpustakaan</button>'+
         '<h4 style="color:var(--on-dark);margin-top:16px">Impor BibTeX (.bib)</h4>'+
-        '<p class="muted" style="font-size:12.5px;margin:4px 0 8px">Tempel isi file .bib atau pilih berkas — semua entri (jurnal/buku) langsung masuk ke perpustakaan.</p>'+
+        '<p class="muted" style="font-size:12.5px;margin:4px 0 8px">Tempel isi file .bib atau pilih berkas, semua entri (jurnal/buku) langsung masuk ke perpustakaan.</p>'+
         '<input type="file" id="bibFile" accept=".bib,text/plain" style="font-size:13px;margin-bottom:8px">'+
         '<textarea class="f-area" id="bibIn" placeholder="@article{...}"></textarea>'+
         '<button class="btn btn-ghost" id="bibAdd" style="margin-top:8px">'+icon('i-doc')+' Impor BibTeX</button>'+
@@ -1196,7 +1198,7 @@
     }).join(''):'<p class="muted">Belum ada tujuan penelitian.</p>';
 
     var inner='<h1 style="font-size:22px;color:var(--on-dark)">Rumusan & Tujuan</h1>'+
-      '<p class="muted" style="margin-top:6px;margin-bottom:16px">Sudah diisi otomatis dari judul — silakan sunting. Setiap tujuan idealnya menjawab satu rumusan masalah.</p>'+
+      '<p class="muted" style="margin-top:6px;margin-bottom:16px">Sudah diisi otomatis dari judul, silakan sunting. Setiap tujuan idealnya menjawab satu rumusan masalah.</p>'+
       '<div class="ws-card"><h3 style="color:var(--on-dark)">Rumusan Masalah</h3><div style="margin-top:12px">'+qHtml+'</div>'+
         '<div style="margin-top:12px;display:flex;gap:8px"><input class="f-input" id="newQ" placeholder="Tulis satu rumusan masalah…"><button class="btn btn-primary" id="addQ">Tambah</button></div>'+
       '</div>'+
@@ -1237,7 +1239,7 @@
     if(!p){ shell(needProject(),'Metode'); wireNeed(); return; }
     var m=p.state.method||{};
     var inner='<h1 style="font-size:22px;color:var(--on-dark)">Metode Penelitian</h1>'+
-      '<p class="muted" style="margin-top:6px;margin-bottom:16px">Sistem memberi <b>rekomendasi</b> heuristik untuk kamu tinjau bersama dosen — bukan keputusan final.</p>'+
+      '<p class="muted" style="margin-top:6px;margin-bottom:16px">Sistem memberi <b>rekomendasi</b> heuristik untuk kamu tinjau bersama dosen, bukan keputusan final.</p>'+
       '<div class="ws-card">'+
         '<div class="f-row"><label class="f-label" for="mGoal">Tujuan utama penelitian</label><select class="f-select" id="mGoal">'+
           '<option value="measure">Mengukur / mendeskripsikan</option>'+
@@ -1265,9 +1267,9 @@
   function renderMethod(rec,saved){
     var conf=Math.round((rec.confidence||0)*(rec.confidence>1?1:100));
     if(rec.confidence<=1) conf=Math.round(rec.confidence*100);
-    function list(arr,ic){ return (arr&&arr.length)?('<ul class="li-list" style="margin-top:6px">'+arr.map(function(x){ return '<li class="muted mt">'+icon(ic)+' '+esc(typeof x==='string'?x:(x.family+' — '+x.design))+'</li>'; }).join('')+'</ul>'):'<p class="muted">—</p>'; }
+    function list(arr,ic){ return (arr&&arr.length)?('<ul class="li-list" style="margin-top:6px">'+arr.map(function(x){ return '<li class="muted mt">'+icon(ic)+' '+esc(typeof x==='string'?x:(x.family+', '+x.design))+'</li>'; }).join('')+'</ul>'):'<p class="muted">—</p>'; }
     return '<div class="ws-card" style="margin-top:16px">'+
-      '<p class="badge badge-b" style="display:inline-block">Rekomendasi untuk ditinjau — bukan keputusan final</p>'+
+      '<p class="badge badge-b" style="display:inline-block">Rekomendasi untuk ditinjau, bukan keputusan final</p>'+
       '<h3 style="color:var(--on-dark);margin-top:10px">'+esc(rec.family||'—')+(rec.design?' · '+esc(rec.design):'')+'</h3>'+
       '<p class="muted" style="margin-top:6px">Tingkat keyakinan heuristik: <b class="num">'+esc(conf)+'%</b></p>'+
       '<h4 style="color:var(--on-dark);margin-top:14px">Alasan</h4>'+list(rec.reasons,'i-check')+
@@ -1333,7 +1335,7 @@
     var cards='';
     // ── Ide & Proposal ──
     cards+=catHead('1 · Ide & Proposal');
-    cards+=toolCard('idea','Generator Ide Penelitian','Judul alternatif, rumusan masalah, tujuan, manfaat, variabel, hipotesis & kerangka berpikir — dari judul proyek.',
+    cards+=toolCard('idea','Generator Ide Penelitian','Judul alternatif, rumusan masalah, tujuan, manfaat, variabel, hipotesis & kerangka berpikir, dari judul proyek.',
       '<button class="btn btn-primary btn-sm" id="tIdea">'+icon('i-sparkles')+' Buat Ide Lengkap</button>');
     cards+=toolCard('abs','Generator Abstrak (ID + EN) & Kata Kunci','Buat draf abstrak Bahasa Indonesia dan Inggris beserta kata kunci dari data proyek.',
       '<button class="btn btn-primary btn-sm" id="tAbs">'+icon('i-sparkles')+' Buat Abstrak</button>');
@@ -1351,7 +1353,7 @@
       '<div style="margin-top:8px"><button class="btn btn-primary btn-sm" id="tSg">Deteksi</button></div>');
     // ── Metodologi ──
     cards+=catHead('3 · Metodologi');
-    cards+=toolCard('smp','Kalkulator Ukuran Sampel (Slovin & Cochran)','Hitung jumlah sampel — rumus Slovin atau Cochran dengan koreksi populasi terbatas.',
+    cards+=toolCard('smp','Kalkulator Ukuran Sampel (Slovin & Cochran)','Hitung jumlah sampel, rumus Slovin atau Cochran dengan koreksi populasi terbatas.',
       '<div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">'+
         '<label class="muted" style="font-size:13px">Rumus <select id="smpM" class="f-select" style="padding:8px;margin-left:6px"><option value="slovin" selected>Slovin</option><option value="cochran">Cochran</option></select></label>'+
         '<label class="muted" style="font-size:13px">Populasi (N) <input id="smpN" type="number" min="1" value="100" class="f-input" style="width:110px;padding:8px;margin-left:6px"></label>'+
@@ -1369,7 +1371,7 @@
       '<button class="btn btn-primary btn-sm" id="tOpv">'+icon('i-list')+' Buat Tabel</button>');
     // ── Instrumen ──
     cards+=catHead('4 · Instrumen');
-    cards+=toolCard('kus','Generator Kuesioner (Skala Likert)','Buat kerangka item angket per variabel — siap disesuaikan dengan indikatormu.',
+    cards+=toolCard('kus','Generator Kuesioner (Skala Likert)','Buat kerangka item angket per variabel, siap disesuaikan dengan indikatormu.',
       '<button class="btn btn-primary btn-sm" id="tKus">'+icon('i-list')+' Buat Kuesioner</button>');
     cards+=toolCard('iv','Pedoman Wawancara (Kualitatif)','Buat daftar pertanyaan wawancara semi-terstruktur per variabel.',
       '<button class="btn btn-primary btn-sm" id="tIv">'+icon('i-list')+' Buat Pertanyaan</button>');
@@ -1380,7 +1382,7 @@
       '<div style="margin-top:8px"><button class="btn btn-primary btn-sm" id="tDs">Hitung</button></div>');
     // ── Penulisan ──
     cards+=catHead('6 · Penulisan');
-    cards+=toolCard('prf','Parafrase & Humanize Teks','Tempel teks, dapatkan versi parafrasa untuk mengurangi duplikasi & pola AI.',
+    cards+=toolCard('prf','Parafrase dan Rapikan Bahasa','Tempel teks, dapatkan versi parafrasa untuk mengurangi duplikasi & pola AI.',
       '<textarea id="prfIn" class="f-input" rows="5" style="width:100%;padding:10px" placeholder="Tempel kalimat/paragraf di sini…"></textarea>'+
       '<div style="margin-top:8px"><button class="btn btn-primary btn-sm" id="tPrf">'+icon('i-refresh')+' Parafrase</button></div>');
     cards+=toolCard('bk','Cek Kata Baku (KBBI)','Deteksi kata tidak baku dan saran bentuk bakunya.',
@@ -1611,7 +1613,7 @@
       var t=byId('rdIn').value; if(t.trim().length<20){ toast('Tempel teks yang cukup dulu.'); return; }
       var r=THESIS.readabilityCheck(t);
       var h='<div class="ws-card"><div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px"><b style="color:var(--on-dark)">Keterbacaan</b><span class="badge">'+r.sentences+' kalimat · rerata '+r.avgWords+' kata</span></div><p class="muted" style="font-size:13px;margin-top:6px">'+esc(r.note)+'</p><ul style="margin:8px 0 0 18px;font-size:13px">'+r.issues.map(function(x){return '<li style="margin-bottom:3px">'+esc(x)+'</li>';}).join('')+'</ul>';
-      if(r.longSentences.length) h+='<p style="margin-top:8px;color:var(--on-dark);font-size:13px"><b>Kalimat terpanjang:</b></p>'+r.longSentences.map(function(s){return '<div style="border-left:3px solid var(--primary);padding:5px 9px;margin-top:5px;background:var(--elevated);border-radius:4px;font-size:12.5px"><b>'+s.words+' kata</b> — '+esc(s.text)+'…</div>';}).join('');
+      if(r.longSentences.length) h+='<p style="margin-top:8px;color:var(--on-dark);font-size:13px"><b>Kalimat terpanjang:</b></p>'+r.longSentences.map(function(s){return '<div style="border-left:3px solid var(--primary);padding:5px 9px;margin-top:5px;background:var(--elevated);border-radius:4px;font-size:12.5px"><b>'+s.words+' kata</b>, '+esc(s.text)+'…</div>';}).join('');
       show('rd',h+'</div>');
     });
     function renderRev(){
@@ -1684,8 +1686,8 @@
   function levelLabel(l){ return l==='critical'?'Kritis':l==='warning'?'Perhatian':'Info'; }
 
   function viewDoctor(){
-    var inner='<h1 style="font-size:22px;color:var(--on-dark)">Skripsi Doctor</h1>'+
-      '<p class="muted" style="margin-top:6px">Unggah/ tempel naskah — audit menyeluruh: kelengkapan BAB, sitasi vs daftar pustaka, konsistensi angka, kata baku, pola AI.</p>'+
+    var inner='<h1 style="font-size:22px;color:var(--on-dark)">Cek Draf Skripsi</h1>'+
+      '<p class="muted" style="margin-top:6px">Unggah/ tempel naskah, audit menyeluruh: kelengkapan BAB, sitasi vs daftar pustaka, konsistensi angka, kata baku, pola AI.</p>'+
       '<div class="ws-card" style="margin-top:14px">'+
         '<div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">'+
           '<input type="file" id="docFile" accept=".docx,.pdf,.txt" style="font-size:13px">'+
@@ -1695,7 +1697,7 @@
         '<div style="margin-top:10px"><button class="btn btn-primary btn-sm" id="docRun">'+icon('i-shield-check')+' Audit Sekarang</button></div>'+
         '<div id="docOut" style="display:none;margin-top:14px"></div>'+
       '</div>';
-    shell(inner,'Skripsi Doctor');
+    shell(inner,'Cek Draf Skripsi');
     byId('docFile').addEventListener('change',function(){
       var f=this.files&&this.files[0]; if(!f) return;
       if(!window.FILES){ toast('Modul pembaca berkas gagal dimuat.'); return; }
@@ -1713,7 +1715,7 @@
       var secs=Object.keys(a.sections).map(function(k){ return '<span class="badge" style="color:'+(a.sections[k]?'var(--up)':'var(--muted)')+'">'+(a.sections[k]?'✓ ':'○ ')+esc(k)+'</span>'; }).join(' ');
       h+='<div style="margin-top:10px;display:flex;gap:6px;flex-wrap:wrap">'+secs+'</div>';
       if(!a.findings.length) h+='<p style="margin-top:12px;color:var(--up);font-size:14px">Tidak ada masalah besar terdeteksi. Tetap periksa manual.</p>';
-      else h+='<div style="margin-top:12px">'+a.findings.map(function(f){ return '<div style="border-left:3px solid '+levelColor(f.level)+';padding:6px 10px;margin-bottom:6px;background:var(--elevated);border-radius:4px;font-size:13px"><b style="color:'+levelColor(f.level)+'">'+levelLabel(f.level)+'</b> — '+esc(f.msg)+'</div>'; }).join('')+'</div>';
+      else h+='<div style="margin-top:12px">'+a.findings.map(function(f){ return '<div style="border-left:3px solid '+levelColor(f.level)+';padding:6px 10px;margin-bottom:6px;background:var(--elevated);border-radius:4px;font-size:13px"><b style="color:'+levelColor(f.level)+'">'+levelLabel(f.level)+'</b>, '+esc(f.msg)+'</div>'; }).join('')+'</div>';
       h+='<div style="margin-top:12px"><button class="btn btn-ghost btn-sm" id="docDoc">Unduh Laporan (DOCX)</button></div>';
       var o=byId('docOut'); o.style.display='block'; o.innerHTML=h+'</div>';
       byId('docDoc').addEventListener('click',function(){
@@ -1750,7 +1752,7 @@
     if(st.i>=st.qs.length){
       var avg=Math.round(st.results.reduce(function(s,x){return s+x.score;},0)/(st.results.length||1));
       var col=avg>=75?'var(--up)':avg>=55?'var(--primary)':'var(--down)';
-      inner+='<div class="ws-card" style="margin-top:14px"><div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px"><b style="color:var(--on-dark)">Selesai — Rata-rata Skor</b><span class="badge" style="color:'+col+';font-size:16px">'+avg+'/100</span></div>';
+      inner+='<div class="ws-card" style="margin-top:14px"><div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px"><b style="color:var(--on-dark)">Selesai, Rata-rata Skor</b><span class="badge" style="color:'+col+';font-size:16px">'+avg+'/100</span></div>';
       inner+=st.results.map(function(x,i){ return '<div style="border-left:3px solid '+(x.score>=60?'var(--up)':'var(--primary)')+';padding:6px 10px;margin-top:8px;background:var(--elevated);border-radius:4px;font-size:13px"><b>'+(i+1)+'. '+esc(st.qs[i].q)+'</b><br><span class="muted">Skor '+x.score+' ('+esc(x.verdict)+'). '+esc(x.feedback)+'</span></div>'; }).join('');
       inner+='<div style="margin-top:12px"><button class="btn btn-primary btn-sm" id="simRestart">Ulangi</button></div></div>';
       shell(inner,'Simulasi Sidang');
@@ -1779,7 +1781,7 @@
 
   function viewDataLab(){
     var inner='<h1 style="font-size:22px;color:var(--on-dark)">Analisis Data</h1>'+
-      '<p class="muted" style="margin-top:6px">Unggah CSV atau XLSX — sistem mendeteksi tipe tiap kolom, menghitung statistik, dan menyarankan uji. <b>Tidak mengarang nilai.</b></p>'+
+      '<p class="muted" style="margin-top:6px">Unggah CSV atau XLSX, sistem mendeteksi tipe tiap kolom, menghitung statistik, dan menyarankan uji. <b>Tidak mengarang nilai.</b></p>'+
       '<div class="ws-card" style="margin-top:14px">'+
         '<input type="file" id="dlFile" accept=".csv,.tsv,.xlsx" style="font-size:13px">'+
         '<span class="muted" style="font-size:12px;margin-left:8px">Format: CSV, TSV, atau XLSX. Baris pertama = judul kolom.</span>'+
