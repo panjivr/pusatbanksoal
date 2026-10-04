@@ -95,6 +95,8 @@ def sync(lastmod):
         title = feature['title'] + ' | Bekal'
         url = BASE + feature['url']
         source = re.sub(r'<title>.*?</title>', lambda _: '<title>' + html.escape(title) + '</title>', source, count=1, flags=re.S)
+        if '<link rel="canonical"' not in source:
+            source = source.replace('</head>', '<link rel="canonical" href="' + url + '">\n</head>', 1)
         source = re.sub(r'<link rel="canonical"[^>]*>', lambda _: '<link rel="canonical" href="' + url + '">', source, count=1)
         for attribute, key, value in [
             ('name', 'description', feature['description']),

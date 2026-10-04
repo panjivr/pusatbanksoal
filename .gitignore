@@ -2,3 +2,6 @@
 shot-*.png
 node_modules/
 u-*.png
+
+# Python catalog sync caches
+__pycache__/

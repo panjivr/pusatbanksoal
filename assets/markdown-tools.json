@@ -1,0 +1,86 @@
+[
+  {
+    "id": "editor",
+    "name": "Editor dan Pratinjau",
+    "description": "Tulis Markdown dengan pratinjau, undo, pencarian, dan hitungan kata.",
+    "icon": "markdown"
+  },
+  {
+    "id": "import",
+    "name": "Konversi ke Markdown",
+    "description": "Buka Word, HTML, tabel CSV/Excel/JSON, gambar OCR, atau subtitle.",
+    "icon": "file-text"
+  },
+  {
+    "id": "pdf",
+    "name": "PDF ke Markdown",
+    "description": "Paket Markdown dengan teks, gambar halaman, metadata, dan PDF asli.",
+    "icon": "doc"
+  },
+  {
+    "id": "video",
+    "name": "Video dan Audio ke Markdown",
+    "description": "Transkripsi suara lokal, transkrip subtitle, ringkasan, dan cuplikan video.",
+    "icon": "video"
+  },
+  {
+    "id": "format",
+    "name": "Rapikan Markdown",
+    "description": "Rapikan sintaks, tabel, indentasi, dan spasi tanpa membungkus ulang paragraf.",
+    "icon": "pen"
+  },
+  {
+    "id": "toc",
+    "name": "Daftar Isi",
+    "description": "Buat tautan heading, termasuk judul berulang.",
+    "icon": "list"
+  },
+  {
+    "id": "check",
+    "name": "Periksa Dokumen",
+    "description": "Periksa heading, blok kode, teks alternatif, dan tautan bagian.",
+    "icon": "shield"
+  },
+  {
+    "id": "export",
+    "name": "Ekspor Dokumen",
+    "description": "Simpan MD, HTML, TXT, DOCX, JSON, PDF cetak, atau paket ZIP dengan aset.",
+    "icon": "upload"
+  },
+  {
+    "id": "summary",
+    "name": "Ringkas Dokumen",
+    "description": "Pilih kalimat penting dari teks tanpa menambahkan informasi baru.",
+    "icon": "file-text"
+  },
+  {
+    "id": "diff",
+    "name": "Bandingkan Markdown",
+    "description": "Lihat baris yang ditambah dan dihapus dari dua versi.",
+    "icon": "layers"
+  },
+  {
+    "id": "split",
+    "name": "Pisah per Heading",
+    "description": "Unduh bagian dokumen sebagai file Markdown terpisah.",
+    "icon": "layers"
+  },
+  {
+    "id": "merge",
+    "name": "Gabungkan Markdown",
+    "description": "Susun beberapa file MD dengan urutan pilihan.",
+    "icon": "file-text"
+  },
+  {
+    "id": "table",
+    "name": "Pembuat Tabel",
+    "description": "Ubah data tab menjadi tabel Markdown. Cocok untuk salinan dari spreadsheet.",
+    "icon": "calculator"
+  },
+  {
+    "id": "template",
+    "name": "Template Dokumen",
+    "description": "Mulai dari catatan, README, notulen, atau catatan belajar.",
+    "icon": "book"
+  }
+]

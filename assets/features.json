@@ -4,153 +4,193 @@
     "name": "Tryout dan Simulasi Ujian",
     "description": "Latihan ujian dengan timer, pilihan jawaban, pembahasan, dan hasil nilai. Pilih kategori CPNS, PPPK, SNBT, kedinasan, BUMN, TNI/Polri, sertifikasi, TOEFL, atau IELTS.",
     "group": "belajar",
-    "title": "Tryout Online CPNS, PPPK, SNBT, BUMN, TOEFL dan IELTS"
+    "title": "Tryout Online CPNS, PPPK, SNBT, BUMN, TOEFL dan IELTS",
+    "icon": "clock"
   },
   {
     "url": "pembahasan.html",
     "name": "Bank Soal dan Pembahasan",
     "description": "Cari soal berdasarkan kategori dan subtes, kerjakan latihan, baca pembahasan, lalu simpan soal yang ingin dipelajari lagi.",
     "group": "belajar",
-    "title": "Bank Soal dan Pembahasan CPNS, PPPK, SNBT"
+    "title": "Bank Soal dan Pembahasan CPNS, PPPK, SNBT",
+    "icon": "book"
   },
   {
     "url": "analisis.html",
     "name": "Analisis Nilai dan Rencana Belajar",
     "description": "Lihat kekuatan dan bagian yang perlu dilatih dari nilai rapor, UTBK, atau tryout. Coba simulasi kenaikan nilai dan telusuri pilihan kampus serta jurusan.",
     "group": "belajar",
-    "title": "Analisis Nilai UTBK, Rapor dan Tryout"
+    "title": "Analisis Nilai UTBK, Rapor dan Tryout",
+    "icon": "brain"
   },
   {
     "url": "verifikasi.html",
     "name": "Cek Sertifikat",
     "description": "Periksa sertifikat hasil tryout Bekal menggunakan ID atau tautan verifikasi yang tercantum pada sertifikat.",
     "group": "belajar",
-    "title": "Cek Sertifikat Tryout Online"
+    "title": "Cek Sertifikat Tryout Online",
+    "icon": "shield"
   },
   {
     "url": "kuliah.html",
     "name": "Cari Jurusan dan Kampus",
     "description": "Bandingkan jurusan dan kampus di Indonesia serta luar negeri. Saring berdasarkan jenjang, lokasi, jenis kampus, kuliah online, atau kelas karyawan.",
     "group": "kampus",
-    "title": "Cari Jurusan Kuliah dan Kampus Indonesia"
+    "title": "Cari Jurusan Kuliah dan Kampus Indonesia",
+    "icon": "building"
   },
   {
     "url": "beasiswa.html",
     "name": "Cari Beasiswa",
     "description": "Temukan pilihan beasiswa dalam dan luar negeri, persyaratan, serta tautan resminya. Periksa jadwal dan ketentuan terbaru di situs penyelenggara sebelum mendaftar.",
     "group": "kampus",
-    "title": "Cari Beasiswa Kuliah Indonesia dan Luar Negeri"
+    "title": "Cari Beasiswa Kuliah Indonesia dan Luar Negeri",
+    "icon": "money"
   },
   {
     "url": "kerja-remote.html",
     "name": "Cari Kerja Remote",
     "description": "Kenali jenis pekerjaan remote, keterampilan yang dibutuhkan, perkiraan gaji, serta perusahaan dan situs untuk mencari lowongan. Cek posisi yang tersedia langsung di sumbernya.",
     "group": "kampus",
-    "title": "Panduan Kerja Remote untuk Orang Indonesia"
+    "title": "Panduan Kerja Remote untuk Orang Indonesia",
+    "icon": "laptop"
   },
   {
     "url": "skripsi.html",
     "name": "Riset dan Skripsi",
     "description": "Cari sumber ilmiah, susun kerangka proposal, atur sitasi, dan siapkan daftar pustaka. Buka ruang kerja skripsi untuk mengelola proyek dan meninjau drafmu.",
     "group": "kampus",
-    "title": "Alat Bantu Skripsi, Riset dan Daftar Pustaka"
+    "title": "Alat Bantu Skripsi, Riset dan Daftar Pustaka",
+    "icon": "file-text"
   },
   {
     "url": "kelas.html",
     "name": "Belajar Bisnis dari Nol",
     "description": "Pelajari cara memilih ide usaha, mengenali calon pelanggan, menyiapkan produk, pemasaran, dan operasional melalui tujuh bab materi bisnis.",
     "group": "usaha",
-    "title": "Belajar Bisnis dari Nol untuk Pemula"
+    "title": "Belajar Bisnis dari Nol untuk Pemula",
+    "icon": "grad"
   },
   {
     "url": "blueprint.html",
     "name": "Rencana Bisnis",
     "description": "Isi rencana usaha dari ide, riset pasar, produk, pemasaran, hingga operasional. Unduh hasilnya sebagai PDF untuk ditinjau atau dibahas bersama tim.",
     "group": "usaha",
-    "title": "Template Rencana Bisnis Gratis, Unduh PDF"
+    "title": "Template Rencana Bisnis Gratis, Unduh PDF",
+    "icon": "file-text"
   },
   {
     "url": "scaleup.html",
     "name": "Kembangkan Usaha",
     "description": "Pelajari cara menguji produk, memahami kebutuhan pasar, menentukan segmen pelanggan, dan menyiapkan ekspansi usaha.",
     "group": "usaha",
-    "title": "Cara Mengembangkan Usaha dan Ekspansi Bisnis"
+    "title": "Cara Mengembangkan Usaha dan Ekspansi Bisnis",
+    "icon": "trend"
   },
   {
     "url": "deck.html",
     "name": "Presentasi Bisnis",
     "description": "Susun presentasi usaha dari masalah pelanggan, solusi, pasar, model bisnis, tim, hingga keuangan. Unduh pitch deck sebagai PDF.",
     "group": "usaha",
-    "title": "Template Presentasi Bisnis dan Pitch Deck Gratis"
+    "title": "Template Presentasi Bisnis dan Pitch Deck Gratis",
+    "icon": "layers"
   },
   {
     "url": "legalitas.html",
     "name": "Izin Usaha dan Pajak",
     "description": "Pelajari NIB, OSS, KBLI, PT, CV, PIRT, serta pajak usaha. Gunakan panduan dan simulasi sebagai persiapan, lalu cek ketentuan terbaru di sumber resmi.",
     "group": "usaha",
-    "title": "Panduan NIB, Izin Usaha dan Pajak UMKM"
+    "title": "Panduan NIB, Izin Usaha dan Pajak UMKM",
+    "icon": "shield"
   },
   {
     "url": "bisnis.html",
     "name": "Kalkulator Usaha",
     "description": "Hitung harga jual, laba, titik impas, pengembalian modal, pinjaman, dan bagi hasil. Bandingkan skenario sebelum menentukan rencana usaha.",
     "group": "usaha",
-    "title": "Kalkulator Usaha, Harga Jual, BEP dan ROI"
+    "title": "Kalkulator Usaha, Harga Jual, BEP dan ROI",
+    "icon": "calculator"
   },
   {
     "url": "franchise.html",
     "name": "Franchise dan Ide Usaha",
     "description": "Bandingkan pilihan franchise dan ide usaha berdasarkan modal serta kota. Hitung perkiraan laba dan balik modal, lalu konfirmasi biaya langsung ke pemilik franchise.",
     "group": "usaha",
-    "title": "Cari Franchise dan Ide Usaha Sesuai Modal"
+    "title": "Cari Franchise dan Ide Usaha Sesuai Modal",
+    "icon": "store"
   },
   {
     "url": "finansial.html",
     "name": "Keuangan dan Investasi",
     "description": "Catat aset dan kewajiban, pantau arus kas, serta coba perhitungan saham, reksa dana, dan obligasi. Hasil simulasi membantu perencanaan dan bukan jaminan keuntungan.",
     "group": "usaha",
-    "title": "Kalkulator Keuangan Pribadi dan Investasi"
+    "title": "Kalkulator Keuangan Pribadi dan Investasi",
+    "icon": "wallet"
   },
   {
     "url": "prompt-studio.html",
     "name": "Buat Prompt Banner AI",
     "description": "Susun instruksi untuk membuat banner dengan AI. Pilih platform, gaya, warna, dan teks, lalu salin prompt ke alat AI yang kamu gunakan.",
     "group": "alat",
-    "title": "Buat Prompt AI untuk Desain Banner"
+    "title": "Buat Prompt AI untuk Desain Banner",
+    "icon": "pen",
+    "landing_description": "Buat instruksi desain banner untuk AI"
   },
   {
     "url": "keuangan-harian.html",
     "name": "Catatan Keuangan Harian",
     "description": "Catat pemasukan dan pengeluaran, pantau saldo, atur anggaran bulanan, dan ekspor laporan. Data disimpan di browser perangkatmu tanpa perlu login.",
     "group": "alat",
-    "title": "Catatan Keuangan Harian dan Anggaran Bulanan"
+    "title": "Catatan Keuangan Harian dan Anggaran Bulanan",
+    "icon": "wallet",
+    "landing_description": "Catat pemasukan, pengeluaran, dan anggaran"
   },
   {
     "url": "qr-studio.html",
     "name": "Buat QR dan Barcode",
     "description": "Ubah link atau teks menjadi QR code dan buat barcode sesuai kebutuhan. Atur tampilannya, lalu unduh sebagai PNG, JPG, SVG, atau PDF tanpa perlu login.",
     "group": "alat",
-    "title": "Buat QR Code dan Barcode Gratis Online"
+    "title": "Buat QR Code dan Barcode Gratis Online",
+    "icon": "scan",
+    "landing_description": "Buat QR dan barcode, lalu unduh hasilnya"
   },
   {
     "url": "transfer-teks.html",
     "name": "Kirim Teks dan File",
     "description": "Kirim teks dan file antara HP, tablet, dan laptop melalui QR. Pilih koneksi antar perangkat untuk file atau kirim teks tanpa internet. Tidak perlu memasang aplikasi atau login.",
     "group": "alat",
-    "title": "Kirim Teks dan File dari HP ke Laptop lewat QR"
+    "title": "Kirim Teks dan File dari HP ke Laptop lewat QR",
+    "icon": "refresh",
+    "landing_description": "Kirim teks dan file antara HP dan laptop"
   },
   {
     "url": "pdf-tools.html",
     "name": "Alat PDF Gratis",
     "description": "Gabungkan, pisahkan, kompres, konversi, beri tanda tangan, OCR, dan lindungi PDF langsung di perangkat tanpa unggah file.",
     "group": "studio",
-    "title": "Alat PDF Gratis: Gabung, Kompres, Konversi dan OCR PDF"
+    "title": "Alat PDF Gratis: Gabung, Kompres, Konversi dan OCR PDF",
+    "icon": "doc",
+    "new": true,
+    "landing_description": "Gabungkan, kompres, konversi, dan lindungi PDF"
   },
   {
     "url": "image-tools.html",
     "name": "Alat Gambar Gratis",
     "description": "Kompres foto, ubah ukuran, potong, konversi JPG PNG WebP, buat kolase, watermark, GIF, dan OCR gambar di perangkatmu.",
     "group": "studio",
-    "title": "Alat Gambar Gratis: Kompres Foto, Edit dan Konversi JPG PNG"
+    "title": "Alat Gambar Gratis: Kompres Foto, Edit dan Konversi JPG PNG",
+    "icon": "image",
+    "new": true,
+    "landing_description": "Kompres, edit, dan konversi foto"
+  },
+  {
+    "url": "markdown-tools.html",
+    "name": "Alat Markdown",
+    "description": "Edit dan pratinjau file MD, konversi PDF Word HTML ke Markdown, ringkas video dari transkrip atau suara lokal, buat tabel dan daftar isi, lalu ekspor dokumen beserta aset.",
+    "group": "studio",
+    "title": "Alat Markdown Gratis: Editor MD, PDF ke Markdown dan Ringkasan Video",
+    "icon": "markdown",
+    "new": true,
+    "landing_description": "Edit Markdown, konversi dokumen, dan ringkas video"
   }
 ]

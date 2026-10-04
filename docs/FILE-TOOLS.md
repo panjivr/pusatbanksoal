@@ -12,7 +12,7 @@ Konversi PDF ke Word mengekstrak teks, Excel mengelompokkan posisi teks, dan Pow
 
 ## Pengembangan dan pemeriksaan
 
-Situs statis: `python -m http.server 8000 --bind 127.0.0.1` dari akar checkout. Build ulang vendor: `npm ci --prefix tooling`, kemudian `npm run --prefix tooling build`. Tidak diperlukan build untuk menjalankan versi yang sudah disertakan.
+Situs statis: `python -m http.server 8000 --bind 127.0.0.1` dari akar checkout. Build ulang vendor: `ONNXRUNTIME_NODE_INSTALL_CUDA=skip npm ci --prefix tooling`, kemudian `npm run --prefix tooling build`. Tidak diperlukan build untuk menjalankan versi yang sudah disertakan.
 
 `python scripts/sync-seo.py` menyinkronkan metadata, katalog landing dan sitemap. `python scripts/check-site.py` memeriksa tautan/metadata. `scripts/check-file-tools.cjs` memproses fixture nyata, memeriksa geometri/piksel, enkripsi/password, format keluaran, OCR searchable dan GIF. Jalankan dengan Playwright dan Chromium terpasang, `PBS_SITE_BASE_URL` dapat mengganti URL server. `scripts/check-responsive.cjs` mencakup seluruh halaman pada delapan viewport dan dua tema.
 

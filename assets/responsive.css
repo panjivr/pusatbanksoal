@@ -151,3 +151,16 @@ body .lg-tabs::-webkit-scrollbar-thumb{background:var(--hair-dark);border-radius
 .bs-grid>*,.rl-grid>*{min-width:0}
 body .rl-grid{grid-template-columns:repeat(auto-fill,minmax(min(100%,310px),1fr))}
 @media(max-width:640px){body .bs-grid{grid-template-columns:minmax(0,1fr)}}
+
+/* Practical tools grow with the feature catalog. Keep their menu reachable. */
+@media(min-width:901px){#menu-studio{max-height:calc(100dvh - 110px);overflow-y:auto;width:340px;max-width:calc(100vw - 32px)}}
+/* Generated directory keeps every file-tool operation discoverable on the landing. */
+#alat-file input[type=search]{width:min(100%,540px);display:block;padding:12px 14px;margin:10px 0;border:1px solid var(--hair-dark);border-radius:10px;background:var(--card);color:var(--body);font:inherit}
+.feature-tool-group{border:1px solid var(--hair-dark);border-radius:12px;margin:12px 0;padding:16px;background:var(--card)}
+.feature-tool-group summary{font-weight:700;cursor:pointer;min-height:36px;line-height:1.8}
+.feature-tool-group summary .i{width:22px;height:22px;vertical-align:middle;margin-right:8px;color:var(--accent-ink)}
+.feature-tool-links{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:8px;margin-top:16px}
+.feature-tool-links a{display:flex;align-items:center;gap:10px;min-height:44px;padding:10px;border-radius:8px;color:var(--body);text-decoration:none;background:var(--canvas)}
+.feature-tool-links a .i{width:18px;height:18px;flex:none;color:var(--accent-ink)}
+.feature-tool-links a:hover{background:var(--primary-soft)}
+#alat-file [hidden]{display:none!important}

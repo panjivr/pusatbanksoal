@@ -23,6 +23,10 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+      - name: Sync feature catalog, landing page and SEO
+        run: |
+          python3 scripts/sync-catalog.py
+          python3 scripts/check-site.py
       - name: Setup Pages
         uses: actions/configure-pages@v5
         with:
