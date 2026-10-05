@@ -5,3 +5,5 @@ u-*.png
 
 # Python catalog sync caches
 __pycache__/
+
+.pages/

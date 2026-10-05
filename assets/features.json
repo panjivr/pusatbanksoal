@@ -196,11 +196,11 @@
   {
     "url": "film-studio.html",
     "name": "Studio Film AI",
-    "title": "Studio Film AI: Naskah, Storyboard dan Prompt Video",
-    "description": "Rancang film AI dan drama pendek: karakter konsisten, naskah, storyboard, shot list, prompt gambar dan video, subtitle, serta paket produksi.",
+    "title": "Studio Film AI: Cinematic Series Director",
+    "description": "Studio produksi serial dengan AI Canvas, Series Bible, karakter, episode, shot list, prompt, keyframe, video animatic dan ekspor film WebM.",
     "group": "studio",
     "icon": "film",
     "new": true,
-    "landing_description": "Rancang film AI, jaga karakter, susun storyboard dan prompt video"
+    "landing_description": "AI Canvas, karakter, episode, shot dan produksi video animatic"
   }
 ]

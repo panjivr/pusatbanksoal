@@ -1,57 +1,32 @@
 [
   {
-    "id": "idea",
-    "name": "Ide Cerita Film",
+    "id": "canvas",
+    "name": "AI Canvas",
     "icon": "film"
   },
   {
-    "id": "story",
-    "name": "Alur Serial dan Rahasia",
+    "id": "bible",
+    "name": "Series Bible",
     "icon": "film"
   },
   {
-    "id": "script",
-    "name": "Naskah dan Dialog",
+    "id": "assets",
+    "name": "Asset Bible",
     "icon": "film"
   },
   {
-    "id": "characters",
-    "name": "Karakter, Kostum dan Suara",
+    "id": "episodes",
+    "name": "Episode dan Adegan",
     "icon": "film"
   },
   {
-    "id": "world",
-    "name": "Dunia dan Aset Referensi",
+    "id": "shots",
+    "name": "Shot List dan Prompt",
     "icon": "film"
   },
   {
-    "id": "director",
-    "name": "Adegan dan Daftar Shot",
-    "icon": "film"
-  },
-  {
-    "id": "storyboard",
-    "name": "Storyboard dan Keyframe",
-    "icon": "film"
-  },
-  {
-    "id": "prompt",
-    "name": "Prompt Gambar dan Video AI",
-    "icon": "film"
-  },
-  {
-    "id": "continuity",
-    "name": "Cek Konsistensi Film",
-    "icon": "film"
-  },
-  {
-    "id": "assembly",
-    "name": "Timeline, Subtitle dan Ekspor",
-    "icon": "film"
-  },
-  {
-    "id": "guide",
-    "name": "Panduan Film AI Lengkap",
+    "id": "production",
+    "name": "Keyframe, Video dan Film Final",
     "icon": "film"
   }
 ]

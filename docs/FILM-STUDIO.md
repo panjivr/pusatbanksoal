@@ -1,32 +1,46 @@
-# Studio Film AI
+# Studio Film AI: Cinematic Series Director
 
-`film-studio.html` implements a local production planner from the supplied AI Cinematic Series Director blueprint. It includes ten production modules and the full 67 numbered chapters, plus the original Markdown document including its role section. The uploaded document is product input; its claims about provider versions are displayed as source material, not verified provider capability guarantees.
+The application at `film-studio.html` replaces the previous planner with the user's React application from https://github.com/panjivr/studio-film-ai, imported from commit `6dc835e1a4fc3796ea9eaad89e38633b27aeaec9`. Editable source is in `studio-film-ai/`; compiled runtime assets are in `assets/studio-film-ai/`.
 
-## Working features
+## Features and storage
 
-- Project intake, ten concept scaffolds, model-language instruction briefs, seven-beat episode templates, season arc scaffolds and editable narrative JSON (secrets, relationships, reveal timing, unresolved threads and color scripts).
-- Immutable canonical IDs, explicit identity locks, separate variants and mutable scene state. Canon changes invalidate previously approved shots. Characters, wardrobe, locations, props, styles, voices, vehicles and organizations have editable records.
-- Fourteen character reference prompts, local reference/keyframe/clip/audio files, provenance metadata and explicit human approval. Missing local files can be reattached without changing reference IDs.
-- Scene state, wardrobe ownership, physical/emotional state, carried props, character knowledge, screen position, eyeline, hand, story timestamps, axis side and justified changes.
-- Shot size/angle/lens/movement, single-action prompts, dialogue, performance, lighting/style inheritance, start/end state, first/last frame binding, seven-shot dialogue coverage scaffolds, and line-based screenplay splitting. These are deterministic planners, not local language-model inference.
-- Provider prompt profiles for generic, Midjourney, Runway and Veo. Provider model/version is user supplied; no obsolete reference flags or generation API requests are emitted. Profile duration warnings are planning suggestions, not enforced file/scene limits or claims about all versions. Reference files must be uploaded in the chosen provider; internal IDs alone do not transfer media.
-- Data continuity checks for reference approval, wardrobe ownership, prop IDs, early secret knowledge, keyframe binding, story-time changes, speaker membership and entry/end state mismatches. Human visual QC scores with identity/wardrobe/critical-prop gates and weighted thresholds. This is not computer vision; a PASS covers only inspected structured rules.
-- Prompt hash/version history and approved-shot state event log, editable timeline order, clip mapping, costs/iteration estimates, subtitle SRT, project Markdown and JSON, and complete ZIP export/import including reference/clip assets, prompts, timeline, subtitles, system roles and original guide.
-- Explicit IndexedDB save/recovery/clear; JSON exports metadata, ZIP includes media. Import validates schema, IDs and asset paths. Rendering escapes user text; guide HTML uses existing DOMPurify. Downloads have separate Blob URL lifetime from pane rendering to avoid revoking download URLs during tab updates.
-- Eleven direct module links are generated on the landing page from `assets/film-tools.json`; public discovery adds the film feature/menu/SEO/sitemap through existing catalog synchronization. Film sprite is in `assets/app.js`.
+The original six workspaces are retained: AI Canvas, Series Bible, Asset Bible, Episode, Shot List and Produksi. Production has keyframes, WebM animatic clips, ordered episode assembly, music/narration mixing and final WebM downloads. Canvas supports asset synchronization, connections, Auto Coverage and structured QC. Prompt/story generation uses deterministic templates; image rendering is a procedural storyboard renderer, not an image-generation model. Video is an animated storyboard in portrait 540 × 960 format. External model names in prompts are user settings, not connected or verified generation services.
 
-## Scope and limitations
+By default, the existing database API runs against IndexedDB `bekal-cinematic-studio`. Projects, assets, episodes, scenes, shots, keyframe parameters and Canvas are saved automatically on this device. The last selected project persists through reload. Data is scoped to the selected project; foreign keys, cascading deletes, unique episode numbers and keyframe upserts are enforced by local transactions. The previous planner's separate `bekal-film-studio` database is untouched.
 
-No model API, paid service, local image/video generative model, automatic face/video inspection, MP4 assembly, background server jobs, team messaging or viewer analytics are implemented. Generated media is imported from the user's chosen provider. Timeline/clip/audio plans and subtitles are exported for an external editor. No UI implies that a prompt or timeline is a rendered film. AI generation and autonomous multi-episode rendering remain provider-dependent stages described in the included blueprint. Permission/consent and asset licenses are recorded locally, not legally adjudicated.
+Rendered video/audio Blobs currently live in the production workspace's memory. Download them before leaving that workspace or refreshing; those media files are not persistent project backups. Browser data clearing removes local projects. Browser storage quota, codec support, device memory and processing speed still apply. Recording runs in real time; keep the tab visible. Browser-based tests are Chromium checks, not physical-device certification.
 
-Input assets are processed locally; the planner itself makes no provider requests. Browser codec, memory, storage quota and model capabilities still apply. Local copies are saved only through the save button; browser clearing can remove them, so use ZIP backups. Browser tests are Chromium-based, not proof for every physical device/provider.
+The upstream Supabase migrations remain in the source folder as optional reference. No migrations are executed and no external database is required. Only a separately configured build with real `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY` selects cloud mode. Never commit credentials. The upstream database policies require independent review before configuring a public shared instance.
 
-## Verification
+## Build and develop
 
-Use `PBS_SITE_BASE_URL` and installed Playwright/Chromium:
+Requires Node 22+ and Python 3. From the repository root:
 
-- `node scripts/check-film-studio.cjs`: canonical locks/variants, reference gates, secret timing, wardrobe checks, first/last frames, human QC, end/start states, prompt adapters/inheritance/version hash, timeline/SRT, unsafe paths, full source guide, UI, IndexedDB recovery, ZIP asset round trip.
-- `node scripts/check-film-responsive.cjs`: eleven populated panes × six viewport sizes × two themes (132 combinations).
-- `python scripts/check-catalog.py`, `python scripts/check-site.py`, and `node scripts/check-responsive.cjs` for site/catalog regressions.
+```sh
+npm ci --prefix studio-film-ai --no-audit --no-fund
+npm run --prefix studio-film-ai typecheck
+npm run --prefix studio-film-ai lint
+npm run --prefix studio-film-ai build
+python3 scripts/publish-film-studio.py
+python3 scripts/sync-catalog.py
+python3 scripts/check-site.py
+```
 
-Run the existing static server; no npm/build or extra runtime dependency is required.
+Static deployment uses the committed runtime assets. For source development, run `npm run --prefix studio-film-ai dev -- --host 127.0.0.1 --port 8007`. Its entry URL is `/assets/studio-film-ai/`. For the integrated website, run `python3 -m http.server 8006 --bind 127.0.0.1` from the repository root.
+
+`assets/features.json` and `assets/film-tools.json` supply landing links, icons and metadata. The Pages workflow rebuilds the imported app, synchronizes catalogs and stages only runtime files using `scripts/stage-pages.py`; source, node_modules and tooling are excluded from the Pages artifact.
+
+## Validation
+
+With Playwright installed, Chromium available at `/usr/bin/chromium`, static server running and Vite running:
+
+```sh
+PBS_SITE_BASE_URL=http://127.0.0.1:8006 FILM_DEV_BASE_URL=http://127.0.0.1:8007/assets/studio-film-ai/ node scripts/check-film-studio.cjs
+python3 scripts/check-catalog.py
+python3 scripts/check-site.py
+PBS_SITE_BASE_URL=http://127.0.0.1:8006/ node scripts/check-responsive.cjs
+```
+
+The film check exercises local CRUD, rollback, relationships, cascades, keyframe upserts, Canvas edge deletion, real MediaRecorder clip/film output and playback, project creation/reload, repeated asset sync, the production/download workflow, and populated layouts across phones, tablets, landscape and wide desktops. Set `NODE_PATH` to the installed Playwright module directory if it is not a local dependency.
+
+`node scripts/check-film-long.cjs` additionally records a real 32-second clip, assembles it and checks video packet timestamps with `ffprobe` to catch truncation of long episodes. It requires FFmpeg/ffprobe and takes about one minute.
