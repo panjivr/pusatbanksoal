@@ -196,11 +196,11 @@
   {
     "url": "film-studio.html",
     "name": "Studio Film AI",
-    "title": "Studio Film AI: Cinematic Series Director",
-    "description": "Studio produksi serial dengan AI Canvas, Series Bible, karakter, episode, shot list, prompt, keyframe, video animatic dan ekspor film WebM.",
+    "title": "Studio Film AI: Editor Video, Storyboard dan Produksi",
+    "description": "Rancang naskah dan storyboard, kelola media, edit timeline, atur warna dan audio, lalu ekspor video dari Studio Film AI Bekal.",
     "group": "studio",
     "icon": "film",
     "new": true,
-    "landing_description": "AI Canvas, karakter, episode, shot dan produksi video animatic"
+    "landing_description": "Naskah, storyboard, timeline, warna, audio dan ekspor video"
   }
 ]

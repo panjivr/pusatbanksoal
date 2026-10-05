@@ -1,18 +1,9 @@
 import { defineConfig } from 'vite';
+import { resolve } from 'node:path';
 import react from '@vitejs/plugin-react';
-import { fileURLToPath, URL } from 'node:url';
-
-// https://vitejs.dev/config/
 export default defineConfig({
-  base: '/assets/studio-film-ai/',
-  build: { assetsDir: '' },
   plugins: [react()],
-  resolve: {
-    alias: {
-      '@': fileURLToPath(new URL('./src', import.meta.url)),
-    },
-  },
-  optimizeDeps: {
-    exclude: ['lucide-react'],
-  },
+  base: '/assets/studio-film-ai/',
+  define: { 'process.env': {} },
+  build: { outDir: 'dist', emptyOutDir: true, sourcemap: false, assetsDir: '', rollupOptions: { input: resolve(__dirname, 'studio.html') } },
 });

@@ -1,46 +1,44 @@
-# Studio Film AI: Cinematic Series Director
+# Studio Film AI Bekal
 
-The application at `film-studio.html` replaces the previous planner with the user's React application from https://github.com/panjivr/studio-film-ai, imported from commit `6dc835e1a4fc3796ea9eaad89e38633b27aeaec9`. Editable source is in `studio-film-ai/`; compiled runtime assets are in `assets/studio-film-ai/`.
+The editor replaces the previous film studio with a web adaptation of [AI Video Production Editor](https://github.com/LudwigKienle/ai-video-production-editor) by Ludwig Maximillian Kienle, imported at commit `752cd43d3af6421d2bd6d4ce27f2d9815f7acba3`. Original notices, source and GPL-3.0-or-later license are retained in `studio-film-ai/`. The adapted editor is named Studio Film AI Bekal; it is not an official upstream release. The About dialog links to the original project, the complete adapted source in this repository, and the license included with the public runtime.
 
-## Features and storage
+## Integration
 
-The original six workspaces are retained: AI Canvas, Series Bible, Asset Bible, Episode, Shot List and Produksi. Production has keyframes, WebM animatic clips, ordered episode assembly, music/narration mixing and final WebM downloads. Canvas supports asset synchronization, connections, Auto Coverage and structured QC. Prompt/story generation uses deterministic templates; image rendering is a procedural storyboard renderer, not an image-generation model. Video is an animated storyboard in portrait 540 × 960 format. External model names in prompts are user settings, not connected or verified generation services.
+The original production workspaces remain: project/script, microdrama, media library/import, moodboard, design, image/video generation, node workflows, scene/set/world tools, timeline editing, sound, compositing, color, review and export. The simple/standard/pro modes remain available; core navigation labels use Indonesian. Optional provider, cloud/team and desktop integrations remain in the source, with their original prerequisites.
 
-By default, the existing database API runs against IndexedDB `bekal-cinematic-studio`. Projects, assets, episodes, scenes, shots, keyframe parameters and Canvas are saved automatically on this device. The last selected project persists through reload. Data is scoped to the selected project; foreign keys, cascading deletes, unique episode numbers and keyframe upserts are enforced by local transactions. The previous planner's separate `bekal-film-studio` database is untouched.
+`src/services/bekalBrowserProject.ts` adapts the project storage contract to IndexedDB `bekal-video-editor`. Projects, imported media and project metadata are saved atomically on this device. The last saved project is reopened after reload. JSON backups include project metadata and binary assets; backup restore validates asset paths. The previous `bekal-film-studio` and `bekal-cinematic-studio` databases are untouched. Back up projects before clearing browser data. Device memory/storage quota and browser codecs still apply.
 
-Rendered video/audio Blobs currently live in the production workspace's memory. Download them before leaving that workspace or refreshing; those media files are not persistent project backups. Browser data clearing removes local projects. Browser storage quota, codec support, device memory and processing speed still apply. Recording runs in real time; keep the tab visible. Browser-based tests are Chromium checks, not physical-device certification.
+Local editing does not require a server or account. AI generation needs the user's own provider key and may incur provider charges; provider support and browser CORS rules apply. Requests with API credentials are sent directly to their provider, rather than upstream's public CORS relay. No paid provider or external cloud service is configured by this deployment. Browser WebM export and editor handoff formats remain; MP4/FFmpeg, native plugin installation and desktop filesystem operations require the desktop application. Those capabilities are not represented as automatically available on GitHub Pages. Media/provider generation is not a local animatic template substitute.
 
-The upstream Supabase migrations remain in the source folder as optional reference. No migrations are executed and no external database is required. Only a separately configured build with real `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY` selects cloud mode. Never commit credentials. The upstream database policies require independent review before configuring a public shared instance.
+The website's live green/teal and navy/light color tokens are read from `assets/style.css` by `scripts/sync-film-theme.py`. The adapted Tailwind and editor CSS use those tokens. Theme choice follows `pbs_theme`. Workspaces are loaded on demand with React Suspense rather than a single large editor bundle. Tailwind is compiled locally; no Tailwind runtime CDN or import-map React CDN is needed.
 
-## Build and develop
+`assets/features.json` and `assets/film-tools.json` provide landing/menu links. `scripts/publish-film-studio.py` installs the web build at the existing `film-studio.html` URL; `scripts/stage-pages.py` includes only runtime HTML/assets/partials in the Pages artifact.
 
-Requires Node 22+ and Python 3. From the repository root:
+## Development and deployment
+
+Requires Node 24 (supported upstream engine also includes recent Node 22), npm 10+ and Python 3. Web development does not need Electron/FFmpeg installation hooks; `--ignore-scripts` skips those desktop hooks while npm still checks package integrity. Required Vite native binaries are installed as platform dependencies.
 
 ```sh
-npm ci --prefix studio-film-ai --no-audit --no-fund
+npm ci --prefix studio-film-ai --ignore-scripts --no-audit --no-fund
 npm run --prefix studio-film-ai typecheck
-npm run --prefix studio-film-ai lint
-npm run --prefix studio-film-ai build
+npm run --prefix studio-film-ai test
+npm run --prefix studio-film-ai build:web
 python3 scripts/publish-film-studio.py
 python3 scripts/sync-catalog.py
 python3 scripts/check-site.py
 ```
 
-Static deployment uses the committed runtime assets. For source development, run `npm run --prefix studio-film-ai dev -- --host 127.0.0.1 --port 8007`. Its entry URL is `/assets/studio-film-ai/`. For the integrated website, run `python3 -m http.server 8006 --bind 127.0.0.1` from the repository root.
+Source development: `npm run --prefix studio-film-ai dev -- --host 127.0.0.1 --port 8010`, entry `/assets/studio-film-ai/studio.html`. Integrated website: run `python3 -m http.server 8006 --bind 127.0.0.1` from the repository root. Source theme regeneration uses `python3 scripts/sync-film-theme.py`. The Pages workflow repeats pinned installation, typecheck, upstream tests, web build, catalog synchronization and runtime staging before deployment.
 
-`assets/features.json` and `assets/film-tools.json` supply landing links, icons and metadata. The Pages workflow rebuilds the imported app, synchronizes catalogs and stages only runtime files using `scripts/stage-pages.py`; source, node_modules and tooling are excluded from the Pages artifact.
+## Verification
 
-## Validation
-
-With Playwright installed, Chromium available at `/usr/bin/chromium`, static server running and Vite running:
+The upstream Node test suite covers the existing timeline, export/interchange, color, task, media and desktop helper logic. Browser tests exercise the adapted static production build, project save/reload, actual image import/decode, backup download/restore, local storage operations and populated responsive workspaces across dark/light themes.
 
 ```sh
-PBS_SITE_BASE_URL=http://127.0.0.1:8006 FILM_DEV_BASE_URL=http://127.0.0.1:8007/assets/studio-film-ai/ node scripts/check-film-studio.cjs
+PBS_SITE_BASE_URL=http://127.0.0.1:8006 FILM_DEV_BASE_URL=http://127.0.0.1:8010/assets/studio-film-ai/studio.html node scripts/check-film-studio.cjs
 python3 scripts/check-catalog.py
 python3 scripts/check-site.py
 PBS_SITE_BASE_URL=http://127.0.0.1:8006/ node scripts/check-responsive.cjs
 ```
 
-The film check exercises local CRUD, rollback, relationships, cascades, keyframe upserts, Canvas edge deletion, real MediaRecorder clip/film output and playback, project creation/reload, repeated asset sync, the production/download workflow, and populated layouts across phones, tablets, landscape and wide desktops. Set `NODE_PATH` to the installed Playwright module directory if it is not a local dependency.
-
-`node scripts/check-film-long.cjs` additionally records a real 32-second clip, assembles it and checks video packet timestamps with `ffprobe` to catch truncation of long episodes. It requires FFmpeg/ffprobe and takes about one minute.
+Use installed Playwright and Chromium; set `NODE_PATH` if Playwright is outside the checkout. Tests do not invoke paid AI providers or claim verification on every physical device.

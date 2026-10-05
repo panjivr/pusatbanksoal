@@ -1,32 +1,57 @@
 [
   {
-    "id": "canvas",
-    "name": "AI Canvas",
+    "id": "project",
+    "name": "Proyek dan Naskah",
     "icon": "film"
   },
   {
-    "id": "bible",
-    "name": "Series Bible",
+    "id": "microdrama",
+    "name": "Serial Pendek 9:16",
     "icon": "film"
   },
   {
-    "id": "assets",
-    "name": "Asset Bible",
+    "id": "import",
+    "name": "Unggah Media",
     "icon": "film"
   },
   {
-    "id": "episodes",
-    "name": "Episode dan Adegan",
+    "id": "moodboard",
+    "name": "Papan Referensi",
     "icon": "film"
   },
   {
-    "id": "shots",
-    "name": "Shot List dan Prompt",
+    "id": "design",
+    "name": "Desain",
     "icon": "film"
   },
   {
-    "id": "production",
-    "name": "Keyframe, Video dan Film Final",
+    "id": "image_gen",
+    "name": "Gambar AI",
+    "icon": "film"
+  },
+  {
+    "id": "video_gen",
+    "name": "Video AI",
+    "icon": "film"
+  },
+  {
+    "id": "edit",
+    "name": "Edit Video",
+    "icon": "film"
+  },
+  {
+    "id": "sound",
+    "name": "Audio dan Musik",
+    "icon": "film"
+  },
+  {
+    "id": "post",
+    "name": "Warna Video",
+    "icon": "film"
+  },
+  {
+    "id": "export",
+    "name": "Ekspor Video",
     "icon": "film"
   }
 ]

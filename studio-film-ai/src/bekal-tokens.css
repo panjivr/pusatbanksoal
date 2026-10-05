@@ -1,0 +1,81 @@
+:root{
+  /* Brand accents — professional trust blue + teal */
+  --primary:#2e8b40; --primary-active:#256e33; --primary-dis:#1b2740;
+  --primary-soft:rgba(46,139,64,.14);
+  --accent2:#0ea5a4; --accent2-active:#0b8887; --accent2-soft:rgba(14,165,164,.16);
+  /* Readable accent text token */
+  --accent-ink:#6fd08a;
+
+  /* Text */
+  --ink:#181a20; --body:#e7eaf0; --muted:#8892a6; --muted-strong:#aeb6c6;
+  --on-primary:#ffffff; --on-dark:#f5f7fb;
+
+  /* Hairlines / borders */
+  --hair-dark:#26304a; --hair-soft:#1c2438; --hair-light:#eaecef; --border-strong:#cdd1d6;
+
+  /* Surfaces — refined deep navy */
+  --canvas:#0a0e17; --card:#141a26; --elevated:#1e2636;
+  --canvas-light:#fff; --soft-light:#fafafa;
+
+  /* Semantic */
+  --up:#22c55e; --down:#f6465d; --turq:#2dbdb6; --info:#2e8b40;
+
+  /* Gradients */
+  --grad-brand:linear-gradient(135deg,#3fae57 0%,#2e8b40 50%,#0ea5a4 100%);
+  --grad-gold:linear-gradient(100deg,#2e8b40 0%,#37a04e 55%,#63c47d 100%);
+  --grad-surface:linear-gradient(180deg,#161d2c 0%,#111725 100%);
+
+  /* Elevation */
+  --sh-sm:0 1px 2px rgba(0,0,0,.4);
+  --sh-md:0 8px 28px -14px rgba(0,0,0,.7);
+  --sh-lg:0 24px 60px -28px rgba(0,0,0,.8);
+  --sh-glow:0 10px 34px -12px rgba(46,139,64,.42);
+  --sh-glow2:0 10px 34px -12px rgba(91,140,255,.42);
+
+  /* Radii */
+  --r-sm:4px; --r-md:8px; --r-lg:12px; --r-xl:16px; --r-pill:9999px;
+  /* Spacing */
+  --s-xs:8px; --s-sm:12px; --s-md:16px; --s-lg:24px; --s-xl:32px; --s-xxl:48px; --s-sec:80px;
+
+  /* Type */
+  --font:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+  --display:'Plus Jakarta Sans','Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  --num:'IBM Plex Mono','JetBrains Mono',ui-monospace,monospace;
+  --maxw:1280px;
+
+--bekal-canvas-rgb:10 14 23;
+--bekal-card-rgb:20 26 38;
+--bekal-elevated-rgb:30 38 54;
+--bekal-muted-strong-rgb:174 182 198;
+--bekal-primary-rgb:46 139 64;
+--bekal-accent2-rgb:14 165 164;}
+:root[data-theme="light"]{
+  /* Text — dark ink on light surfaces */
+  --body:#1b2230; --muted:#5a6474; --muted-strong:#39424f;
+  --on-dark:#0b1020;               /* headings become near-black */
+
+  /* Hairlines / borders */
+  --hair-dark:#dde3ee; --hair-soft:#eef1f7;
+
+  /* Surfaces */
+  --canvas:#f6f8fc; --card:#ffffff; --elevated:#eef1f7;
+
+  /* Brand blue tuned darker for contrast on white */
+  --primary:#1f6a33; --primary-active:#175529; --primary-soft:rgba(31,106,51,.10);
+  --accent-ink:#1f6a33; --info:#1f6a33;
+
+  /* Gradients tuned for legibility on white */
+  --grad-brand:linear-gradient(135deg,#2e8b40 0%,#256e33 50%,#0ea5a4 100%);
+  --grad-gold:linear-gradient(100deg,#1f6a33 0%,#256e33 55%,#37a04e 100%);
+  --grad-surface:linear-gradient(180deg,#ffffff 0%,#f3f6fc 100%);
+
+  /* Softer shadows for a light UI */
+  --sh-sm:0 1px 2px rgba(20,30,60,.08);
+  --sh-md:0 8px 28px -14px rgba(20,30,60,.18);
+  --sh-lg:0 24px 60px -28px rgba(20,30,60,.22);
+
+--bekal-canvas-rgb:246 248 252;
+--bekal-card-rgb:255 255 255;
+--bekal-elevated-rgb:238 241 247;
+--bekal-muted-strong-rgb:57 66 79;
+--bekal-primary-rgb:31 106 51;}

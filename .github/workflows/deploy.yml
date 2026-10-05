@@ -26,14 +26,15 @@ jobs:
       - name: Setup Node for Film Studio
         uses: actions/setup-node@v4
         with:
-          node-version: '22'
+          node-version: '24'
           cache: npm
           cache-dependency-path: studio-film-ai/package-lock.json
       - name: Build imported Film Studio
         run: |
-          npm ci --prefix studio-film-ai --no-audit --no-fund
+          npm ci --prefix studio-film-ai --ignore-scripts --no-audit --no-fund
           npm run --prefix studio-film-ai typecheck
-          npm run --prefix studio-film-ai build
+          npm run --prefix studio-film-ai test
+          npm run --prefix studio-film-ai build:web
           python3 scripts/publish-film-studio.py
       - name: Sync feature catalog, landing page and SEO
         run: |

@@ -1,3 +1,4 @@
+# Logs
 logs
 *.log
 npm-debug.log*
@@ -9,8 +10,39 @@ lerna-debug.log*
 node_modules
 dist
 dist-ssr
+dist-electron
+release
 *.local
 
+# Local environment and credentials
+.env
+.env.*
+!.env.example
+*.p12
+*.pfx
+*.pem
+*.key
+certificate.txt
+
+# Keep distributable app icons, ignore other local build scratch files.
+build/*
+!build/
+!build/icon.png
+!build/icon.icns
+
+design-os
+*.tgz
+.venv
+.venv-*
+scripts/__pycache__/
+__pycache__/
+*.pyc
+docs/superpowers/
+docs/private-*.md
+awesome-design-md/
+matchering/
+
+# Editor directories and files
 .vscode/*
 !.vscode/extensions.json
 .idea
@@ -20,4 +52,5 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
-.env
+.gemini
+src/assets/videos/
