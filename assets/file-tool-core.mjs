@@ -7,16 +7,16 @@ export async function dependency(name){
 export function stop(signal){if(signal?.aborted)throw new DOMException('Proses dibatalkan.','AbortError');}
 export async function breathe(signal){stop(signal);await new Promise(r=>setTimeout(r,0));stop(signal);}
 export function number(value,fallback,min=-Infinity,max=Infinity){const n=value===''||value==null?fallback:Number(value);if(!Number.isFinite(n)||n<min||n>max)throw new Error(`Isi angka antara ${min} dan ${max}.`);return n;}
-export function pages(value,count){
+export function pages(value,count,{maxSelected=5000,maxInputLength=5000}={}){
  if(!value?.trim())return Array.from({length:count},(_,i)=>i);
- const out=[];if(value.length>5000)throw new Error('Daftar halaman terlalu panjang.');
- for(const part of value.split(',')){const m=part.trim().match(/^(\d+)(?:\s*-\s*(\d+))?$/);if(!m)throw new Error('Gunakan nomor halaman, misalnya 1-3, 5, 7.');const a=Number(m[1]),b=m[2]?Number(m[2]):a;if(a<1||b<a||b>count)throw new Error(`Dokumen ini memiliki ${count} halaman. Periksa pilihan halaman.`);for(let i=a;i<=b;i++)out.push(i-1);if(out.length>5000)throw new Error('Terlalu banyak halaman dipilih.');}
+ const out=[];if(value.length>maxInputLength)throw new Error('Daftar halaman terlalu panjang.');
+ for(const part of value.split(',')){const m=part.trim().match(/^(\d+)(?:\s*-\s*(\d+))?$/);if(!m)throw new Error('Gunakan nomor halaman, misalnya 1-3, 5, 7.');const a=Number(m[1]),b=m[2]?Number(m[2]):a;if(a<1||b<a||b>count)throw new Error(`Dokumen ini memiliki ${count} halaman. Periksa pilihan halaman.`);for(let i=a;i<=b;i++)out.push(i-1);if(out.length>maxSelected)throw new Error('Terlalu banyak halaman dipilih.');}
  if(!out.length)throw new Error('Pilih minimal satu halaman.');return out;
 }
 export function safeName(name){return name.replace(/\.[^.]+$/,'').replace(/[<>:"/\\|?*\u0000-\u001f]/g,'_').slice(0,100)||'bekal';}
 export function canvas(width,height){width=Math.round(width);height=Math.round(height);if(!Number.isFinite(width)||!Number.isFinite(height)||width<1||height<1||width>16384||height>16384||width*height>24000000)throw new Error('Ukuran hasil terlalu besar. Gunakan maksimal 24 megapiksel dan 16.384 piksel per sisi.');const c=document.createElement('canvas');c.width=width;c.height=height;return c;}
 export async function blob(c,type='image/png',quality=.85){const b=await new Promise(r=>c.toBlob(r,type,quality));if(!b||b.type!==type)throw new Error('Format hasil ini belum didukung browser yang kamu gunakan.');return b;}
-export async function image(file){
+export async function image(file,{downsample=false}={}){
  if(/\.svg$/i.test(file.name)||file.type==='image/svg+xml'){
   const xml=new DOMParser().parseFromString(await file.text(),'image/svg+xml');if(xml.querySelector('parsererror')||xml.documentElement.localName!=='svg')throw new Error('SVG tidak valid.');
   for(const el of xml.querySelectorAll('*')){if(['script','foreignObject','iframe','object','embed','style','use','feImage','animate','set'].includes(el.localName))el.remove();else for(const a of [...el.attributes])if(/^on/i.test(a.name)||(/href/i.test(a.name)&&!(el.localName==='image'&&/^data:image\/(png|jpeg|webp);base64,[a-z0-9+/=]+$/i.test(a.value)))||/url\(|@import/i.test(a.value))el.removeAttribute(a.name);}
@@ -26,11 +26,11 @@ export async function image(file){
  if(/\.tiff?$/i.test(file.name||'')||file.type==='image/tiff'){
   const {UTIF}=await dependency('image-codecs'),data=await file.arrayBuffer(),ifds=UTIF.decode(data);if(!ifds.length)throw new Error('TIFF tidak memiliki gambar.');canvas(Number(ifds[0].t256?.[0]),Number(ifds[0].t257?.[0]));UTIF.decodeImage(data,ifds[0]);const f=ifds[0],c=canvas(f.width,f.height);c.getContext('2d').putImageData(new ImageData(new Uint8ClampedArray(UTIF.toRGBA8(f)),f.width,f.height),0,0);return c;
  }
- const url=URL.createObjectURL(file);try{const im=new Image();im.src=url;await im.decode();if(im.naturalWidth*im.naturalHeight>24000000)throw new Error('Gambar melebihi 24 megapiksel. Kecilkan ukuran sumber terlebih dahulu.');return im;}catch(e){if(e.message.includes('megapiksel'))throw e;throw new Error('Gambar belum bisa dibaca. Gunakan JPG, PNG, WebP, GIF, BMP, SVG, atau TIFF. HEIC perlu dikonversi dahulu.');}finally{URL.revokeObjectURL(url);}
+ const url=URL.createObjectURL(file);try{const im=new Image();im.src=url;await im.decode();if(downsample&&im.naturalWidth*im.naturalHeight>4000000){const ratio=Math.sqrt(4000000/(im.naturalWidth*im.naturalHeight)),c=canvas(im.naturalWidth*ratio,im.naturalHeight*ratio);c.getContext('2d').drawImage(im,0,0,c.width,c.height);return c;}if(im.naturalWidth*im.naturalHeight>24000000)throw new Error('Gambar melebihi 24 megapiksel. Kecilkan ukuran sumber terlebih dahulu.');return im;}catch(e){if(e.message.includes('megapiksel'))throw e;throw new Error('Gambar belum bisa dibaca. Gunakan JPG, PNG, WebP, GIF, BMP, SVG, atau TIFF. HEIC perlu dikonversi dahulu.');}finally{URL.revokeObjectURL(url);}
 }
 export async function reader(data,password=''){
  const mod=await dependency('pdf-reader');mod.GlobalWorkerOptions.workerSrc=new URL('./vendor/pdf.worker.min.mjs',import.meta.url).href;
- const task=mod.getDocument({data:data.slice(),password,cMapUrl:new URL('./vendor/cmaps/',import.meta.url).href,cMapPacked:true,standardFontDataUrl:new URL('./vendor/standard_fonts/',import.meta.url).href,isEvalSupported:false});
+ let input;if(data instanceof Blob){const initial=new Uint8Array(await data.slice(0,65536).arrayBuffer());class LocalRange extends mod.PDFDataRangeTransport{constructor(){super(data.size,initial);this.closed=false;}requestDataRange(begin,end){data.slice(begin,end).arrayBuffer().then(buffer=>{if(!this.closed)this.onDataRange(begin,new Uint8Array(buffer));}).catch(()=>this.abort());}abort(){this.closed=true;}}input={range:new LocalRange(),length:data.size,rangeChunkSize:65536,disableAutoFetch:true,disableStream:true};}else input={data:data.slice()};const task=mod.getDocument({...input,password,cMapUrl:new URL('./vendor/cmaps/',import.meta.url).href,cMapPacked:true,standardFontDataUrl:new URL('./vendor/standard_fonts/',import.meta.url).href,isEvalSupported:false});
  try{return await task.promise;}catch(e){if(e.name==='PasswordException')throw new Error('PDF terkunci. Masukkan password yang benar pada pengaturan.');throw new Error('PDF belum bisa dibaca. File mungkin rusak atau formatnya tidak didukung.');}
 }
 export async function render(doc,index,scale=1.5){const page=await doc.getPage(index+1);let v=page.getViewport({scale});if(v.width*v.height>12000000)v=page.getViewport({scale:scale*Math.sqrt(12000000/(v.width*v.height))});const c=canvas(v.width,v.height);await page.render({canvasContext:c.getContext('2d'),viewport:v,background:'#ffffff'}).promise;page.cleanup();return c;}

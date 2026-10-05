@@ -5,7 +5,7 @@ const here=path.dirname(new URL(import.meta.url).pathname),root=path.resolve(her
 await fs.mkdir(out,{recursive:true});
 await fs.rm(path.join(out,'chunks'),{recursive:true,force:true});
 for(const file of await fs.readdir(out))if(/\.mjs(?:\.LEGAL\.txt)?$/.test(file))await fs.rm(path.join(out,file));
-await build({entryPoints:['pdf-engine','font-engine','zip-engine','word-engine','office-engine','slides-engine','image-codecs','ocr-engine','markdown-engine','markdown-format-engine','speech-engine'].map(n=>path.join(here,'entries',n+'.mjs')),outdir:out,outExtension:{'.js':'.mjs'},bundle:true,minify:true,splitting:true,format:'esm',platform:'browser',target:['es2022'],legalComments:'linked',chunkNames:'chunks/[name]-[hash]',define:{'process.env.NODE_ENV':'"production"'},metafile:true});
+await build({entryPoints:['pdf-engine','font-engine','zip-engine','word-engine','office-engine','slides-engine','image-codecs','ocr-engine','markdown-engine','markdown-format-engine','speech-engine','stream-zip-engine','hash-engine'].map(n=>path.join(here,'entries',n+'.mjs')),outdir:out,outExtension:{'.js':'.mjs'},bundle:true,minify:true,splitting:true,format:'esm',platform:'browser',target:['es2022'],legalComments:'linked',chunkNames:'chunks/[name]-[hash]',define:{'process.env.NODE_ENV':'"production"'},metafile:true});
 const pdfjs=path.join(here,'node_modules/pdfjs-dist');
 await fs.copyFile(path.join(pdfjs,'build/pdf.min.mjs'),path.join(out,'pdf-reader.mjs'));
 await fs.copyFile(path.join(pdfjs,'build/pdf.worker.min.mjs'),path.join(out,'pdf.worker.min.mjs'));

@@ -10,6 +10,8 @@
     "@cantoo/fontkit": "2.0.12",
     "@cantoo/pdf-lib": "2.11.1",
     "@huggingface/transformers": "3.7.2",
+    "@noble/hashes": "2.0.1",
+    "@zip.js/zip.js": "2.8.11",
     "buffer": "6.0.3",
     "diff": "8.0.2",
     "docx": "9.5.1",
