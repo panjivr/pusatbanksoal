@@ -22,18 +22,19 @@ def sync(root=ROOT):
     if '<!-- feature-map:start -->' in source:source=re.sub(r'<!-- feature-map:start -->.*?<!-- feature-map:end -->',lambda _:block,source,flags=re.S)
     else:
         start=source.index('<div class="lp-map">');end=source.index('\n</div></section>',start);source=source[:start]+block+source[end:]
-    tool_sources=[('pdf','Alat PDF','doc'),('image','Alat Gambar','image'),('markdown','Alat Markdown','markdown')]
+    tool_sources=[('pdf','Alat PDF','doc'),('image','Alat Gambar','image'),('markdown','Alat Markdown','markdown'),('film','Studio Film AI','film')]
     operations=json.loads((root/'assets/file-tools.json').read_text()) if (root/'assets/file-tools.json').exists() else {}
     if (root/'assets/markdown-tools.json').exists():operations['markdown']=json.loads((root/'assets/markdown-tools.json').read_text())
+    if (root/'assets/film-tools.json').exists():operations['film']=json.loads((root/'assets/film-tools.json').read_text())
     catalogs=[];tool_count=0
     for kind,title,symbol in tool_sources:
         items=operations.get(kind,[])
         if not items:continue
         tool_count+=len(items)
-        links=''.join(f'<a href="{kind}-tools.html#{html.escape(t["id"],quote=True)}">{icon(t.get("icon",symbol))}<span>{html.escape(t["name"])}</span></a>' for t in items)
+        links=''.join(f'<a href="{'film-studio' if kind=='film' else kind+'-tools'}.html#{html.escape(t["id"],quote=True)}">{icon(t.get("icon",symbol))}<span>{html.escape(t["name"])}</span></a>' for t in items)
         catalogs.append(f'<details class="feature-tool-group"><summary>{icon(symbol)} {title} ({len(items)})</summary><nav class="feature-tool-links" aria-label="Daftar {title}">{links}</nav></details>')
     if catalogs:
-        directory='<!-- practical-tool-catalog:start --><section class="feature-guide" id="alat-file"><div class="wrap"><h2>Semua alat untuk dokumen dan gambar</h2><p>Pilih dari '+str(tool_count)+' alat untuk dokumen, foto, dan video. Cari alat, lalu buka untuk mulai.</p><label for="practical-tool-search">Cari alat</label><input id="practical-tool-search" type="search" placeholder="Cari PDF, Markdown, kompres, video..."><p id="practical-tool-count" role="status" aria-live="polite"></p>'+''.join(catalogs)+'</div></section><!-- practical-tool-catalog:end -->'
+        directory='<!-- practical-tool-catalog:start --><section class="feature-guide" id="alat-file"><div class="wrap"><h2>Semua alat praktis</h2><p>Pilih dari '+str(tool_count)+' alat untuk dokumen, foto, film, dan video. Cari alat, lalu buka untuk mulai.</p><label for="practical-tool-search">Cari alat</label><input id="practical-tool-search" type="search" placeholder="Cari PDF, Markdown, film, prompt, video..."><p id="practical-tool-count" role="status" aria-live="polite"></p>'+''.join(catalogs)+'</div></section><!-- practical-tool-catalog:end -->'
         if '<!-- practical-tool-catalog:start -->' in source:source=re.sub(r'<!-- practical-tool-catalog:start -->.*?<!-- practical-tool-catalog:end -->',lambda _:directory,source,flags=re.S)
         elif re.search(r'<section class="feature-guide"><div class="wrap"><h2>PDF dan gambar,',source):source=re.sub(r'<section class="feature-guide"><div class="wrap"><h2>PDF dan gambar,.*?</section>',lambda _:directory,source,count=1,flags=re.S)
         else:source=source.replace('<footer',directory+'<footer',1)

@@ -1,0 +1,57 @@
+[
+  {
+    "id": "idea",
+    "name": "Ide Cerita Film",
+    "icon": "film"
+  },
+  {
+    "id": "story",
+    "name": "Alur Serial dan Rahasia",
+    "icon": "film"
+  },
+  {
+    "id": "script",
+    "name": "Naskah dan Dialog",
+    "icon": "film"
+  },
+  {
+    "id": "characters",
+    "name": "Karakter, Kostum dan Suara",
+    "icon": "film"
+  },
+  {
+    "id": "world",
+    "name": "Dunia dan Aset Referensi",
+    "icon": "film"
+  },
+  {
+    "id": "director",
+    "name": "Adegan dan Daftar Shot",
+    "icon": "film"
+  },
+  {
+    "id": "storyboard",
+    "name": "Storyboard dan Keyframe",
+    "icon": "film"
+  },
+  {
+    "id": "prompt",
+    "name": "Prompt Gambar dan Video AI",
+    "icon": "film"
+  },
+  {
+    "id": "continuity",
+    "name": "Cek Konsistensi Film",
+    "icon": "film"
+  },
+  {
+    "id": "assembly",
+    "name": "Timeline, Subtitle dan Ekspor",
+    "icon": "film"
+  },
+  {
+    "id": "guide",
+    "name": "Panduan Film AI Lengkap",
+    "icon": "film"
+  }
+]

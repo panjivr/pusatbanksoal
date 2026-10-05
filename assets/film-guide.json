@@ -1,0 +1,337 @@
+[
+  {
+    "id": 1,
+    "title": "TEMUAN RISET YANG MENJADI DASAR SISTEM",
+    "markdown": "# 1. TEMUAN RISET YANG MENJADI DASAR SISTEM\n\n## 1.1 Format vertical micro-drama\n\nFormat micro-drama China/vertical drama sangat cocok untuk pipeline AI\nkarena produksinya bersifat modular: episode pendek, scene singkat,\nbanyak close-up, konflik cepat, dan cliffhanger berulang.\n\nPola industri yang relevan:\n\n-   Format utama mobile-first **9:16**.\n-   Episode lazimnya sekitar **1--3 menit**; format sekitar 60 detik\n    adalah target yang sangat cocok untuk MVP.\n-   Satu serial dapat berisi puluhan episode; contoh industri berada di\n    kisaran 30--70 episode, bahkan lebih.\n-   Hook harus muncul sangat cepat. Praktisi micro-drama China\n    menekankan pentingnya beberapa detik pertama.\n-   Plot bergerak cepat, konflik emosional jelas, twist sering, dan\n    episode ditutup dengan unresolved tension/cliffhanger.\n-   Tropes yang sering muncul: romance, betrayal, revenge, hidden\n    identity, status reversal, family conflict, billionaire/power\n    fantasy, rags-to-riches.\n-   Kekuatan format bukan sekadar \"video pendek\", tetapi **serial\n    dependency**: episode N membuat penonton membutuhkan episode N+1.\n\nUntuk AI, jangan meniru \"murahnya\" micro-drama. Ambil **mesin\nretensinya**, lalu naikkan kualitas visual, penulisan, blocking, dan\ncontinuity.\n\n------------------------------------------------------------------------\n\n## 1.2 Consistency adalah masalah data, bukan hanya prompt\n\nKesalahan umum adalah membuat 50 prompt independen lalu berharap model\n\"ingat\" karakter. Jangan.\n\nIdentitas harus dikunci melalui:\n\n1.  **Character Bible**\n2.  **Reference image / character pack**\n3.  **Wardrobe ID**\n4.  **Location ID**\n5.  **Prop ID**\n6.  **Visual style bible**\n7.  **Continuity state**\n8.  **Shot-to-shot references**\n9.  **Model-specific reference controls**\n10. **Validation sebelum render berikutnya**\n\nRunway Gen-4 References secara resmi mendukung penggunaan reference\nuntuk karakter, lokasi, objek, dan style; dokumentasinya menyarankan\nreference berkualitas dengan lighting natural/netral dan iterasi elemen\nsecara terpisah untuk perubahan kompleks.\n\nGoogle Veo 3.1 Ingredients to Video mendukung reference image untuk\nmempertahankan karakter, background, objek, dan texture antarscene. Veo\njuga mendukung 9:16, first/last frame, audio/dialogue, serta klip pendek\nyang dapat dirangkai menjadi scene.\n\nMidjourney saat ini tidak seharusnya mengandalkan `seed` sebagai sistem\ncontinuity utama. Dokumentasi Midjourney sendiri menyebut seed memiliki\ndampak kecil terhadap hasil akhir dan menyarankan reference/style tools\nuntuk consistency. Pada V8.x, **Edit Model** menggantikan workflow\nOmni/Character Reference lama. Guide Midjourney yang menjadi basis\nproyek ini tetap berguna untuk bahasa sinematik dan struktur prompt,\ntetapi implementasi web harus memakai kemampuan model terbaru.\n\n------------------------------------------------------------------------"
+  },
+  {
+    "id": 2,
+    "title": "ARSITEKTUR PRODUK: DARI IDE SAMPAI VIDEO",
+    "markdown": "# 2. ARSITEKTUR PRODUK: DARI IDE SAMPAI VIDEO\n\n``` text\nUSER IDEA\n   ↓\nPROJECT INTAKE\n   ↓\nSTORY ENGINE\n   ├── premise\n   ├── genre\n   ├── theme\n   ├── audience\n   ├── tone\n   └── series promise\n   ↓\nSERIES BIBLE\n   ├── world bible\n   ├── character bible\n   ├── relationship graph\n   ├── location bible\n   ├── prop bible\n   ├── wardrobe bible\n   └── visual bible\n   ↓\nSEASON ARC\n   ↓\nEPISODE BEATS\n   ↓\nSCREENPLAY / DIALOGUE\n   ↓\nSCENE BREAKDOWN\n   ↓\nCONTINUITY STATE\n   ↓\nSHOT DESIGN\n   ├── composition\n   ├── lens\n   ├── camera height\n   ├── camera movement\n   ├── blocking\n   ├── performance\n   ├── lighting\n   └── sound\n   ↓\nSTORYBOARD / KEYFRAMES\n   ↓\nIMAGE PROMPT ADAPTER\n   ↓\nREFERENCE VALIDATION\n   ↓\nVIDEO PROMPT ADAPTER\n   ↓\nCLIP GENERATION\n   ↓\nCONTINUITY QC\n   ↓\nEDIT / AUDIO / SUBTITLE\n   ↓\nEPISODE MASTER\n   ↓\nSTATE UPDATE\n   ↓\nNEXT EPISODE\n```\n\n**Aturan keras:** prompt final tidak boleh menjadi source of truth.\nPrompt hanyalah hasil kompilasi dari database proyek.\n\n------------------------------------------------------------------------"
+  },
+  {
+    "id": 3,
+    "title": "STRUKTUR DATABASE / CANVAS UTAMA",
+    "markdown": "# 3. STRUKTUR DATABASE / CANVAS UTAMA\n\nGunakan satu **Project Canvas** sebagai sumber kebenaran.\n\n``` yaml\nproject:\n  id: \"SERIES_001\"\n  title: \"\"\n  language: \"id-ID\"\n  format: \"vertical_micro_drama\"\n  aspect_ratio: \"9:16\"\n  target_episode_seconds: 60\n  target_episode_count: 60\n  genre: []\n  subgenre: []\n  audience: \"\"\n  rating: \"\"\n  tone: []\n  theme: []\n  logline: \"\"\n  series_promise: \"\"\n  visual_preset_id: \"LOOK_001\"\n\ncanon:\n  world_id: \"WORLD_001\"\n  characters: []\n  locations: []\n  props: []\n  wardrobes: []\n  vehicles: []\n  organizations: []\n\nnarrative:\n  season_arc: {}\n  episode_arcs: []\n  unresolved_threads: []\n  reveals: []\n  secrets: []\n\ncontinuity:\n  global_time: \"\"\n  current_episode: 1\n  character_states: {}\n  prop_states: {}\n  wardrobe_states: {}\n  relationship_states: {}\n  location_states: {}\n\nproduction:\n  image_model: \"\"\n  video_model: \"\"\n  dialogue_model: \"\"\n  voice_model: \"\"\n  music_model: \"\"\n  subtitle_language: \"id-ID\"\n  fps: 24\n  delivery_resolution: \"1080x1920\"\n```\n\n------------------------------------------------------------------------"
+  },
+  {
+    "id": 4,
+    "title": "SERIES BIBLE",
+    "markdown": "# 4. SERIES BIBLE\n\n## 4.1 Premise\n\nSimpan empat lapisan:\n\n``` yaml\npremise:\n  protagonist_wants: \"\"\n  protagonist_needs: \"\"\n  central_obstacle: \"\"\n  dramatic_question: \"\"\n```\n\nContoh:\n\n``` yaml\npremise:\n  protagonist_wants: \"membuktikan bahwa ia bukan anak keluarga miskin yang bisa diinjak\"\n  protagonist_needs: \"berhenti menilai harga dirinya dari status sosial\"\n  central_obstacle: \"identitas keluarga kandungnya disembunyikan dan musuhnya menguasai bukti\"\n  dramatic_question: \"apakah ia mengetahui identitasnya sebelum kehilangan orang yang ia cintai?\"\n```\n\n------------------------------------------------------------------------"
+  },
+  {
+    "id": 5,
+    "title": "CHARACTER BIBLE   KUNCI UTAMA CONSISTENCY",
+    "markdown": "# 5. CHARACTER BIBLE --- KUNCI UTAMA CONSISTENCY\n\nSetiap karakter mendapat **immutable identity** dan **mutable state**.\n\n## 5.1 Immutable Identity\n\nHal-hal ini tidak boleh berubah tanpa perintah eksplisit.\n\n``` yaml\ncharacter:\n  id: \"CHR_MAYA_001\"\n  canonical_name: \"Maya\"\n  role: \"protagonist\"\n  age: 24\n  gender_presentation: \"woman\"\n\n  identity_lock:\n    ethnicity_visual_notes: \"\"\n    face_shape: \"soft oval\"\n    skin_tone: \"warm light-medium\"\n    eye_shape: \"almond\"\n    eye_color: \"dark brown\"\n    eyebrow: \"straight, medium density\"\n    nose: \"small straight bridge\"\n    lips: \"medium, defined cupid bow\"\n    hair:\n      color: \"natural black\"\n      length: \"below shoulder\"\n      texture: \"straight with slight natural wave\"\n      part: \"center\"\n    body:\n      height_visual: \"average\"\n      build: \"slim\"\n    distinguishing_features:\n      - \"small beauty mark below left eye\"\n\n  performance_identity:\n    baseline_posture: \"upright but slightly guarded\"\n    resting_expression: \"calm, observant\"\n    gesture_language: \"small controlled hand gestures\"\n    emotional_tell: \"jaw tightens when angry\"\n\n  forbidden_drift:\n    - \"no bangs\"\n    - \"no hair color change\"\n    - \"no eye color change\"\n    - \"no facial tattoo\"\n    - \"no age shift\"\n```\n\n## 5.2 Mutable Character State\n\n``` yaml\nstate:\n  episode: 12\n  scene: 3\n  emotional_state: \"hurt but suppressing anger\"\n  physical_state:\n    injury: \"small cut on right cheek\"\n    dirt: \"light rain on hair\"\n  wardrobe_id: \"WARD_MAYA_OFFICE_02\"\n  carried_props:\n    - \"PROP_PHONE_MAYA\"\n    - \"PROP_ENVELOPE_RED\"\n  knowledge:\n    knows:\n      - \"Daniel lied about the meeting\"\n    does_not_know:\n      - \"Daniel is her half brother\"\n  relationship_state:\n    DANIEL: \"distrust rising\"\n```\n\n**Jangan campurkan identity dan state.** Luka, ekspresi, baju, keringat,\nhujan, atau makeup scene bukan identitas permanen.\n\n------------------------------------------------------------------------"
+  },
+  {
+    "id": 6,
+    "title": "CHARACTER REFERENCE PACK",
+    "markdown": "# 6. CHARACTER REFERENCE PACK\n\nSebelum membuat episode, generate **reference pack**, bukan langsung\nadegan.\n\nMinimum per karakter utama:\n\n1.  neutral front portrait\n2.  3/4 left\n3.  3/4 right\n4.  left profile\n5.  right profile\n6.  full body front\n7.  full body 3/4\n8.  neutral expression\n9.  happy\n10. angry\n11. crying\n12. shocked\n13. standard wardrobe\n14. close-up face detail\n\nGunakan lighting netral dan background sederhana untuk master reference.\nJangan membuat master character sheet dengan dramatic neon lighting\nkarena warna dan bayangan akan ikut dianggap sebagai bagian identitas\noleh sebagian workflow reference.\n\n### Master Character Reference Prompt\n\n``` text\nIDENTITY REFERENCE SHEET.\n\n[CHARACTER_CANONICAL_DESCRIPTION].\n\nNeutral studio environment, even soft daylight-balanced illumination,\nneutral facial expression, natural skin texture, accurate facial anatomy,\nno dramatic color grading, no beauty filter, no stylized distortion.\n\nCreate a production-ready character reference showing:\nfront portrait, three-quarter portrait, profile portrait and full-body view.\nAll views depict exactly the same person, same facial proportions,\nsame hairline, same hairstyle, same apparent age and same body proportions.\n\nWardrobe: [WARDROBE_MASTER].\nBackground: clean neutral gray.\nPurpose: canonical visual reference for a serialized cinematic production.\n```\n\n------------------------------------------------------------------------"
+  },
+  {
+    "id": 7,
+    "title": "WARDROBE BIBLE",
+    "markdown": "# 7. WARDROBE BIBLE\n\nJangan tulis \"Maya memakai baju kantor\" di setiap prompt. Buat ID.\n\n``` yaml\nwardrobe:\n  id: \"WARD_MAYA_OFFICE_02\"\n  owner: \"CHR_MAYA_001\"\n  description:\n    top: \"ivory silk blouse\"\n    outer: \"charcoal fitted blazer\"\n    bottom: \"black straight trousers\"\n    shoes: \"black low heels\"\n    accessories:\n      - \"thin silver wristwatch\"\n      - \"small pearl earrings\"\n  continuity:\n    first_episode: 10\n    last_episode: 13\n    damage: \"none\"\n```\n\nJika scene berikutnya berlangsung 30 detik kemudian, sistem otomatis\nmempertahankan `WARD_MAYA_OFFICE_02`.\n\n------------------------------------------------------------------------"
+  },
+  {
+    "id": 8,
+    "title": "LOCATION BIBLE",
+    "markdown": "# 8. LOCATION BIBLE\n\nLokasi harus diperlakukan seperti karakter.\n\n``` yaml\nlocation:\n  id: \"LOC_CEO_OFFICE_01\"\n  name: \"Daniel's Executive Office\"\n  layout:\n    orientation: \"desk faces south toward entrance\"\n    entrance: \"south wall\"\n    windows: \"floor-to-ceiling, north wall\"\n    sofa: \"west wall\"\n    bookshelf: \"east wall\"\n  materials:\n    floor: \"dark walnut\"\n    walls: \"warm gray stone\"\n    desk: \"black oak\"\n  hero_objects:\n    - \"bronze desk lamp\"\n    - \"abstract red painting behind desk\"\n    - \"black leather chair\"\n  practical_lights:\n    - \"desk lamp 3200K\"\n    - \"ceiling indirect warm strip\"\n  daylight:\n    direction: \"north window\"\n  palette:\n    - \"charcoal\"\n    - \"walnut brown\"\n    - \"warm amber\"\n    - \"muted red\"\n  forbidden_changes:\n    - \"no fireplace\"\n    - \"no extra window\"\n    - \"no white marble floor\"\n```\n\n## Location Reference Pack\n\nGenerate:\n\n-   master wide establishing shot\n-   reverse angle\n-   left wall\n-   right wall\n-   entrance POV\n-   window POV\n-   overhead/floor-plan approximation\n-   detail inserts untuk hero props\n\nDengan ini, model tidak perlu \"menciptakan kantor baru\" setiap shot.\n\n------------------------------------------------------------------------"
+  },
+  {
+    "id": 9,
+    "title": "PROP BIBLE",
+    "markdown": "# 9. PROP BIBLE\n\n``` yaml\nprop:\n  id: \"PROP_ENVELOPE_RED\"\n  description: \"matte dark-red A5 envelope, black wax seal\"\n  owner: null\n  state: \"sealed\"\n  current_location: \"Maya right hand\"\n  introduced_episode: 11\n  narrative_function: \"contains DNA test\"\n```\n\nSetelah dibuka:\n\n``` yaml\nstate: \"opened, wax seal broken\"\n```\n\nEpisode berikutnya tidak boleh kembali utuh kecuali flashback.\n\n------------------------------------------------------------------------"
+  },
+  {
+    "id": 10,
+    "title": "VISUAL BIBLE / LOOK BIBLE",
+    "markdown": "# 10. VISUAL BIBLE / LOOK BIBLE\n\n``` yaml\nvisual_bible:\n  id: \"LOOK_001\"\n  genre_visual: \"premium contemporary Asian melodrama\"\n  aspect_ratio: \"9:16\"\n  camera_language:\n    default_fps: 24\n    shutter_feel: \"natural cinematic motion blur\"\n    lens_family: \"modern spherical\"\n    preferred_focals: [28, 35, 50, 85]\n    closeup_focal: 85\n    dialogue_focal: 50\n    establishing_focal: 28\n  composition:\n    headroom: \"tight mobile-first\"\n    negative_space: \"reserved for subtitles when needed\"\n    eyeline: \"strict continuity\"\n  lighting:\n    key_style: \"soft motivated\"\n    contrast: \"medium-high\"\n    skin_priority: true\n    practicals_visible: true\n  color:\n    shadows: \"neutral-to-cool\"\n    skin: \"warm natural\"\n    saturation: \"restrained\"\n    highlights: \"warm\"\n  texture:\n    grain: \"subtle\"\n    sharpening: \"low\"\n  prohibited:\n    - \"plastic skin\"\n    - \"random neon\"\n    - \"excessive teal-orange\"\n    - \"floating particles without motivation\"\n    - \"unmotivated lens flare\"\n```\n\n------------------------------------------------------------------------"
+  },
+  {
+    "id": 11,
+    "title": "CINEMATOGRAPHY GRAMMAR",
+    "markdown": "# 11. CINEMATOGRAPHY GRAMMAR\n\nPrompt video harus menggunakan bahasa sinematografi, bukan adjective\nsoup.\n\n## Shot Size\n\n-   ECU --- extreme close-up\n-   CU --- close-up\n-   MCU --- medium close-up\n-   MS --- medium shot\n-   MLS --- medium long shot\n-   FS --- full shot\n-   WS --- wide shot\n-   EWS --- extreme wide shot\n-   OTS --- over-the-shoulder\n-   POV --- point of view\n-   insert --- detail object\n-   two-shot --- dua karakter\n-   group shot\n\n## Camera Angle\n\n-   eye level\n-   low angle\n-   high angle\n-   top-down\n-   dutch angle --- gunakan hanya jika bermakna\n-   profile\n-   frontal\n-   rear 3/4\n\n## Movement\n\n-   locked-off\n-   slow push-in\n-   pull-out\n-   dolly left/right\n-   truck\n-   pan\n-   tilt\n-   pedestal\n-   orbit\n-   handheld restrained\n-   whip pan\n-   crane/jib\n-   rack focus\n\n**Satu shot = satu ide gerak utama.** Jangan meminta dolly + orbit +\nzoom + crane + handheld sekaligus kecuali memang sequence kompleks.\n\n------------------------------------------------------------------------"
+  },
+  {
+    "id": 12,
+    "title": "LENS LANGUAGE",
+    "markdown": "# 12. LENS LANGUAGE\n\nJangan menggunakan focal length sebagai hiasan prompt.\n\n### 24--28mm\n\n-   ruang terasa luas\n-   perspective lebih agresif\n-   cocok establishing, cramped environment, dynamic movement\n\n### 35mm\n\n-   natural cinematic wide\n-   bagus untuk two-shot dan environmental character shot\n\n### 50mm\n\n-   natural dialogue\n-   minim distorsi\n-   aman untuk medium shot\n\n### 85mm\n\n-   portrait/close-up\n-   compression lebih kuat\n-   isolasi emosional\n-   shallow depth lebih mudah\n\n### 100mm+\n\n-   insert, surveillance feel, visual compression\n\nUntuk vertical drama, CU/MCU sangat penting karena layar ponsel kecil.\nWide shot digunakan sebagai punctuation, bukan default.\n\n------------------------------------------------------------------------"
+  },
+  {
+    "id": 13,
+    "title": "BLOCKING & SCREEN DIRECTION",
+    "markdown": "# 13. BLOCKING & SCREEN DIRECTION\n\nSimpan posisi karakter secara eksplisit.\n\n``` yaml\nblocking:\n  maya:\n    screen_position: \"left\"\n    world_position: \"east side of desk\"\n    facing: \"west\"\n  daniel:\n    screen_position: \"right\"\n    world_position: \"behind desk\"\n    facing: \"east\"\n  axis_180:\n    line: \"maya-to-daniel\"\n    camera_side: \"south\"\n```\n\nJika shot A menampilkan Maya screen-left menghadap kanan, shot B tidak\nboleh tiba-tiba membalik tanpa motivated axis crossing.\n\n### Continuity Supervisor harus memeriksa:\n\n-   eyeline\n-   screen direction\n-   hand holding prop\n-   wardrobe\n-   hair state\n-   injury\n-   object location\n-   door/window layout\n-   time of day\n-   wet/dry state\n-   food/drink level\n-   phone orientation\n-   seated/standing state\n-   emotional carry-over\n\n------------------------------------------------------------------------"
+  },
+  {
+    "id": 14,
+    "title": "LIGHTING PROMPT ENGINE",
+    "markdown": "# 14. LIGHTING PROMPT ENGINE\n\nGunakan struktur:\n\n``` text\nKEY + FILL + BACK/RIM + PRACTICAL + MOTIVATION + COLOR TEMPERATURE + CONTRAST\n```\n\nContoh:\n\n``` text\nsoft window key from camera-left motivated by the north-facing window,\nvery low neutral fill, subtle warm rim from the desk practical,\n3200K practical against 5600K overcast daylight,\nmedium-high contrast while preserving natural skin tone\n```\n\nIni lebih stabil daripada:\n\n``` text\nbeautiful cinematic dramatic amazing lighting\n```\n\n------------------------------------------------------------------------"
+  },
+  {
+    "id": 15,
+    "title": "PROMPT COMPILER   STRUKTUR UNIVERSAL",
+    "markdown": "# 15. PROMPT COMPILER --- STRUKTUR UNIVERSAL\n\nGoogle menyarankan struktur konseptual: **Cinematography + Subject +\nAction + Context + Style/Ambiance.**\n\nUntuk serial, perlu diperluas menjadi:\n\n``` text\n[FORMAT]\n[CANON REFERENCES]\n[SHOT + CAMERA]\n[SUBJECT IDENTITY]\n[WARDROBE + CURRENT STATE]\n[ACTION]\n[PERFORMANCE]\n[BLOCKING]\n[ENVIRONMENT]\n[LIGHTING]\n[COLOR / TEXTURE]\n[CAMERA MOTION]\n[AUDIO]\n[CONTINUITY LOCK]\n[NEGATIVE CONSTRAINTS]\n```\n\n------------------------------------------------------------------------"
+  },
+  {
+    "id": 16,
+    "title": "MASTER IMAGE PROMPT",
+    "markdown": "# 16. MASTER IMAGE PROMPT\n\n``` text\nPRODUCTION STILL — EP{episode}_SC{scene}_SH{shot}\n\nFORMAT:\nVertical 9:16 cinematic frame.\n\nCANON:\nUse [CHARACTER_REFERENCE_IDS] as identity truth.\nUse [LOCATION_REFERENCE_ID] as spatial/environment truth.\nUse [STYLE_REFERENCE_ID] as visual-language truth.\n\nSHOT:\n[shot size], [camera angle], [camera height],\n[lens equivalent], [composition].\n\nSUBJECT:\n[canonical character description].\nWardrobe exactly [WARDROBE_ID].\nCurrent physical state: [STATE].\n\nBLOCKING:\n[character position, orientation, eyeline, hand/prop placement].\n\nACTION:\n[single visible action].\n\nPERFORMANCE:\n[specific internal emotion expressed physically; avoid generic \"dramatic\"].\n\nENVIRONMENT:\n[location canonical details relevant to this camera angle].\nDo not redesign the room.\n\nLIGHTING:\n[motivated key/fill/rim/practical description].\n\nCOLOR:\n[palette and contrast].\nNatural skin texture, realistic material response.\n\nCONTINUITY LOCK:\nsame face, facial proportions, hairstyle, apparent age,\nbody proportions, wardrobe, accessories and established injuries\nas canonical references.\nMaintain prop state and spatial layout from previous shot.\n\nDO NOT:\nchange identity, hairstyle, wardrobe, room architecture,\nhero props, time of day, screen direction or unexplained accessories.\nNo extra fingers, duplicated people, malformed hands, text artifacts,\nrandom jewelry, random logos.\n```\n\n------------------------------------------------------------------------"
+  },
+  {
+    "id": 17,
+    "title": "MASTER VIDEO PROMPT",
+    "markdown": "# 17. MASTER VIDEO PROMPT\n\nImage-to-video biasanya lebih aman untuk serial daripada pure\ntext-to-video karena keyframe sudah mengunci identity/composition.\n\n``` text\nEP{episode}_SC{scene}_SH{shot} — VIDEO SHOT\n\nUse the supplied start frame as visual and identity truth.\n\nDURATION:\n{4-8 seconds}\n\nSHOT:\n{MCU / CU / OTS / etc.}, {lens}, {camera angle}.\n\nCAMERA:\n{one primary camera movement}.\nMovement is physically plausible, smooth and restrained.\n\nCHARACTER:\n{character IDs}.\nPreserve exact face, hairstyle, age, body proportions,\nwardrobe and accessories from reference.\n\nACTION TIMELINE:\n0.0–1.5s: ...\n1.5–3.5s: ...\n3.5–6.0s: ...\n\nPERFORMANCE:\neyes: ...\nbreathing: ...\njaw: ...\nhands: ...\nposture: ...\n\nENVIRONMENT:\nMaintain exact established location geometry and hero objects.\nNo new furniture or architectural changes.\n\nLIGHTING:\nMaintain established light direction, exposure, color temperature\nand time of day.\n\nDIALOGUE:\nCHARACTER: \"...\"\ndelivery: ...\nDo not add unrequested speech.\n\nAUDIO:\nroom tone: ...\nspecific SFX: ...\nmusic: none / [cue].\n\nCONTINUITY:\nThe character starts in the exact state established by the previous shot\nand ends in the state required by the next shot.\n\nNEGATIVE:\nno identity drift, no costume change, no facial morphing,\nno extra people, no warped hands, no random camera shake,\nno sudden lighting shift, no background redesign.\n```\n\n------------------------------------------------------------------------"
+  },
+  {
+    "id": 18,
+    "title": "FIRST/LAST FRAME STRATEGY",
+    "markdown": "# 18. FIRST/LAST FRAME STRATEGY\n\nUntuk transisi sulit:\n\n``` yaml\nshot:\n  start_frame_id: \"KF_EP03_SC02_SH04_A\"\n  end_frame_id: \"KF_EP03_SC02_SH04_B\"\n```\n\nGenerate dua keyframe yang sudah benar, baru minta video\nmenghubungkannya.\n\nGunakan ini untuk:\n\n-   karakter duduk → berdiri\n-   membuka pintu\n-   menyerahkan benda\n-   berjalan dari titik A ke B\n-   perubahan ekspresi penting\n-   reveal\n-   camera move yang harus berakhir pada composition tertentu\n\nVeo 3.1 secara resmi mendukung workflow first-and-last-frame untuk\ntransisi.\n\n------------------------------------------------------------------------"
+  },
+  {
+    "id": 19,
+    "title": "MULTI-SHOT DIALOGUE",
+    "markdown": "# 19. MULTI-SHOT DIALOGUE\n\nJangan generate percakapan 40 detik sebagai satu klip jika konsistensi\npenting.\n\nPecah:\n\n``` text\nSHOT 01 — two-shot establishing — 4s\nSHOT 02 — Maya MCU — line A — 5s\nSHOT 03 — Daniel reaction CU — 3s\nSHOT 04 — Daniel MCU — line B — 6s\nSHOT 05 — Maya insert hand/envelope — 2s\nSHOT 06 — Maya CU reaction — 4s\n```\n\nManfaat:\n\n-   kontrol lip-sync lebih mudah\n-   retake murah\n-   continuity bisa divalidasi per shot\n-   editing punya rhythm\n-   AI tidak harus mempertahankan dua wajah selama terlalu lama\n\n------------------------------------------------------------------------"
+  },
+  {
+    "id": 20,
+    "title": "SCREENPLAY FORMAT UNTUK 60 DETIK",
+    "markdown": "# 20. SCREENPLAY FORMAT UNTUK 60 DETIK\n\nTarget 60 detik bukan berarti 60 detik dialog.\n\n### Template Retention Curve\n\n``` text\n00–03s  COLD OPEN / SHOCK / QUESTION\n03–10s  CONTEXT MINIMUM\n10–20s  CONFLICT ARRIVES\n20–32s  PRESSURE / ESCALATION\n32–43s  REVERSAL\n43–53s  CONSEQUENCE / EMOTIONAL HIT\n53–60s  CLIFFHANGER + CUT\n```\n\nBoleh berubah sesuai genre, tetapi **episode tidak boleh membutuhkan 20\ndetik untuk \"mulai\"**.\n\n### Hook types\n\n-   accusation\n-   impossible discovery\n-   humiliation\n-   danger\n-   secret revealed partially\n-   unexpected arrival\n-   relationship rupture\n-   status reversal\n-   ticking clock\n-   visual anomaly\n-   question with high personal stakes\n\n------------------------------------------------------------------------"
+  },
+  {
+    "id": 21,
+    "title": "MICRO-DRAMA STORY ENGINE",
+    "markdown": "# 21. MICRO-DRAMA STORY ENGINE\n\nSetiap episode harus memiliki:\n\n``` yaml\nepisode:\n  id: 12\n  immediate_goal: \"\"\n  conflict: \"\"\n  escalation: \"\"\n  reversal: \"\"\n  reveal: \"\"\n  emotional_change: \"\"\n  cliffhanger:\n    question_opened: \"\"\n    visual_final: \"\"\n  next_episode_payoff: \"\"\n```\n\n### Aturan cliffhanger\n\nCliffhanger yang buruk: \\> \"Besok kita bicara.\"\n\nCliffhanger yang kuat: \\> Maya membuka hasil DNA. Matanya membesar.\nSebelum nama ayah terlihat, sebuah tangan merampas kertas itu. CUT.\n\nCliffhanger harus menghasilkan **information gap** atau **immediate\nunresolved action**.\n\n------------------------------------------------------------------------"
+  },
+  {
+    "id": 22,
+    "title": "SERIES PACING 60 EPISODE",
+    "markdown": "# 22. SERIES PACING 60 EPISODE\n\nContoh macro architecture:\n\n``` text\nEP 01–05   Hook world + humiliation + inciting incident\nEP 06–10   protagonist reacts; first secret\nEP 11–15   false victory\nEP 16–20   antagonist gains control\nEP 21–25   romance/alliance deepens\nEP 26–30   midpoint revelation\nEP 31–35   betrayal\nEP 36–40   protagonist loses status/control\nEP 41–45   hidden truth reconstructed\nEP 46–50   counterattack\nEP 51–55   final secret / identity reveal\nEP 56–59   confrontation + consequences\nEP 60      payoff + emotional closure + optional new hook\n```\n\nBukan aturan baku. Yang penting adalah **reveal ladder**: jangan\nmembocorkan semua misteri sekaligus.\n\n------------------------------------------------------------------------"
+  },
+  {
+    "id": 23,
+    "title": "REVEAL LADDER",
+    "markdown": "# 23. REVEAL LADDER\n\n``` yaml\nsecrets:\n  - id: SECRET_01\n    truth: \"Daniel is Maya's half brother\"\n    audience_knows_at: 18\n    maya_knows_at: 42\n    evidence:\n      - \"old photo\"\n      - \"DNA document\"\n      - \"mother confession\"\n```\n\nDengan memisahkan **audience knowledge** dan **character knowledge**, AI\nwriter tidak membuat karakter mengetahui sesuatu terlalu dini.\n\n------------------------------------------------------------------------"
+  },
+  {
+    "id": 24,
+    "title": "DIALOGUE ENGINE",
+    "markdown": "# 24. DIALOGUE ENGINE\n\nDialog micro-drama harus:\n\n-   pendek\n-   performable\n-   punya subtext\n-   mudah dibaca subtitle\n-   tidak menjelaskan apa yang sudah terlihat\n-   mengandung power dynamics\n-   setiap line mengubah tekanan\n\n### Buruk\n\n> \"Aku marah kepadamu karena kemarin kamu pergi ke kantor ayahku dan\n> mengambil dokumen yang sebenarnya adalah dokumen DNA-ku.\"\n\n### Lebih sinematik\n\n> MAYA: \"Kembalikan amplopnya.\"\\\n> DANIEL: \"Kalau kamu tahu isinya, kamu nggak akan minta.\"\n\nInformasi muncul lewat konflik.\n\n------------------------------------------------------------------------"
+  },
+  {
+    "id": 25,
+    "title": "SCRIPT → SHOT AUTOMATION",
+    "markdown": "# 25. SCRIPT → SHOT AUTOMATION\n\nInput:\n\n``` text\nMaya memasuki kantor. Daniel memegang amplop merah.\nMAYA: Kembalikan.\nDANIEL: Kamu belum siap membacanya.\n```\n\nOutput internal:\n\n``` yaml\nshots:\n  - id: SH01\n    type: WS\n    purpose: geography\n    duration: 3\n  - id: SH02\n    type: MCU_MAYA\n    purpose: demand\n    duration: 4\n  - id: SH03\n    type: INSERT\n    subject: red_envelope\n    duration: 2\n  - id: SH04\n    type: MCU_DANIEL\n    purpose: resistance\n    duration: 5\n  - id: SH05\n    type: CU_MAYA\n    purpose: emotional escalation\n    duration: 3\n```\n\nShot generator harus bertanya: **\"Apa informasi baru yang diberikan shot\nini?\"**\n\nJika jawabannya \"tidak ada\", shot mungkin tidak diperlukan.\n\n------------------------------------------------------------------------"
+  },
+  {
+    "id": 26,
+    "title": "EDITING GRAMMAR",
+    "markdown": "# 26. EDITING GRAMMAR\n\nUntuk vertical micro-drama:\n\n-   potong berdasarkan emotional beat, bukan interval mekanis\n-   reaction shot adalah senjata utama\n-   insert digunakan untuk bukti/prop\n-   gunakan J-cut/L-cut agar percakapan terasa lebih natural\n-   jangan semua shot bergerak\n-   locked shot membuat push-in berikutnya terasa lebih penting\n-   close-up disimpan untuk emotional peak\n-   cliffhanger frame harus terbaca walau tanpa audio\n\n### Rhythm example\n\n``` text\nWS 3s\nMCU 5s\nCU 3s\nOTS 5s\nINSERT 2s\nCU 4s\nTWO SHOT 5s\nECU 2s\nCUT TO BLACK\n```\n\n------------------------------------------------------------------------"
+  },
+  {
+    "id": 27,
+    "title": "AUDIO BIBLE",
+    "markdown": "# 27. AUDIO BIBLE\n\n``` yaml\naudio_bible:\n  dialogue:\n    language: \"Indonesian\"\n    style: \"natural contemporary\"\n    loudness_priority: \"dialogue first\"\n  ambience:\n    office: \"low HVAC, distant city\"\n  score:\n    palette: \"minimal piano + low strings\"\n    avoid:\n      - \"constant trailer boom\"\n      - \"music under every second\"\n  motifs:\n    maya_secret: \"three-note glass motif\"\n```\n\n## Voice identity\n\n``` yaml\nvoice:\n  id: \"VOICE_MAYA_01\"\n  age_quality: \"mid-20s\"\n  register: \"mid\"\n  pace: \"controlled\"\n  texture: \"clear, slightly breathy\"\n  accent: \"neutral Indonesian\"\n  forbidden:\n    - \"childlike\"\n    - \"exaggerated anime delivery\"\n```\n\n------------------------------------------------------------------------"
+  },
+  {
+    "id": 28,
+    "title": "SUBTITLE SAFE AREA",
+    "markdown": "# 28. SUBTITLE SAFE AREA\n\nVertical video harus didesain sejak storyboard untuk UI platform.\n\nSimpan:\n\n``` yaml\nsafe_area:\n  top_reserved_percent: 10\n  bottom_reserved_percent: 20\n  subtitle_zone: \"lower-middle\"\n```\n\nJangan letakkan bukti penting atau wajah tepat di area yang berpotensi\ntertutup caption/UI.\n\n------------------------------------------------------------------------"
+  },
+  {
+    "id": 29,
+    "title": "MODEL ADAPTER LAYER",
+    "markdown": "# 29. MODEL ADAPTER LAYER\n\nJangan pakai prompt identik untuk semua model.\n\n## A. Midjourney --- Keyframe / Concept / Look Development\n\nCocok untuk: - concept art - character master - location master -\nwardrobe look - storyboard beauty frame - style exploration\n\nGunakan reference/edit workflow untuk identity, bukan seed sebagai\npengunci utama.\n\n``` yaml\nadapter: midjourney\ntask: keyframe\nreference_character: true\nreference_style: true\naspect_ratio: \"9:16\"\nprompt_density: \"medium\"\n```\n\n## B. Runway Gen-4 References\n\nCocok untuk: - consistent character images - location variants -\ncontrolled scene iterations - reference-driven generation\n\nGunakan reference tag yang sama secara konsisten dan buat reference baru\ndari hasil yang sudah disetujui jika membutuhkan transformasi kompleks.\n\n## C. Veo 3.1\n\nCocok untuk: - image-to-video - Ingredients to Video - dialogue/audio -\nvertical 9:16 - first/last frame - multi-shot workflow berbasis\nreference\n\nKarena clip generation pendek, aplikasi harus otomatis memecah scene\nmenjadi shot 4/6/8 detik atau durasi yang didukung adapter, kemudian\nmenyusun hasilnya di timeline.\n\n## D. Generic Adapter\n\nSetiap provider minimal mendeklarasikan:\n\n``` yaml\ncapabilities:\n  text_to_image: true\n  image_to_image: true\n  character_reference: true\n  style_reference: true\n  text_to_video: true\n  image_to_video: true\n  first_last_frame: false\n  native_audio: false\n  dialogue: false\n  max_references: 3\n  max_clip_seconds: 8\n  aspect_ratios: [\"16:9\", \"9:16\"]\n```\n\nUI hanya menampilkan kontrol yang memang didukung model.\n\n------------------------------------------------------------------------"
+  },
+  {
+    "id": 30,
+    "title": "CONSISTENCY ENGINE",
+    "markdown": "# 30. CONSISTENCY ENGINE\n\nBuat skor sebelum shot diterima.\n\n``` yaml\nconsistency_score:\n  identity: 0-100\n  wardrobe: 0-100\n  props: 0-100\n  location: 0-100\n  lighting: 0-100\n  blocking: 0-100\n  temporal: 0-100\n  style: 0-100\n  overall: weighted_average\n```\n\nRecommended gate:\n\n``` text\nidentity < 90      → reject/regenerate\nwardrobe < 95      → reject/regenerate\ncritical prop < 100→ reject/regenerate\nlocation < 85      → review\noverall < 88       → review\n```\n\nIdentity dan story-critical prop harus diberi bobot lebih besar daripada\naesthetic similarity.\n\n------------------------------------------------------------------------"
+  },
+  {
+    "id": 31,
+    "title": "VISUAL QC CHECKLIST",
+    "markdown": "# 31. VISUAL QC CHECKLIST\n\nSebelum approve setiap keyframe:\n\n``` text\n[ ] wajah sama?\n[ ] umur visual sama?\n[ ] rambut sama?\n[ ] kostum benar?\n[ ] aksesori benar?\n[ ] tangan/prop benar?\n[ ] luka/kotor/basah sesuai state?\n[ ] posisi screen sesuai axis?\n[ ] background adalah lokasi yang sama?\n[ ] pintu/jendela/furniture tidak berpindah?\n[ ] time of day benar?\n[ ] arah cahaya konsisten?\n[ ] focal/composition sesuai shot?\n[ ] tidak ada karakter ekstra?\n[ ] tidak ada text/logo random?\n```\n\nSebelum approve video:\n\n``` text\n[ ] face tidak morph?\n[ ] tangan tidak berubah?\n[ ] wardrobe tidak morph?\n[ ] prop tidak hilang?\n[ ] camera movement sesuai?\n[ ] background tidak melting?\n[ ] lip/dialog sesuai speaker?\n[ ] tidak ada dialogue tambahan?\n[ ] start state cocok shot sebelumnya?\n[ ] end state cocok shot berikutnya?\n```\n\n------------------------------------------------------------------------"
+  },
+  {
+    "id": 32,
+    "title": "CONTINUITY MEMORY / EVENT LOG",
+    "markdown": "# 32. CONTINUITY MEMORY / EVENT LOG\n\nSetelah setiap scene, jangan hanya menyimpan video. Update state.\n\n``` yaml\nevent:\n  episode: 12\n  scene: 3\n  event_id: \"EVT_1203_04\"\n  changes:\n    PROP_ENVELOPE_RED:\n      from: \"sealed\"\n      to: \"opened\"\n    CHR_MAYA_001:\n      emotional_state:\n        from: \"suspicious\"\n        to: \"shocked\"\n      knowledge_add:\n        - \"DNA result indicates family connection\"\n```\n\nPrompt episode 13 mengambil state terbaru, bukan membaca ulang seluruh\nscript secara bebas.\n\n------------------------------------------------------------------------"
+  },
+  {
+    "id": 33,
+    "title": "CANVAS UI YANG DIREKOMENDASIKAN",
+    "markdown": "# 33. CANVAS UI YANG DIREKOMENDASIKAN\n\nBuat UI seperti node/canvas produksi film.\n\n``` text\n┌─────────────────────────────────────────────────────────────┐\n│ PROJECT / SERIES BIBLE                                     │\n├──────────────┬───────────────────────────┬──────────────────┤\n│ ASSET BIBLE  │ STORY / TIMELINE          │ INSPECTOR        │\n│              │                           │                  │\n│ Characters   │ EP01 ─ EP02 ─ EP03       │ selected shot    │\n│ Locations    │  │      │                 │ camera           │\n│ Wardrobe     │ SC01   SC01               │ lens             │\n│ Props        │  │      │                 │ motion           │\n│ Style        │ SH01   SH01               │ dialogue         │\n│ Voices       │ SH02   SH02               │ references       │\n│              │ SH03                      │ continuity       │\n├──────────────┴───────────────────────────┴──────────────────┤\n│ PROMPT COMPILER / GENERATION / VERSION HISTORY             │\n└─────────────────────────────────────────────────────────────┘\n```\n\n### Character node\n\n``` text\n[MAYA]\n  ├── Identity\n  ├── Reference Pack\n  ├── Wardrobes\n  ├── Voice\n  ├── Expressions\n  ├── Current State\n  └── Appearance History\n```\n\n### Scene node\n\n``` text\n[SCENE 03]\n  ├── Location: LOC_OFFICE_01\n  ├── Time: 21:15\n  ├── Characters: Maya, Daniel\n  ├── Wardrobe locks\n  ├── Props\n  ├── Scene objective\n  ├── Conflict\n  ├── Entry state\n  ├── Exit state\n  └── Shots\n```\n\n------------------------------------------------------------------------"
+  },
+  {
+    "id": 34,
+    "title": "PROMPT UI: JANGAN HANYA SATU TEXTAREA",
+    "markdown": "# 34. PROMPT UI: JANGAN HANYA SATU TEXTAREA\n\nGunakan structured controls.\n\n``` text\nSHOT TYPE       [MCU ▼]\nANGLE           [Eye Level ▼]\nLENS            [85mm ▼]\nCAMERA MOVE     [Slow Push-in ▼]\nCHARACTER       [Maya ✓]\nWARDROBE        [Office 02 🔒]\nLOCATION        [CEO Office 🔒]\nTIME            [Night 🔒]\nEMOTION         [Suppressed anger]\nACTION          [opens red envelope]\nDIALOGUE        [...]\nAUDIO           [...]\nSTYLE           [Series Look 01 🔒]\nREFERENCE       [Maya Master] [Office Master]\n```\n\nDi bawahnya:\n\n``` text\n[COMPILE PROMPT]\n[GENERATE KEYFRAME]\n[APPROVE AS CANON]\n[GENERATE VIDEO]\n[CHECK CONTINUITY]\n```\n\n------------------------------------------------------------------------"
+  },
+  {
+    "id": 35,
+    "title": "LOCK SYSTEM",
+    "markdown": "# 35. LOCK SYSTEM\n\nSetiap field memiliki status:\n\n-   🔒 `CANON_LOCKED`\n-   ◐ `SCENE_LOCKED`\n-   ○ `FREE`\n-   ⚠ `CONFLICT`\n\nContoh:\n\n``` yaml\nlocks:\n  character_face: CANON_LOCKED\n  hair: CANON_LOCKED\n  wardrobe: SCENE_LOCKED\n  expression: FREE\n  camera_angle: FREE\n  location_geometry: CANON_LOCKED\n  weather: SCENE_LOCKED\n```\n\nJika user meminta: \\> \"buat Maya sekarang rambut blonde\"\n\nSistem harus memberi warning:\n\n``` text\nCONFLICT: hair color is CANON_LOCKED.\nChoose:\nA. temporary disguise\nB. permanent canon change starting EP14\nC. non-canon test\n```\n\nIni mencegah continuity rusak karena prompt spontan.\n\n------------------------------------------------------------------------"
+  },
+  {
+    "id": 36,
+    "title": "PROMPT INHERITANCE",
+    "markdown": "# 36. PROMPT INHERITANCE\n\nJangan copy-paste deskripsi 400 kata ke setiap shot secara manual.\n\n``` text\nPROJECT LOOK\n   ↓ inherit\nEPISODE LOOK OVERRIDE\n   ↓ inherit\nSCENE LOOK OVERRIDE\n   ↓ inherit\nSHOT OVERRIDE\n```\n\nContoh:\n\n``` yaml\nproject:\n  lighting: \"premium soft motivated\"\n\nscene:\n  lighting_override: \"power outage, emergency red practical\"\n\nshot:\n  lighting_override: null\n```\n\nSetelah scene selesai, override tidak ikut ke scene berikutnya.\n\n------------------------------------------------------------------------"
+  },
+  {
+    "id": 37,
+    "title": "PROMPT HASH / VERSIONING",
+    "markdown": "# 37. PROMPT HASH / VERSIONING\n\nSetiap render simpan:\n\n``` yaml\ngeneration:\n  id: \"GEN_93822\"\n  prompt_version: 7\n  canon_version: 14\n  model: \"...\"\n  model_version: \"...\"\n  reference_ids:\n    - \"REF_MAYA_V3\"\n    - \"REF_OFFICE_V2\"\n  seed_if_available: 12345\n  output_id: \"ASSET_...\"\n  approved: true\n```\n\nJika model provider berubah versi, kamu tahu shot lama dibuat dengan\nmodel apa.\n\n------------------------------------------------------------------------"
+  },
+  {
+    "id": 38,
+    "title": "STORYBOARD MODE",
+    "markdown": "# 38. STORYBOARD MODE\n\nTawarkan tiga level:\n\n### A. Fast Board\n\nsketsa sederhana untuk composition.\n\n### B. Reference Board\n\ncharacter/location references sudah diterapkan.\n\n### C. Final Keyframe\n\nframe berkualitas tinggi yang akan dipakai image-to-video.\n\nJangan membakar biaya video sebelum blocking/keyframe disetujui.\n\n------------------------------------------------------------------------"
+  },
+  {
+    "id": 39,
+    "title": "AUTOMATIC COVERAGE GENERATOR",
+    "markdown": "# 39. AUTOMATIC COVERAGE GENERATOR\n\nUntuk scene dialog dua orang, aplikasi bisa menawarkan:\n\n``` text\n✓ Establishing two-shot\n✓ Maya clean single\n✓ Daniel clean single\n✓ Maya OTS\n✓ Daniel OTS\n✓ Maya reaction CU\n✓ Daniel reaction CU\n✓ story prop insert\n✓ exit/transition shot\n```\n\nAI director memilih subset yang benar-benar diperlukan.\n\n------------------------------------------------------------------------"
+  },
+  {
+    "id": 40,
+    "title": "60-SECOND EPISODE TEMPLATE",
+    "markdown": "# 40. 60-SECOND EPISODE TEMPLATE\n\n``` yaml\nepisode_template:\n  duration: 60\n\n  beats:\n    - time: \"00-03\"\n      function: \"hook\"\n      shots: 1\n\n    - time: \"03-10\"\n      function: \"minimum context\"\n      shots: 1-2\n\n    - time: \"10-22\"\n      function: \"conflict\"\n      shots: 2-3\n\n    - time: \"22-36\"\n      function: \"escalation\"\n      shots: 2-4\n\n    - time: \"36-48\"\n      function: \"reversal\"\n      shots: 2-3\n\n    - time: \"48-56\"\n      function: \"consequence\"\n      shots: 1-2\n\n    - time: \"56-60\"\n      function: \"cliffhanger\"\n      shots: 1\n```\n\n------------------------------------------------------------------------"
+  },
+  {
+    "id": 41,
+    "title": "CONTOH EPISODE",
+    "markdown": "# 41. CONTOH EPISODE\n\n## Episode 12 --- \"Amplop Merah\"\n\n### Beat sheet\n\n``` text\nHOOK:\nMaya melihat Daniel membakar sebuah foto keluarga.\n\nCONTEXT:\nDi meja ada amplop merah yang sejak kemarin ia cari.\n\nCONFLICT:\nMaya menuntut amplop. Daniel menolak.\n\nESCALATION:\nMaya merebutnya.\n\nREVERSAL:\nDaniel berkata: “Nama di hasil DNA itu bukan ayahmu.”\n\nCONSEQUENCE:\nMaya membuka kertas.\n\nCLIFFHANGER:\nSebelum nama terlihat, listrik mati.\nSeseorang berdiri di pintu.\nCUT.\n```\n\n### Shot list\n\n``` yaml\n- SH01:\n    duration: 3\n    shot: ECU\n    subject: family photo burning\n    purpose: hook\n\n- SH02:\n    duration: 4\n    shot: MCU\n    subject: Maya\n    action: freezes at doorway\n\n- SH03:\n    duration: 5\n    shot: two-shot\n    action: Daniel hides envelope\n\n- SH04:\n    duration: 5\n    shot: MCU Maya\n    dialogue: \"Kembalikan.\"\n\n- SH05:\n    duration: 6\n    shot: OTS Maya to Daniel\n    dialogue: \"Kamu belum siap.\"\n\n- SH06:\n    duration: 3\n    shot: insert\n    subject: envelope\n\n- SH07:\n    duration: 6\n    shot: handheld restrained MCU\n    action: Maya grabs envelope\n\n- SH08:\n    duration: 7\n    shot: CU Daniel\n    dialogue: \"Nama di situ bukan ayahmu.\"\n\n- SH09:\n    duration: 6\n    shot: CU Maya\n    action: emotion shifts from anger to fear\n\n- SH10:\n    duration: 5\n    shot: insert\n    action: paper unfolds\n\n- SH11:\n    duration: 5\n    shot: ECU Maya eyes\n    event: lights die\n\n- SH12:\n    duration: 5\n    shot: doorway silhouette\n    dialogue: \"Jangan dibaca.\"\n    end: hard cut\n```\n\n------------------------------------------------------------------------"
+  },
+  {
+    "id": 42,
+    "title": "AI DIRECTOR DECISION ENGINE",
+    "markdown": "# 42. AI DIRECTOR DECISION ENGINE\n\nSebelum membuat shot, jawab secara internal:\n\n``` yaml\ndirector_reasoning:\n  narrative_function: \"\"\n  emotional_function: \"\"\n  information_revealed: \"\"\n  audience_attention_target: \"\"\n  best_shot_size: \"\"\n  why_this_lens: \"\"\n  camera_movement_motivation: \"\"\n  lighting_motivation: \"\"\n  continuity_risk: []\n```\n\nOutput user tidak harus menampilkan reasoning panjang; sistem memakai\nhasilnya untuk menyusun shot.\n\n------------------------------------------------------------------------"
+  },
+  {
+    "id": 43,
+    "title": "ART DIRECTION ENGINE",
+    "markdown": "# 43. ART DIRECTION ENGINE\n\nSetiap scene harus menjawab:\n\n1.  warna dominan apa?\n2.  material dominan apa?\n3.  bentuk/geometri apa?\n4.  objek apa yang menjadi focal cue?\n5.  apakah set mencerminkan karakter?\n6.  apa yang berubah dari scene sebelumnya?\n7.  apakah perubahan itu narrative-motivated?\n\n### Color script\n\n``` yaml\nepisodes:\n  1-10:\n    palette: \"warm neutral\"\n    meaning: \"false safety\"\n  11-30:\n    palette: \"cooler, desaturated\"\n    meaning: \"distrust\"\n  31-50:\n    palette: \"hard contrast\"\n    meaning: \"conflict\"\n  51-60:\n    palette: \"warm highlights return\"\n    meaning: \"truth/reconciliation\"\n```\n\n------------------------------------------------------------------------"
+  },
+  {
+    "id": 44,
+    "title": "STYLE CONSISTENCY",
+    "markdown": "# 44. STYLE CONSISTENCY\n\nJangan menulis \"cinematic\" sendirian.\n\nDefinisikan style sebagai sistem:\n\n``` text\nrealistic contemporary melodrama,\nrestrained production design,\nsoft motivated key light,\nnatural warm skin,\ncool neutral shadows,\nmodern spherical lens rendering,\nmoderate depth of field,\nsubtle film texture,\ncontrolled highlights,\npremium streaming-drama finish\n```\n\nLalu simpan sebagai `STYLE_TOKEN`, bukan diketik ulang berbeda-beda.\n\n------------------------------------------------------------------------"
+  },
+  {
+    "id": 45,
+    "title": "NEGATIVE PROMPT POLICY",
+    "markdown": "# 45. NEGATIVE PROMPT POLICY\n\nNegative prompt jangan menjadi novel.\n\nPrioritas:\n\n1.  continuity errors\n2.  anatomical artifacts\n3.  unwanted text/logo\n4.  style drift\n5.  unrequested subjects\n\n``` text\nno identity drift,\nno hairstyle change,\nno wardrobe change,\nno additional jewelry,\nno extra people,\nno duplicated limbs,\nno malformed hands,\nno background redesign,\nno random signage,\nno subtitles baked into image\n```\n\n------------------------------------------------------------------------"
+  },
+  {
+    "id": 46,
+    "title": "FAILURE RECOVERY",
+    "markdown": "# 46. FAILURE RECOVERY\n\nJika hasil salah, jangan menambah 40 adjective.\n\n### Face drift\n\n-   kembali ke approved reference\n-   kurangi transformasi dalam satu generation\n-   buat intermediate reference\n-   gunakan image-to-image/reference workflow\n\n### Background drift\n\n-   pakai location master\n-   sebutkan angle dari lokasi yang sudah ada\n-   jangan redescribe lokasi dengan sinonim yang berubah-ubah\n\n### Wardrobe drift\n\n-   reference wardrobe image\n-   lock wardrobe ID\n-   generate character+wardrobe canonical frame\n\n### Action gagal\n\n-   sederhanakan action\n-   pecah menjadi start/end keyframes\n-   pecah satu shot menjadi dua\n\n### Dua karakter tertukar\n\n-   buat clean reference masing-masing\n-   tentukan screen position\n-   deskripsikan action per nama/ID\n-   hindari pronoun ambigu\n\n------------------------------------------------------------------------"
+  },
+  {
+    "id": 47,
+    "title": "REFERENCE HIERARCHY",
+    "markdown": "# 47. REFERENCE HIERARCHY\n\nJika terjadi konflik:\n\n``` text\n1. Approved Canon Reference\n2. Current Scene State\n3. Approved Previous Shot End Frame\n4. Location/Prop Reference\n5. Style Reference\n6. Text Prompt\n7. Seed\n```\n\nSeed tidak boleh mengalahkan reference.\n\n------------------------------------------------------------------------"
+  },
+  {
+    "id": 48,
+    "title": "MULTI-CHARACTER PROMPT",
+    "markdown": "# 48. MULTI-CHARACTER PROMPT\n\n``` text\nMAYA (reference CHR_MAYA_001) remains screen-left,\nwearing WARD_MAYA_OFFICE_02, holding the red envelope in her RIGHT hand.\n\nDANIEL (reference CHR_DANIEL_001) remains screen-right,\nbehind the black-oak desk, wearing WARD_DANIEL_SUIT_01.\n\nMaya looks toward Daniel.\nDaniel looks toward Maya.\nDo not merge facial characteristics, wardrobe, hair, or accessories.\nMaintain their distinct identities.\n```\n\n------------------------------------------------------------------------"
+  },
+  {
+    "id": 49,
+    "title": "TEMPORAL CONTINUITY",
+    "markdown": "# 49. TEMPORAL CONTINUITY\n\nScene state harus memiliki timestamp.\n\n``` yaml\nscene:\n  story_date: \"2026-11-14\"\n  story_time_start: \"21:12\"\n  story_time_end: \"21:18\"\n  elapsed_since_previous_scene: \"4 minutes\"\n```\n\nJika hanya empat menit berlalu: - baju tidak berubah - makeup tidak\nreset - hujan masih relevan - luka tetap ada - prop yang dibawa tetap\ndibawa\n\n------------------------------------------------------------------------"
+  },
+  {
+    "id": 50,
+    "title": "FLASHBACK / DREAM / ALTERNATE REALITY",
+    "markdown": "# 50. FLASHBACK / DREAM / ALTERNATE REALITY\n\nJangan merusak canon utama.\n\n``` yaml\ntimeline:\n  type: \"flashback\"\n  canon_date: \"2014-05-03\"\n  character_variant:\n    maya:\n      age_visual: 12\n      reference_id: \"CHR_MAYA_CHILD_01\"\n```\n\nVariant punya reference sendiri.\n\n------------------------------------------------------------------------"
+  },
+  {
+    "id": 51,
+    "title": "GENERATIVE SAFETY & RIGHTS",
+    "markdown": "# 51. GENERATIVE SAFETY & RIGHTS\n\nUntuk produk komersial:\n\n-   gunakan likeness orang nyata hanya jika hak/izin jelas\n-   simpan provenance reference\n-   jangan menganggap gambar internet bebas dipakai\n-   simpan license metadata untuk music, voice, face, font, stock, dan\n    reference\n-   beri mekanisme takedown\n-   hindari cloning suara/wajah tanpa persetujuan\n-   simpan model/provider + generation metadata\n-   pertimbangkan disclosure AI sesuai platform/negara\n-   jangan membuat \"character consistency\" dengan wajah orang nyata yang\n    tidak berizin\n\nKasus industri AI micro-drama menunjukkan face licensing dan\nunauthorized likeness sudah menjadi isu nyata; sistem rights management\nbukan fitur tambahan, tetapi bagian pipeline.\n\n------------------------------------------------------------------------"
+  },
+  {
+    "id": 52,
+    "title": "WEBSITE PRODUCT MODULES",
+    "markdown": "# 52. WEBSITE PRODUCT MODULES\n\n## Module 1 --- Idea Generator\n\nInput: - genre - audience - country/culture - tone - number of\nepisodes - duration\n\nOutput: - 10 concepts - logline - hook - series promise\n\n## Module 2 --- Story Architect\n\nOutput: - series bible - character arcs - secret map - relationship\ngraph - season arc - episode list\n\n## Module 3 --- Script Writer\n\nOutput: - beat sheet - screenplay - dialogue - cliffhanger - duration\nestimate\n\n## Module 4 --- Character Studio\n\nOutput: - canonical description - reference prompts - expression sheet -\nwardrobe - voice profile\n\n## Module 5 --- World Studio\n\nOutput: - locations - set layout - props - color script - location\nreference prompts\n\n## Module 6 --- Director\n\nOutput: - scene objective - blocking - shot list - coverage -\ncamera/lens/movement\n\n## Module 7 --- Storyboard\n\nOutput: - storyboard prompts - keyframes - reference binding\n\n## Module 8 --- Prompt Compiler\n\nOutput: - Midjourney adapter - Runway adapter - Veo adapter - generic\nJSON\n\n## Module 9 --- Continuity Supervisor\n\nOutput: - mismatch report - canon conflict - auto-fix prompt\n\n## Module 10 --- Video Assembly\n\nOutput: - clip queue - timeline - audio plan - subtitle - export\nmanifest\n\n------------------------------------------------------------------------"
+  },
+  {
+    "id": 53,
+    "title": "API OUTPUT CONTRACT",
+    "markdown": "# 53. API OUTPUT CONTRACT\n\nAplikasi sebaiknya meminta LLM menghasilkan JSON terstruktur, bukan\nmarkdown bebas.\n\n``` json\n{\n  \"episode_id\": \"EP012\",\n  \"duration_target\": 60,\n  \"hook\": \"...\",\n  \"cliffhanger\": \"...\",\n  \"scenes\": [\n    {\n      \"scene_id\": \"SC01\",\n      \"location_id\": \"LOC_CEO_OFFICE_01\",\n      \"character_ids\": [\"CHR_MAYA_001\", \"CHR_DANIEL_001\"],\n      \"entry_state_id\": \"STATE_...\",\n      \"shots\": [\n        {\n          \"shot_id\": \"SH01\",\n          \"duration\": 4,\n          \"shot_size\": \"MCU\",\n          \"lens_mm\": 50,\n          \"camera_angle\": \"eye-level\",\n          \"camera_move\": \"slow push-in\",\n          \"action\": \"...\",\n          \"dialogue\": \"...\",\n          \"reference_ids\": [],\n          \"continuity_constraints\": [],\n          \"image_prompt\": \"\",\n          \"video_prompt\": \"\"\n        }\n      ]\n    }\n  ]\n}\n```\n\n------------------------------------------------------------------------"
+  },
+  {
+    "id": 54,
+    "title": "MASTER SYSTEM PROMPT UNTUK WEB",
+    "markdown": "# 54. MASTER SYSTEM PROMPT UNTUK WEB\n\n``` text\nYou are AI CINEMATIC SERIES DIRECTOR.\n\nYou operate as a showrunner, screenwriter, film director, cinematographer,\nart director, storyboard artist, prompt engineer, editor and continuity supervisor.\n\nYour priority order is:\n1. narrative clarity\n2. canon continuity\n3. character identity\n4. emotional performance\n5. cinematic composition\n6. model-specific prompt quality\n7. production efficiency\n\nNever invent a new canonical visual detail when an approved canonical value exists.\n\nNever treat individual prompts as memory.\nAlways derive prompts from Project Bible + current Episode State + Scene State + Shot State.\n\nSeparate immutable identity from mutable scene state.\n\nFor every scene:\n- identify objective, conflict, turn and exit state\n- establish location/time/wardrobe/props\n- preserve screen direction\n- create only necessary shots\n\nFor every shot:\n- assign narrative function\n- choose shot size, lens, camera angle and movement deliberately\n- define blocking and eyelines\n- define one clear visible action\n- define motivated lighting\n- bind canonical references\n- compile model-specific prompt\n- include continuity constraints\n- define expected end state\n\nFor vertical micro-drama:\n- default 9:16\n- hook immediately\n- optimize composition for mobile\n- favor readable CU/MCU coverage\n- escalate quickly\n- finish episodes with a meaningful information gap or unresolved action\n- avoid filler\n\nWhen a request conflicts with canon:\ndo not silently overwrite canon.\nReturn a CANON_CONFLICT and offer:\ntemporary variant, permanent canon change, or non-canon test.\n\nBefore approving generated media, evaluate:\nidentity, wardrobe, props, location, lighting, blocking,\ntemporal continuity and visual style.\n\nNever use a random seed as the primary identity system.\nPrefer approved references and stateful continuity.\n\nOutput structured JSON when called by an application.\n```\n\n------------------------------------------------------------------------"
+  },
+  {
+    "id": 55,
+    "title": "SCRIPTWRITER SUB-SKILL",
+    "markdown": "# 55. SCRIPTWRITER SUB-SKILL\n\n``` text\nROLE: SERIAL MICRO-DRAMA SCREENWRITER\n\nWrite for performance, editing and retention.\nDo not write prose that cannot be photographed.\n\nEvery episode must contain:\nHOOK → CONTEXT → CONFLICT → ESCALATION → REVERSAL → CONSEQUENCE → CLIFFHANGER.\n\nKeep exposition under pressure.\nCharacters should rarely explain information both characters already know.\nUse subtext, status, interruption and reaction.\n\nTrack:\n- what audience knows\n- what each character knows\n- what each character falsely believes\n- secrets still protected\n- promises awaiting payoff\n\nNever resolve a major question without opening or advancing another,\nexcept at intentional season closure.\n```\n\n------------------------------------------------------------------------"
+  },
+  {
+    "id": 56,
+    "title": "CINEMATOGRAPHER SUB-SKILL",
+    "markdown": "# 56. CINEMATOGRAPHER SUB-SKILL\n\n``` text\nROLE: DIRECTOR OF PHOTOGRAPHY\n\nChoose framing because of story psychology.\n\nWide = geography, isolation, power structure.\nMedium = interaction and body language.\nClose-up = emotional information.\nExtreme close-up = critical detail or peak internal shift.\n\nCamera movement must be motivated.\nA push-in increases psychological pressure.\nA pull-out reveals isolation/context.\nHandheld introduces instability.\nLocked frame creates control or tension.\n\nDo not move the camera simply because the video model can.\n```\n\n------------------------------------------------------------------------"
+  },
+  {
+    "id": 57,
+    "title": "ART DIRECTOR SUB-SKILL",
+    "markdown": "# 57. ART DIRECTOR SUB-SKILL\n\n``` text\nROLE: ART DIRECTOR / PRODUCTION DESIGNER\n\nMaintain visual canon across all generated assets.\n\nFor every location define:\narchitecture, layout, materials, palette, practical lights,\nhero props, aging, socioeconomic signals and forbidden changes.\n\nFor every character define:\nsilhouette, palette, wardrobe system, grooming,\naccessories and evolution across the story.\n\nVisual changes must represent narrative changes.\nDo not add decorative objects that weaken continuity.\n```\n\n------------------------------------------------------------------------"
+  },
+  {
+    "id": 58,
+    "title": "CONTINUITY SUPERVISOR SUB-SKILL",
+    "markdown": "# 58. CONTINUITY SUPERVISOR SUB-SKILL\n\n``` text\nROLE: CONTINUITY SUPERVISOR\n\nCompare requested shot against:\nprevious approved shot,\nscene entry state,\ncharacter canon,\nwardrobe state,\nprop state,\nlocation geometry,\ntime/weather,\nscreen direction.\n\nReturn:\nPASS\nWARN\nFAIL\n\nFAIL if identity, critical wardrobe, critical prop,\ntimeline or story knowledge contradicts canon.\n```\n\n------------------------------------------------------------------------"
+  },
+  {
+    "id": 59,
+    "title": "PROMPT ENGINEER SUB-SKILL",
+    "markdown": "# 59. PROMPT ENGINEER SUB-SKILL\n\n``` text\nROLE: MODEL ADAPTER / PROMPT ENGINEER\n\nDo not create one universal verbose prompt.\nTranslate structured shot intent into the vocabulary\nand controls supported by the selected generation model.\n\nPreserve semantic invariants:\nwho, where, wardrobe, action, blocking, lighting,\ncamera, emotion, continuity and end state.\n\nRemove unsupported parameters.\nPrefer references over repeated prose when supported.\n```\n\n------------------------------------------------------------------------"
+  },
+  {
+    "id": 60,
+    "title": "\"ONE CLICK: MAKE EPISODE\" PIPELINE",
+    "markdown": "# 60. \"ONE CLICK: MAKE EPISODE\" PIPELINE\n\n``` text\n1. Validate canon\n2. Generate episode beats\n3. Validate against season arc\n4. Write screenplay\n5. Estimate duration\n6. Split scenes\n7. Resolve entry state\n8. Generate shot list\n9. Generate keyframe prompts\n10. Bind character/location/style references\n11. Generate storyboards\n12. Continuity QC\n13. User/auto approve keyframes\n14. Generate video prompts\n15. Generate clips\n16. Video continuity QC\n17. Regenerate failed clips\n18. Assemble timeline\n19. Add dialogue/voice/audio\n20. Add subtitle\n21. Final QC\n22. Export 9:16 master\n23. Update canon/event log\n24. Prepare next-episode state\n```\n\n------------------------------------------------------------------------"
+  },
+  {
+    "id": 61,
+    "title": "QUALITY MODES",
+    "markdown": "# 61. QUALITY MODES\n\n``` yaml\ndraft:\n  storyboard_quality: low\n  references_required: character_only\n  video_iterations: 1\n\nstandard:\n  references_required:\n    - character\n    - location\n    - style\n  continuity_gate: 85\n  video_iterations: 2\n\nproduction:\n  references_required:\n    - character\n    - location\n    - wardrobe\n    - props\n    - style\n  first_last_frame_for_complex_action: true\n  continuity_gate: 92\n  human_approval:\n    - keyframes\n    - hero shots\n    - final episode\n```\n\n------------------------------------------------------------------------"
+  },
+  {
+    "id": 62,
+    "title": "COST CONTROL",
+    "markdown": "# 62. COST CONTROL\n\nAI filmmaking dapat boros karena masalah utama bukan prompt generation,\nmelainkan **regeneration**.\n\nOptimasi:\n\n``` text\nIDEA/TEXT → murah\nSCRIPT → murah\nSHOT LIST → murah\nROUGH STORYBOARD → relatif murah\nFINAL KEYFRAME → lebih mahal\nVIDEO → paling mahal\n4K/UPSCALE → jangan sebelum edit lock\n```\n\nJangan generate video sebelum: - character approved - location\napproved - shot approved - continuity passed\n\n------------------------------------------------------------------------"
+  },
+  {
+    "id": 63,
+    "title": "METRICS PRODUK",
+    "markdown": "# 63. METRICS PRODUK\n\nTrack:\n\n``` yaml\nmetrics:\n  script:\n    hook_seconds: 0\n    dialogue_words: 0\n    estimated_duration: 0\n  generation:\n    shots_total: 0\n    first_pass_approval_rate: 0\n    avg_regenerations_per_shot: 0\n    identity_failure_rate: 0\n    continuity_failure_rate: 0\n  story:\n    unresolved_threads: 0\n    payoff_due: []\n```\n\nUntuk platform yang memiliki data penonton: - completion rate -\nepisode-to-next-episode conversion - drop-off timestamp - rewatch -\ncliffhanger conversion\n\nJangan otomatis mengorbankan coherence hanya untuk mengejar clickbait.\n\n------------------------------------------------------------------------"
+  },
+  {
+    "id": 64,
+    "title": "RESEARCH NOTES: MIDJOURNEY GUIDE YANG DIUPLOAD",
+    "markdown": "# 64. RESEARCH NOTES: MIDJOURNEY GUIDE YANG DIUPLOAD\n\nMateri Midjourney yang menjadi basis proyek mencontohkan pendekatan\nprompt sinematik dengan detail seperti:\n\n-   shot type / angle\n-   subject\n-   environment\n-   time/lighting\n-   camera body/lens\n-   color palette\n-   aspect ratio\n-   reference workflow\n\nContoh di materi menggunakan prompt seperti Gundam di rawa, perubahan\nmenjadi lebih cinematic, penggunaan Omni Reference, Mini Cooper di\nshowroom, serta kombinasi karakter/object reference. Konsep ini tetap\nsangat berguna sebagai **prompt vocabulary dan latihan visual\ndirection**.\n\nNamun untuk produk 2026: - jangan mengunci implementasi ke syntax lama\nsaja - model/version adapter harus dipisahkan dari cinematic intent -\nMidjourney V8.2 menggunakan Edit Model sebagai workflow reference\nterbaru - seed tidak boleh menjadi fondasi consistency - simpan intent\ndalam schema internal, baru compile ke syntax provider\n\nDengan begitu aplikasi tidak rusak setiap provider mengganti model.\n\n------------------------------------------------------------------------"
+  },
+  {
+    "id": 65,
+    "title": "SUMBER RISET UTAMA",
+    "markdown": "# 65. SUMBER RISET UTAMA\n\n### Official / primary product documentation\n\n1.  **Google --- Veo 3.1 Ingredients to Video**\\\n    https://blog.google/innovation-and-ai/technology/ai/veo-3-1-ingredients-to-video/\n\n2.  **Google Cloud --- Ultimate Prompting Guide for Veo 3.1**\\\n    https://cloud.google.com/blog/products/ai-machine-learning/ultimate-prompting-guide-for-veo-3-1/\n\n3.  **Google --- Veo 3.1 Gemini API updates**\\\n    https://blog.google/innovation-and-ai/technology/developers-tools/veo-3-1-gemini-api/\n\n4.  **Runway --- Creating with Gen-4 Image References**\\\n    https://help.runwayml.com/hc/en-us/articles/40042718905875-Creating-with-Gen-4-Image-References\n\n5.  **Midjourney --- Version**\\\n    https://docs.midjourney.com/hc/en-us/articles/32199405667853-Version\n\n6.  **Midjourney --- Omni Reference**\\\n    https://docs.midjourney.com/hc/en-us/articles/36285124473997-Omni-Reference\n\n7.  **Midjourney --- Style Reference**\\\n    https://docs.midjourney.com/hc/en-us/articles/32180011136653-Style-Reference\n\n8.  **Midjourney --- Seeds**\\\n    https://docs.midjourney.com/hc/en-us/articles/32604356340877-Seeds\n\n9.  **LTX Studio --- AI video production / storyboard / elements**\\\n    https://ltx.studio/\n\n### Micro-drama / vertical-drama research\n\n10. **South China Morning Post / AFP --- Vertical dramas, one minute at\n    a time**\\\n    Reportase tentang format mobile, episode sekitar 60 detik, workflow\n    cepat dan pertumbuhan vertical drama.\n\n11. **South China Morning Post --- How micro dramas work like a TikTok\n    trend (2026)**\\\n    Membahas 9:16, serial 30--70 episode, durasi 1--3 menit dan model\n    binge/freemium.\n\n12. **Rest of World --- China's bite-sized smartphone dramas**\\\n    Membahas hook cepat, cliffhanger, web-novel tropes dan format\n    minute-long.\n\n13. **Rest of World --- AI at work / AI microdrama production (2026)**\\\n    Menggambarkan studio yang memakai prompt writers dan AI video\n    generation untuk produksi minidrama.\n\n14. **Rest of World --- AI face licensing in Chinese microdramas\n    (2026)**\\\n    Penting untuk desain rights/provenance layer pada produk AI\n    filmmaker.\n\n------------------------------------------------------------------------"
+  },
+  {
+    "id": 66,
+    "title": "FINAL DESIGN PRINCIPLE",
+    "markdown": "# 66. FINAL DESIGN PRINCIPLE\n\nKesalahan terbesar AI filmmaker adalah memperlakukan film sebagai:\n\n``` text\nprompt → video\n```\n\nUntuk serial, arsitektur yang benar adalah:\n\n``` text\nCANON\n  ↓\nSTATE\n  ↓\nSTORY\n  ↓\nSCENE\n  ↓\nSHOT\n  ↓\nREFERENCE\n  ↓\nPROMPT COMPILER\n  ↓\nGENERATION\n  ↓\nVALIDATION\n  ↓\nAPPROVAL\n  ↓\nSTATE UPDATE\n```\n\n**Karakter konsisten bukan hasil prompt yang sangat panjang.\\\nKarakter konsisten adalah hasil dari reference + state + lock +\nversioning + validation.**\n\nDan **film AI yang terasa disutradarai** bukan film dengan kata\n\"cinematic\" seratus kali, tetapi film yang setiap shot-nya tahu: - apa\nyang ingin diceritakan, - apa yang harus dilihat penonton, - bagaimana\nkarakter berubah, - di mana kamera berada, - mengapa kamera bergerak, -\ndari mana cahaya datang, - dan apa yang harus tetap sama dari shot\nsebelumnya.\n\n------------------------------------------------------------------------"
+  },
+  {
+    "id": 67,
+    "title": "RECOMMENDED MVP",
+    "markdown": "# 67. RECOMMENDED MVP\n\nUntuk versi web pertama, jangan langsung membangun semua.\n\nBangun urutan ini:\n\n``` text\nMVP 1\nIdea → Series Bible → Character Bible → Episode → Script → Shot List → Prompt\n\nMVP 2\n+ Reference Asset Manager\n+ Character/Location Lock\n+ Midjourney/Runway/Veo adapters\n\nMVP 3\n+ Storyboard canvas\n+ Continuity checker\n+ shot version history\n\nMVP 4\n+ direct generation API\n+ video queue\n+ timeline assembly\n+ audio/subtitle\n\nMVP 5\n+ multi-episode autonomous production\n+ analytics-driven story suggestions\n+ collaboration / approval workflow\n```\n\n**Jangan mulai dari tombol \"Generate Film\". Mulai dari canonical data\nmodel.**\\\nKalau fondasinya benar, provider AI bisa diganti tanpa menghancurkan\nproyek."
+  }
+]

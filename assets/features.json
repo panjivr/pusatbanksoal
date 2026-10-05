@@ -192,5 +192,15 @@
     "icon": "markdown",
     "new": true,
     "landing_description": "Edit Markdown, konversi dokumen, dan ringkas video"
+  },
+  {
+    "url": "film-studio.html",
+    "name": "Studio Film AI",
+    "title": "Studio Film AI: Naskah, Storyboard dan Prompt Video",
+    "description": "Rancang film AI dan drama pendek: karakter konsisten, naskah, storyboard, shot list, prompt gambar dan video, subtitle, serta paket produksi.",
+    "group": "studio",
+    "icon": "film",
+    "new": true,
+    "landing_description": "Rancang film AI, jaga karakter, susun storyboard dan prompt video"
   }
 ]
