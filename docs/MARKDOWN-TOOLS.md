@@ -15,6 +15,10 @@ Editor dan pratinjau; heading/outline; GFM tabel, checklist, coretan dan code fe
 
 Pratinjau tidak memuat gambar eksternal atau menjalankan HTML aktif. Raw source tetap tersedia dalam ekspor MD/JSON/ZIP. Gambar lokal ditambahkan sebagai aset, diarsipkan dalam ZIP, dan dapat ditanam ke HTML/DOCX. Tabel HTML sederhana termasuk tabel Word tanpa elemen TH dipertahankan sebagai tabel Markdown; tabel gabungan colspan/rowspan dipertahankan sebagai HTML dalam MD. DOCX mempertahankan struktur umum, bukan seluruh ekstensi Markdown atau tata letak kompleks. Mermaid, matematika LaTeX, footnote khusus, dan ekstensi aplikasi tertentu dipertahankan sebagai teks/code; tidak ada klaim render universal atau kesetaraan seluruh dialek Markdown.
 
+## Umpan balik pemilihan file
+
+Alat PDF, gambar dan Markdown menggunakan `assets/file-activity.mjs`. Pemilihan file dan tarik-lepas menampilkan nama, ukuran total, indikator bergerak serta status selesai/gagal. Pembacaan tetap lokal, tanpa unggahan server. Indikator tanpa persentase digunakan jika kemajuan belum dapat diukur. Antarmuka diberi kesempatan menggambar sebelum parsing; status menunggu pekerjaan asinkron selesai. Pemeriksaan perilaku tertunda, kegagalan, tarik-lepas dan layout: `scripts/check-file-activity.cjs`.
+
 ## Ukuran dokumen
 
 Tidak ada batas buatan untuk ukuran file, jumlah halaman PDF, panjang dokumen, jumlah aset, atau jumlah file gabungan. File MD kosong tetap dapat diimpor dan diunduh. Pratinjau dokumen panjang hanya merender 100.000 karakter pertama; editor dan ekspor tetap menyimpan seluruh dokumen. Kapasitas memori, penyimpanan, codec, validitas file dan kemampuan perangkat tetap berlaku. Validasi keamanan arsip, sanitasi HTML dan pemeriksaan metadata tetap aktif.
