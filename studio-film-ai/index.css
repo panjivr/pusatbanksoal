@@ -7641,3 +7641,11 @@ body[data-theme="light"] .app-modal button.bg-gray-800\/40 {background:var(--ele
 .bekal-brand-light {display:none;}
 body[data-theme="light"] .bekal-brand-light {display:block;}
 body[data-theme="light"] .bekal-brand-dark {display:none;}
+@media(max-width:640px){
+  .app-toolbar__crumbs {display:none;}
+  .app-toolbar__leading {flex-shrink:0;}
+  .app-toolbar__center {min-width:0;}
+  .toolbar-project {max-width:100%;min-width:0;}
+  .toolbar-project__name {min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+}
+@media(max-width:400px){.toolbar-activity__label {display:none;}}

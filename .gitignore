@@ -7,3 +7,7 @@ u-*.png
 __pycache__/
 
 .pages/
+
+# Film Studio's imported shot reference assets are application files.
+!studio-film-ai/src/assets/visuals/shot-*.png
+!assets/studio-film-ai/shot-*.png
