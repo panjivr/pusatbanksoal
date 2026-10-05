@@ -1,5 +1,6 @@
+import { AiRouteError, hasGatewayTextRoute, readAiRouting } from './aiRouting';
 import { GoogleGenAI, Modality, Type, GenerateContentResponse, Operation, Chat, FunctionDeclaration, GenerateImagesResponse } from "@google/genai";
-import { withModelFallback } from './geminiModelFallback';
+import { getStudioAiClient } from './studioAiClient';
 import { MediaItem, ScriptAnalysisResult, StoryBible, ChatMessage, ShotPrompt, ReviewFeedback, ScriptLength, CinematographyCritique, AudioScoreRequest, TimelineClip, ReferenceItem, AudioCue, ScriptQualityReport, ScriptDoctorImprovement, NeurocinematicsAnalysisResult, AudioPsychoacousticsResult, DirectorTreatment, SubtitleWordTiming, ShotContinuityReview } from '../types';
 import { getVideoDuration, fileToBase64, decode } from "../utils/helpers";
 import { recordUsage } from '../utils/usageTracker';
@@ -27,6 +28,7 @@ const withRetry = async <T>(
         try {
             return await apiCall();
         } catch (error: any) {
+            if (error instanceof AiRouteError || error?.name === 'AbortError') throw error;
             const errorMessage = error.message || '';
             const isPermissionError = errorMessage.includes('403') || errorMessage.includes('PERMISSION_DENIED') || errorMessage.includes('The caller does not have permission');
             const isQuotaError = errorMessage.includes('429') || errorMessage.includes('RESOURCE_EXHAUSTED') || errorMessage.includes('quota');
@@ -120,20 +122,10 @@ const setVideoCacheEntry = (key: string, fileUri: string, mimeType: string) => {
 
 const buildVideoCacheKey = (file: File) => `file:${file.name}:${file.size}:${file.lastModified}`;
 
-const getAiClient = () => {
-    // Check process.env first (for web dev), then LocalStorage (for desktop/user key)
-    const envKey = process.env.API_KEY;
-    const storageKey = localStorage.getItem('gemini_api_key');
-
-    const apiKey = envKey || storageKey;
-
-    if (!apiKey) {
-        throw new Error("API Key is missing. Please enter your Google Gemini API Key in the settings.");
-    }
-    return withModelFallback(new GoogleGenAI({ apiKey }));
-};
+const getAiClient = getStudioAiClient;
 
 const shouldUseReplicateForGoogleModels = () => getGoogleModelProvider() === 'replicate';
+const shouldUseReplicateForTextModels = () => shouldUseReplicateForGoogleModels() && !(hasGatewayTextRoute() && readAiRouting().preferGateway);
 const GEMINI_NANO_BANANA_2_IMAGE_MODEL = 'gemini-3.1-flash-image-preview';
 const GEMINI_3_PRO_IMAGE_MODEL = 'gemini-3-pro-image-preview';
 const GEMINI_TEXT_MODEL_PRO = 'gemini-3.1-pro-preview';
@@ -283,7 +275,7 @@ Shots:
 ${JSON.stringify(shotSummaries)}
 `;
 
-    if (shouldUseReplicateForGoogleModels()) {
+    if (shouldUseReplicateForTextModels()) {
         const text = await generateTextWithGemini3ProReplicate(content, {
             systemPrompt: 'Return only valid JSON. No markdown, no commentary.',
         });
@@ -409,7 +401,7 @@ User Instruction:
 ${payload.instruction}
 `;
 
-    if (shouldUseReplicateForGoogleModels()) {
+    if (shouldUseReplicateForTextModels()) {
         const text = await generateTextWithGemini3ProReplicate(content, {
             systemPrompt: 'Return only valid JSON. No markdown, no commentary.',
         });
@@ -1354,7 +1346,7 @@ Script context:
 ${(payload.script || '').slice(0, 3000) || 'n/a'}
 `;
 
-    if (shouldUseReplicateForGoogleModels()) {
+    if (shouldUseReplicateForTextModels()) {
         const text = await generateTextWithGemini3ProReplicate(content, {
             systemPrompt: 'Return only valid JSON. No markdown, no commentary.',
         });
@@ -1576,7 +1568,7 @@ export const runChat = async (
 
                 const name = typeof entry.name === 'string' ? entry.name : '';
                 const thoughtSignature = typeof entry.thoughtSignature === 'string' ? entry.thoughtSignature : undefined;
-                if (!name || !thoughtSignature) return null;
+                if (!name) return null;
                 return {
                     functionCall: {
                         id: typeof entry.id === 'string' ? entry.id : undefined,
@@ -1648,7 +1640,7 @@ export const analyzeScriptQuality = async (script: string): Promise<ScriptQualit
         ---
         `;
 
-    if (shouldUseReplicateForGoogleModels()) {
+    if (shouldUseReplicateForTextModels()) {
         const text = await generateTextWithGemini3ProReplicate(content, {
             systemPrompt: 'Return only valid JSON. No markdown, no commentary.',
         });
@@ -1728,7 +1720,7 @@ Output JSON schema:
   "summary": ["string", "string"]
 }`;
 
-    if (shouldUseReplicateForGoogleModels()) {
+    if (shouldUseReplicateForTextModels()) {
         const text = await generateTextWithGemini3ProReplicate(content, {
             systemPrompt: 'Return only valid JSON. No markdown, no commentary.',
         });
@@ -1861,7 +1853,7 @@ export const analyzeScriptForReferences = async (script: string): Promise<Script
         Example:
         {"characters":[{"name":"Name","description":"..." }],"environments":[{"name":"Location","description":"..."}],"products":[{"name":"Brand","description":"..."}]}`;
 
-    if (shouldUseReplicateForGoogleModels()) {
+    if (shouldUseReplicateForTextModels()) {
         const text = await generateTextWithGemini3ProReplicate(content, {
             systemPrompt: 'Return only valid JSON. No markdown, no commentary.',
             maxTokens: 2400,
@@ -2008,7 +2000,7 @@ SCRIPT CHUNK:
 ${excerpt}
 ---`;
 
-    if (shouldUseReplicateForGoogleModels()) {
+    if (shouldUseReplicateForTextModels()) {
         const text = await generateTextWithGemini3ProReplicate(content, {
             systemPrompt: 'Return only valid JSON. No markdown, no commentary.',
             maxTokens: 2200,
@@ -2110,7 +2102,7 @@ export const generateScriptWithMode = async (
         Apply McKee's principle of "Conflict" in every scene. Ensure the dialogue has subtext.`;
 
     const isFast = mode === 'fast';
-    if (shouldUseReplicateForGoogleModels()) {
+    if (shouldUseReplicateForTextModels()) {
         try {
             return await generateTextWithGemini3ProReplicate(content, {
                 maxTokens: isFast ? 2400 : 4800,
@@ -2233,7 +2225,7 @@ export const editScriptSelection = async (fullScript: string, selection: string,
 
         Return ONLY the rewritten version of the Selected Text. Maintain standard screenplay format.`;
 
-    if (shouldUseReplicateForGoogleModels()) {
+    if (shouldUseReplicateForTextModels()) {
         return generateTextWithGemini3ProReplicate(content);
     }
 
@@ -2255,7 +2247,7 @@ export const suggestNextPlotPoints = async (script: string): Promise<string[]> =
 
         Return a JSON array of 3 strings. Each string should be a concise plot beat description.`;
 
-    if (shouldUseReplicateForGoogleModels()) {
+    if (shouldUseReplicateForTextModels()) {
         try {
             const text = await generateTextWithGemini3ProReplicate(content, {
                 systemPrompt: 'Return only valid JSON. No markdown, no commentary.',
@@ -2294,7 +2286,7 @@ export const suggestVisualStyles = async (script: string): Promise<string[]> => 
 
         Return a JSON array of strings.`;
 
-    if (shouldUseReplicateForGoogleModels()) {
+    if (shouldUseReplicateForTextModels()) {
         try {
             const text = await generateTextWithGemini3ProReplicate(content, {
                 systemPrompt: 'Return only valid JSON. No markdown, no commentary.',
@@ -2327,7 +2319,7 @@ export const suggestVisualStyles = async (script: string): Promise<string[]> => 
 export const generateProductionGuidelines = async (bible: StoryBible): Promise<string> => {
     const content = `Create production guidelines. Logline: ${bible.logline}. Script: ${bible.script}`;
 
-    if (shouldUseReplicateForGoogleModels()) {
+    if (shouldUseReplicateForTextModels()) {
         return generateTextWithGemini3ProReplicate(content);
     }
 
@@ -2371,7 +2363,7 @@ export const generateReferenceDetails = async (
         Return JSON { prompt: string, tags: string[] }.
     `;
 
-    if (shouldUseReplicateForGoogleModels()) {
+    if (shouldUseReplicateForTextModels()) {
         try {
             const text = await generateTextWithGemini3ProReplicate(userPrompt, {
                 systemPrompt: 'Return only valid JSON. No markdown, no commentary.',
@@ -2419,7 +2411,7 @@ Script (context): ${payload.script.substring(0, 3000)}
 
 Return JSON only with: personalityNotes, voiceNotes, backstory, characterGoals, characterArc, designNotes.`;
 
-    if (shouldUseReplicateForGoogleModels()) {
+    if (shouldUseReplicateForTextModels()) {
         try {
             const text = await generateTextWithGemini3ProReplicate(content, {
                 systemPrompt: 'Return only valid JSON. No markdown, no commentary.',
@@ -2488,7 +2480,7 @@ Script (context): ${payload.script.substring(0, 4000)}
 
 Return JSON with an array "outfits" (name, description, prompt). The description must include when/why the outfit appears (scene/setting/time/occasion). The prompt should describe the outfit on the same character, preserving identity, and be compatible with a try-on workflow where the character starts from a neutral swimsuit/base body and is then dressed with the target garments.`;
 
-    if (shouldUseReplicateForGoogleModels()) {
+    if (shouldUseReplicateForTextModels()) {
         try {
             const text = await generateTextWithGemini3ProReplicate(content, {
                 systemPrompt: 'Return only valid JSON. No markdown, no commentary.',
@@ -2596,7 +2588,7 @@ Return JSON only with:
   ]
 }`;
 
-    if (shouldUseReplicateForGoogleModels()) {
+    if (shouldUseReplicateForTextModels()) {
         try {
             const text = await generateTextWithGemini3ProReplicate(content, {
                 systemPrompt: 'Return only valid JSON. No markdown, no commentary.',
@@ -2700,7 +2692,7 @@ export const generateShotImagePrompts = async (
         ---
         `;
 
-    if (shouldUseReplicateForGoogleModels()) {
+    if (shouldUseReplicateForTextModels()) {
         const text = await generateTextWithGemini3ProReplicate(content, {
             systemPrompt: 'Return only valid JSON. No markdown, no commentary.',
         });
@@ -2868,7 +2860,7 @@ export const generateExtraShotPrompt = async (payload: {
         - "references": optional suggested visual references (character/environment/product/prop) with name and description.
         `;
 
-    if (shouldUseReplicateForGoogleModels()) {
+    if (shouldUseReplicateForTextModels()) {
         try {
             const text = await generateTextWithGemini3ProReplicate(content, {
                 systemPrompt: 'Return only valid JSON. No markdown, no commentary.',
@@ -2968,7 +2960,7 @@ Environment: ${payload.currentShot.environment || 'unspecified'}
 Prompt: ${payload.currentShot.prompt || 'n/a'}
         `;
 
-    if (shouldUseReplicateForGoogleModels()) {
+    if (shouldUseReplicateForTextModels()) {
         try {
             const text = await generateTextWithGemini3ProReplicate(content, {
                 systemPrompt: 'Return only valid JSON. No markdown, no commentary.',
@@ -3108,7 +3100,7 @@ Continuity Review:
 ${JSON.stringify(reviewContext)}
 `;
 
-    if (shouldUseReplicateForGoogleModels()) {
+    if (shouldUseReplicateForTextModels()) {
         try {
             const text = await generateTextWithGemini3ProReplicate(content, {
                 systemPrompt: 'Return only valid JSON. No markdown, no commentary.',
@@ -3256,7 +3248,7 @@ Continuity Review:
 ${JSON.stringify(reviewContext)}
 `;
 
-    if (shouldUseReplicateForGoogleModels()) {
+    if (shouldUseReplicateForTextModels()) {
         try {
             const text = await generateTextWithGemini3ProReplicate(content, {
                 systemPrompt: 'Return only valid JSON. No markdown, no commentary.',
@@ -3318,7 +3310,7 @@ export const analyzeProjectDraft = async (
         ${JSON.stringify(shotList.map(s => ({ shot: s.shot, desc: s.description, prompt: s.prompt })), null, 2)}
         `;
 
-    if (shouldUseReplicateForGoogleModels()) {
+    if (shouldUseReplicateForTextModels()) {
         try {
             const text = await generateTextWithGemini3ProReplicate(content, {
                 systemPrompt: 'Return only valid JSON. No markdown, no commentary.',
@@ -3553,7 +3545,7 @@ export const generateMotionPromptForShot = async (
 
         Generate only the motion prompt.`;
 
-    if (shouldUseReplicateForGoogleModels()) {
+    if (shouldUseReplicateForTextModels()) {
         return generateTextWithGemini3ProReplicate(content);
     }
 
@@ -3575,7 +3567,7 @@ export const getAudioSuggestions = async (timelineClips: any[], mediaItems: Medi
 
     const content = `You are a post-production sound designer. Recommend music styles and SFX. Scene List: ${sceneDescriptions}`;
 
-    if (shouldUseReplicateForGoogleModels()) {
+    if (shouldUseReplicateForTextModels()) {
         return generateTextWithGemini3ProReplicate(content);
     }
 
@@ -3603,7 +3595,7 @@ export const generateSmartScore = async (timelineClips: TimelineClip[], mediaIte
 
         Return a JSON array of audio requests. For music, suggest a mood. For SFX, be specific.`;
 
-    if (shouldUseReplicateForGoogleModels()) {
+    if (shouldUseReplicateForTextModels()) {
         try {
             const text = await generateTextWithGemini3ProReplicate(content, {
                 systemPrompt: 'Return only valid JSON. No markdown, no commentary.',
@@ -3670,7 +3662,7 @@ Return JSON with:
 - instruments: optional list of key instruments
 - mixNotes: optional mixing notes (e.g., \"duck under dialogue\", \"big rise at 0:45\")`;
 
-    if (shouldUseReplicateForGoogleModels()) {
+    if (shouldUseReplicateForTextModels()) {
         try {
             const text = await generateTextWithGemini3ProReplicate(content, {
                 systemPrompt: 'Return only valid JSON. No markdown, no commentary.',
@@ -4013,7 +4005,7 @@ export const generateMoviePoster = async (bible: StoryBible, references: Referen
 
         Output ONLY the prompt text.`;
 
-    const imagePrompt = shouldUseReplicateForGoogleModels()
+    const imagePrompt = shouldUseReplicateForTextModels()
         ? (await generateTextWithGemini3ProReplicate(promptContent)).trim()
         : (await (async () => {
             const ai = getAiClient();
@@ -4089,7 +4081,7 @@ export const analyzeTargetAudience = async (
     Keep the output structured and concise.
     `;
 
-    if (shouldUseReplicateForGoogleModels()) {
+    if (shouldUseReplicateForTextModels()) {
         return generateTextWithGemini3ProReplicate(prompt);
     }
 
@@ -4106,7 +4098,7 @@ export const analyzeTargetAudience = async (
 };
 
 export const generateTextWithGemini3Pro = async (prompt: string): Promise<string> => {
-    if (shouldUseReplicateForGoogleModels()) {
+    if (shouldUseReplicateForTextModels()) {
         return generateTextWithGemini3ProReplicate(prompt);
     }
     const ai = getAiClient();
@@ -4230,7 +4222,7 @@ const generateDirectorChunkJson = async <T>(
     responseSchema: any,
     label: string,
 ): Promise<T> => {
-    if (shouldUseReplicateForGoogleModels()) {
+    if (shouldUseReplicateForTextModels()) {
         const text = await generateTextWithGemini3ProReplicate(prompt, {
             systemPrompt: 'Return only valid JSON. No markdown.',
             temperature: 0.35,

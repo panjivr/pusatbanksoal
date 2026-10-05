@@ -33,7 +33,7 @@ const LiveConversation: React.FC<LiveConversationProps> = ({ apiKeyReady, onClos
   }, []);
 
   const stopConversation = () => {
-    sessionPromiseRef.current?.then(session => session.close());
+    sessionPromiseRef.current?.then(session => session.close()).catch(() => {});
     sessionPromiseRef.current = null;
 
     streamRef.current?.getTracks().forEach(track => track.stop());
@@ -61,8 +61,9 @@ const LiveConversation: React.FC<LiveConversationProps> = ({ apiKeyReady, onClos
   };
 
   const startConversation = async () => {
-    if (!apiKeyReady) {
-      setError("API Key not ready.");
+    const liveKey = process.env.API_KEY || localStorage.getItem('gemini_api_key');
+    if (!liveKey) {
+      setError("Percakapan langsung membutuhkan API key Gemini.");
       return;
     }
     setError(null);
@@ -72,7 +73,7 @@ const LiveConversation: React.FC<LiveConversationProps> = ({ apiKeyReady, onClos
         const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
         streamRef.current = stream;
 
-        const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+        const ai = new GoogleGenAI({ apiKey: liveKey });
         audioContextRef.current = new (window.AudioContext || (window as any).webkitAudioContext)({ sampleRate: 16000 });
         outputAudioContextRef.current = new (window.AudioContext || (window as any).webkitAudioContext)({ sampleRate: 24000 });
 
@@ -172,7 +173,8 @@ const LiveConversation: React.FC<LiveConversationProps> = ({ apiKeyReady, onClos
         });
 
     } catch (err) {
-        setError(`Failed to start session: ${(err as Error).message}`);
+        stopConversation();
+        setError(`Percakapan belum dapat dimulai: ${(err as Error).message}`);
     }
   };
 

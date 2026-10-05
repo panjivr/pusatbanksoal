@@ -475,16 +475,16 @@ export const buildStudioAgentSystemPrompt = (
 
 export const summarizeStudioAgentSnapshot = (snapshot: StudioAgentSnapshot) => {
   const parts = [
-    snapshot.projectName || 'Untitled project',
-    snapshot.activeWorkspace ? `workspace ${snapshot.activeWorkspace}` : null,
-    snapshot.activeProjectPhase ? `phase ${snapshot.activeProjectPhase}` : null,
-    `${snapshot.timelineClipCount} timeline clips`,
+    snapshot.projectName || 'Proyek tanpa judul',
+    snapshot.activeWorkspace ? `ruang kerja ${snapshot.activeWorkspace}` : null,
+    snapshot.activeProjectPhase ? `tahap ${snapshot.activeProjectPhase}` : null,
+    `${snapshot.timelineClipCount} klip linimasa`,
     typeof snapshot.storyboardShotCount === 'number'
-      ? `${snapshot.storyboardShotCount} storyboard shots`
+      ? `${snapshot.storyboardShotCount} adegan`
       : null,
     snapshot.creativeDNA ? snapshot.creativeDNA.directorMode : null,
     snapshot.collaboration
-      ? `${snapshot.collaboration.collaboratorCount} collaborators`
+      ? `${snapshot.collaboration.collaboratorCount} kolaborator`
       : null,
   ].filter(Boolean);
   return parts.join(' | ');

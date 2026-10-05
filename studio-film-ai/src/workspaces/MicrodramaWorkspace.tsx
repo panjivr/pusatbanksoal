@@ -15,7 +15,7 @@ interface MicrodramaWorkspaceProps {
 
 // Inline custom SVGs for complete independence and robustness
 const FireIcon = () => (
-    <svg className="w-5 h-5 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    <svg className="w-5 h-5 micro-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
     </svg>
@@ -51,7 +51,7 @@ const CheckIcon = ({ className = "w-5 h-5 text-green-500" }) => (
     </svg>
 );
 
-const ExclamationIcon = ({ className = "w-5 h-5 text-amber-500" }) => (
+const ExclamationIcon = ({ className = "w-5 h-5 micro-accent" }) => (
     <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
     </svg>
@@ -61,7 +61,7 @@ const ExclamationIcon = ({ className = "w-5 h-5 text-amber-500" }) => (
 const SUBGENRE_PRESETS = [
     {
         id: 'contemporary',
-        name: 'Contemporary Drama',
+        name: 'Drama masa kini',
         style: 'realistic, modern, urban, social media aesthetic',
         palette: 'warm neutrals, soft pastels, vibrant accents',
         lighting: 'natural, golden hour, soft, phone screen glow',
@@ -69,7 +69,7 @@ const SUBGENRE_PRESETS = [
     },
     {
         id: 'billionaire',
-        name: 'Billionaire Romance',
+        name: 'Romansa konglomerat',
         style: 'luxurious, high-end, sophisticated, rich texture',
         palette: 'black, gold, silver, rich deep colors',
         lighting: 'dramatic, high contrast, cinematic, selective rim lights',
@@ -77,7 +77,7 @@ const SUBGENRE_PRESETS = [
     },
     {
         id: 'enemies_to_lovers',
-        name: 'Enemies to Lovers',
+        name: 'Dari musuh menjadi pasangan',
         style: 'dramatic, intense, highly dynamic framing',
         palette: 'contrasting colors, bold reds, deep shadows, dramatic skin tones',
         lighting: 'high contrast, dramatic chiaroscuro, intense spotlighting',
@@ -85,7 +85,7 @@ const SUBGENRE_PRESETS = [
     },
     {
         id: 'historical',
-        name: 'Historical Period',
+        name: 'Drama sejarah',
         style: 'period accurate, vintage, elegant, textured film stock',
         palette: 'rich jewel tones, sepia, vintage copper',
         lighting: 'dramatic, candlelit, classical low-key',
@@ -93,7 +93,7 @@ const SUBGENRE_PRESETS = [
     },
     {
         id: 'fantasy',
-        name: 'Mystical Fantasy',
+        name: 'Fantasi dan misteri',
         style: 'mystical, ethereal, magical, cinematic bloom',
         palette: 'deep purples, golds, mystical midnight blues',
         lighting: 'magical glow, dramatic dark shadow, ethereal backlight',
@@ -120,31 +120,31 @@ const FOCAL_LENGTH_PRESETS = [
 const ARCHETYPE_PRESETS = [
     {
         id: 'ice_king',
-        name: 'The Ice King CEO',
+        name: 'CEO yang dingin',
         desc: 'Cold, ruthless, tailored suit, luxury wristwatch, razor-sharp gaze.',
         prompt: 'ultra photorealistic, [Age]-year-old male Ice King CEO, steel-gray eyes, cold ruthless expression, impeccably tailored dark navy suit, luxury watch peek, professional close-up portrait, cinematic high-contrast lighting, realistic skin textures, 85mm lens --ar 9:16 --v 7 --style raw --quality 5'
     },
     {
         id: 'fallen_heiress',
-        name: 'The Fallen Heiress',
+        name: 'Pewaris yang kehilangan segalanya',
         desc: 'Proud princess becomes pauper overnight. Worn trench coat, elegant stature.',
         prompt: 'ultra photorealistic, [Age]-year-old elegant female, proud expression, posture of a princess, slightly worn trench coat, holding a vintage gold family necklace, neutral studio background, realistic textures, cinematic lighting --ar 9:16 --v 7 --style raw --quality 5'
     },
     {
         id: 'fake_fiancee',
-        name: 'The Fake Fiancée',
+        name: 'Tunangan kontrak',
         desc: 'Contract love, business casual blazer, awkward sweet body language.',
         prompt: 'ultra photorealistic, [Age]-year-old female fake fiancée, awkward sweet expression, oversized diamond engagement ring clearly visible, business casual beige blazer, studio lighting, soft shadows, sharp focus, 50mm lens --ar 9:16 --v 7 --style raw --quality 5'
     },
     {
         id: 'fated_mate',
-        name: 'The Fated Mate',
+        name: 'Pasangan takdir',
         desc: 'Human with hidden wolf mate destiny, messy hair, ancient werewolf amulet.',
         prompt: 'ultra photorealistic, [Age]-year-old female with natural messy hair, minimal makeup, wearing an ancient glowing silver werewolf pendant, looking shocked, forest-green background, magical warm rim light, cinematic depth of field, 85mm --ar 9:16 --v 7 --style raw --quality 5'
     },
     {
         id: 'cursed_alpha',
-        name: 'The Cursed Alpha',
+        name: 'Pemimpin yang terkutuk',
         desc: 'Imposing werewolf leader, amber eyes, black leather jacket, runic scars.',
         prompt: 'ultra photorealistic, imposing rugged [Age]-year-old male alpha werewolf, amber glowing eyes, dark leather jacket, glowing runic neck scars, high-contrast dramatic side-lighting, smoke embers around him, dark backdrop, epic cinematic mood --ar 9:16 --v 7 --style raw --quality 5'
     },
@@ -225,7 +225,7 @@ const MicrodramaWorkspace: React.FC<MicrodramaWorkspaceProps> = ({
             script: fullScript,
             projectType: 'micro-drama' // Set custom project type to indicate vertical mobile drama
         }));
-        alert('Detonation screenplay successfully saved to the active Story Bible!');
+        alert('Naskah sudah disimpan ke panduan proyek.');
     };
 
     // AI Helper to draft high-tension screenplay drafts
@@ -234,17 +234,63 @@ const MicrodramaWorkspace: React.FC<MicrodramaWorkspaceProps> = ({
         let h = '', esc = '', fr = '';
 
         if (genreId === 'billionaire') {
-            h = `[SLAP!] The crystal goblet shatters on the polished marble. \n\nEVELYN (crying)\n"You married me... just for my bone marrow?!"\n\nPRESIDENT DAMIAN (coldly buttoning his Armani cuff)\n"Be glad your blood is at least useful to my true love, Evelyn."`;
-            esc = `Evelyn backs away, her bare feet bleeding on the shards. She runs out into the pouring rain, but Damian's security guards block the gate.\n\nDamian steps out with an umbrella, looking down like a god.\n\nDAMIAN\n"Sign the divorce, and the marrow transplant happens tomorrow."\n\nAt exactly 40 seconds: Evelyn laughs, wiping her blood and tears. She stands tall.\n\nEVELYN\n"Damian... you think you own this city? The anonymous shareholder who bought 51% of your corporation this morning... is ME."`;
-            fr = `Damian's phone buzzes. He answers, his face turning pale as ashes.\n\nDAMIAN (trembling)\n"W-what? The new chairwoman is a woman named... Evelyn Vance?"\n\nEvelyn smiles coldly, stepping past him into the rain.\n\n[FREEZE FRAME ON DAMIAN'S TOTAL DISBELIEF]`;
+            h = `[PRAK!] Gelas kristal pecah di lantai marmer.
+
+EVELYN (menahan tangis)
+“Kamu menikahiku hanya untuk menyelamatkan kekasihmu?”
+
+DAMIAN (dingin)
+“Setidaknya kamu bisa berguna untuknya.”`;
+            esc = `Evelyn mundur di antara pecahan kaca. Ia berlari ke gerbang, tetapi petugas keamanan menghalanginya.
+
+DAMIAN
+“Tanda tangani surat cerai ini. Setelah itu, semuanya selesai.”
+
+Kejutan di detik ke-40: Evelyn mengusap air matanya dan berdiri tegak.
+
+EVELYN
+“Pemegang saham yang membeli 51 persen perusahaanmu pagi ini adalah aku.”`;
+            fr = `Ponsel Damian berdering. Wajahnya memucat saat mendengar nama pemilik baru.
+
+DAMIAN
+“Evelyn Vance?”
+
+Evelyn tersenyum dan berjalan melewatinya.
+
+[AKHIR MENGGANTUNG: apa yang akan Evelyn lakukan pada perusahaan itu?]`;
         } else if (genreId === 'enemies_to_lovers') {
-            h = `ALEXANDER pins SARAH against the brick wall. A heavy silver knife is held between them. Sarah's breath is hot in the winter air.\n\nSARAH (grinning)\n"Kill me, Alexander. Or kiss me. Stop boring me."`;
-            esc = `Alexander's grip tightens, but his eyes flicker down to her lips. Rain begins to fall, washing the soot off their faces.\n\nALEXANDER\n"If I let you live, you'll burn my empire down by dawn."\n\nSARAH\n"Then you better hold me very tight."\n\nAt exactly 40 seconds: Sarah pulls the trigger of a hidden pocket pistol. Click. It's empty. Alexander smirked, opening his hand to reveal her bullets.\n\nALEXANDER\n"Nice try, kitten. But I taught you that trick."`;
-            fr = `Sarah gasps as Alexander drops the knife, grabbing her waist and pulling her into an intense, rain-soaked kiss. The sound of police sirens wail in the distance.\n\n[FREEZE FRAME ON SARAH'S SHOCKED EYELASHES AND UNRESOLVED BREATH]`;
+            h = `ALEXANDER menghadang SARAH di gang sempit. Keduanya saling menatap di tengah hujan.
+
+SARAH
+“Kamu sudah tahu rahasiaku. Kenapa masih membiarkanku pergi?”`;
+            esc = `Alexander terdiam. Sirene terdengar dari kejauhan.
+
+ALEXANDER
+“Kalau kamu pergi, semua yang kubangun bisa hancur.”
+
+SARAH
+“Kalau aku tinggal, kamu harus percaya kepadaku.”
+
+Kejutan di detik ke-40: Sarah menunjukkan rekaman yang membuktikan bahwa orang kepercayaan Alexander telah mengkhianatinya.`;
+            fr = `Alexander meraih tangan Sarah. Di ujung gang, seseorang menodongkan senjata ke arah mereka.
+
+[AKHIR MENGGANTUNG: siapa yang mengikuti mereka, dan bisakah keduanya lolos?]`;
         } else {
-            h = `[CRASH!] The front door swings open. \n\nLUCAS (pointing, hands shaking)\n"I saw the signature. It was you! You sold our family secret!"`;
-            esc = `Lucas demands answers. The room is silent except for the grandfather clock. \n\nLucas steps closer, cornering the suspect. \n\nAt 40 seconds: The suspect turns around, revealing Lucas's supposedly deceased brother, alive and wearing a luxurious signet ring.\n\nBROTHER\n"Lucas... I had to sell it. To save you."`;
-            fr = `The brother raises a key. "Choose right now: follow me, or the bomb in the basement detonate in 10 seconds."\n\n[FREEZE FRAME ON LUCAS FACING THE ULTIMATUM]`;
+            h = `[BRAK!] Pintu terbuka.
+
+LUCAS
+“Aku melihat tanda tangan itu. Kamu yang membocorkan rahasia keluarga kita!”`;
+            esc = `Lucas menuntut penjelasan. Ruangan sunyi, hanya jam tua yang berdetak.
+
+Kejutan di detik ke-40: sosok di depannya berbalik. Ia adalah kakak Lucas yang selama ini dikira telah meninggal.
+
+KAKAK
+“Aku melakukannya untuk menyelamatkanmu.”`;
+            fr = `Sang kakak mengangkat sebuah kunci.
+
+“Ikut denganku sekarang. Kita hanya punya sepuluh detik.”
+
+[AKHIR MENGGANTUNG: pilihan Lucas akan menentukan nasib mereka.]`;
         }
 
         setHookText(h);
@@ -306,7 +352,7 @@ const MicrodramaWorkspace: React.FC<MicrodramaWorkspaceProps> = ({
             videoUrl: undefined
         };
         setShotPrompts(prev => [...prev, newShot]);
-        alert(`Successfully added Shot #${nextNum} to the main project storyboard!`);
+        alert(`Adegan ${nextNum} sudah ditambahkan ke papan adegan proyek.`);
     };
 
     // 3. Audio Tab State (Mobile Optimization Desk)
@@ -318,56 +364,56 @@ const MicrodramaWorkspace: React.FC<MicrodramaWorkspaceProps> = ({
     const [cliffhangerAudio, setCliffhangerAudio] = useState('suspended');
 
     const handleSaveAudioSpec = () => {
-        const audioSpec = `=== MOBILE-FIRST AUDIO DESIGN SPECS ===
-* Low-End Control: ${hpfEnabled ? 'STEEP HIGH-PASS FILTER AT 80HZ (Bass Management for Mobile Speakers)' : 'Bypass HPF'}
-* Dialogue Clarity EQ: +${dialogueBoost}dB Boost at 2.5kHz (Optimized for noisy commutes)
-* Intimacy EQ: +${intimacyBoost}dB Vocal Boost at 3.0kHz (Brings whisper scenes forward)
-* Crispness EQ: +${airShelf}dB High-Shelf at 12kHz (Air & clarity on standard earbuds)
-* Target Loudness: ${targetLoudness} LUFS (Integrated, high volume matching feeds)
-* Peak Limiter Ceiling: -3.0 dB (Prevent phone amp clipping)
-* Cliffhanger Ending Treatment: ${cliffhangerAudio === 'suspended' ? 'Unresolved Suspended Chords (sus2/sus4/diminished)' : cliffhangerAudio === 'silence' ? 'Sudden Vacuum Silence (Anticipatory anxiety spike)' : '110 BPM Subliminal Heartbeat pulse'}`;
+        const audioSpec = `=== PANDUAN AUDIO UNTUK HP ===
+* Kontrol frekuensi rendah: ${hpfEnabled ? 'STEEP HIGH-PASS FILTER AT 80HZ (Bass Management for Mobile Speakers)' : 'Bypass HPF'}
+* EQ kejelasan dialog: +${dialogueBoost}dB Boost at 2.5kHz (Optimized for noisy commutes)
+* EQ penegasan vokal: +${intimacyBoost}dB Vocal Boost at 3.0kHz (Brings whisper scenes forward)
+* EQ kejernihan: +${airShelf}dB High-Shelf at 12kHz (Air & clarity on standard earbuds)
+* Target volume: ${targetLoudness} LUFS (Integrated, high volume matching feeds)
+* Batas puncak suara: -3.0 dB (Prevent phone amp clipping)
+* Audio akhir menggantung: ${cliffhangerAudio === 'suspended' ? 'Unresolved Suspended Chords (sus2/sus4/diminished)' : cliffhangerAudio === 'silence' ? 'Sudden Vacuum Silence (Anticipatory anxiety spike)' : '110 BPM Subliminal Heartbeat pulse'}`;
 
         setStoryBible(prev => ({
             ...prev,
             productionGuidelines: `${prev.productionGuidelines || ''}\n\n${audioSpec}`.trim()
         }));
-        alert('Specialized Mobile-First Audio specs appended to Project Production Guidelines!');
+        alert('Panduan audio sudah disimpan ke proyek. Berkas audio belum diubah.');
     };
 
     // Checklist validators
     const scriptValidations = [
-        { name: 'Peak-Conflict Hook (0-15s)', pass: hookText.length > 50 && (hookText.toLowerCase().includes('slap') || hookText.toLowerCase().includes('blood') || hookText.toLowerCase().includes(' betrayal') || hookText.toLowerCase().includes('!') || hookText.toLowerCase().includes('sign')) },
-        { name: '40-Second Dopamine Jolt / Reversal', pass: escalationText.length > 100 && (escalationText.toLowerCase().includes('40 second') || escalationText.toLowerCase().includes('exactly 40') || escalationText.toLowerCase().includes('reversal') || escalationText.toLowerCase().includes('turnout') || escalationText.toLowerCase().includes('reveal')) },
-        { name: 'Cliffhanger Freeze (No Closure)', pass: freezeText.length > 50 && (freezeText.toLowerCase().includes('freeze') || freezeText.toLowerCase().includes('cliffhanger') || freezeText.toLowerCase().includes('unresolved') || freezeText.toLowerCase().includes('ultimatum') || freezeText.toLowerCase().includes('?')) }
+        { name: 'Konflik pembuka (0–15 detik)', pass: hookText.length > 50 && (hookText.toLowerCase().includes('slap') || hookText.toLowerCase().includes('blood') || hookText.toLowerCase().includes(' betrayal') || hookText.toLowerCase().includes('!') || hookText.toLowerCase().includes('sign') || /khianat|konflik|rahasia|darah|tampar/.test(hookText.toLowerCase())) },
+        { name: '40-Second Dopamine Jolt / Reversal', pass: escalationText.length > 100 && (escalationText.toLowerCase().includes('40 second') || escalationText.toLowerCase().includes('exactly 40') || escalationText.toLowerCase().includes('reversal') || escalationText.toLowerCase().includes('turnout') || escalationText.toLowerCase().includes('reveal') || /40 detik|detik ke.?40|kejutan|terungkap|balik keadaan/.test(escalationText.toLowerCase())) },
+        { name: 'Akhir menggantung', pass: freezeText.length > 50 && (freezeText.toLowerCase().includes('freeze') || freezeText.toLowerCase().includes('cliffhanger') || freezeText.toLowerCase().includes('unresolved') || freezeText.toLowerCase().includes('ultimatum') || freezeText.toLowerCase().includes('?') || /menggantung|ancaman|pilihan|belum selesai/.test(freezeText.toLowerCase())) }
     ];
 
     return (
-        <div className="studio-workspace h-full flex flex-col bg-gray-950 text-gray-100 overflow-hidden">
+        <div className="studio-workspace microdrama-workspace h-full flex flex-col micro-base micro-text overflow-hidden">
             {/* Workspace Header banner */}
-            <div className="px-6 py-4 bg-gradient-to-r from-red-950/40 via-purple-950/30 to-gray-900 border-b border-red-900/30 flex justify-between items-center">
+            <div className="px-6 py-4 micro-header border-b micro-border flex flex-wrap justify-between items-center gap-4">
                 <div>
-                    <h1 className="text-2xl font-bold flex items-center gap-2 text-red-500">
+                    <h1 className="text-2xl font-bold flex items-center gap-2 micro-accent">
                         <FireIcon />
                         Microdrama Studio Workspace
                     </h1>
-                    <p className="text-xs text-gray-400 mt-0.5">Automated 9:16 Mobile-First Production & Screenplay Pipeline (爆点 Formula)</p>
+                    <p className="text-xs micro-muted mt-0.5">Automated 9:16 Mobile-First Production & Screenplay Pipeline (爆点 Formula)</p>
                 </div>
-                <div className="flex gap-2">
+                <div className="micro-tabs flex flex-wrap gap-2" role="tablist" aria-label="Bagian drama pendek">
                     <button
-                        onClick={() => setActiveTab('script')}
-                        className={`px-4 py-2 text-xs font-semibold rounded-lg flex items-center gap-2 transition ${activeTab === 'script' ? 'bg-red-600 text-white' : 'bg-gray-800 hover:bg-gray-700 text-gray-300'}`}
+                        type="button" role="tab" aria-selected={activeTab === 'script'} onClick={() => setActiveTab('script')}
+                        className={`px-4 py-2 text-xs font-semibold rounded-lg flex items-center gap-2 transition ${activeTab === 'script' ? 'micro-primary micro-text' : 'micro-control hover:micro-control micro-text'}`}
                     >
                         <ScriptIcon /> Screenplay (爆点)
                     </button>
                     <button
-                        onClick={() => setActiveTab('video')}
-                        className={`px-4 py-2 text-xs font-semibold rounded-lg flex items-center gap-2 transition ${activeTab === 'video' ? 'bg-red-600 text-white' : 'bg-gray-800 hover:bg-gray-700 text-gray-300'}`}
+                        type="button" role="tab" aria-selected={activeTab === 'video'} onClick={() => setActiveTab('video')}
+                        className={`px-4 py-2 text-xs font-semibold rounded-lg flex items-center gap-2 transition ${activeTab === 'video' ? 'micro-primary micro-text' : 'micro-control hover:micro-control micro-text'}`}
                     >
                         <VideoIcon /> Video Prompt Formula
                     </button>
                     <button
-                        onClick={() => setActiveTab('audio')}
-                        className={`px-4 py-2 text-xs font-semibold rounded-lg flex items-center gap-2 transition ${activeTab === 'audio' ? 'bg-red-600 text-white' : 'bg-gray-800 hover:bg-gray-700 text-gray-300'}`}
+                        type="button" role="tab" aria-selected={activeTab === 'audio'} onClick={() => setActiveTab('audio')}
+                        className={`px-4 py-2 text-xs font-semibold rounded-lg flex items-center gap-2 transition ${activeTab === 'audio' ? 'micro-primary micro-text' : 'micro-control hover:micro-control micro-text'}`}
                     >
                         <AudioIcon /> Mobile EQ & Audio
                     </button>
@@ -381,21 +427,21 @@ const MicrodramaWorkspace: React.FC<MicrodramaWorkspaceProps> = ({
                 {activeTab === 'script' && (
                     <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                         {/* Interactive Editor Form */}
-                        <div className="lg:col-span-2 space-y-4 bg-gray-900/40 border border-gray-800 rounded-xl p-5">
+                        <div className="lg:col-span-2 space-y-4 micro-panel border micro-border rounded-xl p-5">
                             <div className="flex justify-between items-center mb-2">
-                                <h2 className="text-lg font-bold text-white flex items-center gap-2">
+                                <h2 className="text-lg font-bold micro-text flex items-center gap-2">
                                     <ScriptIcon /> Screenplay Draft (90s Beat Timeline)
                                 </h2>
                                 <div className="flex gap-1.5">
                                     <button
                                         onClick={() => handleAIScriptDraft('billionaire')}
-                                        className="px-2.5 py-1 text-[11px] bg-amber-600/25 text-amber-300 border border-amber-500/30 rounded hover:bg-amber-600/40 transition"
+                                        className="px-2.5 py-1 text-[11px] micro-tint micro-accent border micro-border rounded hover:micro-tint transition"
                                     >
                                         💡 Billionaire Drama Presets
                                     </button>
                                     <button
                                         onClick={() => handleAIScriptDraft('enemies_to_lovers')}
-                                        className="px-2.5 py-1 text-[11px] bg-red-600/25 text-red-300 border border-red-500/30 rounded hover:bg-red-600/40 transition"
+                                        className="px-2.5 py-1 text-[11px] micro-primary/25 micro-accent border micro-border rounded hover:micro-primary/40 transition"
                                     >
                                         ⚡ Intense Enemies Presets
                                     </button>
@@ -404,51 +450,51 @@ const MicrodramaWorkspace: React.FC<MicrodramaWorkspaceProps> = ({
 
                             {/* Phase 1 Input */}
                             <div className="space-y-1">
-                                <label className="block text-xs font-medium text-red-400">Phase 1: The Hook (0 - 15 Seconds) — Immediate high crisis / betrayal</label>
+                                <label className="block text-xs font-medium micro-accent">Phase 1: The Hook (0 - 15 Seconds) — Immediate high crisis / betrayal</label>
                                 <textarea
-                                    value={hookText}
+                                    id="micro-hook" aria-label="Pembuka cerita" value={hookText}
                                     onChange={(e) => setHookText(e.target.value)}
                                     placeholder="Enter mid-crisis (in media res). No setup. e.g., SLAP! 'You betrayed our contract marriage!'"
-                                    className="w-full h-32 bg-gray-950 border border-gray-800 rounded-lg p-3 text-sm focus:outline-none focus:ring-1 focus:ring-red-500 text-gray-200"
+                                    className="w-full h-32 micro-base border micro-border rounded-lg p-3 text-sm focus:outline-none focus:ring-1 focus:micro-ring micro-text"
                                 />
                             </div>
 
                             {/* Phase 2 Input */}
                             <div className="space-y-1">
-                                <label className="block text-xs font-medium text-purple-400">Phase 2: The Escalation (15 - 60 Seconds) — Mini-conflicts & 40s Climax Reversal</label>
+                                <label className="block text-xs font-medium micro-accent">Phase 2: The Escalation (15 - 60 Seconds) — Mini-conflicts & 40s Climax Reversal</label>
                                 <textarea
-                                    value={escalationText}
+                                    id="micro-escalation" aria-label="Perkembangan konflik" value={escalationText}
                                     onChange={(e) => setEscalationText(e.target.value)}
                                     placeholder="Layer intense mini-conflicts. REMEMBER to specify a major climax twist/reversal at precisely the 40-second mark!"
-                                    className="w-full h-40 bg-gray-950 border border-gray-800 rounded-lg p-3 text-sm focus:outline-none focus:ring-1 focus:ring-purple-500 text-gray-200"
+                                    className="w-full h-40 micro-base border micro-border rounded-lg p-3 text-sm focus:outline-none focus:ring-1 focus:micro-ring micro-text"
                                 />
                             </div>
 
                             {/* Phase 3 Input */}
                             <div className="space-y-1">
-                                <label className="block text-xs font-medium text-amber-400">Phase 3: The Freeze (60 - 90 Seconds) — Abrupt high-stakes cliffhanger</label>
+                                <label className="block text-xs font-medium micro-accent">Phase 3: The Freeze (60 - 90 Seconds) — Abrupt high-stakes cliffhanger</label>
                                 <div className="grid grid-cols-2 sm:grid-cols-5 gap-1.5 mb-2">
                                     {['decision', 'identity', 'threat', 'break', 'powershift'].map((cat) => (
                                         <button
                                             key={cat}
                                             onClick={() => setSelectedCliffhanger(cat)}
-                                            className={`py-1 text-[10px] uppercase font-bold rounded border transition ${selectedCliffhanger === cat ? 'bg-amber-600 border-amber-500 text-white' : 'bg-gray-950 border-gray-800 hover:border-gray-700 text-gray-400'}`}
+                                            className={`py-1 text-[10px] uppercase font-bold rounded border transition ${selectedCliffhanger === cat ? 'micro-primary micro-border micro-text' : 'micro-base micro-border hover:micro-border micro-muted'}`}
                                         >
-                                            {cat === 'powershift' ? 'Power Shift' : `${cat} freeze`}
+                                            {({ decision: 'Pilihan sulit', identity: 'Rahasia identitas', threat: 'Ancaman', break: 'Perpisahan', powershift: 'Balik keadaan' } as Record<string, string>)[cat]}
                                         </button>
                                     ))}
                                 </div>
                                 <textarea
-                                    value={freezeText}
+                                    id="micro-ending" aria-label="Akhir menggantung" value={freezeText}
                                     onChange={(e) => setFreezeText(e.target.value)}
                                     placeholder="Withhold resolution completely. Freeze characters at a devastating decision point, reveal, or sudden physical threat!"
-                                    className="w-full h-32 bg-gray-950 border border-gray-800 rounded-lg p-3 text-sm focus:outline-none focus:ring-1 focus:ring-amber-500 text-gray-200"
+                                    className="w-full h-32 micro-base border micro-border rounded-lg p-3 text-sm focus:outline-none focus:ring-1 focus:micro-ring micro-text"
                                 />
                             </div>
 
                             <button
                                 onClick={handleSaveScriptToBible}
-                                className="w-full bg-red-600 hover:bg-red-500 py-2.5 rounded-lg text-sm font-semibold text-white transition flex justify-center items-center gap-2 mt-4 shadow-lg shadow-red-950/20"
+                                className="w-full micro-primary hover:micro-primary py-2.5 rounded-lg text-sm font-semibold micro-text transition flex justify-center items-center gap-2 mt-4 shadow-lg "
                             >
                                 <ScriptIcon /> Save Screenplay to Project Bible
                             </button>
@@ -456,15 +502,15 @@ const MicrodramaWorkspace: React.FC<MicrodramaWorkspaceProps> = ({
 
                         {/* Real-time Detonation Assessment Sidebar */}
                         <div className="space-y-4">
-                            <div className="bg-gray-900/40 border border-gray-800 rounded-xl p-5">
-                                <h3 className="text-sm font-bold text-white mb-3 uppercase tracking-wider">爆点 Pacing Checklist</h3>
+                            <div className="micro-panel border micro-border rounded-xl p-5">
+                                <h3 className="text-sm font-bold micro-text mb-3 uppercase tracking-wider">爆点 Pacing Checklist</h3>
                                 <div className="space-y-3">
                                     {scriptValidations.map((val, idx) => (
-                                        <div key={idx} className="flex items-start gap-3 p-2.5 rounded-lg bg-gray-950/60 border border-gray-800/80">
+                                        <div key={idx} className="flex items-start gap-3 p-2.5 rounded-lg micro-base border micro-border">
                                             {val.pass ? <CheckIcon /> : <ExclamationIcon />}
                                             <div>
-                                                <h4 className="text-xs font-semibold text-gray-200">{val.name}</h4>
-                                                <p className="text-[10px] text-gray-400 mt-0.5">
+                                                <h4 className="text-xs font-semibold micro-text">{val.name}</h4>
+                                                <p className="text-[10px] micro-muted mt-0.5">
                                                     {idx === 0 && 'Must start directly mid-crisis (e.g. slaps, betrayals, sudden reveals).'}
                                                     {idx === 1 && 'Pacing requires a powerful plot twist/reversal at the 40-second mark.'}
                                                     {idx === 2 && 'Must deny closure completely using one of the 5 cliffhanger templates.'}
@@ -475,9 +521,9 @@ const MicrodramaWorkspace: React.FC<MicrodramaWorkspaceProps> = ({
                                 </div>
                             </div>
 
-                            <div className="bg-gradient-to-br from-red-950/20 to-gray-950 border border-red-900/20 rounded-xl p-5">
-                                <h3 className="text-xs font-bold text-red-400 uppercase tracking-wider mb-2">Technical Framing Tips</h3>
-                                <p className="text-xs text-gray-300 leading-relaxed">
+                            <div className="micro-tint border micro-border rounded-xl p-5">
+                                <h3 className="text-xs font-bold micro-accent uppercase tracking-wider mb-2">Technical Framing Tips</h3>
+                                <p className="text-xs micro-text leading-relaxed">
                                     When drafting the actions, frame human drama in <b>48mm (2.0x) portrait focal lengths</b> to compress faces beautifully and simulate optical bokeh on modern mobile sensors (iPhone 15 Pro).
                                     Avoid placing character heads on the portrait edge boundaries to prevent wide-angle stretching.
                                 </p>
@@ -490,18 +536,18 @@ const MicrodramaWorkspace: React.FC<MicrodramaWorkspaceProps> = ({
                 {activeTab === 'video' && (
                     <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                         {/* Prompt Customization Form */}
-                        <div className="lg:col-span-2 space-y-4 bg-gray-900/40 border border-gray-800 rounded-xl p-5">
-                            <h2 className="text-lg font-bold text-white flex items-center gap-2 mb-2">
+                        <div className="lg:col-span-2 space-y-4 micro-panel border micro-border rounded-xl p-5">
+                            <h2 className="text-lg font-bold micro-text flex items-center gap-2 mb-2">
                                 <SparklesIcon /> Engine-Specific Video Prompt Builder (9:16 Vertical)
                             </h2>
 
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                 <div className="space-y-1">
-                                    <label className="block text-xs font-medium text-gray-400">Subgenre & Visual Aesthetics</label>
+                                    <label className="block text-xs font-medium micro-muted">Subgenre & Visual Aesthetics</label>
                                     <select
                                         value={selectedSubgenre}
                                         onChange={(e) => setSelectedSubgenre(e.target.value)}
-                                        className="w-full bg-gray-950 border border-gray-800 rounded-lg p-2.5 text-sm text-gray-200"
+                                        className="w-full micro-base border micro-border rounded-lg p-2.5 text-sm micro-text"
                                     >
                                         {SUBGENRE_PRESETS.map(p => (
                                             <option key={p.id} value={p.id}>{p.name}</option>
@@ -509,15 +555,15 @@ const MicrodramaWorkspace: React.FC<MicrodramaWorkspaceProps> = ({
                                     </select>
                                 </div>
                                 <div className="space-y-1">
-                                    <label className="block text-xs font-medium text-gray-400">Target Video Model Engine</label>
+                                    <label className="block text-xs font-medium micro-muted">Target Video Model Engine</label>
                                     <div className="grid grid-cols-3 gap-1">
                                         {['kling', 'veo', 'seadance'].map((eng) => (
                                             <button
                                                 key={eng}
                                                 onClick={() => setSelectedEngine(eng as any)}
-                                                className={`py-2 text-xs font-bold rounded border transition ${selectedEngine === eng ? 'bg-red-600 border-red-500 text-white' : 'bg-gray-950 border-gray-800 text-gray-400 hover:border-gray-700'}`}
+                                                className={`py-2 text-xs font-bold rounded border transition ${selectedEngine === eng ? 'micro-primary micro-border micro-text' : 'micro-base micro-border micro-muted hover:micro-border'}`}
                                             >
-                                                {eng === 'kling' ? 'Kling 2.6 (Emotions)' : eng === 'veo' ? 'Veo 3 (Camera Moves)' : 'SeaDance (Intimacy)'}
+                                                {eng === 'kling' ? 'Kling (ekspresi)' : eng === 'veo' ? 'Veo (kamera)' : 'Seedance (adegan dekat)'}
                                             </button>
                                         ))}
                                     </div>
@@ -525,19 +571,19 @@ const MicrodramaWorkspace: React.FC<MicrodramaWorkspaceProps> = ({
                             </div>
 
                             {/* High-Converting Character & Environment Presets */}
-                            <div className="p-4 bg-gray-950/60 border border-gray-800 rounded-lg space-y-4">
+                            <div className="p-4 micro-base border micro-border rounded-lg space-y-4">
                                 <div className="flex flex-col sm:flex-row gap-4 justify-between items-start sm:items-center">
                                     <div>
-                                        <h3 className="text-xs font-bold text-red-400 uppercase tracking-wider">Character Archetypes (Midjourney V7 formula)</h3>
-                                        <p className="text-[10px] text-gray-400 mt-0.5">Loads ready-to-render character profiles with emotional triggers.</p>
+                                        <h3 className="text-xs font-bold micro-accent uppercase tracking-wider">Character Archetypes (Midjourney V7 formula)</h3>
+                                        <p className="text-[10px] micro-muted mt-0.5">Loads ready-to-render character profiles with emotional triggers.</p>
                                     </div>
                                     <div className="flex items-center gap-2">
-                                        <span className="text-[10px] text-gray-400 font-medium">Set Character Age:</span>
+                                        <span className="text-[10px] micro-muted font-medium">Set Character Age:</span>
                                         <input
                                             type="number"
                                             value={characterAge}
                                             onChange={(e) => setCharacterAge(Math.max(18, Math.min(100, parseInt(e.target.value) || 28)))}
-                                            className="w-14 bg-gray-900 border border-gray-800 rounded p-1 text-xs text-center text-white"
+                                            className="w-14 micro-panel border micro-border rounded p-1 text-xs text-center micro-text"
                                             min="18"
                                             max="100"
                                         />
@@ -548,27 +594,27 @@ const MicrodramaWorkspace: React.FC<MicrodramaWorkspaceProps> = ({
                                         <button
                                             key={arch.id}
                                             onClick={() => handleApplyArchetype(arch.id)}
-                                            className="p-2 text-[11px] text-left bg-gray-900 border border-gray-800 rounded-lg hover:border-red-500 hover:bg-gray-900/80 transition flex flex-col justify-between"
+                                            className="p-2 text-[11px] text-left micro-panel border micro-border rounded-lg hover:micro-border hover:micro-panel transition flex flex-col justify-between"
                                             title={arch.desc}
                                         >
-                                            <span className="font-bold text-white block">{arch.name}</span>
-                                            <span className="text-[9px] text-gray-500 mt-1 truncate w-full">{arch.desc}</span>
+                                            <span className="font-bold micro-text block">{arch.name}</span>
+                                            <span className="text-[9px] micro-muted mt-1 truncate w-full">{arch.desc}</span>
                                         </button>
                                     ))}
                                 </div>
 
-                                <div className="pt-2 border-t border-gray-800/40">
-                                    <h3 className="text-xs font-bold text-purple-400 uppercase tracking-wider mb-2">Cinematic 9:16 Environment Presets</h3>
+                                <div className="pt-2 border-t micro-border">
+                                    <h3 className="text-xs font-bold micro-accent uppercase tracking-wider mb-2">Cinematic 9:16 Environment Presets</h3>
                                     <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
                                         {ENVIRONMENT_PRESETS.map((env) => (
                                             <button
                                                 key={env.id}
                                                 onClick={() => handleApplyEnvironment(env.id)}
-                                                className="p-2 text-[11px] text-left bg-gray-900 border border-gray-800 rounded-lg hover:border-purple-500 hover:bg-gray-900/80 transition flex flex-col justify-between"
+                                                className="p-2 text-[11px] text-left micro-panel border micro-border rounded-lg hover:micro-border hover:micro-panel transition flex flex-col justify-between"
                                                 title={env.desc}
                                             >
-                                                <span className="font-bold text-white block">{env.name}</span>
-                                                <span className="text-[9px] text-gray-500 mt-1 truncate w-full">{env.desc}</span>
+                                                <span className="font-bold micro-text block">{env.name}</span>
+                                                <span className="text-[9px] micro-muted mt-1 truncate w-full">{env.desc}</span>
                                             </button>
                                         ))}
                                     </div>
@@ -577,11 +623,11 @@ const MicrodramaWorkspace: React.FC<MicrodramaWorkspaceProps> = ({
 
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                 <div className="space-y-1">
-                                    <label className="block text-xs font-medium text-gray-400">iPhone Pro Portrait Lens Crop</label>
+                                    <label className="block text-xs font-medium micro-muted">iPhone Pro Portrait Lens Crop</label>
                                     <select
                                         value={focalLength}
                                         onChange={(e) => setFocalLength(e.target.value)}
-                                        className="w-full bg-gray-950 border border-gray-800 rounded-lg p-2.5 text-sm text-gray-200"
+                                        className="w-full micro-base border micro-border rounded-lg p-2.5 text-sm micro-text"
                                     >
                                         {FOCAL_LENGTH_PRESETS.map(f => (
                                             <option key={f.value} value={f.value}>{f.label} — {f.desc}</option>
@@ -589,39 +635,39 @@ const MicrodramaWorkspace: React.FC<MicrodramaWorkspaceProps> = ({
                                     </select>
                                 </div>
                                 <div className="space-y-1">
-                                    <label className="block text-xs font-medium text-gray-400">Lead Character Name / Subject</label>
+                                    <label className="block text-xs font-medium micro-muted">Lead Character Name / Subject</label>
                                     <input
                                         type="text"
                                         value={characterName}
                                         onChange={(e) => setCharacterName(e.target.value)}
                                         placeholder="e.g. Evelyn (betrayed wife, white silk dress)"
-                                        className="w-full bg-gray-950 border border-gray-800 rounded-lg p-2.5 text-sm text-gray-200"
+                                        className="w-full micro-base border micro-border rounded-lg p-2.5 text-sm micro-text"
                                     />
                                 </div>
                             </div>
 
                             <div className="space-y-1">
-                                <label className="block text-xs font-medium text-gray-400">Shot Action & Narrative Description</label>
+                                <label className="block text-xs font-medium micro-muted">Shot Action & Narrative Description</label>
                                 <textarea
                                     value={shotDescription}
                                     onChange={(e) => setShotDescription(e.target.value)}
                                     placeholder="Describe the action and expression in detail..."
-                                    className="w-full h-20 bg-gray-950 border border-gray-800 rounded-lg p-2.5 text-sm text-gray-200 focus:outline-none"
+                                    className="w-full h-20 micro-base border micro-border rounded-lg p-2.5 text-sm micro-text focus:outline-none"
                                 />
                             </div>
 
                             {/* Output Prompt Formula Field */}
-                            <div className="space-y-1 bg-gray-950/90 border border-gray-800/80 rounded-lg p-4 mt-2">
+                            <div className="space-y-1 micro-base border micro-border rounded-lg p-4 mt-2">
                                 <div className="flex justify-between items-center mb-1">
-                                    <label className="block text-[10px] font-bold text-red-400 uppercase tracking-wider">Generated Model-Calibrated Prompt</label>
-                                    <span className="text-[9px] bg-gray-800 px-1.5 py-0.5 rounded text-gray-400 uppercase font-mono">{selectedEngine} engine preset active</span>
+                                    <label className="block text-[10px] font-bold micro-accent uppercase tracking-wider">Generated Model-Calibrated Prompt</label>
+                                    <span className="text-[9px] micro-control px-1.5 py-0.5 rounded micro-muted uppercase font-mono">{selectedEngine} model terpilih</span>
                                 </div>
-                                <p className="text-xs text-gray-100 font-mono select-all break-words leading-relaxed">{outputPrompt}</p>
+                                <p className="text-xs micro-text font-mono select-all break-words leading-relaxed">{outputPrompt}</p>
                             </div>
 
                             <button
                                 onClick={handleAddShotPrompt}
-                                className="w-full bg-red-600 hover:bg-red-500 py-2.5 rounded-lg text-sm font-semibold text-white transition flex justify-center items-center gap-2 shadow-lg shadow-red-950/20"
+                                className="w-full micro-primary hover:micro-primary py-2.5 rounded-lg text-sm font-semibold micro-text transition flex justify-center items-center gap-2 shadow-lg "
                             >
                                 <VideoIcon /> Inject into Storyboard / Shot List
                             </button>
@@ -629,17 +675,17 @@ const MicrodramaWorkspace: React.FC<MicrodramaWorkspaceProps> = ({
 
                         {/* Presets and Guidance Sidebar */}
                         <div className="space-y-4">
-                            <div className="bg-gray-900/40 border border-gray-800 rounded-xl p-5">
-                                <h3 className="text-sm font-bold text-white mb-3">Engine Highlights</h3>
-                                <ul className="space-y-3 text-xs text-gray-300">
+                            <div className="micro-panel border micro-border rounded-xl p-5">
+                                <h3 className="text-sm font-bold micro-text mb-3">Engine Highlights</h3>
+                                <ul className="space-y-3 text-xs micro-text">
                                     <li className="flex items-start gap-2">
-                                        <span className="text-red-500 font-bold">•</span>
+                                        <span className="micro-accent font-bold">•</span>
                                         <div>
                                             <b>Kling:</b> Exceptional for close-up micro expressions, crying, slaps, and complex physical interactions.
                                         </div>
                                     </li>
                                     <li className="flex items-start gap-2">
-                                        <span className="text-purple-500 font-bold">•</span>
+                                        <span className="micro-accent font-bold">•</span>
                                         <div>
                                             <b>Veo 3:</b> Superb high-resolution wide landscapes and heavy camera movements. Ideal for dramatic entrances.
                                         </div>
@@ -647,19 +693,19 @@ const MicrodramaWorkspace: React.FC<MicrodramaWorkspaceProps> = ({
                                     <li className="flex items-start gap-2">
                                         <span className="text-blue-500 font-bold">•</span>
                                         <div>
-                                            <b>SeaDance:</b> Outstanding photorealistic romantic skin textures, slow breathing loops, and intimate whispering.
+                                            <b>Seedance:</b> Outstanding photorealistic romantic skin textures, slow breathing loops, and intimate whispering.
                                         </div>
                                     </li>
                                 </ul>
                             </div>
 
-                            <div className="bg-gray-900/40 border border-gray-800 rounded-xl p-5">
-                                <h3 className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Visual Style Spec</h3>
-                                <div className="p-3 bg-gray-950 rounded-lg text-xs space-y-1.5">
-                                    <div className="text-gray-400">Current Palette:</div>
-                                    <div className="font-semibold text-white">{(SUBGENRE_PRESETS.find(p => p.id === selectedSubgenre) || SUBGENRE_PRESETS[0]).palette}</div>
-                                    <div className="text-gray-400 mt-2">Current Lighting:</div>
-                                    <div className="font-semibold text-white">{(SUBGENRE_PRESETS.find(p => p.id === selectedSubgenre) || SUBGENRE_PRESETS[0]).lighting}</div>
+                            <div className="micro-panel border micro-border rounded-xl p-5">
+                                <h3 className="text-xs font-bold micro-muted uppercase tracking-wider mb-2">Visual Style Spec</h3>
+                                <div className="p-3 micro-base rounded-lg text-xs space-y-1.5">
+                                    <div className="micro-muted">Current Palette:</div>
+                                    <div className="font-semibold micro-text">{(SUBGENRE_PRESETS.find(p => p.id === selectedSubgenre) || SUBGENRE_PRESETS[0]).palette}</div>
+                                    <div className="micro-muted mt-2">Current Lighting:</div>
+                                    <div className="font-semibold micro-text">{(SUBGENRE_PRESETS.find(p => p.id === selectedSubgenre) || SUBGENRE_PRESETS[0]).lighting}</div>
                                 </div>
                             </div>
                         </div>
@@ -670,31 +716,31 @@ const MicrodramaWorkspace: React.FC<MicrodramaWorkspaceProps> = ({
                 {activeTab === 'audio' && (
                     <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                         {/* Audio Controls Panel */}
-                        <div className="lg:col-span-2 space-y-5 bg-gray-900/40 border border-gray-800 rounded-xl p-5">
-                            <h2 className="text-lg font-bold text-white flex items-center gap-2 mb-2">
+                        <div className="lg:col-span-2 space-y-5 micro-panel border micro-border rounded-xl p-5">
+                            <h2 className="text-lg font-bold micro-text flex items-center gap-2 mb-2">
                                 <AudioIcon /> Mobile-First EQ & Audio Mastering Console
                             </h2>
 
                             {/* EQ Sliders and Toggles */}
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                                 <div className="space-y-4">
-                                    <div className="flex items-center justify-between p-3 bg-gray-950 rounded-lg border border-gray-800">
+                                    <div className="flex items-center justify-between p-3 micro-base rounded-lg border micro-border">
                                         <div>
-                                            <h3 className="text-xs font-semibold text-white">Steep HPF Filter (80Hz)</h3>
-                                            <p className="text-[10px] text-gray-400 mt-0.5">Cuts low distortion on tiny phone speakers.</p>
+                                            <h3 className="text-xs font-semibold micro-text">Steep HPF Filter (80Hz)</h3>
+                                            <p className="text-[10px] micro-muted mt-0.5">Cuts low distortion on tiny phone speakers.</p>
                                         </div>
                                         <input
                                             type="checkbox"
                                             checked={hpfEnabled}
                                             onChange={(e) => setHpfEnabled(e.target.checked)}
-                                            className="w-4 h-4 text-red-600 bg-gray-900 border-gray-800 rounded focus:ring-red-500 focus:ring-1"
+                                            className="w-4 h-4 micro-accent micro-panel micro-border rounded focus:micro-ring focus:ring-1"
                                         />
                                     </div>
 
                                     <div className="space-y-1">
-                                        <div className="flex justify-between text-xs text-gray-300">
+                                        <div className="flex justify-between text-xs micro-text">
                                             <span>Dialogue Boost at 2.5kHz (Clarity)</span>
-                                            <span className="text-red-400 font-bold">+{dialogueBoost.toFixed(1)} dB</span>
+                                            <span className="micro-accent font-bold">+{dialogueBoost.toFixed(1)} dB</span>
                                         </div>
                                         <input
                                             type="range"
@@ -703,17 +749,17 @@ const MicrodramaWorkspace: React.FC<MicrodramaWorkspaceProps> = ({
                                             step="0.5"
                                             value={dialogueBoost}
                                             onChange={(e) => setDialogueBoost(parseFloat(e.target.value))}
-                                            className="w-full h-1 bg-gray-800 rounded-lg appearance-none cursor-pointer accent-red-600"
+                                            className="w-full h-1 micro-control rounded-lg appearance-none cursor-pointer micro-range"
                                         />
-                                        <p className="text-[9px] text-gray-500">Intelligibility in noisy environments.</p>
+                                        <p className="text-[9px] micro-muted">Intelligibility in noisy environments.</p>
                                     </div>
                                 </div>
 
                                 <div className="space-y-4">
                                     <div className="space-y-1">
-                                        <div className="flex justify-between text-xs text-gray-300">
+                                        <div className="flex justify-between text-xs micro-text">
                                             <span>Vocal Intimacy Boost at 3.0kHz</span>
-                                            <span className="text-red-400 font-bold">+{intimacyBoost.toFixed(1)} dB</span>
+                                            <span className="micro-accent font-bold">+{intimacyBoost.toFixed(1)} dB</span>
                                         </div>
                                         <input
                                             type="range"
@@ -722,15 +768,15 @@ const MicrodramaWorkspace: React.FC<MicrodramaWorkspaceProps> = ({
                                             step="0.5"
                                             value={intimacyBoost}
                                             onChange={(e) => setIntimacyBoost(parseFloat(e.target.value))}
-                                            className="w-full h-1 bg-gray-800 rounded-lg appearance-none cursor-pointer accent-red-600"
+                                            className="w-full h-1 micro-control rounded-lg appearance-none cursor-pointer micro-range"
                                         />
-                                        <p className="text-[9px] text-gray-500">Brings vocals forward for close-up face framing.</p>
+                                        <p className="text-[9px] micro-muted">Brings vocals forward for close-up face framing.</p>
                                     </div>
 
                                     <div className="space-y-1">
-                                        <div className="flex justify-between text-xs text-gray-300">
+                                        <div className="flex justify-between text-xs micro-text">
                                             <span>Crisp High-Shelf Boost at 12kHz</span>
-                                            <span className="text-red-400 font-bold">+{airShelf.toFixed(1)} dB</span>
+                                            <span className="micro-accent font-bold">+{airShelf.toFixed(1)} dB</span>
                                         </div>
                                         <input
                                             type="range"
@@ -739,17 +785,17 @@ const MicrodramaWorkspace: React.FC<MicrodramaWorkspaceProps> = ({
                                             step="0.5"
                                             value={airShelf}
                                             onChange={(e) => setAirShelf(parseFloat(e.target.value))}
-                                            className="w-full h-1 bg-gray-800 rounded-lg appearance-none cursor-pointer accent-red-600"
+                                            className="w-full h-1 micro-control rounded-lg appearance-none cursor-pointer micro-range"
                                         />
-                                        <p className="text-[9px] text-gray-500">Crystalline sparkle on earbuds.</p>
+                                        <p className="text-[9px] micro-muted">Crystalline sparkle on earbuds.</p>
                                     </div>
                                 </div>
                             </div>
 
                             {/* Loudness & Ending Treatment */}
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2 border-t border-gray-800/60">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2 border-t micro-border">
                                 <div className="space-y-1">
-                                    <label className="block text-xs font-medium text-gray-400">Target Loudness (Integrated)</label>
+                                    <label className="block text-xs font-medium micro-muted">Target Loudness (Integrated)</label>
                                     <div className="flex items-center gap-3">
                                         <input
                                             type="range"
@@ -758,19 +804,19 @@ const MicrodramaWorkspace: React.FC<MicrodramaWorkspaceProps> = ({
                                             step="1"
                                             value={targetLoudness}
                                             onChange={(e) => setTargetLoudness(parseInt(e.target.value))}
-                                            className="flex-1 h-1 bg-gray-800 rounded-lg appearance-none cursor-pointer accent-red-600"
+                                            className="flex-1 h-1 micro-control rounded-lg appearance-none cursor-pointer micro-range"
                                         />
-                                        <span className="text-xs font-bold text-white font-mono">{targetLoudness} LUFS</span>
+                                        <span className="text-xs font-bold micro-text font-mono">{targetLoudness} LUFS</span>
                                     </div>
-                                    <p className="text-[9px] text-gray-500">Social standard feed volume matches.</p>
+                                    <p className="text-[9px] micro-muted">Social standard feed volume matches.</p>
                                 </div>
 
                                 <div className="space-y-1">
-                                    <label className="block text-xs font-medium text-gray-400">Cliffhanger Audio Design</label>
+                                    <label className="block text-xs font-medium micro-muted">Cliffhanger Audio Design</label>
                                     <select
                                         value={cliffhangerAudio}
                                         onChange={(e) => setCliffhangerAudio(e.target.value)}
-                                        className="w-full bg-gray-950 border border-gray-800 rounded-lg p-2.5 text-xs text-gray-200 focus:ring-1 focus:ring-red-500"
+                                        className="w-full micro-base border micro-border rounded-lg p-2.5 text-xs micro-text focus:ring-1 focus:micro-ring"
                                     >
                                         <option value="suspended">Hold Unresolved Suspended Chords (sus2/sus4/diminished)</option>
                                         <option value="silence">Sudden Vacuum of Silence (Anxiety cliffhanger spike)</option>
@@ -781,7 +827,7 @@ const MicrodramaWorkspace: React.FC<MicrodramaWorkspaceProps> = ({
 
                             <button
                                 onClick={handleSaveAudioSpec}
-                                className="w-full bg-red-600 hover:bg-red-500 py-2.5 rounded-lg text-sm font-semibold text-white transition flex justify-center items-center gap-2 shadow-lg shadow-red-950/20"
+                                className="w-full micro-primary hover:micro-primary py-2.5 rounded-lg text-sm font-semibold micro-text transition flex justify-center items-center gap-2 shadow-lg "
                             >
                                 <AudioIcon /> Inject Audio Specifications into Guidelines
                             </button>
@@ -789,20 +835,20 @@ const MicrodramaWorkspace: React.FC<MicrodramaWorkspaceProps> = ({
 
                         {/* Interactive EQ Graph Visualizer */}
                         <div className="space-y-4">
-                            <div className="bg-gray-900/40 border border-gray-800 rounded-xl p-5">
-                                <h3 className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-3 text-center">Mobile EQ Profile Curve</h3>
-                                <div className="relative w-full h-44 bg-gray-950 rounded-lg border border-gray-800 overflow-hidden flex items-center justify-center">
+                            <div className="micro-panel border micro-border rounded-xl p-5">
+                                <h3 className="text-xs font-bold micro-muted uppercase tracking-wider mb-3 text-center">Mobile EQ Profile Curve</h3>
+                                <div className="relative w-full h-44 micro-base rounded-lg border micro-border overflow-hidden flex items-center justify-center">
                                     {/* Simulated EQ Grid lines */}
                                     <div className="absolute inset-0 grid grid-cols-5 grid-rows-4 pointer-events-none opacity-20">
-                                        {[...Array(5)].map((_, i) => <div key={`col-${i}`} className="border-r border-gray-600 h-full" />)}
-                                        {[...Array(4)].map((_, i) => <div key={`row-${i}`} className="border-b border-gray-600 w-full" />)}
+                                        {[...Array(5)].map((_, i) => <div key={`col-${i}`} className="border-r micro-border h-full" />)}
+                                        {[...Array(4)].map((_, i) => <div key={`row-${i}`} className="border-b micro-border w-full" />)}
                                     </div>
 
                                     {/* Frequency Tags */}
-                                    <div className="absolute bottom-1.5 left-2 text-[8px] text-gray-600">80Hz</div>
-                                    <div className="absolute bottom-1.5 left-1/3 text-[8px] text-gray-600">1kHz</div>
-                                    <div className="absolute bottom-1.5 left-2/3 text-[8px] text-gray-600">4kHz</div>
-                                    <div className="absolute bottom-1.5 right-2 text-[8px] text-gray-600">15kHz</div>
+                                    <div className="absolute bottom-1.5 left-2 text-[8px] micro-muted">80Hz</div>
+                                    <div className="absolute bottom-1.5 left-1/3 text-[8px] micro-muted">1kHz</div>
+                                    <div className="absolute bottom-1.5 left-2/3 text-[8px] micro-muted">4kHz</div>
+                                    <div className="absolute bottom-1.5 right-2 text-[8px] micro-muted">15kHz</div>
 
                                     {/* Interactive EQ Spline Curve using dynamic SVG */}
                                     <svg className="absolute inset-0 w-full h-full" viewBox="0 0 100 50" preserveAspectRatio="none">
@@ -814,16 +860,16 @@ const MicrodramaWorkspace: React.FC<MicrodramaWorkspaceProps> = ({
                                                 C 65,${25 - intimacyBoost * 2} 70,${25 - (dialogueBoost + intimacyBoost) * 1.3} 80,${25 - airShelf * 2.2}
                                                 Q 90,${25 - airShelf * 2.2} 100,${25 - airShelf * 2.2}`}
                                             fill="none"
-                                            stroke="#ef4444"
+                                            stroke="var(--app-accent)"
                                             strokeWidth="1.5"
                                         />
                                     </svg>
                                     <div className="absolute top-2.5 right-2.5 flex items-center gap-1.5">
-                                        <span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse" />
-                                        <span className="text-[9px] text-gray-400 font-mono">Mobile Filter Active</span>
+                                        <span className="w-1.5 h-1.5 rounded-full micro-primary animate-pulse" />
+                                        <span className="text-[9px] micro-muted font-mono">Mobile Filter Active</span>
                                     </div>
                                 </div>
-                                <p className="text-[10px] text-gray-400 mt-2.5 leading-relaxed text-center">
+                                <p className="text-[10px] micro-muted mt-2.5 leading-relaxed text-center">
                                     The curve displays high-pass filter bass cuts below 80Hz, followed by mid-frequency dialogue gains and a crystal-clear high shelf sparkle.
                                 </p>
                             </div>

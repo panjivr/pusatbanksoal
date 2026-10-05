@@ -7649,3 +7649,47 @@ body[data-theme="light"] .bekal-brand-dark {display:none;}
   .toolbar-project__name {min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
 }
 @media(max-width:400px){.toolbar-activity__label {display:none;}}
+
+/* Bekal Microdrama uses the same surfaces in both themes. */
+.microdrama-workspace { background:var(--app-bg);color:var(--app-text);min-width:0; }
+.microdrama-workspace .micro-base {background:var(--app-bg);}
+.microdrama-workspace .micro-panel {background:var(--app-panel);}
+.microdrama-workspace .micro-control {background:var(--app-card);}
+.microdrama-workspace .micro-tint {background:var(--primary-soft);}
+.microdrama-workspace .micro-border {border-color:var(--app-border);}
+.microdrama-workspace .micro-text {color:var(--app-text);}
+.microdrama-workspace .micro-muted {color:var(--app-muted);}
+.microdrama-workspace .micro-accent {color:var(--accent-ink);}
+.microdrama-workspace .micro-header {background:var(--app-panel);border-color:var(--app-border);}
+.microdrama-workspace .micro-primary {background:var(--primary);color:#fff !important;box-shadow:none;}
+.microdrama-workspace .micro-primary:hover {background:var(--primary-active);}
+.microdrama-workspace input,.microdrama-workspace select,.microdrama-workspace textarea {color:var(--app-text);font-size:max(14px,1em);accent-color:var(--primary);}
+.microdrama-workspace textarea {resize:vertical;line-height:1.65;}
+.microdrama-workspace textarea::placeholder {color:var(--app-muted);opacity:1;}
+.microdrama-workspace :is(input,textarea,select):focus-visible {outline:2px solid var(--primary);outline-offset:2px;}
+.microdrama-workspace .micro-range {accent-color:var(--primary);}
+.microdrama-workspace h1 {font-size:clamp(1.1rem,2.4vw,1.5rem);}
+.microdrama-workspace button {min-height:36px;white-space:normal;}
+.microdrama-workspace p {line-height:1.55;}
+.microdrama-workspace [class*="text-[9px]"],.microdrama-workspace [class*="text-[10px]"],.microdrama-workspace [class*="text-[11px]"] {font-size:12px;}
+.microdrama-workspace .micro-tabs button {flex:1 1 110px;}
+@media(max-width:900px) {
+ .microdrama-workspace .micro-header {padding:14px;}
+ .microdrama-workspace .micro-tabs {width:100%;}
+ .microdrama-workspace .p-6 {padding:14px;}
+ .microdrama-workspace .p-5 {padding:14px;}
+ .microdrama-workspace .flex.justify-between.items-center {flex-wrap:wrap;gap:10px;}
+ .microdrama-workspace .grid {min-width:0;}
+}
+.ai-routing-settings {padding:16px;border:1px solid var(--app-border);border-radius:12px;background:var(--app-panel);display:grid;gap:12px;margin-bottom:20px;}
+.ai-routing-settings h3 {font-size:1.05rem;font-weight:700;}
+.ai-route-card {min-width:0;padding:12px;border:1px solid var(--app-border);border-radius:10px;display:grid;gap:12px;}
+.ai-route-card legend {font-weight:700;padding:0 6px;}
+.ai-route-actions {display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.ai-route-check {display:flex;align-items:flex-start;gap:8px;font-size:13px;line-height:1.5;}
+.ai-route-check input {margin-top:3px;flex-shrink:0;accent-color:var(--primary);}
+.ai-route-fields {display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;}
+.ai-route-fields label {min-width:0;}.ai-route-fields input {width:100%;min-width:0;}
+@media(max-width:640px){.ai-route-fields{grid-template-columns:1fr;}.ai-routing-settings{padding:12px;}}
+#bekal-ai-route-notice {position:fixed;bottom:16px;left:50%;transform:translateX(-50%);z-index:9998;padding:10px 16px;max-width:calc(100vw - 28px);border:1px solid var(--app-border);border-radius:10px;background:var(--app-panel);color:var(--app-text);font-size:13px;box-shadow:var(--sh-md);pointer-events:none;}
+.microdrama-workspace button:not(.micro-primary):hover {background:var(--app-card);border-color:var(--primary);}

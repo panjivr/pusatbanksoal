@@ -1,3 +1,5 @@
+import bekalWhiteLogo from '../../../assets/bekal-logo-white.png';
+import bekalGreenLogo from '../../../assets/bekal-logo-green.png';
 import React, { useEffect, useRef, useState } from 'react';
 import { AppLogoIcon, UndoIcon, RedoIcon, InfoIcon, SettingsIcon, FolderIcon, ChevronRightIcon } from './icons';
 import { Theme, User, UserProfile } from '../types';
@@ -175,7 +177,7 @@ const Header: React.FC<HeaderProps> = ({
                         <SidebarToggleIcon className="w-[18px] h-[18px]" />
                     </button>
                     <div className="app-toolbar__brand" title="Studio Film AI Bekal">
-                        <img className="bekal-brand-dark" src="/assets/bekal-logo-white.png" alt="Bekal" width="48" height="26" /><img className="bekal-brand-light" src="/assets/bekal-logo-green.png" alt="" aria-hidden="true" width="48" height="26" />
+                        <img className="bekal-brand-dark" src={bekalWhiteLogo} alt="Bekal" width="48" height="26" /><img className="bekal-brand-light" src={bekalGreenLogo} alt="" aria-hidden="true" width="48" height="26" />
                     </div>
                     <div className="app-toolbar__crumbs" aria-label="Current workspace">
                         {breadcrumb?.group && (
@@ -202,7 +204,7 @@ const Header: React.FC<HeaderProps> = ({
                             aria-expanded={showProjectMenu}
                         >
                             <FolderIcon className="w-4 h-4 toolbar-project__icon" />
-                            <span className="toolbar-project__name">{projectName || 'Choose project'}</span>
+                            <span className="toolbar-project__name">{projectName || 'Pilih proyek'}</span>
                             <span className={`toolbar-project__status toolbar-project__status--${projectStatus.tone}`} title={projectStatus.label}>
                                 <span className="toolbar-project__dot" />
                                 <span className="toolbar-project__status-text">{projectStatus.label}</span>

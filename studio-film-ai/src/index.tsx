@@ -37,6 +37,16 @@ const applyPlatformAttributes = () => {
   root.dataset.platform = platform;
 };
 
+window.addEventListener('bekal-ai-route-status', (event) => {
+  const { provider, status } = (event as CustomEvent).detail || {};
+  if (typeof provider !== 'string') return;
+  let notice = document.getElementById('bekal-ai-route-notice');
+  if (!notice) { notice = document.createElement('div'); notice.id = 'bekal-ai-route-notice'; notice.setAttribute('role', 'status'); notice.setAttribute('aria-live', 'polite'); document.body.appendChild(notice); }
+  notice.textContent = status === 'fallback' ? `${provider} belum berhasil. Mencoba layanan cadangan...` : status === 'failed' ? `Permintaan ke ${provider} belum berhasil. Periksa pesan kesalahan di editor.` : status === 'success' ? `Jawaban diterima dari ${provider}.` : `Menghubungi ${provider}...`;
+  if (status === 'failed') setTimeout(() => { if (notice?.textContent?.startsWith(`Permintaan ke ${provider}`)) notice.remove(); }, 8000);
+  if (status === 'success') setTimeout(() => { if (notice?.textContent === `Jawaban diterima dari ${provider}.`) notice.remove(); }, 5000);
+});
+
 applyPlatformAttributes();
 document.getElementById('studio-fallback')?.remove();
 

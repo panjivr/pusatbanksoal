@@ -1,4 +1,5 @@
 
+import AiRoutingSettings from './AiRoutingSettings';
 import React, { useState, useEffect } from 'react';
 import { LockIcon, CheckCircleIcon, KeyboardIcon, SettingsIcon, FolderIcon, SparklesIcon, InfoIcon } from './icons';
 import { ShortcutAction, ShortcutMap, StudioAgentApprovalMode, StudioAgentControlMode, Workspace } from '../types';
@@ -238,12 +239,6 @@ const ApiKeyModal: React.FC<ApiKeyModalProps> = ({
     const handleSaveKey = () => {
         setError('');
         setCloudError('');
-
-        const hasCloudConfig = dropboxClientId.trim() || googleDriveClientId.trim();
-        if (!googleKey.trim() && !replicateKey.trim() && !xaiKey.trim() && !elevenLabsKey.trim() && !sonautoKey.trim() && !soniloKey.trim() && !falKey.trim() && !ltxKey.trim() && !runwayKey.trim() && !worldLabsKey.trim() && !braveSearchKey.trim() && !unsplashKey.trim() && !hasCloudConfig) {
-            setError("Please enter at least one API Key to continue.");
-            return;
-        }
 
         if (googleKey.trim()) {
             localStorage.setItem('gemini_api_key', googleKey.trim());
@@ -568,6 +563,7 @@ const ApiKeyModal: React.FC<ApiKeyModalProps> = ({
                                             </div>
                                         )}
                                     </div>
+                                    <AiRoutingSettings />
                                     {visibleProviders.map(renderProvider)}
                                 </div>
                                 {hiddenCount > 0 && (

@@ -1,5 +1,6 @@
 import { GoogleGenAI, Type } from '@google/genai';
-import { withModelFallback } from './geminiModelFallback';
+import { hasTextAiConfigured } from './aiRouting';
+import { getStudioAiClient } from './studioAiClient';
 import {
     EditPlan,
     EditPlanFinding,
@@ -31,16 +32,7 @@ const clamp = (value: number, min: number, max: number) => Math.min(max, Math.ma
 
 const buildId = (prefix: string) => `${prefix}-${Date.now()}-${Math.random().toString(16).slice(2, 8)}`;
 
-const getAiClient = () => {
-    const envKey = process.env.API_KEY;
-    const storageKey = localStorage.getItem('gemini_api_key');
-    const apiKey = envKey || storageKey;
-
-    if (!apiKey) {
-        return null;
-    }
-    return withModelFallback(new GoogleGenAI({ apiKey }));
-};
+const getAiClient = () => process.env.API_KEY || hasTextAiConfigured() ? getStudioAiClient() : null;
 
 const extractJsonFromText = (text: string) => {
     const trimmed = (text || '').trim();

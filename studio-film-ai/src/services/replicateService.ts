@@ -592,7 +592,7 @@ export const generateTextWithGemini3ProReplicate = async (
     const textModelCandidates = opts?.priority === 'speed'
         ? [MODELS.GEMINI_2_5_FLASH_TEXT, MODELS.GEMINI_3_1_PRO_TEXT, MODELS.GEMINI_2_5_PRO_TEXT, MODELS.GEMINI_3_PRO_IMAGE]
         : [MODELS.GEMINI_3_1_PRO_TEXT, MODELS.GEMINI_2_5_PRO_TEXT, MODELS.GEMINI_3_PRO_IMAGE, MODELS.GEMINI_2_5_FLASH_TEXT];
-    const systemPrompt = opts?.systemPrompt?.trim();
+    const systemPrompt = `${opts?.systemPrompt?.trim() || ''}\nJawab dalam bahasa Indonesia yang alami. Pertahankan nama properti JSON, nama fungsi, dan parameter teknis.`.trim();
     const payloads: Array<Record<string, any>> = [];
 
     if (systemPrompt) {

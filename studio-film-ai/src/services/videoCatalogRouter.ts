@@ -1,3 +1,5 @@
+import { readAiRouting } from './aiRouting';
+import { runSafeMediaFailover } from './mediaFailover';
 import { MediaItem } from '../types';
 import { generateVideoWithFalCatalog } from './falAiService';
 import { getFalVideoCatalogEntry } from './falVideoCatalog';
@@ -31,7 +33,16 @@ export const resolveCatalogProvider = (modelId: string): 'fal' | 'higgsfield' =>
   return hasFalKey() ? 'fal' : 'higgsfield';
 };
 
-export const generateCatalogVideo = (modelId: string, prompt: string, opts?: CatalogVideoOptions): Promise<MediaItem> =>
-  resolveCatalogProvider(modelId) === 'higgsfield'
-    ? generateVideoWithHiggsfield(modelId, prompt, opts)
-    : generateVideoWithFalCatalog(modelId, prompt, opts);
+export const generateCatalogVideo = async (modelId: string, prompt: string, opts?: CatalogVideoOptions): Promise<MediaItem> => {
+  const primary = resolveCatalogProvider(modelId);
+  const both = Boolean(getFalVideoCatalogEntry(modelId)) && higgsfieldHostsVideoModel(modelId) && hasFalKey() && hasHiggsfieldApiKey();
+  const run = (provider: 'fal' | 'higgsfield') => provider === 'higgsfield' ? generateVideoWithHiggsfield(modelId, prompt, opts) : generateVideoWithFalCatalog(modelId, prompt, opts);
+  const secondary = primary === 'fal' ? 'higgsfield' : 'fal';
+  let switched = false;
+  const notify = (provider: string, status: string) => window.dispatchEvent(new CustomEvent('bekal-ai-route-status', { detail: { provider, status } }));
+  try {
+    const result = await runSafeMediaFailover(() => run(primary), both ? () => run(secondary) : null, readAiRouting().mediaFallback, () => { switched = true; notify(primary, 'fallback'); });
+    if (switched) notify(secondary, 'success');
+    return result;
+  } catch (error) { if (switched) notify(secondary, 'failed'); throw error; }
+};

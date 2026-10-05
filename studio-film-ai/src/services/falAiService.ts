@@ -1,3 +1,4 @@
+import { MediaSubmissionRejected } from './mediaFailover';
 import { MediaItem } from '../types';
 import { getVideoDuration } from '../utils/helpers';
 import { recordUsage } from '../utils/usageTracker';
@@ -298,7 +299,7 @@ const runFalQueueInner = async (
 
             if (!response.ok) {
                 const errorText = await response.text().catch(() => '');
-                throw new Error(`FAL Queue Error (${response.status}): ${errorText || response.statusText}`);
+                throw new MediaSubmissionRejected('fal.ai', response.status, /nsfw|safety|moderation|content.?policy|blocked/i.test(errorText));
             }
             return response.json().catch(() => ({}));
         })()) as FalQueueStatus

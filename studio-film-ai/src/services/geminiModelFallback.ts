@@ -43,12 +43,11 @@ export const pickFallbackModel = (requested: string, available: Set<string> | nu
   return sameFamily[0] || null;
 };
 
-const resolved = new Map<string, string>();
-let availableCache: Promise<Set<string> | null> | null = null;
+const availableByClient = new WeakMap<GoogleGenAI, Promise<Set<string> | null>>();
 
 const listAvailableModels = (ai: GoogleGenAI): Promise<Set<string> | null> => {
-  if (!availableCache) {
-    availableCache = (async () => {
+  if (!availableByClient.has(ai)) {
+    availableByClient.set(ai, (async () => {
       try {
         const names = new Set<string>();
         const pager = await ai.models.list({ config: { pageSize: 200 } });
@@ -61,9 +60,9 @@ const listAvailableModels = (ai: GoogleGenAI): Promise<Set<string> | null> => {
       } catch {
         return null;
       }
-    })();
+    })());
   }
-  return availableCache;
+  return availableByClient.get(ai)!;
 };
 
 /** Wrap a client so generateContent survives a renamed or unavailable model. Idempotent. */
@@ -72,6 +71,7 @@ export const withModelFallback = (ai: GoogleGenAI): GoogleGenAI => {
   if (marked.__modelFallback) return ai;
   const models = ai.models as unknown as { generateContent: (params: { model: string }) => Promise<unknown> };
   const original = models.generateContent.bind(ai.models);
+  const resolved = new Map<string, string>();
   models.generateContent = async (params: { model: string }) => {
     const requested = params?.model;
     const known = requested ? resolved.get(requested) : undefined;

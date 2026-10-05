@@ -1,3 +1,4 @@
+import { hasTextAiConfigured, hasGatewayTextRoute } from './services/aiRouting';
 import { isBekalBrowser, importBrowserProject, downloadBrowserProject, browserProjectName } from './services/bekalBrowserProject';
 
 import { FAL_VIDEO_CATALOG } from './services/falVideoCatalog';
@@ -823,6 +824,7 @@ const clampRatio = (value: number) => Math.max(0, Math.min(1, value));
 const hasAnyLocalApiKey = () => {
     if (typeof window === 'undefined') return false;
     return Boolean(
+        hasGatewayTextRoute() ||
         localStorage.getItem('gemini_api_key') ||
         localStorage.getItem('replicate_api_key') ||
         localStorage.getItem('elevenlabs_api_key') ||
@@ -832,7 +834,10 @@ const hasAnyLocalApiKey = () => {
         localStorage.getItem('worldlabs_api_key') ||
         localStorage.getItem('sonauto_api_key') ||
         localStorage.getItem('sonilo_api_key') ||
-        localStorage.getItem('unsplash_access_key')
+        localStorage.getItem('unsplash_access_key') ||
+        localStorage.getItem('runway_api_key') ||
+        localStorage.getItem('higgsfield_api_key') ||
+        localStorage.getItem('brave_search_api_key')
     );
 };
 
@@ -2593,7 +2598,7 @@ function App() {
 
     // Check for API Key on load
     useEffect(() => {
-        const localKeyReady = hasAnyLocalApiKey();
+        const localKeyReady = hasTextAiConfigured();
 
         if (window.aistudio) {
             window.aistudio.hasSelectedApiKey().then((hasKey) => {
@@ -2604,6 +2609,13 @@ function App() {
         } else if (process.env.API_KEY || localKeyReady) {
             setApiKeyReady(true);
         }
+    }, []);
+
+    useEffect(() => {
+        const update = () => setApiKeyReady(Boolean(process.env.API_KEY) || hasTextAiConfigured());
+        window.addEventListener('bekal-ai-config-changed', update);
+        window.addEventListener('storage', update);
+        return () => { window.removeEventListener('bekal-ai-config-changed', update); window.removeEventListener('storage', update); };
     }, []);
 
     useEffect(() => {
@@ -7199,6 +7211,7 @@ function App() {
         },
         getApiSetupStatus: () => {
             const status = {
+                router: hasGatewayTextRoute(),
                 gemini: Boolean(localStorage.getItem('gemini_api_key')),
                 replicate: Boolean(localStorage.getItem('replicate_api_key')),
                 fal: Boolean(localStorage.getItem('fal_api_key')),
@@ -7214,19 +7227,21 @@ function App() {
                 success: true,
                 status,
                 links: apiProviderLinks,
-                message: `API setup status loaded. Connected: ${Object.entries(status).filter(([, ok]) => ok).map(([name]) => name).join(', ') || 'none'}.`,
+                message: `Pengaturan API dimuat. Tersedia: ${Object.entries(status).filter(([, ok]) => ok).map(([name]) => name).join(', ') || 'belum ada'}.`,
             };
         },
         openApiProviderWebsite: ({ provider }: { provider?: keyof typeof apiProviderLinks }) => {
             if (!provider || !apiProviderLinks[provider]) {
-                return { success: false, message: 'Unknown provider.' };
+                return { success: false, message: 'Penyedia belum dikenali.' };
             }
             const url = apiProviderLinks[provider];
             window.open(url, '_blank', 'noopener,noreferrer');
-            return { success: true, message: `Opened ${provider} API setup page.` };
+            return { success: true, message: `Halaman pengaturan API ${provider} dibuka.` };
         },
         runSetupCheck: () => {
             const status = {
+                textAi: hasTextAiConfigured(),
+                router: hasGatewayTextRoute(),
                 keys: {
                     gemini: Boolean(localStorage.getItem('gemini_api_key')),
                     replicate: Boolean(localStorage.getItem('replicate_api_key')),
@@ -7251,28 +7266,29 @@ function App() {
                 .map(([provider]) => provider as keyof typeof apiProviderLinks);
 
             const lines: string[] = [];
-            lines.push(`Connected providers: ${connectedProviders.length > 0 ? connectedProviders.join(', ') : 'none'}.`);
-            lines.push(`Moodboard: ${status.moodboard ? 'ok' : 'missing references'}.`);
-            lines.push(`Storyboard: ${status.storyboard ? 'ok' : 'missing first shots'}.`);
-            lines.push(`First video: ${status.firstVideo ? 'ok' : 'not rendered yet'}.`);
+            lines.push(`Penyedia yang tersedia: ${connectedProviders.length > 0 ? connectedProviders.join(', ') : 'belum ada'}.`);
+            lines.push(`AI teks: ${status.textAi ? 'tersedia' : 'belum diatur'}${status.router ? ', router aktif' : ''}.`);
+            lines.push(`Papan referensi: ${status.moodboard ? 'ok' : 'belum ada referensi'}.`);
+            lines.push(`Papan adegan: ${status.storyboard ? 'ok' : 'belum ada adegan'}.`);
+            lines.push(`Video pertama: ${status.firstVideo ? 'ok' : 'belum dirender'}.`);
 
             if (!status.moodboard) {
-                lines.push('Next step: collect references in Moodboard or run assistant moodboard research.');
+                lines.push('Langkah berikutnya: kumpulkan referensi visual atau minta asisten melakukan riset.');
             }
             if (!status.storyboard) {
-                lines.push('Next step: generate first storyboard shots in Project Hub > Storyboard.');
+                lines.push('Langkah berikutnya: buat adegan awal di Pusat proyek > Papan adegan.');
             }
             if (!status.firstVideo) {
-                lines.push('Next step: render one shot in Project Hub > Filming.');
+                lines.push('Langkah berikutnya: buat satu video di Pusat proyek > Produksi video.');
             }
 
             const links = missingProviders.slice(0, 4).map((provider) => ({
                 uri: apiProviderLinks[provider],
-                title: `${provider} API key page`,
+                title: `${provider} halaman API key`,
             }));
 
             if (missingProviders.length > 0) {
-                lines.push(`Missing API keys: ${missingProviders.join(', ')}.`);
+                lines.push(`Penyedia opsional yang belum diisi: ${missingProviders.join(', ')}.`);
             }
 
             return {
@@ -8769,16 +8785,16 @@ function App() {
         ? taskSummary.active.reduce((sum, task) => sum + estimateProgress(task), 0) / taskSummary.activeCount
         : null;
     const activityLabel = studioAgentState.pendingApproval
-        ? 'Approval needed'
+        ? 'Perlu persetujuan'
         : taskSummary.activeCount > 0
-            ? `${taskSummary.activeCount} running`
+            ? `${taskSummary.activeCount} berjalan`
             : studioAgentState.status !== 'idle'
                 ? agentStatusMeta.label
                 : taskSummary.failedCount > 0
-                    ? `${taskSummary.failedCount} failed`
+                    ? `${taskSummary.failedCount} gagal`
                     : onlineCount > 1
-                        ? `${onlineCount} online`
-                        : 'Activity';
+                        ? `${onlineCount} terhubung`
+                        : 'Aktivitas';
     const activityTone: 'idle' | 'busy' | 'attention' | 'ready' | 'error' = studioAgentState.pendingApproval
         ? 'attention'
         : taskSummary.activeCount > 0 || studioAgentState.status === 'planning' || studioAgentState.status === 'acting'
@@ -9043,7 +9059,7 @@ function App() {
                 hasAnyApiKey={hasAnyApiKeyConfigured}
                 onApiKeysChanged={() => {
                     setApiKeysRevision((value) => value + 1);
-                    if (hasAnyLocalApiKey()) setApiKeyReady(true);
+                    setApiKeyReady(hasTextAiConfigured());
                 }}
                 onOpenApiSettings={() => {
                     setShowOnboarding(false);
@@ -9059,7 +9075,7 @@ function App() {
             {(!showOnboarding && showSettings) && (
                 <ApiKeyModal
                     onKeySelected={() => {
-                        setApiKeyReady(true);
+                        setApiKeyReady(Boolean(process.env.API_KEY) || hasTextAiConfigured());
                         setShowSettings(false);
                     }}
                     onClose={() => setShowSettings(false)}

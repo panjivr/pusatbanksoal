@@ -197,7 +197,7 @@
     "url": "film-studio.html",
     "name": "Studio Film AI",
     "title": "Studio Film AI: Editor Video, Storyboard dan Produksi",
-    "description": "Rancang naskah dan storyboard, kelola media, edit timeline, atur warna dan audio, lalu ekspor video dari Studio Film AI Bekal.",
+    "description": "Rancang naskah dan storyboard, edit video, atur warna dan audio. Hubungkan 9Router dan penyedia AI dengan layanan cadangan di Studio Film AI Bekal.",
     "group": "studio",
     "icon": "film",
     "new": true,

@@ -1,3 +1,4 @@
+import { MediaSubmissionRejected } from './mediaFailover';
 import { MediaItem } from '../types';
 import { getVideoDuration } from '../utils/helpers';
 import { recordUsage } from '../utils/usageTracker';
@@ -84,7 +85,7 @@ export const runHiggsfieldQueue = async (
       headers: { Authorization: authHeader(), 'Content-Type': 'application/json' },
       body: JSON.stringify(input),
     });
-    if (!submit.ok) throw new Error(`Higgsfield error (${submit.status}): ${await submit.text().catch(() => submit.statusText)}`);
+    if (!submit.ok) { const detail = await submit.text().catch(() => ''); throw new MediaSubmissionRejected('Higgsfield', submit.status, /nsfw|safety|moderation|content.?policy|blocked/i.test(detail)); }
     let state = (await submit.json()) as HiggsfieldStatus;
     const statusUrl = state.status_url || `${HIGGSFIELD_BASE_URL}/requests/${state.request_id}/status`;
     const pollIntervalMs = opts?.pollIntervalMs ?? 5000;

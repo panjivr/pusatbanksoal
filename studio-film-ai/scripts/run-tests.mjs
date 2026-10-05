@@ -22,6 +22,7 @@ const walk = (dir, predicate) => {
 
 walk(join(root, 'src'), (entry) => entry.endsWith('.test.ts') || entry.endsWith('.test.tsx'));
 walk(join(root, 'electron'), (entry) => entry.endsWith('.test.js'));
+walk(join(root, 'scripts'), (entry) => entry.endsWith('.test.cjs'));
 
 testFiles.sort();
 

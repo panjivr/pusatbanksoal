@@ -43,11 +43,8 @@ const getInitials = (value: string) =>
     .map((part) => part.charAt(0).toUpperCase())
     .join('') || '?';
 
-const humanize = (value: string) =>
-  value
-    .replace(/_/g, ' ')
-    .toLowerCase()
-    .replace(/^\w/, (char) => char.toUpperCase());
+const workspaceNames: Record<string, string> = {"project": "Proyek", "microdrama": "Drama pendek", "asset library": "Pustaka aset", "moodboard": "Papan referensi", "notebooklm": "Catatan riset", "team": "Tim", "plugins": "Plugin", "import": "Impor", "design": "Konsep visual", "image gen": "Pembuatan gambar", "video gen": "Pembuatan video", "nodes": "Alur node", "set design": "Desain set", "scene map": "Peta adegan", "world gen": "Dunia 3D", "avatar": "Avatar", "sound": "Suara", "edit": "Penyuntingan", "photo": "Foto", "upscale": "Perbesar resolusi", "compositing": "Komposisi", "trim": "Potong durasi", "post": "Pascaproduksi", "analysis": "Analisis", "review": "Tinjauan", "requests": "Permintaan", "export": "Ekspor", "worldbuilding": "Dunia cerita", "script": "Naskah", "concept": "Konsep", "storyboard": "Papan adegan", "filming": "Produksi video", "production": "Produksi", "preproduction": "Praproduksi"};
+const humanize = (value: string) => workspaceNames[value.replace(/_/g, ' ').toLowerCase()] || value.replace(/_/g, ' ');
 
 const formatCurrentActivity = (params: {
   activeWorkspace: Workspace;
@@ -60,10 +57,10 @@ const formatCurrentActivity = (params: {
     parts.push(humanize(params.activePhase));
   }
   if (typeof params.activeShotNumber === 'number') {
-    parts.push(`Shot ${params.activeShotNumber}`);
+    parts.push(`Adegan ${params.activeShotNumber}`);
   }
   if (params.selectedClipId) {
-    parts.push(`Clip ${params.selectedClipId.slice(0, 8)}`);
+    parts.push(`Klip ${params.selectedClipId.slice(0, 8)}`);
   }
   return parts.join(' · ');
 };
@@ -77,9 +74,9 @@ const formatPresenceActivity = (entry: ProjectCollaborationPresence) => {
     parts.push(humanize(entry.activePhase));
   }
   if (typeof entry.activeShotNumber === 'number') {
-    parts.push(`Shot ${entry.activeShotNumber}`);
+    parts.push(`Adegan ${entry.activeShotNumber}`);
   } else if (entry.activeClipId) {
-    parts.push(`Clip ${entry.activeClipId.slice(0, 8)}`);
+    parts.push(`Klip ${entry.activeClipId.slice(0, 8)}`);
   }
   return parts.join(' · ');
 };
@@ -105,11 +102,11 @@ const PresenceBar: React.FC<PresenceBarProps> = ({
   });
   const liveCount = presence.length;
   const isLive = realtimeStatus === 'SUBSCRIBED';
-  const connectionLabel = isLive ? 'Live session' : 'Local session';
+  const connectionLabel = isLive ? 'Sesi langsung' : 'Sesi lokal';
   const rosterLabel =
     configuredCollaboratorCount > 0
-      ? `${configuredCollaboratorCount} on the team`
-      : 'Just you';
+      ? `${configuredCollaboratorCount} anggota tim`
+      : 'Hanya kamu';
   const fallbackPresence =
     presence.length > 0
       ? presence
@@ -138,8 +135,8 @@ const PresenceBar: React.FC<PresenceBarProps> = ({
         <span className={`status-dot ${isLive ? 'status-dot--success' : 'status-dot--muted'}`} />
         <span className="status-card__title">{connectionLabel}</span>
         <span className="status-card__meta">
-          {isLive ? `${liveCount} online` : rosterLabel}
-          {syncProvider ? ` · Sync via ${syncProvider}` : ''}
+          {isLive ? `${liveCount} terhubung` : rosterLabel}
+          {syncProvider ? ` · Sinkron melalui ${syncProvider}` : ''}
         </span>
       </div>
       <div className="status-card__body">

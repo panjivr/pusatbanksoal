@@ -1,10 +1,11 @@
+import { AiRouteError } from './aiRouting';
 /**
  * Auto Cut Service
  * AI-powered video analysis for automatic segment detection and quality verification.
  */
 
 import { GoogleGenAI, Type, GenerateContentResponse } from "@google/genai";
-import { withModelFallback } from './geminiModelFallback';
+import { getStudioAiClient } from './studioAiClient';
 import { recordUsage } from '../utils/usageTracker';
 import { prepareVideoFileDataForGemini } from './geminiService';
 
@@ -132,16 +133,7 @@ export const DEFAULT_AUTO_CUT_CONFIG: AutoCutConfig = {
 // HELPERS
 // ============================================================================
 
-const getAiClient = () => {
-    const envKey = process.env.API_KEY;
-    const storageKey = localStorage.getItem('gemini_api_key');
-    const apiKey = envKey || storageKey;
-
-    if (!apiKey) {
-        throw new Error("API Key is missing. Please enter your Google Gemini API Key in the settings.");
-    }
-    return withModelFallback(new GoogleGenAI({ apiKey }));
-};
+const getAiClient = getStudioAiClient;
 
 const withRetry = async <T>(
     apiCall: () => Promise<T>,
