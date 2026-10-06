@@ -20,7 +20,7 @@ export const getOpenRouterImageModels = async (route: AiRoute, fetcher: typeof f
       if (results.every(r => r.status === 'rejected')) throw new AiRouteError('Katalog gambar OpenRouter belum dapat dimuat. Periksa jaringan lalu coba lagi.', 503);
       const merged = new Map<string, any>();
       // Keep working multimodal chat models on chat; dedicated image-only models use /images.
-      for (const result of results) if (result.status === 'fulfilled') for (const model of result.value) if (model.architecture?.output_modalities?.includes('image') && !merged.has(model.id)) merged.set(model.id, model);
+      for (const result of results) if (result.status === 'fulfilled') for (const model of result.value) if (model.architecture?.output_modalities?.includes('image')) merged.set(model.id, { ...merged.get(model.id), ...model });
       return [...merged.values()];
     })();
     entry = { expires: Date.now() + 300000, promise }; imageCatalogCache.set(fetcher, entry);
@@ -112,7 +112,7 @@ export const generateOpenRouterImage = async (route: AiRoute, req: GeminiRequest
       if (binary) parts.push({ inlineData: { mimeType, data: btoa(binary) } });
     }
     if (!parts.length) throw new AiRouteError('OpenRouter belum mengembalikan gambar yang dapat digunakan. Periksa Activity; tidak ada pengiriman ulang otomatis.', undefined, true);
-    return { candidates: [{ content: { role: 'model', parts }, finishReason: 'STOP' }], text: typeof choice?.message?.content === 'string' ? choice.message.content : '', bekalProvider: 'openrouter', bekalModel: id, usageMetadata: { totalTokenCount: data.usage?.total_tokens || 0 } };
+    return { candidates: [{ content: { role: 'model', parts }, finishReason: 'STOP' }], text: typeof choice?.message?.content === 'string' ? choice.message.content : '', bekalProvider: 'openrouter', bekalModel: id, usageMetadata: { ...data.usage, totalTokenCount: data.usage?.total_tokens || 0 } };
   } catch (error) {
     if (caller?.aborted) throw new DOMException('Permintaan dibatalkan.', 'AbortError');
     if (error instanceof AiRouteError) throw error;
@@ -151,7 +151,7 @@ export const generateRoutedOpenRouterImage = async (req: GeminiRequest, direct?:
     catch (error) { last = error; if (!config.fallback) throw error; continue; }
     const explicitProviderModel = req.model.includes('/');
     const selectedName = req.model.split('/').pop()?.split(':')[0] || '';
-    if (explicitProviderModel) {
+    if (explicitProviderModel && !config.imageFallbackModels) {
       const exact = models.find(m => m.id === req.model);
       models = exact ? [exact] : models.filter(m => sameOpenRouterImageSelection(req.model, m.id));
       if (!models.length) last = new AiRouteError(`Model ${selectedName} yang dipilih tidak tersedia di OpenRouter untuk masukan ini. Referensi, rasio, atau resolusi harus sesuai kemampuan model. Model tidak diganti ke Gemini. Pilih model lain dari katalog OpenRouter secara manual.`, 422, true);

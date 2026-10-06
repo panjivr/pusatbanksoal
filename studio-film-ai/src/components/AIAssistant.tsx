@@ -616,7 +616,7 @@ const AIAssistant: React.FC<AIAssistantProps> = ({ apiKeyReady, tools, toolExecu
   };
 
   return (
-    <div className="w-full h-full flex flex-col overflow-hidden">
+    <div className="w-full h-full min-h-0 flex flex-col overflow-y-auto overflow-x-hidden">
       <header className="flex items-center justify-between p-4 border-b border-gray-700 flex-shrink-0">
         <div className="flex items-center gap-3 min-w-0">
           <MagicWandIcon className="w-6 h-6 text-indigo-400 flex-shrink-0" />
@@ -641,8 +641,8 @@ const AIAssistant: React.FC<AIAssistantProps> = ({ apiKeyReady, tools, toolExecu
       </header>
 
       {coachEnabled ? (
-        <div className="p-4 border-b border-gray-700 bg-gray-900/40 max-h-[42vh] overflow-y-auto">
-          <div className="flex items-start justify-between gap-3">
+        <div className="p-4 border-b border-gray-700 bg-gray-900/40 max-h-[42vh] overflow-y-auto flex-shrink-0">
+          <div className="flex flex-wrap items-start justify-between gap-3">
             <div>
               <h3 className="text-sm font-semibold text-white">Quick Start Guide</h3>
               <p className="text-[10px] text-gray-400">Your AI assistant — ask anything or use the quick actions below.</p>

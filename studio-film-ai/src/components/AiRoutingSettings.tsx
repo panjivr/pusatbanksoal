@@ -20,6 +20,8 @@ export default function AiRoutingSettings() {
     <h4>Model audio utama</h4>
     <OpenRouterModelPicker kind="audio" value={studioSelectedModel('audio')} onChange={() => setStatus('Model audio dipilih.')} />
     <label className="ai-route-check"><input type="checkbox" checked={config.fallback} onChange={e => setConfig(c => ({...c,fallback:e.target.checked}))} /> Coba model OpenRouter kompatibel lain setelah penolakan awal pada mode otomatis</label>
+    <label className="ai-route-check"><input type="checkbox" checked={config.imageFallbackModels === true} onChange={e => setConfig(c => ({...c,imageFallbackModels:e.target.checked}))} /> Izinkan model gambar pengganti di OpenRouter jika model pilihan ditolak</label>
+    <p className="pk-hint">Jika opsi model pengganti aktif, referensi dan pengaturan dipertahankan. Estimasi model pilihan tidak berlaku untuk model pengganti; tarif akhirnya dapat berbeda. Timeout, pembatalan, dan penolakan konten tidak memicu pengiriman ulang.</p>
     <p className="pk-hint">Model yang dipilih langsung pada shot tetap diutamakan. Saldo habis, hasil kosong, dan koneksi terputus tidak memicu pengiriman ulang ke API lain. Generate ulang dilakukan lewat tombol shot.</p>
     <button type="button" className="app-button app-primary" onClick={save}>Simpan router AI</button><p role="status">{status}</p>
   </section>;

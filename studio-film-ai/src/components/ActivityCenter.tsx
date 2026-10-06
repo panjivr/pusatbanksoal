@@ -1,5 +1,5 @@
 import React from 'react';
-import { clearFinishedTasks, dismissTask, estimateProgress, type TaskRecord } from '../services/taskCenter';
+import { taskHistoryBlob, cancelTask, clearFinishedTasks, dismissTask, estimateProgress, type TaskRecord } from '../services/taskCenter';
 
 const KIND_LABELS: Record<TaskRecord['kind'], string> = {
   image: 'Image',
@@ -34,7 +34,8 @@ const ActivityCenter: React.FC<{ tasks: TaskRecord[] }> = ({ tasks }) => {
         </span>
         {finished.length > 0 && (
           <div className="status-card__actions">
-            <button type="button" className="status-button" onClick={clearFinishedTasks}>Clear</button>
+            <button type="button" className="status-button" onClick={() => { const url = URL.createObjectURL(taskHistoryBlob()); const link = document.createElement('a'); link.href = url; link.download = 'riwayat-studio-ai.json'; link.click(); setTimeout(() => URL.revokeObjectURL(url),60000); }}>Unduh riwayat</button>
+            <button type="button" className="status-button" onClick={clearFinishedTasks}>Kosongkan</button>
           </div>
         )}
       </div>
@@ -51,7 +52,7 @@ const ActivityCenter: React.FC<{ tasks: TaskRecord[] }> = ({ tasks }) => {
                   {task.provider && <span className="task-row__provider">{task.provider}</span>}
                   <span className="task-row__time">{formatElapsed(task)}</span>
                   {isActive && task.cancel && (
-                    <button type="button" className="task-row__action" onClick={() => task.cancel?.()} title="Cancel">Cancel</button>
+                    <button type="button" className="task-row__action" onClick={() => cancelTask(task.id)} title="Cancel">Cancel</button>
                   )}
                   {!isActive && (
                     <button type="button" className="task-row__action" onClick={() => dismissTask(task.id)} title="Dismiss" aria-label="Dismiss">×</button>

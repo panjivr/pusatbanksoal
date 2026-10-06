@@ -179,15 +179,11 @@ const UpscaleWorkspace: React.FC<UpscaleWorkspaceProps> = ({
       setStatus('Connect your API keys to upscale.');
       return;
     }
-    const payload = await resolveInputPayload();
-    if (!payload) {
-      setStatus('Upload or select an asset to upscale.');
-      return;
-    }
     setIsRunning(true);
-    setStatus('Upscaling...');
-
+    setStatus('Menyiapkan video sumber...');
     try {
+      const payload = await resolveInputPayload();
+      if (!payload) { setStatus('Unggah atau pilih video sumber.'); return; }
       let item: MediaItem;
       const upscaleOptions = {
         scale: Number.isFinite(scaleValue) ? Math.max(1, Number(scaleValue)) : 4,
@@ -197,7 +193,7 @@ const UpscaleWorkspace: React.FC<UpscaleWorkspaceProps> = ({
 
       const itemWithMeta = {
         ...item,
-        generatedBy: `${modelId}${upscaleOptions.scale ? ` • ${upscaleOptions.scale}x` : ''}${upscaleOptions.resolution ? ` • ${upscaleOptions.resolution}` : ''}`,
+        generatedBy: `${modelId}${upscaleOptions.scale ? ` • ${upscaleOptions.scale}x` : ''}`,
       };
       onAddGeneratedMedia(itemWithMeta);
       setGenerated((prev) => [itemWithMeta, ...prev].slice(0, 12));

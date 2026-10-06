@@ -56,6 +56,8 @@ const AvatarWorkspace: React.FC<AvatarWorkspaceProps> = ({ avatars, onUpdateAvat
   const [newAvatarFile, setNewAvatarFile] = useState<File | null>(null);
   const [newAvatarPreviewUrl, setNewAvatarPreviewUrl] = useState<string | null>(null);
 
+  const [avatarRatio,setAvatarRatio] = useState('16:9');
+  const [avatarResolution,setAvatarResolution] = useState('720p');
   const [routerModel, setRouterModel] = useState(studioSelectedModel('video'));
   const [modelMode, setModelMode] = useState<ModelMode>('wan-i2v');
   const [prompt, setPrompt] = useState('');
@@ -81,7 +83,7 @@ const AvatarWorkspace: React.FC<AvatarWorkspaceProps> = ({ avatars, onUpdateAvat
   const [wanInterpolate, setWanInterpolate] = useState(false);
 
   const [klingAspect, setKlingAspect] = useState<'16:9' | '9:16' | '1:1'>('16:9');
-  const [klingDuration, setKlingDuration] = useState<5 | 10>(5);
+  const [klingDuration, setKlingDuration] = useState<number>(5);
   const [klingAudio, setKlingAudio] = useState(true);
   const [klingMode, setKlingMode] = useState<'std' | 'pro'>('std');
   const [klingKeepSound, setKlingKeepSound] = useState(true);
@@ -206,7 +208,7 @@ const AvatarWorkspace: React.FC<AvatarWorkspaceProps> = ({ avatars, onUpdateAvat
     setStatus('Generating voiceover audio...');
     try {
       const audioItem = await generateSpeechWithElevenLabs(voiceText.trim(), {
-        voiceId: selectedVoiceId || undefined,
+        voiceId: undefined,
         modelId: voiceModelId || undefined,
         outputFormat: voiceOutputFormat || undefined,
       });
@@ -228,6 +230,10 @@ const AvatarWorkspace: React.FC<AvatarWorkspaceProps> = ({ avatars, onUpdateAvat
     }
     if (!onAddGeneratedMedia) return;
 
+    if (['omni-human','aurora-fal','wan-replace','kling-motion'].includes(modelMode)) {
+      setStatus('Sinkronisasi bibir dan transfer gerakan belum didukung adapter OpenRouter. Gunakan mode animasi gambar; audio atau gerakan tidak diabaikan otomatis.');
+      return;
+    }
     if (modelMode === 'omni-human' || modelMode === 'aurora-fal') {
       if (!audioFile && !audioUrl && !voiceText.trim()) {
         alert('Please upload an audio file or enter voiceover text.');
@@ -256,7 +262,7 @@ const AvatarWorkspace: React.FC<AvatarWorkspaceProps> = ({ avatars, onUpdateAvat
         if (voiceText.trim()) {
           setStatus('Generating voiceover audio...');
           const audioItem = await generateSpeechWithElevenLabs(voiceText.trim(), {
-            voiceId: selectedVoiceId || undefined,
+            voiceId: undefined,
             modelId: voiceModelId || undefined,
             outputFormat: voiceOutputFormat || undefined,
           });
@@ -267,7 +273,7 @@ const AvatarWorkspace: React.FC<AvatarWorkspaceProps> = ({ avatars, onUpdateAvat
       };
       let item: MediaItem | null = null;
 
-      item = await generateStudioVideo(routerModel, prompt || 'Animasi karakter dengan gerakan alami.', { ratio:'16:9',resolution:'720p',seconds:klingDuration,start:avatarPayload,onProgress:setStatus });
+      item = await generateStudioVideo(routerModel, prompt || 'Animasi karakter dengan gerakan alami.', { ratio:avatarRatio,resolution:avatarResolution,seconds:klingDuration,start:avatarPayload,onProgress:setStatus });
       if (item) {
         onAddGeneratedMedia(item);
         setStatus('Video added to Media Bin.');
@@ -382,7 +388,7 @@ const AvatarWorkspace: React.FC<AvatarWorkspaceProps> = ({ avatars, onUpdateAvat
               </div>
               <div>
                 <label className="text-xs text-gray-400 uppercase tracking-wide">Model</label>
-                <OpenRouterModelPicker kind="video" value={routerModel} onChange={setRouterModel} seconds={klingDuration} ratio="16:9" resolution="720p" />
+                <OpenRouterModelPicker kind="video" value={routerModel} onChange={setRouterModel} seconds={klingDuration} ratio={avatarRatio} resolution={avatarResolution} onSettingsChange={v=>{if(v.ratio)setAvatarRatio(v.ratio);if(v.resolution)setAvatarResolution(v.resolution);if(v.seconds)setKlingDuration(v.seconds);}} />
               </div>
             </div>
 
@@ -426,33 +432,13 @@ const AvatarWorkspace: React.FC<AvatarWorkspaceProps> = ({ avatars, onUpdateAvat
                       >
                         {isGeneratingAudio ? 'Generating Voice...' : 'Generate Voiceover'}
                       </button>
-                      <span className="text-[10px] text-gray-500">Uses ElevenLabs voice.</span>
+                      <span className="text-[10px] text-gray-500">Menggunakan model dan suara OpenRouter pilihan.</span>
                     </div>
                     <div className="mt-2">
-                      <label className="text-[10px] uppercase tracking-wider text-gray-500">Voice</label>
-                      {voiceStatus === 'loading' && (
-                        <div className="text-[10px] text-gray-500 mt-1">Loading voices...</div>
-                      )}
-                      {voiceStatus === 'error' && (
-                        <div className="text-[10px] text-red-300 mt-1">{voiceError || 'Failed to load voices.'}</div>
-                      )}
-                      {voiceStatus === 'ready' && (
-                        <select
-                          value={selectedVoiceId}
-                          onChange={(e) => setSelectedVoiceId(e.target.value)}
-                          className="mt-1 w-full bg-gray-900 border border-gray-700 rounded-lg p-2 text-xs focus:ring-2 focus:ring-indigo-500"
-                        >
-                          {voiceOptions.map((voice) => (
-                            <option key={voice.voice_id} value={voice.voice_id}>
-                              {voice.name}
-                            </option>
-                          ))}
-                        </select>
-                      )}
                       <div className="mt-2 grid md:grid-cols-2 gap-2">
                         <div>
                           <label className="text-[10px] uppercase tracking-wider text-gray-500">Voice Model</label>
-                          <OpenRouterModelPicker kind="audio" value={studioSelectedModel('audio')} onChange={id => setVoiceModelId(id)} />
+                          <OpenRouterModelPicker kind="audio" operation="voice" value={voiceModelId.includes('/') ? voiceModelId : studioSelectedModel('audio')} onChange={setVoiceModelId} />
                         </div>
                         <div>
                           <label className="text-[10px] uppercase tracking-wider text-gray-500">Output Format</label>

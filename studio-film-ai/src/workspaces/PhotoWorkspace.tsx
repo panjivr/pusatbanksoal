@@ -1,3 +1,6 @@
+import OpenRouterModelPicker from '../components/OpenRouterModelPicker';
+import { studioSelectedModel } from '../services/openRouterCatalog';
+import { editMaskedImage } from '../services/maskedImageEdit';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { MediaItem } from '../types';
 import { inpaintWithNanoBanana, inpaintWithFlux2Pro, inpaintWithZTurboInpaint } from '../services/replicateService';
@@ -114,7 +117,7 @@ const PhotoWorkspace: React.FC<PhotoWorkspaceProps> = ({ onAddGeneratedMedia, se
   const [brushSize, setBrushSize] = useState(24);
   const [maskHasPaint, setMaskHasPaint] = useState(false);
   const [inpaintPrompt, setInpaintPrompt] = useState('');
-  const [inpaintModel, setInpaintModel] = useState<'nano-banana-pro' | 'nano-banana-2-fal' | 'flux-2-pro' | 'z-turbo-inpaint'>('nano-banana-pro');
+  const [inpaintModel, setInpaintModel] = useState(studioSelectedModel('image'));
   const [resolution, setResolution] = useState<'1K' | '2K' | '4K' | 'match_input_image' | '0.5 MP' | '1 MP' | '2 MP' | '4 MP'>('2K');
   const [isInpainting, setIsInpainting] = useState(false);
   const [status, setStatus] = useState<string>('');
@@ -145,15 +148,8 @@ const PhotoWorkspace: React.FC<PhotoWorkspaceProps> = ({ onAddGeneratedMedia, se
   const cloneSourceRef = useRef<{ x: number; y: number } | null>(null);
   const cloneOffsetRef = useRef<{ x: number; y: number } | null>(null);
 
-  useEffect(() => {
-    if (inpaintModel === 'nano-banana-pro' || inpaintModel === 'nano-banana-2-fal') {
-      setResolution('2K');
-    } else if (inpaintModel === 'flux-2-pro') {
-      setResolution('match_input_image');
-    } else {
-      setResolution('2K');
-    }
-  }, [inpaintModel]);
+
+
 
   const filterStyle = useMemo(() => {
     const filters = [
@@ -537,23 +533,7 @@ const PhotoWorkspace: React.FC<PhotoWorkspaceProps> = ({ onAddGeneratedMedia, se
     setStatus('Inpainting...');
     try {
       const prompt = promptOverride || inpaintPrompt || 'Reconstruct the masked area seamlessly.';
-      const item = inpaintModel === 'nano-banana-pro'
-        ? await inpaintWithNanoBanana(prompt, maskedDataUrl, resolution as '1K' | '2K' | '4K')
-        : inpaintModel === 'nano-banana-2-fal'
-          ? await (async () => {
-            const match = maskedDataUrl.match(/^data:(.*?);base64,(.*)$/);
-            const payload = match && match[1] && match[2]
-              ? { mimeType: match[1], base64: match[2] }
-              : { mimeType: 'image/png', base64: (maskedDataUrl.split(',')[1] || '') };
-            const images = await editImageWithFalNanoBanana2(prompt, payload, {
-              resolution: resolution as '1K' | '2K' | '4K',
-            });
-            if (!images.length) throw new Error('FAL Nano Banana 2 Edit returned no images.');
-            return images[0];
-          })()
-        : inpaintModel === 'flux-2-pro'
-          ? await inpaintWithFlux2Pro(prompt, maskedDataUrl, resolution as 'match_input_image' | '0.5 MP' | '1 MP' | '2 MP' | '4 MP')
-          : await inpaintWithZTurboInpaint(prompt, maskedDataUrl);
+      const item = await editMaskedImage(inpaintModel, prompt, rasterCanvasRef.current!, maskCanvasRef.current!, resolution);
 
       loadImageToCanvas(item.url);
       clearMask();
@@ -828,43 +808,7 @@ const PhotoWorkspace: React.FC<PhotoWorkspaceProps> = ({ onAddGeneratedMedia, se
               placeholder="Describe what to generate..."
             />
             <div className="mt-2 flex flex-col gap-2">
-              <select
-                value={inpaintModel}
-                onChange={(e) => setInpaintModel(e.target.value as any)}
-                className="bg-gray-800 border border-gray-700 rounded-lg p-2 text-xs"
-              >
-                <option value="nano-banana-pro">Nano Banana Pro</option>
-                <option value="nano-banana-2-fal">Nano Banana 2 Edit (FAL)</option>
-                <option value="flux-2-pro">Flux 2 Pro</option>
-                <option value="z-turbo-inpaint">Z-Turbo Inpaint</option>
-              </select>
-              {inpaintModel === 'z-turbo-inpaint' ? (
-                <div className="bg-gray-800 border border-gray-700 rounded-lg p-2 text-xs text-gray-300">
-                  Resolution: Auto
-                </div>
-              ) : (
-                <select
-                  value={resolution}
-                  onChange={(e) => setResolution(e.target.value as any)}
-                  className="bg-gray-800 border border-gray-700 rounded-lg p-2 text-xs"
-                >
-                  {inpaintModel === 'nano-banana-pro' || inpaintModel === 'nano-banana-2-fal' ? (
-                    <>
-                      <option value="1K">1K</option>
-                      <option value="2K">2K</option>
-                      <option value="4K">4K</option>
-                    </>
-                  ) : (
-                    <>
-                      <option value="match_input_image">Match Input</option>
-                      <option value="0.5 MP">0.5 MP</option>
-                      <option value="1 MP">1 MP</option>
-                      <option value="2 MP">2 MP</option>
-                      <option value="4 MP">4 MP</option>
-                    </>
-                  )}
-                </select>
-              )}
+              <OpenRouterModelPicker kind="image" value={inpaintModel} onChange={setInpaintModel} references={1} resolution={resolution} onSettingsChange={v => { if(v.resolution) setResolution(v.resolution as any); }} />
               <button
                 onClick={() => handleInpaint()}
                 disabled={isInpainting}

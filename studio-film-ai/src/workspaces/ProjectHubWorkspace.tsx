@@ -1,4 +1,5 @@
-import { supportsStudioWorldModels } from '../services/openRouterCatalog';
+import { editMaskedImage } from '../services/maskedImageEdit';
+import { loadStudioCatalog, supportsStudioWorldModels } from '../services/openRouterCatalog';
 import OpenRouterModelPicker from '../components/OpenRouterModelPicker';
 import { generateStudioImage, generateStudioVideo, studioSelectedModel } from '../services/openRouterMedia';
 import { availableGenerationModels } from '../services/generationSupport';
@@ -3161,22 +3162,14 @@ const ShotInpaintModal: React.FC<{
     const [brushSize, setBrushSize] = useState(28);
     const [maskHasPaint, setMaskHasPaint] = useState(false);
     const [inpaintPrompt, setInpaintPrompt] = useState('');
-    const [inpaintModel, setInpaintModel] = useState<'nano-banana-pro' | 'nano-banana-2-fal' | 'flux-2-pro' | 'z-turbo-inpaint' | 'grok-imagine-edit-fal'>('nano-banana-pro');
+    const [inpaintModel, setInpaintModel] = useState(localStorage.getItem('bekal-openrouter-image-model') || '');
     const [resolution, setResolution] = useState<'1K' | '2K' | '4K' | 'match_input_image' | '0.5 MP' | '1 MP' | '2 MP' | '4 MP'>('2K');
     const [isInpainting, setIsInpainting] = useState(false);
     const [status, setStatus] = useState('');
     const [canvasSize, setCanvasSize] = useState({ width: 16, height: 9 });
     const isDrawingRef = useRef(false);
 
-    useEffect(() => {
-        if (inpaintModel === 'nano-banana-pro' || inpaintModel === 'nano-banana-2-fal') {
-            setResolution('2K');
-        } else if (inpaintModel === 'flux-2-pro') {
-            setResolution('match_input_image');
-        } else {
-            setResolution('2K');
-        }
-    }, [inpaintModel]);
+
 
     const clearMask = () => {
         const maskCanvas = maskCanvasRef.current;
@@ -3295,7 +3288,7 @@ const ShotInpaintModal: React.FC<{
                 const [, fallbackBase64 = ''] = dataUrl.split(',');
                 return { mimeType: 'image/png', base64: fallbackBase64 };
             };
-            const item = await generateStudioImage(inpaintModel, `${prompt}\nEdit only the transparent masked area. Preserve everything else.`, [toInlineImage(maskedDataUrl)], '1:1', resolution);
+            const item = await editMaskedImage(inpaintModel, prompt, baseCanvasRef.current!, maskCanvasRef.current!, resolution);
             onApply(item.url, shot.shot);
             loadImageToCanvas(item.url);
             setStatus('Inpaint applied to shot.');
@@ -3369,37 +3362,7 @@ const ShotInpaintModal: React.FC<{
                         <div className="grid grid-cols-2 gap-2">
                             <div>
                                 <label className="text-[10px] uppercase tracking-wide text-gray-500">Model</label>
-                                <OpenRouterModelPicker kind="image" value={inpaintModel} onChange={id => setInpaintModel(id as any)} references={1} resolution={resolution} />
-                            </div>
-                            <div>
-                                <label className="text-[10px] uppercase tracking-wide text-gray-500">Resolution</label>
-                                {inpaintModel === 'z-turbo-inpaint' || inpaintModel === 'grok-imagine-edit-fal' ? (
-                                    <div className="w-full bg-gray-800 text-gray-300 text-xs p-2 rounded border border-gray-700">
-                                        Auto
-                                    </div>
-                                ) : (
-                                    <select
-                                        value={resolution}
-                                        onChange={(e) => setResolution(e.target.value as any)}
-                                        className="w-full bg-gray-800 text-white text-xs p-2 rounded border border-gray-700 focus:border-indigo-500"
-                                    >
-                                        {inpaintModel === 'nano-banana-pro' || inpaintModel === 'nano-banana-2-fal' ? (
-                                            <>
-                                                <option value="1K">1K</option>
-                                                <option value="2K">2K</option>
-                                                <option value="4K">4K</option>
-                                            </>
-                                        ) : (
-                                            <>
-                                                <option value="match_input_image">Match Input</option>
-                                                <option value="0.5 MP">0.5 MP</option>
-                                                <option value="1 MP">1 MP</option>
-                                                <option value="2 MP">2 MP</option>
-                                                <option value="4 MP">4 MP</option>
-                                            </>
-                                        )}
-                                    </select>
-                                )}
+                                <OpenRouterModelPicker kind="image" value={inpaintModel} onChange={id => setInpaintModel(id as any)} references={1} resolution={resolution} onSettingsChange={v => { if(v.resolution) setResolution(v.resolution as any); }} />
                             </div>
                         </div>
                         <button
@@ -3926,14 +3889,14 @@ const ProjectHubWorkspace: React.FC<ProjectHubWorkspaceProps> = ({
     const [scriptLength, setScriptLength] = useState<ScriptLength>(storyBible.projectType || 'trailer');
     const [scriptWritingMode, setScriptWritingMode] = useState<'fast' | 'slow'>('fast');
 
-    const [referenceImageModel, setReferenceImageModel] = useState<ReferenceImageModel>(() => storedUiPrefs.referenceImageModel || studioSelectedModel('image') as ReferenceImageModel || 'imagen');
+    const [referenceImageModel, setReferenceImageModel] = useState<ReferenceImageModel>(() => (storedUiPrefs.referenceImageModel?.includes('/') ? storedUiPrefs.referenceImageModel : studioSelectedModel('image')) as ReferenceImageModel);
     const [environmentWorldModel, setEnvironmentWorldModel] = useState<MarbleModel>(DEFAULT_WORLD_MODEL_ID);
     const environmentWorldModelOptions = useMemo(() => getWorldModelOptionsForProvider('worldlabs'), []);
     const [isReferenceModelDropdownOpen, setIsReferenceModelDropdownOpen] = useState(false);
     const [isStoryboardModelDropdownOpen, setIsStoryboardModelDropdownOpen] = useState(false);
     const [isFilmingModelDropdownOpen, setIsFilmingModelDropdownOpen] = useState(false);
-    const [marketingImageModel, setMarketingImageModel] = useState<MarketingImageModel>(() => storedUiPrefs.marketingImageModel || studioSelectedModel('image') as MarketingImageModel || 'nano-banana-pro');
-    const [videoModel, setVideoModel] = useState<FilmingVideoModel>(() => storedUiPrefs.videoModel || studioSelectedModel('video') as FilmingVideoModel || 'veo-3.1-fast-generate-preview');
+    const [marketingImageModel, setMarketingImageModel] = useState<MarketingImageModel>(() => (storedUiPrefs.marketingImageModel?.includes('/') ? storedUiPrefs.marketingImageModel : studioSelectedModel('image')) as MarketingImageModel);
+    const [videoModel, setVideoModel] = useState<FilmingVideoModel>(() => (storedUiPrefs.videoModel?.includes('/') ? storedUiPrefs.videoModel : studioSelectedModel('video')) as FilmingVideoModel);
     const [routerVideoResolution, setRouterVideoResolution] = useState('720p');
     const [videoDurationSeconds, setVideoDurationSeconds] = useState<number>(5);
     const [ltxAspectRatio, setLtxAspectRatio] = useState<'16:9' | '9:16'>('16:9');
@@ -3962,7 +3925,11 @@ const ProjectHubWorkspace: React.FC<ProjectHubWorkspaceProps> = ({
     const [referenceLoraScale, setReferenceLoraScale] = useState<number>(0.75);
     const isKlingFalVideoModel = videoModel === 'kling-o3-pro-fal' || videoModel === 'kling-v3-pro-i2v-fal' || videoModel === 'kling-v3-pro-t2v-fal';
     const isKlingFalV3Model = videoModel === 'kling-v3-pro-i2v-fal' || videoModel === 'kling-v3-pro-t2v-fal';
-    const isTextOnlyVideoModel = videoModel === 'grok-imagine-video' || videoModel === 'seedance-2.5-t2v-fal' || videoModel === 'kling-v3-pro-t2v-fal' || videoModel === 'wan-2.7-t2v-fal' || videoModel === 'p-video';
+    const [routerVideoMetadata, setRouterVideoMetadata] = useState<any>(null);
+    useEffect(() => { let alive = true; setRouterVideoMetadata(null); loadStudioCatalog('video').then(models => { if (alive) setRouterVideoMetadata(models.find(m => m.id === videoModel) || null); }).catch(() => {}); return () => { alive = false; }; }, [videoModel]);
+    const isTextOnlyVideoModel = videoModel.includes('/') ? Boolean(routerVideoMetadata && !routerVideoMetadata.supported_frame_images?.includes('first_frame') && !routerVideoMetadata.upscale_factor) : videoModel === 'grok-imagine-video' || videoModel === 'seedance-2.5-t2v-fal' || videoModel === 'kling-v3-pro-t2v-fal' || videoModel === 'wan-2.7-t2v-fal' || videoModel === 'p-video';
+    const shotImageLocks = useRef(new Set<number>());
+    const shotVideoLocks = useRef(new Set<number>());
     const supportsAudioDrivenFilmingModel = videoModel === 'aurora-fal' || videoModel === 'ltx-audio-to-video' || videoModel === 'p-video' || videoModel === 'ltx-2.3-pro' || videoModel === 'wan-2.7-t2v-fal' || videoModel === 'wan-2.7-i2v-fal' || (videoModel === 'seedance-2.0-omni-fal' || videoModel === 'seedance-2.5-omni-fal');
     const requiresShotAudio = videoModel === 'aurora-fal' || videoModel === 'ltx-audio-to-video';
     const isSeedanceStoryboardPanelModel = videoModel === 'seedance-1.5-pro' || videoModel === 'seedance-2.0-fal' || videoModel === 'seedance-2.5-i2v-fal';
@@ -6585,14 +6552,9 @@ const ProjectHubWorkspace: React.FC<ProjectHubWorkspaceProps> = ({
         baseImage: { base64: string; mimeType: string } | Array<{ base64: string; mimeType: string }>,
         opts?: { numOutputs?: number }
     ) => {
-        if (useFalMultiAngle) {
-            return editImageWithFalQwenMultiAngle(prompt, baseImage, opts);
-        }
-        const [firstImage] = Array.isArray(baseImage) ? baseImage : [baseImage];
-        if (!firstImage) {
-            throw new Error('Qwen Multi-Angle requires at least one reference image.');
-        }
-        return editImageWithQwenMultiAngle(prompt, firstImage, opts);
+        const refs = Array.isArray(baseImage) ? baseImage : [baseImage];
+        if (!refs.length) throw new Error('Pilih referensi karakter sebelum membuat sudut baru.');
+        return Promise.all(Array.from({length:Math.max(1,opts?.numOutputs || 1)}, () => generateStudioImage(referenceImageModel,prompt,refs,resolveModelAspectRatio(referenceAspectRatio),imageSize)));
     };
 
     const buildMoodboardReferences = async (baseImageUrl?: string) => {
@@ -9391,6 +9353,7 @@ const ProjectHubWorkspace: React.FC<ProjectHubWorkspaceProps> = ({
         const referencePayloads = await resolveImageReferencePayloads(referenceUrls);
         if (referencePayloads.length === 0) throw new Error('Could not load character/outfit reference images.');
         const modelAspectRatio = resolveModelAspectRatio(referenceAspectRatio);
+        if (referenceImageModel.includes('/')) return generateStudioImage(referenceImageModel, outfitPrompt, referencePayloads, modelAspectRatio, imageSize);
         const outfitModel = (referenceImageModel === 'seedream' || referenceImageModel === 'gemini-pro' || referenceImageModel === 'nano' || referenceImageModel === 'nano-banana-2-fal' || referenceImageModel === 'wan-2.7-image-pro' || referenceImageModel === 'wan-2.7-pro-fal')
             ? referenceImageModel
             : 'seedream';
@@ -9477,21 +9440,7 @@ const ProjectHubWorkspace: React.FC<ProjectHubWorkspaceProps> = ({
                 'single character only, no additional people, no props, no scene background elements'
             ].filter(Boolean).join('. ');
 
-            let imageMedia: MediaItem;
-            if (childReference) {
-                imageMedia = await generateImageWithFalSeedreamV5Lite(finalPrompt, { aspectRatio: modelAspectRatio });
-            } else {
-                const baseImage = await getBase64FromUrl(character.imageUrl);
-                const edited = await editImageWithFalNanoBanana2(finalPrompt, baseImage, {
-                    aspectRatio: modelAspectRatio,
-                    resolution: imageSize,
-                    numOutputs: 1,
-                });
-                if (!edited.length) {
-                    throw new Error('FAL Nano Banana 2 edit returned no images.');
-                }
-                imageMedia = edited[0];
-            }
+            const imageMedia = await generateStudioImage(referenceImageModel, finalPrompt, [await getBase64FromUrl(character.imageUrl)], modelAspectRatio, imageSize);
 
             const finalImage = await applyCinemascopeCrop(imageMedia, referenceAspectRatio);
             updateCharacterReference(characterId, {
@@ -10442,7 +10391,8 @@ const ProjectHubWorkspace: React.FC<ProjectHubWorkspaceProps> = ({
 
     const handleGenerateShotImage = async (shotNumber: number) => {
         const shot = shotPrompts.find(s => s.shot === shotNumber);
-        if (!shot) return;
+        if (!shot || shotImageLocks.current.has(shotNumber)) return false;
+        shotImageLocks.current.add(shotNumber);
 
         setShotPrompts(prev => prev.map(s => s.shot === shotNumber ? { ...s, isGenerating: true, isEditing: false, imageGenerationError: undefined } : s));
 
@@ -10936,6 +10886,7 @@ const ProjectHubWorkspace: React.FC<ProjectHubWorkspaceProps> = ({
 
             for (let attempt = 1; attempt <= totalAttempts; attempt += 1) {
                 const rendered = await renderStoryboardAttempt(promptText);
+                setShotPrompts(prev => prev.map(s => { if (s.shot !== shotNumber) return s; const versions = buildVersionList(s.imageVersions, s.imageUrl); if (!versions.includes(rendered.image.url)) versions.push(rendered.image.url); return { ...s, imageUrl: rendered.image.url, imageVersions: versions, selectedVersionIndex: versions.indexOf(rendered.image.url) }; }));
                 const review = await reviewStoryboardAttempt(rendered.image.url, rendered.promptText);
                 attemptResults.push({ ...rendered, review });
 
@@ -11026,7 +10977,7 @@ const ProjectHubWorkspace: React.FC<ProjectHubWorkspaceProps> = ({
                     imageUrl: bestAttempt.image.url,
                     imageVersions: nextVersions,
                     selectedVersionIndex: nextVersions.indexOf(bestAttempt.image.url),
-                    generatedBy: referenceModelLabel,
+                    generatedBy: bestAttempt.image.generatedBy || referenceModelLabel,
                     isGenerating: false,
                     contextReferences,
                     continuityRefinedPrompt: nextPrompt,
@@ -11059,7 +11010,7 @@ const ProjectHubWorkspace: React.FC<ProjectHubWorkspaceProps> = ({
                 setError(`Gambar adegan belum berhasil dibuat: ${msg}`);
             }
             return false;
-        }
+        } finally { shotImageLocks.current.delete(shotNumber); }
     };
 
     const handleRegenerateShotAngle = async (shotNumber: number) => {
@@ -11123,6 +11074,7 @@ const ProjectHubWorkspace: React.FC<ProjectHubWorkspaceProps> = ({
         // Midjourney renders several jobs at once (Settings → Midjourney → parallel jobs); API models get two lanes.
         const parallel = referenceImageModel === 'midjourney' ? getMidjourneyConcurrency() : 2;
         let generatedCount = 0;
+        const failedShots: number[] = [];
         const pending = [...shotsToGenerate];
         const worker = async () => {
             while (pending.length > 0) {
@@ -11130,13 +11082,16 @@ const ProjectHubWorkspace: React.FC<ProjectHubWorkspaceProps> = ({
                 if (!shot) return;
                 try {
                     if (await handleGenerateShotImage(shot.shot)) generatedCount += 1;
+                    else failedShots.push(shot.shot);
                 } catch (e) {
                     console.error(`Failed to generate shot ${shot.shot}`, e);
+                    failedShots.push(shot.shot);
                 }
             }
         };
         await Promise.all(Array.from({ length: Math.min(parallel, pending.length) }, () => worker()));
-        return { generatedCount };
+        pushUiStatus(`${generatedCount} gambar berhasil, ${failedShots.length} gagal, ${sourceShots.length - shotsToGenerate.length} dilewati.${failedShots.length ? ` Ulangi adegan: ${failedShots.join(', ')}.` : ''}`);
+        return { generatedCount, failedShots };
     };
 
     const applyCameraLensToAllShots = () => {
@@ -11564,9 +11519,10 @@ const ProjectHubWorkspace: React.FC<ProjectHubWorkspaceProps> = ({
 
     const handleGenerateShotVideo = async (shotNumber: number) => {
         const shot = shotPrompts.find(s => s.shot === shotNumber);
-        const referenceImageUrl = shot?.startFrameUrl || shot?.imageUrl;
-        const needsStoryboardFrame = !(isTextOnlyVideoModel || videoModel === 'ltx-audio-to-video');
-        if (!shot || (needsStoryboardFrame && !referenceImageUrl)) return;
+        const referenceImageUrl = shot?.startFrameUrl || (!isTextOnlyVideoModel ? shot?.imageUrl : undefined);
+        const needsStoryboardFrame = !videoModel.includes('/') && !(isTextOnlyVideoModel || videoModel === 'ltx-audio-to-video');
+        if (!shot || shotVideoLocks.current.has(shotNumber) || (needsStoryboardFrame && !referenceImageUrl)) return false;
+        shotVideoLocks.current.add(shotNumber);
 
         setShotPrompts(prev => prev.map(s => s.shot === shotNumber ? { ...s, isFilming: true } : s));
 
@@ -11748,7 +11704,7 @@ const ProjectHubWorkspace: React.FC<ProjectHubWorkspaceProps> = ({
                     }, available, available[0]).model
                     : videoModel;
                 if (videoModel === 'auto') console.info(`Auto video model for shot ${shot.shot}: ${activeVideoModel}`);
-                if (activeVideoModel.includes('/')) return generateStudioVideo(activeVideoModel, candidateMotionPrompt, { ratio: referenceAspectRatio, resolution: routerVideoResolution, seconds: normalizedDurationSeconds, start: referencePayload, end: endFramePayload, onProgress: pushUiStatus });
+                if (activeVideoModel.includes('/')) return generateStudioVideo(activeVideoModel, candidateMotionPrompt, { ratio: resolveShotEffectiveAspectRatio(shot), resolution: routerVideoResolution, seconds: normalizedDurationSeconds, start: referencePayload, end: endFramePayload, onProgress: pushUiStatus });
                 if (activeVideoModel === 'grok-imagine-video') {
                     const publicImageUrl = referenceImageUrl && /^https?:\/\//.test(referenceImageUrl) ? referenceImageUrl : undefined;
                     return generateVideoWithGrok({
@@ -12086,6 +12042,7 @@ const ProjectHubWorkspace: React.FC<ProjectHubWorkspaceProps> = ({
             for (let attempt = 1; attempt <= totalAttempts; attempt += 1) {
                 const ratioAwarePrompt = applyFilmingAspectRatioToPrompt(promptText, shot);
                 const renderedVideo = await renderVideoAttempt(ratioAwarePrompt);
+                setShotPrompts(prev => prev.map(s => { if (s.shot !== shotNumber) return s; const versions = [...new Set([...(s.videoVersions || []), ...(s.videoUrl ? [s.videoUrl] : []), renderedVideo.url])]; return { ...s, videoUrl: renderedVideo.url, videoVersions: versions, selectedVideoIndex: versions.indexOf(renderedVideo.url) }; }));
                 const review = await reviewVideoAttempt(renderedVideo.url, ratioAwarePrompt);
                 attemptResults.push({
                     promptText: ratioAwarePrompt,
@@ -12211,7 +12168,7 @@ const ProjectHubWorkspace: React.FC<ProjectHubWorkspaceProps> = ({
                 setError(`Video adegan ${shotNumber} belum berhasil dibuat: ${msg}`);
             }
             return false;
-        }
+        } finally { shotVideoLocks.current.delete(shotNumber); }
     };
 
     // Director Mode Handlers
@@ -12403,7 +12360,7 @@ const ProjectHubWorkspace: React.FC<ProjectHubWorkspaceProps> = ({
     };
 
     const handleGenerateAllVideos = async (shots?: ShotPrompt[]) => {
-        const requiresStoryboardFrame = !(isTextOnlyVideoModel || videoModel === 'ltx-audio-to-video');
+        const requiresStoryboardFrame = !videoModel.includes('/') && !(isTextOnlyVideoModel || videoModel === 'ltx-audio-to-video');
         const sourceShots = shots ?? shotPrompts;
         if (sourceShots.length === 0) {
             const message = 'No shots match the selected director persona.';
@@ -12411,8 +12368,8 @@ const ProjectHubWorkspace: React.FC<ProjectHubWorkspaceProps> = ({
             return { generatedCount: 0, error: message };
         }
         const readyShots = requiresStoryboardFrame
-            ? sourceShots.filter(s => (s.imageUrl || s.startFrameUrl) && !s.videoUrl)
-            : sourceShots.filter(s => !s.videoUrl);
+            ? sourceShots.filter(s => (s.imageUrl || s.startFrameUrl) && !s.videoUrl && !s.isFilming)
+            : sourceShots.filter(s => !s.videoUrl && !s.isFilming);
         if (readyShots.length === 0) {
             const hasVideos = sourceShots.some(s => s.videoUrl);
             const message = hasVideos
@@ -12442,22 +12399,24 @@ const ProjectHubWorkspace: React.FC<ProjectHubWorkspaceProps> = ({
         // We iterate and wait to avoid overwhelming the API if rate limits exist,
         // but also to provide progress updates.
         let generatedCount = 0;
+        const failedShots: number[] = [];
         for (const shot of readyShots) {
             try {
                 if (await handleGenerateShotVideo(shot.shot)) generatedCount += 1;
-                else break;
+                else failedShots.push(shot.shot);
             } catch (e) {
                 console.error("Batch filming interrupted", e);
-                break;
+                failedShots.push(shot.shot);
             }
         }
         setIsLoading(false);
-        return { generatedCount };
+        pushUiStatus(`${generatedCount} video berhasil, ${failedShots.length} gagal, ${sourceShots.length - readyShots.length} dilewati.${failedShots.length ? ` Ulangi adegan: ${failedShots.join(', ')}.` : ''}`);
+        return { generatedCount, failedShots };
     };
 
     const handleRefilmContinuityPriorityShots = async (shots?: ShotPrompt[]) => {
         const sourceShots = shots ?? continuityPriorityQueue;
-        const requiresStoryboardFrame = !(isTextOnlyVideoModel || videoModel === 'ltx-audio-to-video');
+        const requiresStoryboardFrame = !videoModel.includes('/') && !(isTextOnlyVideoModel || videoModel === 'ltx-audio-to-video');
         const readyShots = sourceShots.filter((shot) => {
             if (!shot.continuityReview || shot.continuityReview.status === 'aligned') return false;
             const hasAudio = !requiresShotAudio || Boolean(shot.voiceoverUrl);

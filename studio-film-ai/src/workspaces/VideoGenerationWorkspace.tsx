@@ -1,3 +1,4 @@
+import { loadStudioCatalog } from '../services/openRouterCatalog';
 import OpenRouterModelPicker from '../components/OpenRouterModelPicker';
 import { generateStudioVideo } from '../services/openRouterMedia';
 import { availableGenerationModels } from '../services/generationSupport';
@@ -539,9 +540,11 @@ const VideoGenerationWorkspace: React.FC<VideoGenerationWorkspaceProps> = ({
     recentProjects,
   });
 
-  const modelOption = useMemo(() => MODEL_OPTIONS.find((option) => option.id === modelId), [modelId]);
-  const readyForGeneration = apiKeyReady !== false;
-  const availableAspectRatios = MODEL_ASPECT_RATIOS[modelId] || ASPECT_RATIOS;
+  const [routerMetadata,setRouterMetadata] = useState<any>(null);
+  useEffect(()=>{let alive=true;setRouterMetadata(null);loadStudioCatalog('video').then(models=>{if(alive)setRouterMetadata(models.find(m=>m.id===modelId)||null);}).catch(()=>{});return()=>{alive=false;};},[modelId]);
+  const modelOption = useMemo<ModelOption | undefined>(() => modelId.includes('/') ? routerMetadata ? {id:modelId,label:routerMetadata.name || modelId,provider:'OpenRouter',supportsImage:routerMetadata.supported_frame_images?.includes('first_frame') || false,requiresImage:false,supportsAudio:false,requiresAudio:false,supportsEndFrame:routerMetadata.supported_frame_images?.includes('last_frame') || false} : undefined : MODEL_OPTIONS.find((option) => option.id === modelId), [modelId,routerMetadata]);
+  const readyForGeneration = apiKeyReady !== false && (!modelId.includes('/') || Boolean(routerMetadata));
+  const availableAspectRatios = routerMetadata?.supported_aspect_ratios || MODEL_ASPECT_RATIOS[modelId] || ASPECT_RATIOS;
   const supportsVeoElements = modelId === 'veo-fast' || modelId === 'veo';
   const supportsKlingAdvanced = modelId === 'kling-o3-pro-fal' || modelId === 'kling-v3-pro-i2v-fal' || modelId === 'kling-v3-pro-t2v-fal';
   const supportsStoryboardRefs = modelId === 'seedance' || isSeedanceI2V(modelId) || isSeedanceOmni(modelId) || modelId === 'pixverse-c1-ref-fal';
@@ -552,7 +555,7 @@ const VideoGenerationWorkspace: React.FC<VideoGenerationWorkspaceProps> = ({
   const needsAudio = modelOption?.requiresAudio === true || modelId === 'aurora-fal';
   const supportsAudioInput = modelOption?.supportsAudio === true || modelId === 'aurora-fal';
   const supportsEndFrame = modelOption?.supportsEndFrame === true || supportsKlingAdvanced;
-  const durationConfig = VIDEO_DURATION_OPTIONS[modelId];
+  const durationConfig = modelId.includes('/') ? {supported:Boolean(routerMetadata?.supported_durations?.length),options:routerMetadata?.supported_durations || [videoDurationSeconds],fallback:routerMetadata?.supported_durations?.[0] || videoDurationSeconds} : VIDEO_DURATION_OPTIONS[modelId];
   const hasPrompt = prompt.trim().length > 0;
   const hasStartFrame = Boolean(referenceFile || referenceUrl);
   const hasEndFrame = Boolean(endFrameFile || endFrameUrl);
@@ -901,6 +904,7 @@ const VideoGenerationWorkspace: React.FC<VideoGenerationWorkspaceProps> = ({
       setStatus('Connect your API keys to generate video.');
       return;
     }
+    if (modelId.includes('/') && ((hasStartFrame && !modelOption?.supportsImage) || (hasEndFrame && !supportsEndFrame) || hasAudioTrack || hasMotionReference)) { setStatus('Model atau adapter ini belum menerima semua referensi pilihan. Sesuaikan input; referensi tidak dihapus otomatis.'); return; }
     if (modelOption?.requiresImage && !referenceFile && !referenceUrl && !(supportsStoryboardRefs && storyboardReferenceAssets.length > 0)) {
       setStatus(`${modelOption.label} requires a reference image.`);
       return;
@@ -1340,7 +1344,7 @@ const VideoGenerationWorkspace: React.FC<VideoGenerationWorkspaceProps> = ({
           item = await generateStudioVideo(resolvedModelId, shapedPrompt, { ratio: aspectRatio, resolution: routerVideoResolution, seconds: normalizedDurationSeconds, start: reference, end: endFrameReference, onProgress: setStatus });
       }
 
-      const itemWithMeta = { ...item, generatedBy: modelOption?.label };
+      const itemWithMeta = { ...item, generatedBy: item.generatedBy || modelOption?.label };
       onAddGeneratedMedia(itemWithMeta);
       setGenerated((prev) => [itemWithMeta, ...prev].slice(0, 12));
       setStatus('Video generated and added to your project.');

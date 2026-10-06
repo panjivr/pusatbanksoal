@@ -569,7 +569,7 @@ const MediaBin: React.FC<MediaBinProps> = ({
 
   return (
     <div className="bg-gray-800/50 p-4 flex flex-col h-full">
-      <div className="flex items-center justify-between gap-3 mb-4">
+      <div className="flex flex-wrap flex-shrink-0 items-center justify-between gap-3 mb-4 min-w-0">
         <h3 className="text-lg font-semibold text-white">Media Bin</h3>
         {hasLibrarySupport && (
           <div className="inline-flex rounded-lg border border-gray-700 bg-gray-900/60 p-1 text-[11px]">

@@ -817,7 +817,9 @@ const ImageGenerationWorkspace: React.FC<ImageGenerationWorkspaceProps> = ({
   const [trainerStatus, setTrainerStatus] = useState<string | null>(null);
   const [trainerIsRunning, setTrainerIsRunning] = useState(false);
   const [relightSourceUrl, setRelightSourceUrl] = useState('');
-  const [relightModel, setRelightModel] = useState<'gemini' | 'replicate'>('gemini');
+  const [relightModel, setRelightModel] = useState(localStorage.getItem('bekal-openrouter-image-model') || '');
+  const [relightRatio,setRelightRatio] = useState('1:1');
+  const [relightResolution,setRelightResolution] = useState('1K');
   const [relightPresetId, setRelightPresetId] = useState(RELIGHT_PRESETS[0]?.id || 'neutral');
   const [relightDirectionId, setRelightDirectionId] = useState(RELIGHT_DIRECTIONS[0]?.id || 'front');
   const [relightIntensity, setRelightIntensity] = useState(0.7);
@@ -2153,7 +2155,7 @@ const ImageGenerationWorkspace: React.FC<ImageGenerationWorkspaceProps> = ({
       const relightPrompt = buildRelightPrompt(buildRelightSettings());
       const baseImage = await getBase64FromUrl(relightSourceUrl);
       const modelLabel = relightModel;
-      const item = await generateStudioImage(relightModel, relightPrompt, [baseImage], effectiveAspectRatio, imageSize);
+      const item = await generateStudioImage(relightModel, relightPrompt, [baseImage], relightRatio, relightResolution);
       const itemWithMeta = { ...item, generatedBy: `Relight (${modelLabel})`, prompt: relightPrompt };
       onAddGeneratedMedia(itemWithMeta);
       setGenerated((prev) => [itemWithMeta, ...prev].slice(0, 12));
@@ -3127,7 +3129,7 @@ const ImageGenerationWorkspace: React.FC<ImageGenerationWorkspaceProps> = ({
                             </div>
                           )}
                         </div>
-                        <OpenRouterModelPicker kind="image" value={modelId} onChange={id => setModelId(id as any)} ratio={effectiveAspectRatio} resolution={imageSize} references={activeReferences.length} onSettingsChange={v => { if(v.resolution) setImageSize(v.resolution as any); if(v.ratio) setAspectRatio(v.ratio as any); }} />
+                        <OpenRouterModelPicker kind="image" value={modelId} onChange={id => setModelId(id as any)} ratio={effectiveAspectRatio} resolution={imageSize} references={new Set([...activeReferences, ...buildPromptWithCharacterTags(finalPrompt).refs].map(r=>r.url)).size} onSettingsChange={v => { if(v.resolution) setImageSize(v.resolution as any); if(v.ratio) setAspectRatio(v.ratio as any); }} />
                         <div className="grid gap-4 md:grid-cols-2">
                           <div>
                         <label className="text-xs uppercase tracking-[0.12em] text-gray-500">Format</label>
@@ -3197,7 +3199,7 @@ const ImageGenerationWorkspace: React.FC<ImageGenerationWorkspaceProps> = ({
                         disabled={!readyForGeneration}
                         className="app-button app-primary disabled:opacity-50 disabled:cursor-not-allowed"
                       >
-                        {activeJobs.length > 0 ? `Create Image (${activeJobs.length} running)` : 'Create Image'}
+                        {activeJobs.some(j=>j.status==='queued'||j.status==='running') ? `Buat gambar (${activeJobs.filter(j=>j.status==='queued'||j.status==='running').length} berjalan)` : 'Buat gambar'}
                       </button>
                       <div className="flex items-center gap-3 text-xs text-gray-400">
                         {modelId === 'comfyui' ? (
@@ -4465,7 +4467,7 @@ const ImageGenerationWorkspace: React.FC<ImageGenerationWorkspaceProps> = ({
                     <div className="grid gap-4 md:grid-cols-2">
                       <div>
                         <label className="text-xs uppercase tracking-[0.2em] text-gray-400">Relight Model</label>
-                        <OpenRouterModelPicker kind="image" value={relightModel} onChange={id => setRelightModel(id as any)} references={1} resolution={imageSize} ratio={effectiveAspectRatio} />
+                        <OpenRouterModelPicker kind="image" value={relightModel} onChange={id => setRelightModel(id as any)} references={1} resolution={relightResolution} ratio={relightRatio} onSettingsChange={v=>{if(v.ratio)setRelightRatio(v.ratio);if(v.resolution)setRelightResolution(v.resolution);}} />
                       </div>
                     </div>
 

@@ -287,7 +287,7 @@ const SoundWorkspace: React.FC<SoundWorkspaceProps> = (props) => {
     setIsRunning(true);
     setStatus('Generating voice…');
     try {
-      const item = await generateStudioAudio(openRouterAudioModel, `Bacakan dalam bahasa Indonesia: ${voiceText}`);
+      const item = await generateStudioAudio(openRouterAudioModel, voiceText);
       handleAddGenerated(item, openRouterAudioModel);
       setStatus(placeOnTimeline ? 'Voice placed at the playhead.' : 'Voice added to the project.');
     } catch (error) {
@@ -304,7 +304,7 @@ const SoundWorkspace: React.FC<SoundWorkspaceProps> = (props) => {
     setIsRunning(true);
     setStatus(kind === 'music' && musicProvider === 'sonauto-v3' ? 'Generating music with Sonauto…' : `Generating ${kind}…`);
     try {
-      const item = await generateStudioAudio(openRouterAudioModel, `${kind === 'music' ? 'Buat musik' : 'Buat efek suara'} berdurasi ${duration} detik: ${prompt}`);
+      const item = await generateStudioAudio(openRouterAudioModel, `${kind === 'music' ? 'Buat musik' : 'Buat efek suara'} berdurasi ${duration} detik: ${prompt}`, { operation:kind });
       handleAddGenerated(item, openRouterAudioModel);
       setStatus(`${kind === 'music' ? 'Music' : 'SFX'} ${placeOnTimeline ? 'placed at the playhead.' : 'added to the project.'}`);
     } catch (error) {
@@ -361,7 +361,7 @@ const SoundWorkspace: React.FC<SoundWorkspaceProps> = (props) => {
 
       {generateTool === 'voice' && (
         <div className="fl-form">
-          <OpenRouterModelPicker kind="audio" value={openRouterAudioModel} onChange={setOpenRouterAudioModel} />
+          <OpenRouterModelPicker kind="audio" operation="voice" value={openRouterAudioModel} onChange={setOpenRouterAudioModel} />
           <textarea value={voiceText} onChange={(event) => setVoiceText(event.target.value)} placeholder="What should the voice say?" rows={5} className="app-textarea" />
           <button className="app-button app-primary w-full" onClick={handleGenerateVoice} disabled={isRunning}>{isRunning ? 'Generating…' : 'Generate voice'}</button>
         </div>
@@ -369,7 +369,7 @@ const SoundWorkspace: React.FC<SoundWorkspaceProps> = (props) => {
 
       {generateTool === 'music' && (
         <div className="fl-form">
-          <OpenRouterModelPicker kind="audio" value={openRouterAudioModel} onChange={setOpenRouterAudioModel} />
+          <OpenRouterModelPicker kind="audio" operation="music" value={openRouterAudioModel} onChange={setOpenRouterAudioModel} />
           <textarea value={musicPrompt} onChange={(event) => setMusicPrompt(event.target.value)} placeholder="Style, tempo, mood, instruments…" rows={4} className="app-textarea" />
           {musicProvider === 'lyria2' ? (
             <label className="fl-form__inline">Duration<input type="number" min={4} max={120} value={musicDuration} onChange={(event) => setMusicDuration(Number(event.target.value) || 20)} className="app-input" /><span>s</span></label>
@@ -382,7 +382,7 @@ const SoundWorkspace: React.FC<SoundWorkspaceProps> = (props) => {
 
       {generateTool === 'sfx' && (
         <div className="fl-form">
-          <OpenRouterModelPicker kind="audio" value={openRouterAudioModel} onChange={setOpenRouterAudioModel} />
+          <OpenRouterModelPicker kind="audio" operation="sfx" value={openRouterAudioModel} onChange={setOpenRouterAudioModel} />
           <textarea value={sfxPrompt} onChange={(event) => setSfxPrompt(event.target.value)} placeholder="Whoosh, impact, rain on a tin roof…" rows={4} className="app-textarea" />
           <label className="fl-form__inline">Duration<input type="number" min={2} max={60} value={sfxDuration} onChange={(event) => setSfxDuration(Number(event.target.value) || 6)} className="app-input" /><span>s</span></label>
           <button className="app-button app-primary w-full" onClick={() => handleGenerateMusic('sfx')} disabled={isRunning}>{isRunning ? 'Generating…' : 'Generate SFX'}</button>

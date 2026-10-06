@@ -20,7 +20,7 @@ await page.route('https://openrouter.ai/api/v1/**',async r=>{
  }
  const body=req.postDataJSON();requests.push({url,body});
  if(url.endsWith('/videos')) {assert.equal(req.headers().authorization,'Bearer fixture-key');if(body.model==='google/veo-3.1'){assert.equal(body.duration,8);assert.equal(body.aspect_ratio,'9:16');assert.equal(body.frame_images[0].frame_type,'first_frame');assert.equal(body.frame_images[0].image_url.url,'data:image/png;base64,'+png);}else{assert.equal(body.model,'black-forest-labs/flux-video-upscale');assert.equal(body.upscale_factor,2);assert.equal(body.input_references[0].type,'video_url');assert.equal(body.duration,undefined);}return reply({id:'gen-vid-123-abcdefghijklmnopqrst',polling_url:'https://openrouter.ai/api/v1/videos/gen-vid-123-abcdefghijklmnopqrst',status:'pending'});}
- if(body.model==='openai/gpt-audio-mini'){assert.deepEqual(body.modalities,['text','audio']);assert.equal(body.audio.format,'wav');return reply({choices:[{message:{audio:{data:Buffer.from('RIFF fixture WAVE').toString('base64')}}}]});}
+ if(body.model==='openai/gpt-audio-mini'){assert.deepEqual(body.modalities,['text','audio']);assert.equal(body.audio.format,'wav');assert.equal(body.stream,true);return r.fulfill({status:200,contentType:'text/event-stream',body:'data: '+JSON.stringify({choices:[{delta:{audio:{data:Buffer.from('RIFF fixture WAVE').toString('base64')}}}]})+'\n\ndata: [DONE]\n\n'});}
  if(url.endsWith('/images')){
   assert.equal(body.model,'bytedance-seed/seedream-4.5');assert.equal(body.aspect_ratio,'9:16');
   if(failShot3 && body.prompt.includes('shot3')) return reply({error:{code:429}},429);

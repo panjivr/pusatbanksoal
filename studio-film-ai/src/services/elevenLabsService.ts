@@ -63,5 +63,6 @@ export const generateSpeechWithElevenLabs = async (
   text: string,
   opts?: { voiceId?: string; modelId?: string; outputFormat?: string },
 ): Promise<MediaItem> => {
-  return generateStudioAudio(studioSelectedModel('audio'), `Bacakan dalam bahasa Indonesia: ${text}`);
+  const model = opts?.modelId?.includes('/') ? opts.modelId : studioSelectedModel('audio');
+  return generateStudioAudio(model, text, { voice: opts?.voiceId, format: opts?.outputFormat?.split('_')[0], operation:'voice' });
 };

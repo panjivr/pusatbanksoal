@@ -120,7 +120,10 @@ export type ClipFilters = {
   colorWheels?: import('./utils/colorWheels').ColorWheelGrade | null;
 };
 
+export type AiGenerationRecord = { selectedModel: string; model: string; provider: string; jobId?: string; cost?: number; totalTokens?: number };
+
 export type MediaItem = {
+  aiGeneration?: AiGenerationRecord;
   id: string;
   name: string;
   type: 'video' | 'image' | 'audio';

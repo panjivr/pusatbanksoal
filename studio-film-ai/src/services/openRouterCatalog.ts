@@ -14,7 +14,14 @@ export const loadStudioCatalog = async (kind: CatalogKind): Promise<any[]> => {
   const route = configuredOpenRouterImageRoute() || { id: 'openrouter', name: 'OpenRouter', enabled: true, baseUrl: 'https://openrouter.ai/api/v1', apiKey: '', model: 'auto', tools: true, json: true, vision: true };
   if (kind === 'image') return (await getOpenRouterImageModels(route)).filter(m => !m.imageApi || !m.supported_parameters?.output_format?.values || m.supported_parameters.output_format.values.some((f: string) => ['png','jpeg','webp'].includes(f)));
   if (kind === 'video') return (await publicJson('/videos/models')).data;
-  return (await getOpenRouterModels(route)).filter(m => m.architecture?.output_modalities?.includes(kind === 'audio' ? 'audio' : 'text'));
+  if (kind === 'audio') {
+    const results = await Promise.allSettled([publicJson('/models?output_modalities=audio'), publicJson('/models?output_modalities=speech')]);
+    const models = new Map<string,any>();
+    for (const result of results) if (result.status === 'fulfilled') for (const model of result.value.data || []) models.set(model.id, model);
+    if (!models.size) throw new Error('Katalog audio OpenRouter belum tersedia. Muat ulang katalog.');
+    return [...models.values()];
+  }
+  return (await getOpenRouterModels(route)).filter(m => m.architecture?.output_modalities?.includes('text'));
 };
 export const priceStudioModel = async (model: any, kind: CatalogKind): Promise<any> => {
   if (kind !== 'image') return model;

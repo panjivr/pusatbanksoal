@@ -137,3 +137,13 @@ test('automatic candidates skip reference-only and vector-only native models wit
  const candidates=[{id:'native/styles',imageApi:true,architecture:{input_modalities:['text','image'],output_modalities:['image']},supported_parameters:{input_references:{min:1,max:4}}},{id:'native/vector',imageApi:true,architecture:{input_modalities:['text'],output_modalities:['image']},supported_parameters:{output_format:{values:['svg']}}},{id:'native/raster',imageApi:true,architecture:{input_modalities:['text'],output_modalities:['image']},supported_parameters:{}}];
  assert.deepEqual(compatibleOpenRouterImageModels(candidates,{model:'auto',contents:'Gambar'}).map(m=>m.id),['native/raster']);
 });
+
+test('optional automatic fallback prefers explicit model then another compatible OpenRouter model',async()=>{
+ configure({imageFallbackModels:true});const seen:string[]=[];
+ const result=await generateRoutedOpenRouterImage({...req,model:'black-forest-labs/flux-test'},undefined,legacyFetch((async(u:any,o:any)=>{const body=JSON.parse(o.body);seen.push(body.model);return seen.length===1?response({error:{code:429}},429):response({choices:[{message:{images:[{image_url:{url:'data:image/png;base64,'+png}}]}}]});}) as typeof fetch));
+ assert.deepEqual(seen,['black-forest-labs/flux-test','google/'+model]);assert.equal(result.bekalModel,'google/'+model);
+});
+test('native image metadata overrides duplicate general catalog capability',async()=>{
+ const out=await getOpenRouterImageModels(route,(async(u:any)=>response({data:String(u).includes('/images/models')?[{id:'test/duplicate',architecture:{input_modalities:['text','image'],output_modalities:['image']},supported_parameters:{input_references:{max:4}}}]:[{id:'test/duplicate',architecture:{input_modalities:['text'],output_modalities:['image']}}]})) as typeof fetch);
+ const duplicate=out.find(m=>m.id==='test/duplicate');assert.equal(duplicate.imageApi,true);assert.equal(duplicate.supported_parameters.input_references.max,4);assert.ok(duplicate.architecture.input_modalities.includes('image'));
+});
