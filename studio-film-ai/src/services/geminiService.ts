@@ -639,8 +639,8 @@ export const generateImageWithNano = async (
                     source: 'generated'
                 };
                 recordUsage({
-                    provider: 'gemini',
-                    model,
+                    provider: (response as any).bekalProvider || 'gemini',
+                    model: (response as any).bekalModel || model,
                     kind: 'image',
                     units: 1,
                     unitLabel: 'image',
@@ -689,8 +689,8 @@ export const generateImageWithGemini3Pro = async (prompt: string, aspectRatio: s
                     source: 'generated'
                 };
                 recordUsage({
-                    provider: 'gemini',
-                    model,
+                    provider: (response as any).bekalProvider || 'gemini',
+                    model: (response as any).bekalModel || model,
                     kind: 'image',
                     units: 1,
                     unitLabel: 'image',
@@ -706,6 +706,7 @@ export const generateImageWithGemini3Pro = async (prompt: string, aspectRatio: s
 };
 
 export const generateImageWithImagen = async (prompt: string, aspectRatio: '1:1' | '16:9' | '9:16' | '4:3' | '3:4'): Promise<MediaItem> => {
+    if (getGoogleModelProvider() === 'openrouter') throw new AiRouteError('Imagen belum tersedia melalui jalur OpenRouter ini. Pilih Nano Banana 2 atau Gemini 3 Pro Image, atau ubah penyedia menjadi Gemini.', 422, true);
     if (shouldUseReplicateForGoogleModels()) {
         throw new Error('Imagen is only available via Gemini. Switch Google models to Gemini in settings.');
     }
@@ -3493,8 +3494,8 @@ export const generateImageWithReferences = async (
                     source: 'generated'
                 };
                 recordUsage({
-                    provider: 'gemini',
-                    model,
+                    provider: (response as any).bekalProvider || 'gemini',
+                    model: (response as any).bekalModel || model,
                     kind: 'image',
                     units: 1,
                     unitLabel: 'image',

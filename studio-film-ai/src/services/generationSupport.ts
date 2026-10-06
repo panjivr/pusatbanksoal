@@ -1,14 +1,16 @@
+import { isOpenRouter, readAiRouting } from './aiRouting.ts';
 /** Provider selection stays separate from the existing creative ranking algorithm. */
-export type ProviderKeys = { gemini?: boolean; replicate?: boolean; fal?: boolean; higgsfield?: boolean; xai?: boolean; ltx?: boolean; runway?: boolean; midjourney?: boolean; googleProvider?: string };
+export type ProviderKeys = { openrouter?: boolean; gemini?: boolean; replicate?: boolean; fal?: boolean; higgsfield?: boolean; xai?: boolean; ltx?: boolean; runway?: boolean; midjourney?: boolean; googleProvider?: string };
 export const readGenerationKeys = (): ProviderKeys => {
   const has = (key: string) => Boolean(localStorage.getItem(key)?.trim());
-  return { gemini: has('gemini_api_key'), replicate: has('replicate_api_key'), fal: has('fal_api_key'), higgsfield: Boolean(localStorage.getItem('higgsfield_api_key')?.includes(':')), xai: has('xai_api_key'), ltx: has('ltx_api_key'), runway: has('runway_api_key'), midjourney: has('midjourney_api_key'), googleProvider: localStorage.getItem('google_model_provider_v1') || 'gemini' };
+  return { openrouter: readAiRouting().routes.some(r => r.enabled && isOpenRouter(r) && r.apiKey.trim()), gemini: has('gemini_api_key'), replicate: has('replicate_api_key'), fal: has('fal_api_key'), higgsfield: Boolean(localStorage.getItem('higgsfield_api_key')?.includes(':')), xai: has('xai_api_key'), ltx: has('ltx_api_key'), runway: has('runway_api_key'), midjourney: has('midjourney_api_key'), googleProvider: localStorage.getItem('google_model_provider_v1') || 'gemini' };
 };
 export const modelHasCredentials = (id: string, keys: ProviderKeys, kind: 'image' | 'video', higgsfieldHost = false): boolean => {
   if (id === 'auto') return false;
   if (id.endsWith('-hf') || id.startsWith('soul-')) return Boolean(keys.higgsfield);
   if (/-fal(?:-|$)/.test(id)) return Boolean(keys.fal || (kind === 'video' && higgsfieldHost && keys.higgsfield));
-  if (id === 'imagen') return Boolean(keys.gemini && keys.googleProvider !== 'replicate');
+  if (id === 'imagen') return Boolean(keys.gemini && keys.googleProvider !== 'replicate' && keys.googleProvider !== 'openrouter');
+  if (kind === 'image' && keys.googleProvider === 'openrouter' && (id === 'nano' || id === 'gemini-pro' || id.startsWith('gemini-'))) return Boolean(keys.openrouter);
   if (id === 'nano' || id === 'gemini-pro' || id.startsWith('gemini-') || (id === 'veo' || id.startsWith('veo-'))) return Boolean(keys.googleProvider === 'replicate' ? keys.replicate : keys.gemini);
   if (id.startsWith('grok-')) return Boolean(keys.xai);
   // Midjourney's desktop agent is not a key-based browser service.

@@ -1,3 +1,5 @@
+import { getGoogleModelProvider } from '../services/googleModelProvider';
+import { configuredOpenRouterImageRoute } from '../services/openRouterImages';
 import { availableGenerationModels } from '../services/generationSupport';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { CostRate, MediaItem, RecentProject, ReferenceItem, ShotPrompt, DirectorTreatment, DirectorShot } from '../types';
@@ -1010,7 +1012,7 @@ const ImageGenerationWorkspace: React.FC<ImageGenerationWorkspaceProps> = ({
     if (billingMode === 'hosted') return undefined;
     if (typeof window === 'undefined') return undefined;
     const providers: string[] = [];
-    if (process.env.API_KEY || window.localStorage.getItem('gemini_api_key')) providers.push('gemini');
+    if (process.env.API_KEY || window.localStorage.getItem('gemini_api_key') || (getGoogleModelProvider() === 'openrouter' && configuredOpenRouterImageRoute())) providers.push('gemini');
     if (window.localStorage.getItem('replicate_api_key')) providers.push('replicate');
     if (window.localStorage.getItem('fal_api_key')) providers.push('fal');
     if (window.localStorage.getItem('xai_api_key')) providers.push('xai');
@@ -2264,8 +2266,8 @@ const ImageGenerationWorkspace: React.FC<ImageGenerationWorkspaceProps> = ({
       setActiveJobs((prev) => prev.map((job) => (job.id === jobId ? { ...job, status: 'running' } : job)));
       const hasGeminiKey = Boolean(process.env.API_KEY || localStorage.getItem('gemini_api_key'));
       const hasReplicateKey = Boolean(localStorage.getItem('replicate_api_key'));
-      const fallbackGeminiFlashToReplicate = modelId === 'gemini-flash' && !hasGeminiKey && hasReplicateKey;
-      const fallbackGeminiProToReplicate = modelId === 'gemini-pro' && !hasGeminiKey && hasReplicateKey;
+      const fallbackGeminiFlashToReplicate = modelId === 'gemini-flash' && !hasGeminiKey && hasReplicateKey && getGoogleModelProvider() !== 'openrouter';
+      const fallbackGeminiProToReplicate = modelId === 'gemini-pro' && !hasGeminiKey && hasReplicateKey && getGoogleModelProvider() !== 'openrouter';
       const tagContext = buildPromptWithCharacterTags(finalPrompt);
       const mergedReferences = [...activeReferences, ...tagContext.refs].filter(
         (ref, index, arr) => arr.findIndex((other) => other.url === ref.url) === index

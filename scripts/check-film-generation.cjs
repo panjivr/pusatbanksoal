@@ -147,6 +147,18 @@ const base = 'http://127.0.0.1:8010/assets/studio-film-ai/studio.html';
   assert.match(noMedia,/API penyedia media/);assert.equal(requests.length,count);
   await mount('auto');await generate();await host.getByText(/Belum ada penyedia gambar yang siap/).first().waitFor();assert.equal(requests.length,count);
   console.log('PASS: text-only routers cannot masquerade as media providers; missing media setup gives actionable Indonesian guidance.');
+  let imageJobs=0, openRouterError=0;
+  await page.route('https://openrouter.ai/api/v1/**',async r=>{
+   if(r.request().method()==='GET')return r.fulfill({status:200,contentType:'application/json',body:JSON.stringify({data:['google/gemini-3.1-flash-image-preview','google/gemini-3-pro-image-preview'].map(id=>({id,architecture:{input_modalities:['text','image'],output_modalities:['text','image']}}))})});
+   const body=r.request().postDataJSON();assert.equal(r.request().headers().authorization,'Bearer fake-openrouter-image-key');assert.ok(body.model.startsWith('google/'));assert.deepEqual(body.modalities,['image','text']);imageJobs++;
+   if(openRouterError)return r.fulfill({status:openRouterError,contentType:'application/json',body:'{"error":{"message":"fake-openrouter-image-key"}}'});
+   return r.fulfill({status:200,contentType:'application/json',body:JSON.stringify({choices:[{message:{images:[{image_url:{url:'data:image/png;base64,'+png}}]},finish_reason:'stop'}]})});
+  });
+  await page.evaluate(()=>{localStorage.setItem('google_model_provider_v1','openrouter');localStorage.setItem('bekal_ai_routing_v1',JSON.stringify({version:1,preferGateway:true,fallback:true,timeoutSeconds:10,routes:[{id:'openrouter',name:'OpenRouter',enabled:true,baseUrl:'https://openrouter.ai/api/v1',model:'google/gemini-2.5-flash',apiKey:'fake-openrouter-image-key',vision:false,tools:false,json:false}]}))});
+  await mount('auto');await generate();await done();assert.equal(imageJobs,1);assert.equal(await page.evaluate(()=>window.__generationState.refs[0].id),'fitri-stable-id');
+  await mount('gemini-pro',true);await generate();await done();assert.equal(imageJobs,2);assert.ok((await page.evaluate(()=>window.__generationState.refs[0].imageVersions)).includes('https://mock-image.test/original.png'));
+  openRouterError=402;await mount('nano');await generate();await host.getByText(/Saldo atau batas kredit/).first().waitFor();await page.waitForFunction(()=>!window.__generationState.refs[0].isGenerating);assert.equal(imageJobs,3);assert.equal(await page.evaluate(()=>window.__generationState.refs[0].imageUrl),null);assert.equal(await page.evaluate(()=>window.__generationState.ready),true);
+  console.log('PASS: actual character Generate button through OpenRouter in Auto and reference modes, preserved character/version, credit error displayed, one request per click without retry or native fallback. Provider responses simulated.');
   assert.deepEqual(errors,[]);
  } finally {await browser.close()}
 })().catch(e=>{console.error(e);process.exit(1)});

@@ -50,8 +50,7 @@ export const isOpenRouter = (route: AiRoute): boolean => {
 };
 const openRouterCatalog = new Map<string, { expires: number; promise: Promise<any[]> }>();
 /** Public model metadata, never credentials. Failed lookups are not cached. */
-export const resolveOpenRouterRoute = async (route: AiRoute, fetcher: typeof fetch = fetch): Promise<AiRoute> => {
-  if (!isOpenRouter(route)) return route;
+export const getOpenRouterModels = async (route: AiRoute, fetcher: typeof fetch = fetch): Promise<any[]> => {
   const base = normalizeAiBaseUrl(route.baseUrl);
   let entry = openRouterCatalog.get(base);
   if (!entry || entry.expires < Date.now()) {
@@ -70,7 +69,12 @@ export const resolveOpenRouterRoute = async (route: AiRoute, fetcher: typeof fet
     openRouterCatalog.set(base, entry);
     promise.catch(() => { if (openRouterCatalog.get(base)?.promise === promise) openRouterCatalog.delete(base); });
   }
-  const model = (await entry.promise).find(m => m.id === route.model.trim());
+  return entry.promise;
+};
+export const resolveOpenRouterRoute = async (route: AiRoute, fetcher: typeof fetch = fetch): Promise<AiRoute> => {
+  if (!isOpenRouter(route)) return route;
+  const base = normalizeAiBaseUrl(route.baseUrl);
+  const model = (await getOpenRouterModels(route, fetcher)).find(m => m.id === route.model.trim());
   if (!model) throw new AiRouteError('Model OpenRouter tidak ditemukan. Isi ID model lengkap dari katalog OpenRouter, termasuk nama penyedianya.', 404);
   if (!model.architecture?.output_modalities?.includes('text')) throw new AiRouteError('Model OpenRouter ini tidak mendukung keluaran teks untuk editor. Pilih model teks yang mendukung panggilan alat.', 422);
   const parameters = Array.isArray(model.supported_parameters) ? model.supported_parameters : [];

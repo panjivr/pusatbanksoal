@@ -61,3 +61,10 @@ test('successful HTTP responses with safety rejection remain terminal instead of
   assert.equal(isBlockedGenerationResponse({ promptFeedback: { blockReason: 'BLOCK_REASON_UNSPECIFIED' } }), false);
   assert.equal(isBlockedGenerationResponse({ name: 'operations/test-video', done: true }), false);
 });
+
+test('OpenRouter image credentials enable Google image models but never Imagen, audio or video', () => {
+ const keys={openrouter:true,googleProvider:'openrouter'};
+ for(const id of ['nano','gemini-pro','gemini-flash'])assert.equal(modelHasCredentials(id,keys,'image'),true);
+ for(const id of ['imagen','veo','veo-fast'])assert.equal(modelHasCredentials(id,keys,id==='imagen'?'image':'video'),false);
+ assert.equal(modelHasCredentials('nano',{gemini:true,googleProvider:'openrouter'},'image'),false);
+});
