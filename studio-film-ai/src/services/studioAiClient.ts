@@ -1,7 +1,7 @@
 import { GoogleGenAI } from '@google/genai';
 import { withModelFallback } from './geminiModelFallback';
 import { generationTimeoutSeconds, isNativeMediaRequest, safeGenerationError, isBlockedGenerationResponse } from './generationSupport';
-import { AiRouteError, canFailoverAi, executeAiRoutes, gatewayCanHandle, gatewayGenerate, hasTextAiConfigured, readAiRouting, type GeminiRequest, type RoutingAttempt } from './aiRouting';
+import { AiRouteError, canFailoverAi, executeAiRoutes, gatewayCanHandle, gatewayGenerate, isOpenRouter, resolveOpenRouterRoute, hasTextAiConfigured, readAiRouting, type GeminiRequest, type RoutingAttempt } from './aiRouting';
 
 /** Text gateways and native media APIs have separate capabilities and time budgets. */
 export const getStudioAiClient = (): GoogleGenAI => {
@@ -38,7 +38,11 @@ export const getStudioAiClient = (): GoogleGenAI => {
     const originalSystem = req.config?.systemInstruction;
     // Image/audio prompts and references must be passed unchanged to the media model.
     const localized = isNativeMediaRequest(req) ? params : { ...params, config: { ...params.config, systemInstruction: originalSystem ? (typeof originalSystem === 'string' ? `${originalSystem}\n${language}` : { parts: [...(Array.isArray(originalSystem) ? originalSystem : typeof originalSystem === 'object' && 'parts' in originalSystem ? originalSystem.parts || [] : [{ text: String(originalSystem) }]), { text: language }] }) : language } };
-    const gateways: RoutingAttempt[] = config.routes.filter(r => r.enabled && r.baseUrl && r.model && gatewayCanHandle(r, req)).map(r => ({ id: r.name, run: () => gatewayGenerate(r, req, config.timeoutSeconds) }));
+    const gateways: RoutingAttempt[] = config.routes.filter(r => r.enabled && r.baseUrl && r.model && gatewayCanHandle(isOpenRouter(r) ? { ...r, tools: true, json: true, vision: true } : r, req)).map(r => ({ id: r.name, run: async () => {
+      const resolved = await resolveOpenRouterRoute(r);
+      if (!gatewayCanHandle(resolved, req)) throw new AiRouteError('Model OpenRouter ini belum mendukung kemampuan yang diminta. Pilih model dengan dukungan alat atau analisis gambar yang sesuai.', 422);
+      return gatewayGenerate(resolved, req, config.timeoutSeconds);
+    } }));
     const google: RoutingAttempt[] = geminiKey ? [{ id: 'Gemini', run: () => nativeCall(req, signal => nativeGenerate({ ...localized, config: { ...localized.config, abortSignal: signal } } as typeof params)) }] : [];
     const attempts = config.preferGateway ? [...gateways, ...google] : [...google, ...gateways];
     if (!attempts.length) throw new AiRouteError(isNativeMediaRequest(req) ? 'Pembuatan gambar dan audio membutuhkan API penyedia media. Router teks atau analisis gambar tidak menghasilkan gambar. Isi API Gemini, atau pilih model fal.ai/Replicate yang kuncinya tersedia.' : 'Belum ada layanan aktif yang mendukung format permintaan ini. Periksa dukungan JSON, analisis gambar, dan alat di Pengaturan AI.', undefined, true);

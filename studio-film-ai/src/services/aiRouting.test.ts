@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { AiRouteError, canFailoverAi, executeAiRoutes, gatewayCanHandle, gatewayGenerate, gatewayMessages, jsonSchema, matchesResponseSchema, normalizeAiBaseUrl, type AiRoute } from './aiRouting.ts';
+import { AiRouteError, canFailoverAi, executeAiRoutes, gatewayCanHandle, gatewayGenerate, gatewayMessages, jsonSchema, matchesResponseSchema, normalizeAiBaseUrl, resolveOpenRouterRoute, isOpenRouter, type AiRoute } from './aiRouting.ts';
 const route: AiRoute = { id:'a',name:'A',baseUrl:'https://router.example/v1',model:'my-combo',apiKey:'test-only-key',enabled:true,vision:true,tools:true,json:true };
 const reply = (content: any) => new Response(JSON.stringify({choices:[{message:content,finish_reason:'stop'}],usage:{prompt_tokens:4,completion_tokens:3,total_tokens:7}}),{status:200,headers:{'Content-Type':'application/json'}});
 test('failed A and B switch to C once and stop after success',async()=>{
@@ -80,4 +80,60 @@ test('parallel calls to the same tool preserve separate response IDs',()=>{
 test('Google invalid API keys reported as HTTP 400 can fail over without retrying other invalid arguments', () => {
   assert.equal(canFailoverAi(new AiRouteError('Gemini: API key belum valid. (HTTP 400)', 400)), true);
   assert.equal(canFailoverAi(new AiRouteError('Gemini: Model menolak format permintaan. (HTTP 400)', 400)), false);
+});
+
+const openRouter: AiRoute = { ...route, id: 'openrouter', name: 'OpenRouter', baseUrl: 'https://openrouter.ai/api/v1', model: 'test/editor', tools: false, json: false, vision: false };
+test('OpenRouter normalizes dashboard URLs without treating other gateways as OpenRouter', () => {
+ for (const url of ['https://openrouter.ai', 'https://openrouter.ai/', 'https://openrouter.ai/api', 'https://openrouter.ai/api/v1/chat/completions']) assert.equal(normalizeAiBaseUrl(url), openRouter.baseUrl);
+ assert.equal(isOpenRouter(openRouter), true); assert.equal(isOpenRouter({...openRouter,baseUrl:'https://openrouter.ai.evil.example/api/v1'}), false);
+});
+test('OpenRouter detects model capabilities and caches public catalog without sending API keys', async () => {
+ let count=0;
+ const resolved=await resolveOpenRouterRoute(openRouter,(async(u:any,opts:any)=>{
+  count++; assert.equal(u, 'https://openrouter.ai/api/v1/models'); assert.equal(opts.headers, undefined);
+  return new Response(JSON.stringify({data:[
+   {id:'test/editor',architecture:{input_modalities:['text','image'],output_modalities:['text']},supported_parameters:['tools','response_format','temperature']},
+   {id:'test/text',architecture:{input_modalities:['text'],output_modalities:['text']},supported_parameters:[]}
+  ]}),{status:200});
+ }) as typeof fetch);
+ assert.equal(resolved.tools,true); assert.equal(resolved.json,true); assert.equal(resolved.vision,true);
+ const plain=await resolveOpenRouterRoute({...openRouter,model:'test/text'},(async()=>{throw new Error('cache missing')}) as typeof fetch);
+ assert.equal(count,1);assert.equal(plain.tools,false);assert.equal(plain.vision,false);assert.equal(plain.json,true);
+ await assert.rejects(resolveOpenRouterRoute({...openRouter,model:'not-real'}),/ID model lengkap/);
+});
+test('OpenRouter models without native JSON mode use instructions and validated JSON, not unsupported parameters',async()=>{
+ const resolved=await resolveOpenRouterRoute({...openRouter,model:'test/text'});
+ let body:any;
+ const result=await gatewayGenerate(resolved,{model:'text',contents:'JSON',config:{responseMimeType:'application/json',temperature:0.5,responseSchema:{type:'OBJECT',properties:{title:{type:'STRING'}},required:['title']}}},10,(async(_u:any,o:any)=>{body=JSON.parse(o.body);return reply({content:'{"title":"Judul"}'})}) as typeof fetch);
+ assert.equal(result.text,'{"title":"Judul"}');assert.equal(body.response_format,undefined);assert.equal(body.temperature,undefined);assert.deepEqual(body.provider,{require_parameters:true});assert.equal(typeof body.messages[1].content,'string');
+});
+test('OpenRouter tool round trip retains IDs, schema, arguments and provider reasoning without leaking to fallback',async()=>{
+ const resolved=await resolveOpenRouterRoute(openRouter);
+ const config={tools:[{functionDeclarations:[{name:'rename_project',parametersJsonSchema:{type:'object',properties:{title:{type:'string'}},required:['title']}}]}],toolConfig:{functionCallingConfig:{mode:'ANY',allowedFunctionNames:['rename_project']}}};
+ const details=[{type:'reasoning.encrypted',data:'opaque-provider-data',format:'test',index:0}];
+ let initial:any, continuation:any;
+ const first=await gatewayGenerate(resolved,{model:'text',contents:'Ubah nama',config},10,(async(_u:any,o:any)=>{
+  initial=JSON.parse(o.body); assert.equal(o.headers['HTTP-Referer'],'https://pusatbanksoal.id');assert.equal(o.headers.Authorization,'Bearer test-only-key');
+  return reply({content:null,reasoning_details:details,tool_calls:[{id:'rename-1',type:'function',function:{name:'rename_project',arguments:JSON.stringify({title:'Filmku'},null,2)}}]});
+ }) as typeof fetch);
+ assert.deepEqual(initial.tool_choice,{type:'function',function:{name:'rename_project'}});assert.deepEqual(initial.tools[0].function.parameters,config.tools[0].functionDeclarations[0].parametersJsonSchema);
+ assert.deepEqual(first.functionCalls,[{id:'rename-1',name:'rename_project',args:{title:'Filmku'}}]);
+ const req={model:'text',contents:[{role:'model',parts:first.candidates[0].content.parts},{role:'user',parts:[{functionResponse:{id:'rename-1',name:'rename_project',response:{success:true}}}]}],config:{tools:config.tools}};
+ await gatewayGenerate(resolved,req,10,(async(_u:any,o:any)=>{continuation=JSON.parse(o.body);return reply({content:'Nama proyek sudah diubah.'})}) as typeof fetch);
+ assert.deepEqual(continuation.messages[1].reasoning_details,details);assert.equal(continuation.messages[2].tool_call_id,'rename-1');assert.equal(continuation.messages[2].role,'tool');
+ assert.equal(gatewayMessages(req,route)[1].reasoning_details,undefined);
+});
+test('malformed, unknown or wrong-type tool calls never reach the editor',async()=>{
+ const config={tools:[{functionDeclarations:[{name:'rename_project',parameters:{type:'OBJECT',properties:{title:{type:'STRING'}},required:['title']}}]}]};
+ for (const c of [{name:'unknown',arguments:'{}'},{name:'rename_project',arguments:'bad-json'},{name:'rename_project',arguments:'{"title":9}'},{name:'rename_project',arguments:'[]'}]) {
+  await assert.rejects(gatewayGenerate(openRouter,{model:'text',contents:'execute',config},10,(async()=>reply({content:null,tool_calls:[{id:'invalid',type:'function',function:c}]})) as typeof fetch),/alat/);
+ }
+});
+test('OpenRouter credit and in-band errors fail over with useful messages without exposing raw data',async()=>{
+ for(const status of [401,402,429]) {
+  for(const http of [status,200]) {
+   await assert.rejects(gatewayGenerate(openRouter,{model:'text',contents:'hello'},10,(async()=>new Response(JSON.stringify({error:{code:status,message:'test-only-key private prompt'}}),{status:http})) as typeof fetch),(e:any)=>e.status===status && canFailoverAi(e) && !e.message.includes('test-only-key') && !e.message.includes('private prompt') && (status!==402 || e.message.includes('Saldo')));
+  }
+ }
+ await assert.rejects(gatewayGenerate(openRouter,{model:'text',contents:'hello'},10,(async()=>new Response('Unauthorized',{status:401})) as typeof fetch),(e:any)=>e.status===401);
 });

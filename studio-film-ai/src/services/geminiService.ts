@@ -1611,7 +1611,7 @@ export const runChat = async (
     switch (mode) {
         case 'search': model = GEMINI_TEXT_MODEL_FLASH; config.tools = [{ googleSearch: {} }, ...functionTool]; break;
         case 'maps': model = GEMINI_TEXT_MODEL_FLASH; config.tools = [{ googleMaps: {} }, ...functionTool]; break;
-        case 'thinking': model = GEMINI_TEXT_MODEL_PRO; config.thinkingConfig = { thinkingBudget: 32768 }; break;
+        case 'thinking': model = GEMINI_TEXT_MODEL_PRO; config.thinkingConfig = { thinkingBudget: 32768 }; if (functionTool.length > 0) config.tools = functionTool; break;
         default:
             model = tools ? GEMINI_TEXT_MODEL_PRO : GEMINI_TEXT_MODEL_FLASH;
             if (functionTool.length > 0) {
