@@ -1,0 +1,38 @@
+/** Transport copies only. Project originals, reference order and alpha stay intact. */
+export async function prepareImagePayload(body: any, budget = 6 * 1024 * 1024, signal?: AbortSignal): Promise<string> {
+  const copy = structuredClone(body);
+  const refs: any[] = copy.input_references || (copy.messages || []).flatMap((m: any) => m.content.filter((p: any) => p.type === 'image_url'));
+  let serialized = JSON.stringify(copy);
+  if (new TextEncoder().encode(serialized).length <= budget) return serialized;
+  const unique = new Map<string, Promise<string>>();
+  const allowance = Math.floor((budget - new TextEncoder().encode(JSON.stringify(copy, (k, v) => k === 'url' ? '' : v)).length) / Math.max(1, refs.length));
+  for (const ref of refs) {
+    if (signal?.aborted) throw new DOMException('Dibatalkan', 'AbortError');
+    const url = ref.image_url?.url;
+    if (typeof url !== 'string' || !url.startsWith('data:image/') || url.length <= allowance) continue;
+    if (!unique.has(url)) unique.set(url, (async () => {
+      const blob = await (await fetch(url, { signal })).blob();
+      const bitmap = await createImageBitmap(blob);
+      try {
+        for (const limit of [2048, 1536, 1024, 768, 512, 384, 256]) {
+          if (signal?.aborted) throw new DOMException('Dibatalkan', 'AbortError');
+          const scale = Math.min(1, limit / Math.max(bitmap.width, bitmap.height));
+          const canvas = document.createElement('canvas');
+          canvas.width = Math.max(1, Math.round(bitmap.width * scale)); canvas.height = Math.max(1, Math.round(bitmap.height * scale));
+          const context = canvas.getContext('2d');
+          if (!context) throw new Error('Canvas tidak tersedia');
+          context.drawImage(bitmap, 0, 0, canvas.width, canvas.height);
+          // WebP preserves transparent mask pixels; browsers without WebP fall back to PNG.
+          const result = canvas.toDataURL('image/webp', 0.88);
+          canvas.width = canvas.height = 1;
+          if (result.length <= allowance) return result;
+        }
+        throw new Error('Referensi belum dapat dipadatkan');
+      } finally { bitmap.close(); }
+    })());
+    ref.image_url.url = await unique.get(url);
+  }
+  serialized = JSON.stringify(copy);
+  if (new TextEncoder().encode(serialized).length > budget) throw new Error('Teks atau referensi melebihi kapasitas pengiriman OpenRouter. Kurangi konteks teks atau jumlah referensi.');
+  return serialized;
+}

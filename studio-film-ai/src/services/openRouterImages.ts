@@ -1,3 +1,4 @@
+import { prepareImagePayload } from './imagePayload.ts';
 import { AiRouteError, isOpenRouter, readAiRouting, getOpenRouterModels, type AiRoute, type GeminiRequest } from './aiRouting.ts';
 
 const imageCatalogCache = new Map<typeof fetch, { expires: number; promise: Promise<any[]> }>();
@@ -78,8 +79,24 @@ export const generateOpenRouterImage = async (route: AiRoute, req: GeminiRequest
         ...(refs.length ? { input_references: refs } : {}), ...(ratio && parameters.aspect_ratio ? { aspect_ratio: ratio } : {}),
         ...(resolution && parameters.resolution ? { resolution } : {}), ...(outputFormat ? { output_format: outputFormat } : {}) };
     }
-    submitted = true;
-    const response = await fetcher(model.imageApi ? 'https://openrouter.ai/api/v1/images' : 'https://openrouter.ai/api/v1/chat/completions', { method: 'POST', headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${route.apiKey.trim()}`, 'HTTP-Referer': 'https://pusatbanksoal.id', 'X-Title': 'Bekal Studio Film AI' }, body: JSON.stringify(body), signal: controller.signal, credentials: 'omit', redirect: 'error' });
+    let payload: string;
+    try { payload = await prepareImagePayload(body, undefined, controller.signal); }
+    catch (error) { if (controller.signal.aborted) throw error; throw new AiRouteError(error instanceof Error ? error.message : 'Referensi belum dapat disiapkan untuk OpenRouter.', undefined, true); }
+    const send = async () => {
+      submitted = true;
+      return fetcher(model.imageApi ? 'https://openrouter.ai/api/v1/images' : 'https://openrouter.ai/api/v1/chat/completions', { method: 'POST', headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${route.apiKey.trim()}`, 'HTTP-Referer': 'https://pusatbanksoal.id', 'X-Title': 'Bekal Studio Film AI' }, body: payload, signal: controller.signal, credentials: 'omit', redirect: 'error' });
+    };
+    let response = await send();
+    // A 413 explicitly rejects the body: retry once with smaller copies, on the SAME model.
+    // Never retry an accepted, ambiguous, cancelled or policy-rejected generation here.
+    if (response.status === 413) {
+      await response.body?.cancel();
+      let smaller: string;
+      try { smaller = await prepareImagePayload(body, 2 * 1024 * 1024, controller.signal); }
+      catch { throw new AiRouteError('Referensi terlalu besar untuk OpenRouter dan belum dapat dipadatkan. File asli proyek tetap aman.', 413, true); }
+      if (smaller !== payload) { payload = smaller; response = await send(); }
+      if (response.status === 413) throw new AiRouteError('OpenRouter masih menolak ukuran referensi (HTTP 413) setelah dipadatkan. Kurangi jumlah referensi untuk shot ini; model pilihan tetap dipertahankan.', 413, true);
+    }
     let data: any; try { data = await response.json(); } catch { throw new AiRouteError('Jawaban gambar belum dapat dibaca. Periksa Activity OpenRouter sebelum mengirim ulang.', response.status, true); }
     if (!response.ok || data.error) {
       const status = response.ok ? Number(data.error?.code) || 502 : response.status;

@@ -147,3 +147,12 @@ test('native image metadata overrides duplicate general catalog capability',asyn
  const out=await getOpenRouterImageModels(route,(async(u:any)=>response({data:String(u).includes('/images/models')?[{id:'test/duplicate',architecture:{input_modalities:['text','image'],output_modalities:['image']},supported_parameters:{input_references:{max:4}}}]:[{id:'test/duplicate',architecture:{input_modalities:['text'],output_modalities:['image']}}]})) as typeof fetch);
  const duplicate=out.find(m=>m.id==='test/duplicate');assert.equal(duplicate.imageApi,true);assert.equal(duplicate.supported_parameters.input_references.max,4);assert.ok(duplicate.architecture.input_modalities.includes('image'));
 });
+
+test('plain HTML 413 identifies payload size and never switches the selected model', async () => {
+ configure({imageFallbackModels:true}); let calls=0;
+ await assert.rejects(generateRoutedOpenRouterImage({...req,model:'black-forest-labs/flux-test'},undefined,legacyFetch((async(u:any,o:any)=>{
+  calls++; assert.equal(JSON.parse(o.body).model,'black-forest-labs/flux-test');
+  return new Response('<html>Request too large</html>',{status:413});
+ }) as typeof fetch)), (error:any)=>error.status===413 && /ukuran referensi/.test(error.message));
+ assert.equal(calls,1);
+});
