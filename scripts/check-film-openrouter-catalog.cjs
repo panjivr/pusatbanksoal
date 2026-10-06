@@ -64,7 +64,7 @@ const host=page.locator('#generation-harness');await host.getByLabel('Model gamb
 await host.getByLabel('Model gambar OpenRouter',{exact:true}).selectOption('bytedance-seed/seedream-4.5');
 await host.getByText('Estimasi 2 gambar: $0.08.',{exact:false}).waitFor({timeout:10000}).catch(async e=>{console.error(await host.locator('.openrouter-picker').innerText());throw e;});
 const sort=host.getByLabel('Urutkan harga model');await sort.selectOption('asc');
-let values=await host.getByLabel('Model gambar OpenRouter',{exact:true}).locator('option').evaluateAll(items=>items.map(i=>i.value));assert.equal(values[1],'black-forest-labs/flux.2-klein-4b');
+let values=await host.getByLabel('Model gambar OpenRouter',{exact:true}).locator('option').evaluateAll(items=>items.map(i=>i.value));assert.equal(values[1],'openai/gpt-image-2');assert.ok(values.indexOf('black-forest-labs/flux.2-klein-4b')>values.indexOf('bytedance-seed/seedream-4.5'));
 await sort.selectOption('desc');values=await host.getByLabel('Model gambar OpenRouter',{exact:true}).locator('option').evaluateAll(items=>items.map(i=>i.value));assert.equal(values[1],'bytedance-seed/seedream-4.5');
 await host.getByLabel('Rasio OpenRouter',{exact:true}).selectOption('9:16');
 const batch=await page.evaluate(()=>window.__generationBindings.generateStoryboardImages());assert.equal(batch.generatedCount,1);
