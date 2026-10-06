@@ -256,8 +256,8 @@ const ProjectResearchPanel: React.FC<ProjectResearchPanelProps> = ({
         : [];
 
     return (
-        <div className="h-full overflow-hidden bg-gray-950 text-white">
-            <div className="grid h-full gap-4 p-4 xl:grid-cols-[320px_minmax(0,1fr)]">
+        <div className="project-research-panel h-full overflow-hidden bg-gray-950 text-white">
+            <div className="project-research-grid grid h-full gap-4 p-4 xl:grid-cols-[320px_minmax(0,1fr)]">
                 <div className="flex min-h-0 flex-col gap-4">
                     <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
                         <div className="flex items-center gap-3">

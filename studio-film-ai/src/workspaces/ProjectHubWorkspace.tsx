@@ -15153,7 +15153,7 @@ const ProjectHubWorkspace: React.FC<ProjectHubWorkspaceProps> = ({
                                     <div className="phase-bar__tools">
                                         <AspectRatioPicker value={referenceAspectRatio} onChange={setReferenceAspectRatio} />
                                         {styleRefsButton}
-                                        <div className="flex items-center gap-2 bg-gray-800 p-1 rounded-lg border border-gray-700">
+                                        <div className="studio-model-control flex items-center gap-2 bg-gray-800 p-1 rounded-lg border border-gray-700">
                                             <span className="text-xs font-bold text-gray-400 px-2">Model:</span>
                                             <OpenRouterModelPicker kind="image" value={referenceImageModel} onChange={id => setReferenceImageModel(id as any)} count={Math.max(1, references.filter(r => !r.imageUrl && !r.isGenerating).length)} ratio={referenceAspectRatio} resolution={imageSize} onSettingsChange={v => { if(v.resolution) setImageSize(v.resolution as any); if(v.ratio) setReferenceAspectRatio(v.ratio as any); }} />
                                             {(referenceImageModel === 'gemini-pro' || referenceImageModel === 'nano' || referenceImageModel === 'nano-banana-2-fal' || referenceImageModel === 'wan-2.7-image-pro' || referenceImageModel === 'seedream') && (
@@ -16649,7 +16649,7 @@ const ProjectHubWorkspace: React.FC<ProjectHubWorkspaceProps> = ({
                                     <div className="phase-bar__tools">
                                         <AspectRatioPicker value={referenceAspectRatio} onChange={setReferenceAspectRatio} />
                                         {styleRefsButton}
-                                        <div className="flex items-center gap-2 bg-gray-800 p-1 rounded-lg border border-gray-700 mr-2">
+                                        <div className="studio-model-control flex items-center gap-2 bg-gray-800 p-1 rounded-lg border border-gray-700 mr-2">
                                             {(referenceImageModel === 'gemini-pro' || referenceImageModel === 'nano' || referenceImageModel === 'nano-banana-2-fal' || referenceImageModel === 'wan-2.7-image-pro' || referenceImageModel === 'seedream') && (
                                                 <select
                                                     value={imageSize}
@@ -17982,7 +17982,7 @@ const ProjectHubWorkspace: React.FC<ProjectHubWorkspaceProps> = ({
                                         </div>
                                     </div>
                                     <div className="phase-bar__tools">
-                                        <div className="flex items-center gap-2 bg-gray-800 p-1 rounded-lg border border-gray-700">
+                                        <div className="studio-model-control flex items-center gap-2 bg-gray-800 p-1 rounded-lg border border-gray-700">
                                             <span className="text-xs font-bold text-gray-400 px-2">Video Model:</span>
                                             <OpenRouterModelPicker kind="video" value={videoModel} onChange={id => setVideoModel(id as any)} count={Math.max(1, storyboardVisibleShots.filter(s => !s.videoUrl && !s.isFilming).length)} ratio={referenceAspectRatio} resolution={routerVideoResolution} references={storyboardVisibleShots.some(s => s.imageUrl || s.startFrameUrl) ? 1 : 0} seconds={videoDurationSeconds} onSettingsChange={v => { if(v.resolution) setRouterVideoResolution(v.resolution); if(v.ratio) setReferenceAspectRatio(v.ratio as any); if(v.seconds) setVideoDurationSeconds(v.seconds); }} />
                                             {videoModel === 'kling-v2.6-motion-control' && (
@@ -18001,7 +18001,7 @@ const ProjectHubWorkspace: React.FC<ProjectHubWorkspaceProps> = ({
                                                 <span className="text-[10px] text-cyan-300 font-semibold px-2">Audio optional</span>
                                             )}
                                         </div>
-                                        <div className="flex items-center gap-2 bg-gray-800 p-1 rounded-lg border border-gray-700 mr-2">
+                                        <div className="studio-model-control flex items-center gap-2 bg-gray-800 p-1 rounded-lg border border-gray-700 mr-2">
                                             <span className="text-xs font-bold text-gray-400 px-2">Seconds:</span>
                                             <select
                                                 value={resolveVideoDurationSeconds(videoModel, Number(videoDurationSeconds) || 5)}
@@ -18964,7 +18964,7 @@ const ProjectHubWorkspace: React.FC<ProjectHubWorkspaceProps> = ({
                                             <p className="text-xs text-gray-400">Choose the generator for posters, thumbnails, and promo creatives.</p>
                                         </div>
                                         {(marketingImageModel === 'gemini-pro' || marketingImageModel === 'seedream' || marketingImageModel === 'nano-banana-2-fal' || marketingImageModel === 'wan-2.7-image-pro') && (
-                                            <div className="flex items-center gap-2">
+                                            <div className="studio-model-control flex items-center gap-2">
                                                 <span className="text-[11px] text-gray-400">Output Size</span>
                                                 <select
                                                     value={imageSize}

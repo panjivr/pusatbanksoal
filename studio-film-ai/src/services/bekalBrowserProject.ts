@@ -1,5 +1,6 @@
 // Bekal browser adapter for the upstream project contract. No Electron API is exposed.
 import type { ElectronProjectApi } from '../types';
+import { projectJsonBlob } from './projectSerialization';
 export const isBekalBrowser = typeof window !== 'undefined' && !window.electron?.project;
 const DB = 'bekal-video-editor';
 type Stored = {
@@ -55,23 +56,60 @@ async function choose(allowCreate: boolean): Promise<string | null> { const rows
     dialog.close();
     return;
 } dialog.querySelector('[role=alert]')!.textContent = 'Pilih proyek atau isi nama proyek baru.'; }); dialog.addEventListener('close', () => { const path = dialog.dataset.path || null; dialog.remove(); resolve(path); }, { once: true }); document.body.appendChild(dialog); dialog.showModal(); }); }
-export async function downloadBrowserProject(path: string) { const row = await get(path); if (!row?.project)
-    throw new Error('Simpan proyek sebelum mengunduh cadangan.'); const assets = []; for (const [relativePath, blob] of Object.entries(row.files)) {
-    const data = await new Promise<string>((resolve, reject) => { const reader = new FileReader(); reader.onload = () => resolve(String(reader.result).split(',')[1]); reader.onerror = () => reject(reader.error); reader.readAsDataURL(blob); });
-    assets.push({ relativePath, data, mime: blob.type });
-} const blob = new Blob([JSON.stringify({ format: 'bekal-video-project', version: 1, project: row.project, assets })], { type: 'application/json' }); const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = (row.project.name || row.name || 'proyek') + '.bekal-film.json'; a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 60000); }
-export async function importBrowserProject(file: File) { const bundle = JSON.parse(await file.text()); if (bundle.format !== 'bekal-video-project' || bundle.version !== 1 || !bundle.project || !Array.isArray(bundle.assets))
-    throw new Error('Cadangan proyek tidak valid.'); const path = 'browser/' + crypto.randomUUID(); const files: Record<string, Blob> = {}; for (const asset of bundle.assets) {
-    if (typeof asset.relativePath !== 'string' || asset.relativePath.includes('..') || asset.relativePath.startsWith('/') || typeof asset.data !== 'string')
-        throw new Error('Jalur media tidak valid.');
-    files[asset.relativePath] = new Blob([await bytes(asset.data).arrayBuffer()], { type: asset.mime || mimeFor(asset.relativePath) });
-} await mutate(path, row => { row.project = bundle.project; row.name = bundle.project.name; row.files = files; }); return path; }
+export type ProjectProgress = (message: string) => void;
+const BACKUP_MAGIC = 'BEKALFILM2\n';
+const safeAssetPath = (name: unknown): name is string => typeof name === 'string' && !!name && !name.includes('..') && !name.startsWith('/') && !name.includes('\\');
+export async function createBrowserProjectBackup(path: string, progress?: ProjectProgress) {
+    const row = await get(path);
+    if (!row?.project) throw new Error('Simpan proyek sebelum mengunduh cadangan.');
+    const entries = Object.entries(row.files).filter(([name]) => name !== 'project.json');
+    progress?.(`Menyiapkan ${entries.length} berkas proyek...`);
+    const manifest = projectJsonBlob({format:'bekal-video-project',version:2,project:row.project,assets:entries.map(([relativePath,blob]) => ({relativePath,mime:blob.type,size:blob.size}))});
+    const length = new ArrayBuffer(8); new DataView(length).setBigUint64(0,BigInt(manifest.size),true);
+    // Media stays binary. No base64 expansion or full-project JSON string.
+    const blob = new Blob([BACKUP_MAGIC,length,manifest,...entries.map(([,blob]) => blob)],{type:'application/octet-stream'});
+    return {blob,name:(row.project.name || row.name || 'proyek')+'.bekal-film'};
+}
+export async function downloadBrowserProject(path: string, progress?: ProjectProgress) {
+    const {blob,name} = await createBrowserProjectBackup(path,progress);
+    progress?.('Cadangan siap. Memulai unduhan...');
+    const a=document.createElement('a'),url=URL.createObjectURL(blob);a.href=url;a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),60000);
+}
+export async function importBrowserProject(file: File, progress?: ProjectProgress) {
+    let bundle: any; const files: Record<string,Blob> = {};
+    const binary = await file.slice(0,BACKUP_MAGIC.length).text() === BACKUP_MAGIC;
+    if (binary) {
+        if (file.size < BACKUP_MAGIC.length+8) throw new Error('Cadangan proyek tidak lengkap.');
+        const length = Number(new DataView(await file.slice(BACKUP_MAGIC.length,BACKUP_MAGIC.length+8).arrayBuffer()).getBigUint64(0,true));
+        let offset = BACKUP_MAGIC.length+8;
+        if (!Number.isSafeInteger(length) || length<0 || offset+length>file.size) throw new Error('Cadangan proyek tidak lengkap.');
+        bundle=JSON.parse(await file.slice(offset,offset+length).text()); offset+=length;
+        if (bundle.format!=='bekal-video-project' || bundle.version!==2 || !bundle.project || !Array.isArray(bundle.assets)) throw new Error('Cadangan proyek tidak valid.');
+        for (let i=0;i<bundle.assets.length;i++) {
+            const asset=bundle.assets[i];
+            if (!safeAssetPath(asset.relativePath) || !Number.isSafeInteger(asset.size) || asset.size<0 || offset+asset.size>file.size || files[asset.relativePath]) throw new Error('Data media cadangan tidak valid atau tidak lengkap.');
+            files[asset.relativePath]=file.slice(offset,offset+asset.size,asset.mime || mimeFor(asset.relativePath)); offset+=asset.size;
+            progress?.(`Memulihkan berkas ${i+1}/${bundle.assets.length}...`);
+        }
+        if (offset!==file.size) throw new Error('Ukuran cadangan tidak sesuai dengan daftar berkas.');
+    } else {
+        // Existing JSON backups remain readable.
+        bundle=JSON.parse(await file.text());
+        if (bundle.format!=='bekal-video-project' || bundle.version!==1 || !bundle.project || !Array.isArray(bundle.assets)) throw new Error('Cadangan proyek tidak valid.');
+        for (const asset of bundle.assets) {
+            if (!safeAssetPath(asset.relativePath) || typeof asset.data!=='string') throw new Error('Jalur media tidak valid.');
+            files[asset.relativePath]=new Blob([await bytes(asset.data).arrayBuffer()],{type:asset.mime || mimeFor(asset.relativePath)});
+        }
+    }
+    const path='browser/'+crypto.randomUUID();progress?.('Menyimpan proyek yang dipulihkan...');
+    await mutate(path,row=>{row.project=bundle.project;row.name=bundle.project.name;row.files=files;});return path;
+}
 export const browserProjectApi: ElectronProjectApi = {
     selectFolder: () => choose(true), selectFile: () => choose(false),
     probeFolder: async ({ folderPath }) => ({ exists: !!(await get(folderPath))?.project }),
     initFolder: async ({ folderPath }) => { await mutate(folderPath, () => { }); return { ok: true }; },
     saveProject: async ({ folderPath, project, assets = [] }) => { await mutate(folderPath, row => { row.project = structuredClone(project); row.name = project.name || row.name; for (const a of assets)
-        row.files[a.relativePath] = a.encoding ? bytes(a.data, a.encoding) : new Blob([a.data], { type: mimeFor(a.relativePath) }); row.files['project.json'] = new Blob([JSON.stringify(project)], { type: 'application/json' }); }); localStorage.setItem('bekal-editor-last-project', folderPath); return { ok: true }; },
+        row.files[a.relativePath] = a.encoding ? bytes(a.data, a.encoding) : new Blob([a.data], { type: mimeFor(a.relativePath) }); row.files['project.json'] = projectJsonBlob(project); }); localStorage.setItem('bekal-editor-last-project', folderPath); return { ok: true }; },
     loadProject: async ({ folderPath }) => { const row = await get(folderPath); if (!row?.project)
         throw new Error('Proyek belum disimpan.'); expose(row); localStorage.setItem('bekal-editor-last-project', folderPath); return { project: structuredClone(row.project) }; },
     statProject: async ({ folderPath }) => { const row = await get(folderPath); return { exists: !!row?.project, mtimeMs: row?.mtime, size: row?.files['project.json']?.size }; },

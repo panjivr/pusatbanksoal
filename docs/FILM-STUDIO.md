@@ -4,7 +4,7 @@ Adaptasi web dari [AI Video Production Editor](https://github.com/LudwigKienle/a
 
 ## Proyek dan penyimpanan
 
-Naskah, karakter, referensi, pakaian, kontinuitas, papan adegan, linimasa, penyesuaian warna lokal, tinjauan, dan ekspor menggunakan struktur proyek yang sudah ada. IndexedDB menyimpan proyek dan media di browser. Cadangan JSON dapat diunduh dan dibuka kembali. Kredensial serta data penyedia lama tidak dihapus, tetapi panel generate baru hanya memakai OpenRouter.
+Naskah, karakter, referensi, pakaian, kontinuitas, papan adegan, linimasa, penyesuaian warna lokal, tinjauan, dan ekspor menggunakan struktur proyek yang sudah ada. IndexedDB menyimpan proyek dan media di browser. Cadangan baru berformat `.bekal-film`, berisi manifest proyek dan media biner tanpa penggabungan base64. Cadangan JSON versi lama tetap bisa dibuka. Unduh cadangan menyimpan perubahan terakhir terlebih dahulu, dengan status proses dan penguncian agar simpan otomatis tidak berjalan bersamaan. Kredensial serta data penyedia lama tidak dihapus, tetapi panel generate baru hanya memakai OpenRouter.
 
 Tema mengikuti `assets/style.css`. Katalog terjemahan diterapkan saat build; ID model, nama properti, parameter API, serta isi proyek pengguna tetap dipertahankan. Ekspor WebM tersedia di browser. MP4/FFmpeg, plugin native, dan agen CLI membutuhkan aplikasi desktop.
 
@@ -43,3 +43,5 @@ Kegagalan gambar disimpan pada shot terkait. Tombol **Generate ulang shot** tamp
 `npm run --prefix studio-film-ai test`, `build:web`, dan `scripts/check-film-openrouter-catalog.cjs` memeriksa harga, pengurutan, batch, retry shot, serta protokol gambar/video/audio. Pengujian browser menggunakan respons penyedia simulasi dan metadata katalog yang diperiksa pada 6 Oktober 2026. Pengujian ini tidak membuktikan bahwa saldo, izin model, atau hasil inferensi akun tertentu sudah berhasil. Kunci produksi diperlukan untuk pengujian berbayar sebenarnya.
 
 Analisis audio dan video meneruskan berkas lokal sebagai masukan audio atau video OpenRouter sesuai kemampuan model teks yang dipilih. Tidak ada unggahan ke Google melalui alur transkripsi video ini.
+
+Penyimpanan JSON dan tanda perubahan proyek diproses per potongan, bukan satu string yang memuat semua frame. Uji regresi mencakup media 128 MiB, 160 shot, versi gambar, pemulihan cadangan lama, dan penolakan cadangan terpotong. Audit tampilan memeriksa batas layar dan kontrol yang tertutup dengan hit testing, dalam tema terang dan gelap. Panel model serta tombol Alat AI mengikuti tata letak halaman.

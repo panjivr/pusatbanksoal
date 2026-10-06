@@ -7693,3 +7693,53 @@ body[data-theme="light"] .bekal-brand-dark {display:none;}
 @media(max-width:640px){.ai-route-fields{grid-template-columns:1fr;}.ai-routing-settings{padding:12px;}}
 #bekal-ai-route-notice {position:fixed;bottom:16px;left:50%;transform:translateX(-50%);z-index:9998;padding:10px 16px;max-width:calc(100vw - 28px);border:1px solid var(--app-border);border-radius:10px;background:var(--app-panel);color:var(--app-text);font-size:13px;box-shadow:var(--sh-md);pointer-events:none;}
 .microdrama-workspace button:not(.micro-primary):hover {background:var(--app-card);border-color:var(--primary);}
+
+/* Large model panels participate in layout; they must never float over shots. */
+.phase-bar, .script-page__bar { position: relative; top: auto; z-index: auto; }
+.phase-bar__tools { align-items: flex-start; gap: 12px; min-width: 0; }
+.studio-model-control { display: flex; flex-direction: column; align-items: stretch !important; flex: 1 1 100%; width: 100%; min-width: 0; max-width: 100%; margin-right: 0; gap: 8px; }
+.studio-model-control > .h-4.w-px { display: none; }
+.studio-model-control > span { padding: 0; }
+.studio-model-control .openrouter-picker { max-width: 100% !important; }
+.openrouter-picker { min-width: 0; container-type: inline-size; padding: 12px; background: var(--app-panel); border: 1px solid var(--shell-hairline); border-radius: 10px; }
+.openrouter-picker__search { display: grid; grid-template-columns: minmax(0, 1fr) minmax(125px, .55fr); gap: 8px; }
+.openrouter-picker input, .openrouter-picker select { min-width: 0; max-width: 100%; }
+.openrouter-picker label { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.openrouter-picker details label { margin-top: 8px; }
+@container (max-width: 330px) { .openrouter-picker__search { grid-template-columns: minmax(0, 1fr); } }
+.bekal-project-notice { flex: 1 1 100%; margin: 0; display: flex; align-items: center; gap: 8px; overflow-wrap: anywhere; color: var(--app-text); }
+.bekal-project-notice .pk-spinner { width: 16px; height: 16px; flex-shrink: 0; }
+.bekal-studio-bar button:disabled, .bekal-backup-import.is-disabled { opacity: .6; cursor: wait; }
+.shot-page__inspector { top: 0; max-height: min(75vh, 900px); }
+@media (max-width: 900px) { .shot-page__inspector, .project-hub__nav { position: relative; top: auto; max-height: none; } }
+.bekal-studio-bar .ai-tool-dock { position: relative; inset: auto; margin-left: auto; z-index: 45; flex-shrink: 0; }
+.bekal-studio-bar .ai-tool-dock__trigger { min-height: 34px; padding: 6px 10px; }
+.bekal-studio-bar .ai-tool-dock__trigger span { min-width: 0; color: inherit; }
+.bekal-studio-bar .ai-tool-dock__trigger small { display: none; }
+.bekal-studio-bar .ai-tool-dock__menu { position: absolute; bottom: auto; top: calc(100% + 8px); right: 0; max-width: min(280px, calc(100vw - 32px)); }
+.notebook-workspace { display: flex; flex-direction: column; min-height: 0; }
+.notebook-workspace > :first-child { flex-shrink: 0; }
+.notebook-workspace__body { flex: 1; min-height: 0; overflow: auto; }
+.project-research-panel { overflow: auto; }
+.project-research-grid { height: auto; min-height: 100%; grid-auto-rows: auto; align-items: start; }
+.project-research-grid > div { height: auto; overflow: visible; }
+.post-pagebar { min-width: 0; max-width: 100%; }
+@media (max-width: 900px) {
+  .post-pagebar { grid-template-columns: minmax(0, 1fr); justify-content: stretch; padding-inline: 6px; }
+  .post-pagebar__pages { display: flex; flex-wrap: wrap; justify-content: center; min-width: 0; max-width: 100%; }
+  .post-pagebar__page { flex: 1 1 40px; min-width: 0; padding-inline: 4px; }
+}
+.page-shell__bar { flex: none; flex-wrap: wrap; height: auto; }
+@media (max-width: 1100px) {
+  .page-shell { height: auto; min-height: 100%; }
+  .page-shell__body { flex: none; grid-template-columns: minmax(0, 1fr) !important; grid-template-rows: none; grid-auto-rows: auto; }
+  .page-shell__side { max-height: none; min-height: 220px; overflow: auto; }
+  .page-shell__center { min-height: 240px; }
+  .page-shell__timeline { min-height: 200px; }
+  .page-shell__side > .fl-browser { height: auto; min-height: 350px; }
+}
+.studio-workspace .sticky.bottom-0 { position: relative; bottom: auto; z-index: auto; margin-inline: 0; }
+.edit-toolbar { flex-wrap: wrap; }
+.edit-toolbar__group { flex-wrap: wrap; max-width: 100%; }
+.edit-toolbar button { flex-shrink: 0; }
+.edit-toolbar .edit-select { min-width: 0; max-width: 100%; }

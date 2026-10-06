@@ -1,3 +1,4 @@
+import { projectFingerprint } from './services/projectSerialization';
 import { hasTextAiConfigured, hasGatewayTextRoute } from './services/aiRouting';
 import { isBekalBrowser, importBrowserProject, downloadBrowserProject, browserProjectName } from './services/bekalBrowserProject';
 
@@ -988,6 +989,9 @@ function App() {
     const [lastSavedAt, setLastSavedAt] = useState<string | null>(null);
     const [lastAutoSavedAt, setLastAutoSavedAt] = useState<string | null>(null);
     const [isProjectSaving, setIsProjectSaving] = useState(false);
+    const projectWriteLock = useRef(false);
+    const [backupBusy,setBackupBusy] = useState(false);
+    const [projectNotice,setProjectNotice] = useState('');
     const [isAutoSaving, setIsAutoSaving] = useState(false);
     const [isProjectLoading, setIsProjectLoading] = useState(false);
     const [showDesignSystem, setShowDesignSystem] = useState(false);
@@ -1161,7 +1165,7 @@ function App() {
         selectedClipId,
     }), [reviewData, selectedClipId, shotPrompts, timelineClips, timelineTracks]);
     const collaborativeSnapshotSignature = useMemo(
-        () => JSON.stringify(collaborativeSnapshot),
+        () => projectFingerprint(collaborativeSnapshot),
         [collaborativeSnapshot],
     );
     const resolveCreativeDNAForImageUrl = useCallback((imageUrl: string) => {
@@ -2185,7 +2189,7 @@ function App() {
 
         const detachSnapshot = session.onSnapshotChange((doc) => {
             const next = toProjectSnapshot(doc);
-            const nextSignature = JSON.stringify(next);
+            const nextSignature = projectFingerprint(next);
             if (nextSignature === collaborativeSnapshotSignatureRef.current) {
                 return;
             }
@@ -3243,12 +3247,15 @@ function App() {
     }, []);
 
     const handleSaveProject = async () => {
+        if (projectWriteLock.current || backupBusy) return null;
+        projectWriteLock.current = true;
+        setProjectNotice('Menyiapkan dan menyimpan proyek...');
         try {
             let folderPath = projectPath;
             if (!folderPath) {
                 folderPath = await selectProjectFolder();
-                if (!folderPath) return;
-                if (isBekalBrowser && (await probeProjectFolder(folderPath)).exists) {await handleLoadProject(folderPath);return;}
+                if (!folderPath) {setProjectNotice('Penyimpanan dibatalkan.');return null;}
+                if (isBekalBrowser && (await probeProjectFolder(folderPath)).exists) {await handleLoadProject(folderPath);setProjectNotice('Proyek tersimpan dibuka.');return null;}
                 await initializeProjectFolder(folderPath);
                 setProjectPath(folderPath);
             }
@@ -3303,15 +3310,29 @@ function App() {
                 projectGroup: storyBible.projectGroup,
                 projectSubgroup: storyBible.projectSubgroup,
             });
+            setProjectNotice('Proyek berhasil disimpan.');
+            return folderPath;
         } catch (e) {
             const msg = e instanceof Error ? e.message : String(e);
-            alert(`Project save failed: ${msg}`);
+            setProjectNotice(`Proyek belum tersimpan: ${msg}`);
+            return null;
         } finally {
+            projectWriteLock.current = false;
             setIsProjectSaving(false);
         }
     };
+    const handleDownloadBackup = async () => {
+        if (backupBusy || projectWriteLock.current) return;
+        const path = await handleSaveProject();
+        if (!path) return;
+        setBackupBusy(true);
+        try {await downloadBrowserProject(path,setProjectNotice);setProjectNotice('Cadangan siap diunduh. Periksa daftar unduhan browser.');}
+        catch(e) {setProjectNotice(`Cadangan belum berhasil: ${e instanceof Error ? e.message : String(e)}`);}
+        finally {setBackupBusy(false);}
+    };
 
     const handleOpenProjectFolder = async () => {
+        if (isBekalBrowser) {await handleDownloadBackup();return;}
         if (!projectPath) return;
         try {
             await openProjectFolder(projectPath);
@@ -3358,12 +3379,13 @@ function App() {
 
     const runAutoSave = useCallback(async () => {
         if (!autosaveSettings.enabled) return;
-        if (!projectPath || isProjectSaving || isProjectLoading || isAutoSaving) return;
+        if (!projectPath || isProjectSaving || isProjectLoading || isAutoSaving || projectWriteLock.current || backupBusy) return;
         if (projectSyncStatus.state === 'incoming') return;
         const now = Date.now();
         if (now - lastAutoSaveRef.current < autosaveSettings.minIntervalMs) {
             return;
         }
+        projectWriteLock.current = true;
         setIsAutoSaving(true);
         try {
             const collaborationForSave = buildCollaborationForSave();
@@ -3425,6 +3447,7 @@ function App() {
         } catch (e) {
             console.error('Auto-save failed', e);
         } finally {
+            projectWriteLock.current = false;
             setIsAutoSaving(false);
         }
     }, [
@@ -3451,6 +3474,7 @@ function App() {
         isProjectSaving,
         isProjectLoading,
         isAutoSaving,
+        backupBusy,
         autosaveSettings,
         projectSyncStatus.state,
         projectSync,
@@ -3468,14 +3492,14 @@ function App() {
             }
             return;
         }
-        if (!projectPath || isProjectSaving || isProjectLoading || isAutoSaving) return;
+        if (!projectPath || isProjectSaving || isProjectLoading || isAutoSaving || projectWriteLock.current || backupBusy) return;
         if (autosaveTimerRef.current) {
             window.clearTimeout(autosaveTimerRef.current);
         }
         autosaveTimerRef.current = window.setTimeout(() => {
             runAutoSave();
         }, autosaveSettings.debounceMs);
-    }, [projectPath, isProjectSaving, isProjectLoading, isAutoSaving, runAutoSave, autosaveSettings]);
+    }, [projectPath, isProjectSaving, isProjectLoading, isAutoSaving, backupBusy, runAutoSave, autosaveSettings]);
 
     useEffect(() => {
         if (suppressAutosaveRef.current) {
@@ -8820,9 +8844,15 @@ function App() {
             <div className="bekal-studio-bar">
               <a href="/index.html">← Beranda Bekal</a><strong>Studio Film AI</strong>
               <span>Proyek lokal. Fitur AI perlu API key; MP4/FFmpeg dan plugin desktop perlu aplikasi desktop.</span>
-              <button onClick={() => void handleSaveProject()}>Simpan proyek</button>
-              <button disabled={!projectPath} onClick={() => projectPath && downloadBrowserProject(projectPath).catch(e => alert(e.message))}>Unduh cadangan</button>
-              <label className="bekal-backup-import">Buka cadangan<input type="file" accept=".json" onChange={async e => {const file=e.target.files?.[0];if(!file)return;try{const path=await importBrowserProject(file);await handleLoadProject(path);}catch(err){alert(err instanceof Error?err.message:String(err));}e.target.value='';}} /></label>
+              <button disabled={isProjectSaving || isAutoSaving || backupBusy} onClick={() => void handleSaveProject()}>{isProjectSaving ? 'Menyimpan...' : 'Simpan proyek'}</button>
+              <button disabled={isProjectSaving || isAutoSaving || backupBusy} onClick={() => void handleDownloadBackup()}>{backupBusy ? 'Menyiapkan cadangan...' : 'Unduh cadangan'}</button>
+              <label className={`bekal-backup-import${backupBusy ? ' is-disabled' : ''}`}>Buka cadangan<input disabled={isProjectSaving || isAutoSaving || backupBusy} type="file" accept=".json,.bekal-film" onChange={async e => {const input=e.currentTarget,file=input.files?.[0];if(!file)return;setBackupBusy(true);try{const path=await importBrowserProject(file,setProjectNotice);await handleLoadProject(path);setProjectNotice('Cadangan berhasil dipulihkan.');}catch(err){setProjectNotice(`Cadangan belum berhasil dibuka: ${err instanceof Error?err.message:String(err)}`);}finally{setBackupBusy(false);input.value='';}}} /></label>
+            <FloatingActionButton
+                onAssistantClick={() => setIsAssistantVisible(true)}
+                onLiveClick={() => setIsLiveVisible(true)}
+                showLiveAction={showLiveConversationTool}
+            />
+              {projectNotice && <p className="bekal-project-notice" role="status" aria-live="polite">{(isProjectSaving || backupBusy) && <span className="pk-spinner" aria-hidden="true" />}{projectNotice}</p>}
             </div>
             <Header
                 onUndo={undo}
@@ -9001,11 +9031,7 @@ function App() {
                 </div>
             )}
 
-            <FloatingActionButton
-                onAssistantClick={() => setIsAssistantVisible(true)}
-                onLiveClick={() => setIsLiveVisible(true)}
-                showLiveAction={showLiveConversationTool}
-            />
+
 
             {isAssistantVisible && (
                 <>

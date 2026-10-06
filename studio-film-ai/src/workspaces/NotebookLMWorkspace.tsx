@@ -21,7 +21,7 @@ const NotebookLMWorkspace: React.FC<NotebookLMWorkspaceProps> = ({
     const [tab, setTab] = useState<'internal' | 'graph' | 'notebooklm'>('internal');
 
     return (
-        <div className="w-full h-full bg-gray-950 text-white">
+        <div className="notebook-workspace w-full h-full bg-gray-950 text-white">
             <div className="border-b border-white/10 px-4 pt-4">
                 <div className="flex flex-wrap items-center gap-2">
                     <button
@@ -60,7 +60,7 @@ const NotebookLMWorkspace: React.FC<NotebookLMWorkspaceProps> = ({
                 </div>
             </div>
 
-            <div className="h-[calc(100%-65px)]">
+            <div className="notebook-workspace__body">
                 {tab === 'internal' ? (
                     <ProjectResearchPanel
                         storyBible={storyBible}

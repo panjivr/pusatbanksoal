@@ -19,7 +19,7 @@ export default function OpenRouterModelPicker({ kind, value, onChange, count = 1
     if (x == null) return y == null ? a.id.localeCompare(b.id) : 1; if (y == null) return -1; return sort === 'asc' ? x - y : y - x;
   });
   return <div className="openrouter-picker" style={{ width:'100%', minWidth:0, maxWidth:560 }}>
-    <div style={{ display:'flex', gap:6, flexWrap:'wrap' }}>
+    <div className="openrouter-picker__search">
       <input className="app-input" aria-label={`Cari model ${kindLabel} OpenRouter`} placeholder="Cari model OpenRouter" value={query} onChange={e => setQuery(e.target.value)} style={{ flex:'1 1 130px', minWidth:0 }} />
       <select className="app-select" aria-label="Urutkan harga model" value={sort} onChange={e => setSort(e.target.value)}><option value="name">Nama model</option><option value="asc">Harga terendah</option><option value="desc">Harga tertinggi</option></select>
     </div>
