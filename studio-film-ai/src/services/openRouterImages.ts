@@ -1,5 +1,37 @@
 import { AiRouteError, isOpenRouter, readAiRouting, getOpenRouterModels, type AiRoute, type GeminiRequest } from './aiRouting.ts';
 
+const imageCatalogCache = new Map<typeof fetch, { expires: number; promise: Promise<any[]> }>();
+/** Image-only models have a separate official catalogue and endpoint. Chat metadata alone is incomplete. */
+export const getOpenRouterImageModels = async (route: AiRoute, fetcher: typeof fetch = fetch): Promise<any[]> => {
+  let entry = imageCatalogCache.get(fetcher);
+  if (!entry || entry.expires < Date.now()) {
+    const promise = (async () => {
+      const results = await Promise.allSettled([
+        getOpenRouterModels(route, fetcher),
+        (async () => {
+          const response = await fetcher('https://openrouter.ai/api/v1/images/models', { signal: AbortSignal.timeout(10000), credentials: 'omit', redirect: 'error' });
+          if (!response.ok) throw new Error('image catalogue');
+          const body = await response.json();
+          if (!Array.isArray(body.data)) throw new Error('image catalogue');
+          return body.data.map((model: any) => ({ ...model, imageApi: true }));
+        })(),
+      ]);
+      if (results.every(r => r.status === 'rejected')) throw new AiRouteError('Katalog gambar OpenRouter belum dapat dimuat. Periksa jaringan lalu coba lagi.', 503);
+      const merged = new Map<string, any>();
+      // Keep working multimodal chat models on chat; dedicated image-only models use /images.
+      for (const result of results) if (result.status === 'fulfilled') for (const model of result.value) if (model.architecture?.output_modalities?.includes('image') && !merged.has(model.id)) merged.set(model.id, model);
+      return [...merged.values()];
+    })();
+    entry = { expires: Date.now() + 300000, promise }; imageCatalogCache.set(fetcher, entry);
+    promise.catch(() => { if (imageCatalogCache.get(fetcher)?.promise === promise) imageCatalogCache.delete(fetcher); });
+  }
+  return entry.promise;
+};
+const normalizeImageModelName = (id: string) => (id.split('/').pop()?.split(':')[0] || '').replace('flux.2', 'flux-2');
+export const sameOpenRouterImageSelection = (selected: string, candidate: string) => {
+  const name = normalizeImageModelName(selected), target = normalizeImageModelName(candidate);
+  return name.startsWith('flux-2-klein') ? target.startsWith('flux-2-klein') : name === target;
+};
 export const configuredOpenRouterImageRoute = (): AiRoute | undefined => readAiRouting().routes.find(r => r.enabled && isOpenRouter(r) && r.apiKey.trim());
 /** Preserve Google's selected model identity, including version; do not substitute another image model. */
 export const openRouterImageModelId = (nativeModel: string) => nativeModel.includes('/') ? nativeModel : `google/${nativeModel}`;
@@ -12,10 +44,10 @@ export const generateOpenRouterImage = async (route: AiRoute, req: GeminiRequest
   let submitted = false;
   try {
     if (!isOpenRouter(route) || !route.apiKey.trim()) throw new AiRouteError('Isi dan aktifkan API key OpenRouter di Pengaturan.', undefined, true);
-    const id = req.model.includes('/') ? req.model : openRouterImageModelId(req.model), models = await getOpenRouterModels(route, fetcher);
+    const id = req.model.includes('/') ? req.model : openRouterImageModelId(req.model), models = await getOpenRouterImageModels(route, fetcher);
     if (controller.signal.aborted) throw new DOMException('Permintaan dibatalkan.', 'AbortError');
     const model = models.find(m => m.id === id && m.architecture?.output_modalities?.includes('image'));
-    if (!model) throw new AiRouteError('Model gambar yang dipilih belum tersedia di katalog OpenRouter. Pilih Nano Banana 2 atau Gemini 3 Pro Image yang tersedia, atau gunakan API Gemini.', 404, true);
+    if (!model) throw new AiRouteError('Model gambar yang dipilih belum tersedia di katalog OpenRouter. Muat katalog gambar di Pengaturan dan pilih model yang tersedia.', 404, true);
     const contents = Array.isArray(req.contents) ? req.contents : [req.contents];
     const messages = contents.map(content => ({ role: content?.role === 'model' ? 'assistant' : 'user', content: partsOf(content).map(p => {
       if (typeof p?.text === 'string') return { type: 'text', text: p.text };
@@ -26,22 +58,42 @@ export const generateOpenRouterImage = async (route: AiRoute, req: GeminiRequest
       throw new AiRouteError('Format masukan gambar belum didukung OpenRouter. Referensi tidak dihapus otomatis.', 422, true);
     }) }));
     const imageConfig = req.config?.imageConfig;
-    const body = { model: id, messages, modalities: model.architecture.output_modalities.includes('text') ? ['image', 'text'] : ['image'], stream: false, provider: { allow_fallbacks: true },
+    let body: any = { model: id, messages, modalities: model.architecture.output_modalities.includes('text') ? ['image', 'text'] : ['image'], stream: false, provider: { allow_fallbacks: true },
       ...(imageConfig ? { image_config: { ...(imageConfig.aspectRatio ? { aspect_ratio: imageConfig.aspectRatio } : {}), ...(imageConfig.imageSize ? { image_size: imageConfig.imageSize } : {}) } } : {}) };
+    if (model.imageApi) {
+      const allParts = messages.flatMap(message => message.content);
+      const refs = allParts.filter(part => part.type === 'image_url');
+      const parameters = model.supported_parameters || {};
+      const refRange = parameters.input_references;
+      if (refRange && (refs.length < (refRange.min || 0) || refs.length > (refRange.max ?? Infinity))) throw new AiRouteError(`Model ${id} menerima ${refRange.min || 0} sampai ${refRange.max} referensi. Semua referensi dipertahankan; sesuaikan jumlahnya.`, 422, true);
+      const ratio = imageConfig?.aspectRatio;
+      if (parameters.aspect_ratio?.values && ratio && !parameters.aspect_ratio.values.includes(ratio)) throw new AiRouteError(`Rasio ${ratio} tidak didukung ${id}. Pilih rasio yang didukung model.`, 422, true);
+      const resolution = imageConfig?.imageSize;
+      if (parameters.resolution?.values && resolution && !parameters.resolution.values.includes(resolution)) throw new AiRouteError(`Resolusi ${resolution} tidak didukung ${id}. Pilih resolusi yang didukung model.`, 422, true);
+      const formats = parameters.output_format?.values;
+      const outputFormat = formats ? ['png', 'jpeg', 'webp'].find(format => formats.includes(format)) : undefined;
+      if (formats && !outputFormat) throw new AiRouteError('Model ini menghasilkan format vektor yang belum didukung jalur gambar studio. Pilih model gambar PNG, JPEG, atau WebP.', 422, true);
+      body = { model: id, prompt: allParts.filter(part => part.type === 'text').map((part: any) => part.text).join('\n'), n: 1, stream: false, provider: { allow_fallbacks: true },
+        ...(refs.length ? { input_references: refs } : {}), ...(ratio && parameters.aspect_ratio ? { aspect_ratio: ratio } : {}),
+        ...(resolution && parameters.resolution ? { resolution } : {}), ...(outputFormat ? { output_format: outputFormat } : {}) };
+    }
     submitted = true;
-    const response = await fetcher('https://openrouter.ai/api/v1/chat/completions', { method: 'POST', headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${route.apiKey.trim()}`, 'HTTP-Referer': 'https://pusatbanksoal.id', 'X-Title': 'Bekal Studio Film AI' }, body: JSON.stringify(body), signal: controller.signal, credentials: 'omit', redirect: 'error' });
+    const response = await fetcher(model.imageApi ? 'https://openrouter.ai/api/v1/images' : 'https://openrouter.ai/api/v1/chat/completions', { method: 'POST', headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${route.apiKey.trim()}`, 'HTTP-Referer': 'https://pusatbanksoal.id', 'X-Title': 'Bekal Studio Film AI' }, body: JSON.stringify(body), signal: controller.signal, credentials: 'omit', redirect: 'error' });
     let data: any; try { data = await response.json(); } catch { throw new AiRouteError('Jawaban gambar belum dapat dibaca. Periksa Activity OpenRouter sebelum mengirim ulang.', response.status, true); }
     if (!response.ok || data.error) {
       const status = response.ok ? Number(data.error?.code) || 502 : response.status;
       const raw = JSON.stringify(data.error || {});
       const detail = /safety|content.?policy|moderation|blocked/i.test(raw) ? 'Permintaan ditolak oleh kebijakan konten penyedia.' : status === 401 ? 'API key belum valid.' : status === 402 ? 'Saldo atau batas kredit tidak cukup.' : status === 429 ? 'Kuota atau batas permintaan tercapai.' : status === 403 ? 'Kunci belum mendapat akses ke model gambar.' : `Permintaan gambar gagal (HTTP ${status}).`;
       // Only explicit rejection with no result is eligible for another submission.
-      if (!data.choices?.length && !/safety|content.?policy|moderation|blocked/i.test(raw) && [400, 401, 402, 403, 404, 422, 429, 500, 502, 503, 504].includes(status)) throw new OpenRouterImageRejected(`OpenRouter: ${detail}`, status);
+      if (!data.choices?.length && !data.data?.length && !/safety|content.?policy|moderation|blocked/i.test(raw) && [400, 401, 402, 403, 404, 422, 429, 500, 502, 503, 504].includes(status)) throw new OpenRouterImageRejected(`OpenRouter: ${detail}`, status);
       throw new AiRouteError(`OpenRouter: ${detail} Periksa Activity sebelum mencoba lagi.`, status, true);
     }
     const choice = data.choices?.[0];
     if (choice?.finish_reason === 'content_filter') throw new AiRouteError('OpenRouter: Gambar ditolak oleh kebijakan konten penyedia.', undefined, true);
-    const images = choice?.message?.images || [];
+    const images = model.imageApi ? (data.data || []).map((item: any) => {
+      const mime = item.media_type || 'image/png';
+      return { image_url: { url: typeof item.b64_json === 'string' ? `data:${mime};base64,${item.b64_json}` : item.url } };
+    }) : choice?.message?.images || [];
     const parts: any[] = [];
     for (const image of images) {
       const url = image.image_url?.url;
@@ -59,7 +111,7 @@ export const generateOpenRouterImage = async (route: AiRoute, req: GeminiRequest
       if (binary) parts.push({ inlineData: { mimeType, data: btoa(binary) } });
     }
     if (!parts.length) throw new AiRouteError('OpenRouter belum mengembalikan gambar yang dapat digunakan. Periksa Activity; tidak ada pengiriman ulang otomatis.', undefined, true);
-    return { candidates: [{ content: { role: 'model', parts }, finishReason: 'STOP' }], text: typeof choice.message.content === 'string' ? choice.message.content : '', bekalProvider: 'openrouter', bekalModel: id, usageMetadata: { totalTokenCount: data.usage?.total_tokens || 0 } };
+    return { candidates: [{ content: { role: 'model', parts }, finishReason: 'STOP' }], text: typeof choice?.message?.content === 'string' ? choice.message.content : '', bekalProvider: 'openrouter', bekalModel: id, usageMetadata: { totalTokenCount: data.usage?.total_tokens || 0 } };
   } catch (error) {
     if (caller?.aborted) throw new DOMException('Permintaan dibatalkan.', 'AbortError');
     if (error instanceof AiRouteError) throw error;
@@ -73,8 +125,16 @@ export class OpenRouterImageRejected extends AiRouteError {
 }
 export const compatibleOpenRouterImageModels = (models: any[], req: GeminiRequest): any[] => {
   const parts = (Array.isArray(req.contents) ? req.contents : [req.contents]).flatMap(partsOf);
-  const references = parts.some(p => p?.inlineData);
-  return models.filter(m => typeof m.id === 'string' && m.architecture?.output_modalities?.includes('image') && m.architecture?.input_modalities?.includes('text') && (!references || m.architecture.input_modalities.includes('image')));
+  const referenceCount = parts.filter(p => p?.inlineData).length;
+  return models.filter(m => {
+    if (typeof m.id !== 'string' || !m.architecture?.output_modalities?.includes('image') || !m.architecture?.input_modalities?.includes('text') || (referenceCount && !m.architecture.input_modalities.includes('image'))) return false;
+    if (!m.imageApi) return true;
+    const parameters = m.supported_parameters || {}, range = parameters.input_references;
+    if (range && (referenceCount < (range.min || 0) || referenceCount > (range.max ?? Infinity))) return false;
+    if (parameters.output_format?.values && !parameters.output_format.values.some((format: string) => ['png', 'jpeg', 'webp'].includes(format))) return false;
+    const config = req.config?.imageConfig;
+    return !(config?.aspectRatio && parameters.aspect_ratio?.values && !parameters.aspect_ratio.values.includes(config.aspectRatio)) && !(config?.imageSize && parameters.resolution?.values && !parameters.resolution.values.includes(config.imageSize));
+  });
 };
 /** Exhaust compatible OpenRouter models before invoking a configured native image provider. */
 export const generateRoutedOpenRouterImage = async (req: GeminiRequest, direct?: () => Promise<any>, fetcher: typeof fetch = fetch, announce?: (model: string, status: string) => void, directLabel = 'Gemini (API langsung)'): Promise<any> => {
@@ -86,17 +146,13 @@ export const generateRoutedOpenRouterImage = async (req: GeminiRequest, direct?:
     if (seenKeys.has(route.apiKey.trim())) continue;
     seenKeys.add(route.apiKey.trim());
     let models: any[];
-    try { models = compatibleOpenRouterImageModels(await getOpenRouterModels(route, fetcher), req); }
+    try { models = compatibleOpenRouterImageModels(await getOpenRouterImageModels(route, fetcher), req); }
     catch (error) { last = error; if (!config.fallback) throw error; continue; }
     const explicitProviderModel = req.model.includes('/') && !req.model.startsWith('google/');
     const selectedName = req.model.split('/').pop()?.split(':')[0] || '';
     if (explicitProviderModel) {
-      const sameSelection = (id: string) => {
-        const name = id.split('/').pop() || '';
-        return selectedName.startsWith('flux-2-klein') ? name.startsWith('flux-2-klein') : name === selectedName;
-      };
-      models = models.filter(m => sameSelection(m.id));
-      if (!models.length) last = new AiRouteError(`Model ${selectedName} yang dipilih tidak tersedia di OpenRouter untuk masukan ini. Model tidak diganti ke Gemini. Gunakan API penyedia model ini atau pilih model lain secara manual.`, 422, true);
+      models = models.filter(m => sameOpenRouterImageSelection(req.model, m.id));
+      if (!models.length) last = new AiRouteError(`Model ${selectedName} yang dipilih tidak tersedia di OpenRouter untuk masukan ini. Referensi, rasio, atau resolusi harus sesuai kemampuan model. Model tidak diganti ke Gemini. Gunakan API penyedia model ini atau pilih model lain secara manual.`, 422, true);
     }
     const preferred = explicitProviderModel ? req.model : config.openRouterImageModel && config.openRouterImageModel !== 'auto' ? config.openRouterImageModel : openRouterImageModelId(req.model);
     models.sort((a, b) => Number(b.id === preferred) - Number(a.id === preferred) || a.id.localeCompare(b.id));

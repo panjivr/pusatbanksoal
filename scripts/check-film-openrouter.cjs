@@ -6,6 +6,7 @@ const {chromium}=require('playwright'),assert=require('node:assert/strict');
  await page.addInitScript(()=>{localStorage.setItem('studio_onboarding_completed_v1','true');localStorage.setItem('ui_mode_v1','pro');localStorage.setItem('pbs_theme','dark');});
  const details=[{type:'reasoning.encrypted',data:'test-opaque-reasoning',index:0}];
  await page.route('https://openrouter.ai/api/v1/**',async r=>{
+  if(r.request().method()==='GET' && r.request().url().endsWith('/images/models'))return r.fulfill({status:200,contentType:'application/json',body:JSON.stringify(require('../studio-film-ai/src/services/fixtures/openrouter-image-catalog.json'))});
   if(r.request().method()==='GET')return r.fulfill({status:200,contentType:'application/json',body:JSON.stringify({data:[{id:'black-forest-labs/flux-test',name:'Flux uji',architecture:{input_modalities:['text'],output_modalities:['image']}},{id:'test/editor',architecture:{input_modalities:['text','image'],output_modalities:['text']},supported_parameters:['tools','response_format','temperature','tool_choice']}]})});
   const body=r.request().postDataJSON();posts.push(body);assert.equal(body.model,'test/editor');assert.equal(r.request().headers().authorization,'Bearer test-browser-key');
   let message={content:'Siap.'},finish_reason='stop';
@@ -22,9 +23,9 @@ const {chromium}=require('playwright'),assert=require('node:assert/strict');
  await card.getByLabel('Aktifkan',{exact:true}).check();await card.getByLabel('Alamat API',{exact:true}).fill('https://openrouter.ai');await card.getByLabel('Model atau nama kombo',{exact:true}).fill('test/editor');await card.getByLabel('API key (jika diwajibkan layanan)',{exact:true}).fill('test-browser-key');
  await card.getByRole('button',{name:'Uji koneksi',exact:true}).click();await page.getByRole('status').filter({hasText:'OpenRouter berhasil diuji'}).waitFor();assert.equal(await card.getByLabel('Panggilan alat',{exact:true}).isChecked(),true);assert.equal(await card.getByLabel('Keluaran JSON',{exact:true}).isChecked(),true);
  await page.getByLabel('Utamakan OpenRouter untuk gambar, termasuk Flux dan model lain di katalog',{exact:true}).check();
- await page.getByRole('button',{name:'Muat model gambar OpenRouter',exact:true}).click();await page.getByLabel('Model gambar utama OpenRouter',{exact:true}).selectOption('black-forest-labs/flux-test');
+ await page.getByRole('button',{name:'Muat model gambar OpenRouter',exact:true}).click();await page.getByLabel('Model gambar utama OpenRouter',{exact:true}).selectOption('black-forest-labs/flux.2-klein-4b');
  await page.getByRole('button',{name:'Simpan router AI',exact:true}).click();
- assert.equal(await page.evaluate(()=>JSON.parse(localStorage.getItem('bekal_ai_routing_v1')).openRouterImageModel),'black-forest-labs/flux-test');
+ assert.equal(await page.evaluate(()=>JSON.parse(localStorage.getItem('bekal_ai_routing_v1')).openRouterImageModel),'black-forest-labs/flux.2-klein-4b');
  assert.equal(await page.evaluate(()=>JSON.parse(localStorage.getItem('bekal_ai_routing_v1')).imagesViaOpenRouter),true);
  await page.evaluate(()=>{localStorage.removeItem('gemini_api_key');const c=JSON.parse(localStorage.getItem('bekal_ai_routing_v1'));c.routes.find(r=>r.id==='openrouter').tools=false;c.routes.find(r=>r.id==='openrouter').json=false;localStorage.setItem('bekal_ai_routing_v1',JSON.stringify(c));});
  if(!production){const title=await page.evaluate(async()=>{const {getStudioAiClient}=await import('/assets/studio-film-ai/src/services/studioAiClient.ts');return (await getStudioAiClient().models.generateContent({model:'gemini-3.1-pro-preview',contents:'Buat judul',config:{responseMimeType:'application/json',responseSchema:{type:'OBJECT',properties:{title:{type:'STRING'}},required:['title']}}})).text;});assert.equal(JSON.parse(title).title,'Film uji OpenRouter');}

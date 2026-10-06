@@ -1,5 +1,6 @@
+import { getOpenRouterImageModels } from '../services/openRouterImages';
 import React, { useState } from 'react';
-import { AiRouteError, defaultAiRouting, gatewayGenerate, getOpenRouterModels, isOpenRouter, resolveOpenRouterRoute, normalizeAiBaseUrl, readAiRouting, saveAiRouting, type AiRoute } from '../services/aiRouting';
+import { AiRouteError, defaultAiRouting, gatewayGenerate, isOpenRouter, resolveOpenRouterRoute, normalizeAiBaseUrl, readAiRouting, saveAiRouting, type AiRoute } from '../services/aiRouting';
 
 const AiRoutingSettings: React.FC = () => {
   const [config, setConfig] = useState(readAiRouting);
@@ -8,7 +9,7 @@ const AiRoutingSettings: React.FC = () => {
     const route = config.routes.find(r => r.enabled && isOpenRouter(r));
     if (!route) { setMessage('Aktifkan OpenRouter terlebih dahulu.'); return; }
     setBusy('image-catalog');
-    try { const models = (await getOpenRouterModels(route)).filter(m => m.architecture?.output_modalities?.includes('image')); setImageModels(models); setMessage(`${models.length} model gambar tersedia. Model dengan referensi yang tidak kompatibel akan dilewati otomatis.`); }
+    try { const models = (await getOpenRouterImageModels(route)).filter(m => m.architecture?.output_modalities?.includes('image')); setImageModels(models); setMessage(`${models.length} model gambar tersedia. Model dengan referensi yang tidak kompatibel akan dilewati otomatis.`); }
     catch (e) { setMessage(e instanceof Error ? e.message : 'Katalog belum dapat dimuat.'); }
     finally { setBusy(null); }
   };
