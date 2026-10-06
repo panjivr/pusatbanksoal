@@ -7,6 +7,7 @@ export const readGenerationKeys = (): ProviderKeys => {
 };
 export const modelHasCredentials = (id: string, keys: ProviderKeys, kind: 'image' | 'video', higgsfieldHost = false): boolean => {
   if (id === 'auto') return false;
+  if (kind === 'image' && keys.openrouterImages && ['flux', 'flux-klein', 'qwen-2512', 'qwen', 'gpt-image-1-5', 'wan-v27-image-pro-replicate', 'gemini-pro-replicate', 'flux-pro', 'flux-2-klein', 'flux-2-turbo', 'z-image', 'z-turbo', 'z-turbo-img2img', 'gpt-image', 'gpt-image-1.5', 'qwen-image', 'seedream', 'seedream-4.5', 'wan-2.7-image-pro', 'nano-banana-pro'].includes(id)) return Boolean(keys.openrouter);
   if (id.endsWith('-hf') || id.startsWith('soul-')) return Boolean(keys.higgsfield);
   if (/-fal(?:-|$)/.test(id)) return Boolean(keys.fal || (kind === 'video' && higgsfieldHost && keys.higgsfield));
   if (id === 'imagen') return Boolean(keys.gemini && keys.googleProvider !== 'replicate' && !keys.openrouterImages);

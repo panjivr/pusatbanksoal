@@ -2,7 +2,7 @@ import { AiRouteError, isOpenRouter, readAiRouting, getOpenRouterModels, type Ai
 
 export const configuredOpenRouterImageRoute = (): AiRoute | undefined => readAiRouting().routes.find(r => r.enabled && isOpenRouter(r) && r.apiKey.trim());
 /** Preserve Google's selected model identity, including version; do not substitute another image model. */
-export const openRouterImageModelId = (nativeModel: string) => `google/${nativeModel}`;
+export const openRouterImageModelId = (nativeModel: string) => nativeModel.includes('/') ? nativeModel : `google/${nativeModel}`;
 const partsOf = (value: any): any[] => typeof value === 'string' ? [{ text: value }] : Array.isArray(value) ? value.flatMap(partsOf) : value?.parts ? value.parts : [value];
 export const generateOpenRouterImage = async (route: AiRoute, req: GeminiRequest, fetcher: typeof fetch = fetch): Promise<any> => {
   const controller = new AbortController(), caller = req.config?.abortSignal as AbortSignal | undefined;
@@ -77,7 +77,7 @@ export const compatibleOpenRouterImageModels = (models: any[], req: GeminiReques
   return models.filter(m => typeof m.id === 'string' && m.architecture?.output_modalities?.includes('image') && m.architecture?.input_modalities?.includes('text') && (!references || m.architecture.input_modalities.includes('image')));
 };
 /** Exhaust compatible OpenRouter models before invoking a configured native image provider. */
-export const generateRoutedOpenRouterImage = async (req: GeminiRequest, direct?: () => Promise<any>, fetcher: typeof fetch = fetch, announce?: (model: string, status: string) => void): Promise<any> => {
+export const generateRoutedOpenRouterImage = async (req: GeminiRequest, direct?: () => Promise<any>, fetcher: typeof fetch = fetch, announce?: (model: string, status: string) => void, directLabel = 'Gemini (API langsung)'): Promise<any> => {
   const config = readAiRouting();
   const routes = config.routes.filter(r => r.enabled && isOpenRouter(r) && r.apiKey.trim());
   let last: unknown = new AiRouteError('Belum ada model gambar OpenRouter yang kompatibel dengan masukan ini.', 422, true);
@@ -109,9 +109,9 @@ export const generateRoutedOpenRouterImage = async (req: GeminiRequest, direct?:
   }
   if (config.fallback && direct) {
     if (req.config?.abortSignal?.aborted) throw new DOMException('Permintaan dibatalkan.', 'AbortError');
-    announce?.('Gemini (API langsung)', 'trying');
+    announce?.(directLabel, 'trying');
     const result = await direct();
-    announce?.('Gemini (API langsung)', 'success');
+    announce?.(directLabel, 'success');
     return result;
   }
   announce?.('OpenRouter (gambar)', 'failed');

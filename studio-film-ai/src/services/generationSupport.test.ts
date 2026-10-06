@@ -70,3 +70,11 @@ test('OpenRouter image credentials enable Google image models but never Imagen, 
  assert.equal(modelHasCredentials('veo',{replicate:true,openrouterImages:true,googleProvider:'replicate'},'video'),true);
  assert.equal(modelHasCredentials('veo',{gemini:true,openrouterImages:true,googleProvider:'gemini'},'video'),true);
 });
+
+test('OpenRouter alone enables Flux and other routed prompt image models, while provider editing stays separate',()=>{
+ const keys={openrouter:true,openrouterImages:true};
+ for(const id of ['flux','flux-pro','flux-klein','flux-2-klein','flux-2-turbo','seedream','qwen-2512','qwen','gpt-image-1-5','wan-v27-image-pro-replicate','z-image','z-turbo']) assert.equal(modelHasCredentials(id,keys,'image'),true,id);
+ assert.equal(modelHasCredentials('flux', {openrouter:true,openrouterImages:false},'image'),false);
+ assert.equal(modelHasCredentials('flux',keys,'video'),false);
+ assert.equal(modelHasCredentials('seedream-v5-pro-fal-edit',keys,'image'),false);
+});

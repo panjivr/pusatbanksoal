@@ -1,3 +1,5 @@
+import { readAiRouting, AiRouteError } from './aiRouting';
+import { generateRoutedOpenRouterImage } from './openRouterImages';
 
 import { MediaItem } from '../types';
 import { getVideoDuration } from '../utils/helpers';
@@ -292,7 +294,7 @@ const ensureDisplayableFileUrl = async (url: string, opts?: { forceDownload?: bo
     const headers: Record<string, string> = {};
     if (isProtected) {
         if (!localKey) {
-            throw new Error("Replicate API Token is missing. Please add it in settings.");
+            throw new Error("API key Replicate belum diisi. Aktifkan gambar OpenRouter atau isi kunci Replicate di Pengaturan.");
         }
         headers['Authorization'] = `Bearer ${localKey}`;
     }
@@ -485,7 +487,7 @@ const runReplicateInner = async (model: string, input: any): Promise<any> => {
         return runReplicateViaByok(model, input);
     }
     if (!token) {
-        throw new Error("Replicate API Token is missing. Please add it in settings.");
+        throw new Error("API key Replicate belum diisi. Aktifkan gambar OpenRouter atau isi kunci Replicate di Pengaturan.");
     }
 
     const modelParts = model.split('/');
@@ -1159,7 +1161,7 @@ export const generateModelWithRodin = async (
     throw lastError || new Error('Rodin 3D generation failed.');
 };
 
-export const generateImageWithFlux = async (
+const generateImageWithFluxDirect = async (
     prompt: string,
     aspectRatio: string = "16:9",
     opts?: { loraUrl?: string; loraScale?: number }
@@ -1202,7 +1204,7 @@ export const generateImageWithFlux = async (
     return item;
 };
 
-export const generateImageWithFluxKlein = async (
+const generateImageWithFluxKleinDirect = async (
     prompt: string,
     aspectRatio: string = "16:9",
     image?: { base64: string; mimeType: string },
@@ -1270,7 +1272,7 @@ export const generateImageWithFluxKlein = async (
     return item;
 };
 
-export const generateImageWithFlux2Turbo = async (
+const generateImageWithFlux2TurboDirect = async (
     prompt: string,
     aspectRatio: string = "16:9",
     image?: { base64: string; mimeType: string },
@@ -1338,7 +1340,7 @@ export const generateImageWithFlux2Turbo = async (
     return item;
 };
 
-export const generateImageWithZTurbo = async (
+const generateImageWithZTurboDirect = async (
     prompt: string,
     aspectRatio: string = "16:9",
     opts?: { loraUrl?: string; loraScale?: number }
@@ -1388,7 +1390,7 @@ export const generateImageWithZTurbo = async (
     return item;
 };
 
-export const generateImageWithZImage = async (
+const generateImageWithZImageDirect = async (
     prompt: string,
     aspectRatio: string = "16:9",
     opts?: { loraUrl?: string; loraScale?: number }
@@ -1443,7 +1445,7 @@ export const generateImageWithZImage = async (
     return item;
 };
 
-export const generateImageWithZTurboImg2Img = async (
+const generateImageWithZTurboImg2ImgDirect = async (
     prompt: string,
     aspectRatio: string = "16:9",
     image?: { base64: string; mimeType: string },
@@ -1498,7 +1500,7 @@ export const generateImageWithZTurboImg2Img = async (
     return item;
 };
 
-export const generateImageWithGptImage15 = async (
+const generateImageWithGptImage15Direct = async (
     prompt: string,
     aspectRatio: string = "16:9",
     referenceImages?: { base64: string; mimeType: string }[]
@@ -1574,7 +1576,7 @@ export const generateImageWithGptImage15 = async (
     return item;
 };
 
-export const generateImageWithGemini3ProReplicate = async (
+const generateImageWithGemini3ProReplicateDirect = async (
     prompt: string,
     aspectRatio: string = "16:9",
     imageSize: string = "1K",
@@ -1688,7 +1690,7 @@ export const generateImageWithGemini3ProReplicate = async (
     return item;
 };
 
-export const generateImageWithNanoBananaPro = async (
+const generateImageWithNanoBananaProDirect = async (
     prompt: string,
     aspectRatio: string = "16:9",
     imageSize: string = "1K",
@@ -1754,7 +1756,7 @@ export const generateImageWithNanoBananaPro = async (
     return item;
 };
 
-export const generateImageWithGemini3ProReplicateOnly = async (
+const generateImageWithGemini3ProReplicateOnlyDirect = async (
     prompt: string,
     aspectRatio: string = "16:9",
     imageSize: string = "1K",
@@ -1832,7 +1834,7 @@ export const generateImageWithGemini3ProReplicateOnly = async (
     return item;
 };
 
-export const generateImageWithQwenImage = async (
+const generateImageWithQwenImageDirect = async (
     prompt: string,
     aspectRatio: string = "16:9",
     image?: { base64: string; mimeType: string }
@@ -1878,7 +1880,7 @@ export const generateImageWithQwenImage = async (
     return item;
 };
 
-export const generateImageWithSeedream = async (
+const generateImageWithSeedreamDirect = async (
     prompt: string,
     aspectRatio: string = "16:9",
     size: '2K' | '4K' = '2K'
@@ -1914,7 +1916,7 @@ export const generateImageWithSeedream = async (
     return item;
 };
 
-export const generateImageWithSeedreamReferences = async (
+const generateImageWithSeedreamReferencesDirect = async (
     prompt: string,
     referenceImages: { base64: string; mimeType: string }[],
     aspectRatio: string = "16:9",
@@ -1953,7 +1955,7 @@ export const generateImageWithSeedreamReferences = async (
     return item;
 };
 
-export const generateImageWithWan27ImagePro = async (
+const generateImageWithWan27ImageProDirect = async (
     prompt: string,
     aspectRatio: string = "16:9",
     size: '1K' | '2K' | '4K' = '1K',
@@ -3395,7 +3397,7 @@ const requestReplicateTraining = async (
         });
     }
     if (!token) {
-        throw new Error("Replicate API Token is missing. Please add it in settings.");
+        throw new Error("API key Replicate belum diisi. Aktifkan gambar OpenRouter atau isi kunci Replicate di Pengaturan.");
     }
     const response = await fetch(proxyUrl(url), {
         method,
@@ -3444,3 +3446,50 @@ export const getReplicateTraining = async (trainingId: string): Promise<Replicat
     const payload = await requestReplicateTraining(url, 'GET');
     return mapReplicateTraining(payload);
 };
+
+/** Route prompt image generators before native credential checks; keep specialized editing unchanged. */
+const routePromptImage = async (model: string, native: () => Promise<MediaItem>, args: any[]): Promise<MediaItem> => {
+    if (!readAiRouting().imagesViaOpenRouter) return native();
+    // LoRA weights are provider-specific; never silently drop a user's trained adapter.
+    if (args.some(arg => arg && typeof arg === 'object' && arg.loraUrl)) {
+        throw new AiRouteError('OpenRouter belum mendukung LoRA pada jalur ini. Nonaktifkan pilihan gambar OpenRouter untuk memakai LoRA dengan penyedia langsung.', 422, true);
+    }
+    const parts: any[] = [{ text: String(args[0] || '') }];
+    const collect = (value: any) => {
+        if (Array.isArray(value)) { value.forEach(collect); return; }
+        if (value?.base64 && value?.mimeType) {
+            const inline = /^data:([^;]+);base64,(.*)$/s.exec(value.base64);
+            parts.push({ inlineData: { mimeType: inline?.[1] || value.mimeType, data: inline?.[2] || value.base64 } });
+        }
+    };
+    args.slice(1).forEach(collect);
+    const aspectRatio = args.slice(1).find(value => typeof value === 'string' && /^\d+(?:\.\d+)?:\d+(?:\.\d+)?$/.test(value)) || '16:9';
+    const imageSize = args.slice(1).find(value => typeof value === 'string' && /^[124]K$/.test(value));
+    const task = startTask({ label: 'Gambar melalui OpenRouter', kind: 'image', provider: 'openrouter', estimatedMs: 30000, message: 'Mencari model yang kompatibel...' });
+    let usedDirect = false;
+    try {
+        const result = await generateRoutedOpenRouterImage({ model, contents: { parts }, config: { responseModalities: ['IMAGE'], imageConfig: { aspectRatio, ...(imageSize ? { imageSize } : {}) } } },
+            getReplicateKeyOptional() || shouldUseByokProxy('replicate') ? async () => { usedDirect = true; return native(); } : undefined,
+            fetch, (provider, status) => window.dispatchEvent(new CustomEvent('bekal-ai-route-status', { detail: { provider, status } })), 'Replicate (API langsung)');
+        if (usedDirect) { task.complete(); return result; }
+        const image = result.candidates?.[0]?.content?.parts?.find((part: any) => part.inlineData)?.inlineData;
+        if (!image) throw new AiRouteError('OpenRouter belum mengembalikan gambar yang dapat dipakai.', undefined, true);
+        recordUsage({ provider: 'openrouter', model: result.bekalModel, kind: 'image', units: 1, unitLabel: 'image', note: 'Gambar melalui OpenRouter' });
+        task.complete();
+        return { id: crypto.randomUUID(), name: `${result.bekalModel.split('/').pop()}_${String(args[0]).slice(0, 15)}.png`, type: 'image', source: 'generated', url: `data:${image.mimeType};base64,${image.data}` };
+    } catch (error) { task.fail(error); throw error; }
+};
+export const generateImageWithFlux = (...args: Parameters<typeof generateImageWithFluxDirect>): Promise<MediaItem> => routePromptImage(MODELS.FLUX_PRO, () => generateImageWithFluxDirect(...args), args);
+export const generateImageWithFluxKlein = (...args: Parameters<typeof generateImageWithFluxKleinDirect>): Promise<MediaItem> => routePromptImage(MODELS.FLUX_2_KLEIN_9B_BASE, () => generateImageWithFluxKleinDirect(...args), args);
+export const generateImageWithFlux2Turbo = (...args: Parameters<typeof generateImageWithFlux2TurboDirect>): Promise<MediaItem> => routePromptImage(MODELS.FLUX_2_TURBO, () => generateImageWithFlux2TurboDirect(...args), args);
+export const generateImageWithZTurbo = (...args: Parameters<typeof generateImageWithZTurboDirect>): Promise<MediaItem> => routePromptImage(MODELS.Z_IMAGE_TURBO, () => generateImageWithZTurboDirect(...args), args);
+export const generateImageWithZImage = (...args: Parameters<typeof generateImageWithZImageDirect>): Promise<MediaItem> => routePromptImage(MODELS.Z_IMAGE, () => generateImageWithZImageDirect(...args), args);
+export const generateImageWithZTurboImg2Img = (...args: Parameters<typeof generateImageWithZTurboImg2ImgDirect>): Promise<MediaItem> => routePromptImage(MODELS.Z_IMAGE_TURBO_IMG2IMG, () => generateImageWithZTurboImg2ImgDirect(...args), args);
+export const generateImageWithGptImage15 = (...args: Parameters<typeof generateImageWithGptImage15Direct>): Promise<MediaItem> => routePromptImage(MODELS.GPT_IMAGE_1_5, () => generateImageWithGptImage15Direct(...args), args);
+export const generateImageWithGemini3ProReplicate = (...args: Parameters<typeof generateImageWithGemini3ProReplicateDirect>): Promise<MediaItem> => routePromptImage(MODELS.GEMINI_3_PRO_IMAGE, () => generateImageWithGemini3ProReplicateDirect(...args), args);
+export const generateImageWithNanoBananaPro = (...args: Parameters<typeof generateImageWithNanoBananaProDirect>): Promise<MediaItem> => routePromptImage(MODELS.NANO_BANANA_PRO, () => generateImageWithNanoBananaProDirect(...args), args);
+export const generateImageWithGemini3ProReplicateOnly = (...args: Parameters<typeof generateImageWithGemini3ProReplicateOnlyDirect>): Promise<MediaItem> => routePromptImage(MODELS.GEMINI_3_PRO_IMAGE, () => generateImageWithGemini3ProReplicateOnlyDirect(...args), args);
+export const generateImageWithQwenImage = (...args: Parameters<typeof generateImageWithQwenImageDirect>): Promise<MediaItem> => routePromptImage(MODELS.QWEN_IMAGE_2512, () => generateImageWithQwenImageDirect(...args), args);
+export const generateImageWithSeedream = (...args: Parameters<typeof generateImageWithSeedreamDirect>): Promise<MediaItem> => routePromptImage(MODELS.SEEDREAM_45, () => generateImageWithSeedreamDirect(...args), args);
+export const generateImageWithSeedreamReferences = (...args: Parameters<typeof generateImageWithSeedreamReferencesDirect>): Promise<MediaItem> => routePromptImage(MODELS.SEEDREAM_45, () => generateImageWithSeedreamReferencesDirect(...args), args);
+export const generateImageWithWan27ImagePro = (...args: Parameters<typeof generateImageWithWan27ImageProDirect>): Promise<MediaItem> => routePromptImage(MODELS.WAN_2_7_IMAGE_PRO, () => generateImageWithWan27ImageProDirect(...args), args);
