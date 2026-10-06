@@ -22,6 +22,7 @@ test('video estimate uses selected duration, resolution, references and count',(
 test('audio flat prices come from published descriptions; zero token fields do not imply free music',()=>{
  const m={description:'30 second duration clips are priced at $0.04 per clip.',pricing:{prompt:'0',completion:'0'}}; assert.equal(estimateStudioCost(m,'audio',{count:2})!.low,.08);
  assert.equal(estimateStudioCost({pricing:{prompt:'0',completion:'0'}},'audio'),null);
+ const tokenEstimate=estimateStudioCost({pricing:{prompt:'.000001',audio_output:'.000002'}},'audio',{inputTokens:500,outputTokens:2000});assert.ok(Math.abs(tokenEstimate!.low-.0045)<1e-9);assert.match(tokenEstimate!.basis,/500 token masukan \+ 2000 token audio/);
 });
 
 test('explicit image-token assumptions produce a batch estimate without treating token rate as image rate',()=>{const model={priceEndpoints:[{pricing:[{billable:'input_text',unit:'token',cost_usd:.000005},{billable:'output_image',unit:'token',cost_usd:.00003}]}]};const cost=estimateStudioCost(model,'image',{count:8,inputTokens:1000,outputTokens:1000});assert.ok(Math.abs(cost!.low-.28)<1e-9);assert.match(cost!.basis,/asumsi/);});

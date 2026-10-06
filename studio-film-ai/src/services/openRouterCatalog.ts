@@ -69,7 +69,7 @@ export const estimateStudioCost = (model: any, kind: CatalogKind, options: Estim
   if (kind === 'audio') {
     const flat = model.description?.match(/priced at \$(\d+(?:\.\d+)?) per (?:song|clip)/i);
     if (flat) return { low:Number(flat[1])*count, high:Number(flat[1])*count, basis:'per lagu/klip, sesuai deskripsi katalog OpenRouter' };
-    if (pricing.audio_output != null) { const cost = Number(pricing.audio_output) * (options.outputTokens || 1000) + Number(pricing.prompt || 0) * (options.inputTokens || 1000); if (Number.isFinite(cost)) return { low:cost*count, high:cost*count, basis:'asumsi 1.000 token masukan + 1.000 token audio keluaran' }; }
+    if (pricing.audio_output != null) { const cost = Number(pricing.audio_output) * (options.outputTokens || 1000) + Number(pricing.prompt || 0) * (options.inputTokens || 1000); if (Number.isFinite(cost)) return { low:cost*count, high:cost*count, basis:`asumsi ${options.inputTokens || 1000} token masukan + ${options.outputTokens || 1000} token audio keluaran` }; }
   }
   if (kind === 'text' && pricing.prompt != null && pricing.completion != null) {
     const cost = Number(pricing.prompt) * (options.inputTokens || 1000) + Number(pricing.completion) * (options.outputTokens || 1000);
