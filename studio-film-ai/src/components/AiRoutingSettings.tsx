@@ -1,8 +1,17 @@
 import React, { useState } from 'react';
-import { AiRouteError, defaultAiRouting, gatewayGenerate, isOpenRouter, resolveOpenRouterRoute, normalizeAiBaseUrl, readAiRouting, saveAiRouting, type AiRoute } from '../services/aiRouting';
+import { AiRouteError, defaultAiRouting, gatewayGenerate, getOpenRouterModels, isOpenRouter, resolveOpenRouterRoute, normalizeAiBaseUrl, readAiRouting, saveAiRouting, type AiRoute } from '../services/aiRouting';
 
 const AiRoutingSettings: React.FC = () => {
   const [config, setConfig] = useState(readAiRouting);
+  const [imageModels, setImageModels] = useState<any[]>([]);
+  const loadImageModels = async () => {
+    const route = config.routes.find(r => r.enabled && isOpenRouter(r));
+    if (!route) { setMessage('Aktifkan OpenRouter terlebih dahulu.'); return; }
+    setBusy('image-catalog');
+    try { const models = (await getOpenRouterModels(route)).filter(m => m.architecture?.output_modalities?.includes('image')); setImageModels(models); setMessage(`${models.length} model gambar tersedia. Model dengan referensi yang tidak kompatibel akan dilewati otomatis.`); }
+    catch (e) { setMessage(e instanceof Error ? e.message : 'Katalog belum dapat dimuat.'); }
+    finally { setBusy(null); }
+  };
   const [message, setMessage] = useState('');
   const [busy, setBusy] = useState<string | null>(null);
   const update = (id: string, patch: Partial<AiRoute>) => { setConfig(c => ({ ...c, routes: c.routes.map(r => r.id === id ? { ...r, ...patch } : r) })); setMessage('Ada perubahan yang belum disimpan.'); };
@@ -37,8 +46,17 @@ const AiRoutingSettings: React.FC = () => {
     <p className="pk-hint">9Router berjalan sebagai layanan terpisah milikmu. Gunakan alamat HTTPS yang dapat diakses browser dan mengizinkan CORS dari pusatbanksoal.id. Alamat localhost merujuk ke perangkat yang sedang membuka web ini.</p>
     <label className="ai-route-check"><input type="checkbox" checked={config.preferGateway} onChange={e => setConfig(c => ({ ...c, preferGateway: e.target.checked }))} /> Utamakan router, gunakan Gemini sebagai cadangan</label>
     <label className="ai-route-check"><input type="checkbox" checked={config.fallback} onChange={e => setConfig(c => ({ ...c, fallback: e.target.checked }))} /> Pindah otomatis saat kunci tidak valid, kuota habis, koneksi gagal, atau layanan sibuk</label>
-    <label className="ai-route-check"><input type="checkbox" checked={config.imagesViaOpenRouter === true} onChange={e => setConfig(c => ({ ...c, imagesViaOpenRouter: e.target.checked }))} /> Buat gambar Nano Banana 2 dan Gemini 3 Pro Image melalui OpenRouter</label>
-    <p className="pk-hint">Gambar menggunakan kunci OpenRouter yang aktif di bawah. Referensi karakter, rasio, dan ukuran gambar tetap diteruskan. Video dan audio mengikuti pengaturan penyedia masing-masing.</p>
+    <label className="ai-route-check"><input type="checkbox" checked={config.imagesViaOpenRouter === true} onChange={e => setConfig(c => ({ ...c, imagesViaOpenRouter: e.target.checked }))} /> Utamakan OpenRouter untuk gambar, termasuk Flux dan model lain di katalog</label>
+    <p className="pk-hint">Satu kunci memakai model gambar yang tersedia di OpenRouter. Mode otomatis mengutamakan model yang dipilih di studio, lalu mencoba model lain yang menerima masukan yang sama. Referensi karakter tidak dihapus. Video dan audio mengikuti penyedia masing-masing.</p>
+    {config.imagesViaOpenRouter && <>
+      <label className="pk-field"><span>Model gambar utama OpenRouter</span><select aria-label="Model gambar utama OpenRouter" className="app-input" value={config.openRouterImageModel || 'auto'} onChange={e => setConfig(c => ({ ...c, openRouterImageModel: e.target.value }))}>
+        <option value="auto">Otomatis dari katalog</option>
+        {config.openRouterImageModel && config.openRouterImageModel !== 'auto' && !imageModels.some(m => m.id === config.openRouterImageModel) && <option value={config.openRouterImageModel}>{config.openRouterImageModel}</option>}
+        {imageModels.map(m => <option key={m.id} value={m.id}>{m.name || m.id} ({m.id})</option>)}
+      </select></label>
+      <button type="button" className="app-button app-secondary" disabled={Boolean(busy)} onClick={() => void loadImageModels()}>{busy === 'image-catalog' ? 'Memuat katalog...' : 'Muat model gambar OpenRouter'}</button>
+      <p className="pk-hint">Jika cadangan otomatis aktif, OpenRouter mencoba penyedia lain dan studio mencoba model kompatibel berikutnya saat permintaan ditolak. Setelah pilihan OpenRouter habis, API Gemini yang sudah diisi menjadi cadangan. Saldo habis berlaku untuk satu kunci, sehingga kunci itu tidak dicoba berulang. Batas waktu, pembatalan, hasil kosong, dan penolakan konten menghentikan proses. Biaya dan karakter visual mengikuti model yang berhasil; OpenRouter menentukan dukungan rasio dan resolusi.</p>
+    </>}
     <label className="ai-route-check"><input type="checkbox" checked={config.mediaFallback} onChange={e => setConfig(c => ({ ...c, mediaFallback: e.target.checked }))} /> Gunakan penyedia cadangan untuk model video yang sama jika pengiriman awal ditolak</label>
     <p className="pk-hint">Cadangan video berlaku untuk model katalog yang tersedia di fal.ai dan Higgsfield, jika kedua kunci sudah diisi. Pekerjaan yang sudah diterima, sedang diproses, dibatalkan, atau ditolak kebijakan konten tidak dikirim ulang.</p>
     <label className="pk-field"><span>Batas waktu tiap layanan (detik)</span><input className="app-input" type="number" min="10" max="120" value={config.timeoutSeconds} onChange={e => setConfig(c => ({ ...c, timeoutSeconds: Math.max(10, Math.min(120, Number(e.target.value) || 45)) }))} /></label>

@@ -1,4 +1,4 @@
-import { configuredOpenRouterImageRoute, generateOpenRouterImage } from './openRouterImages';
+import { generateRoutedOpenRouterImage } from './openRouterImages';
 import { GoogleGenAI } from '@google/genai';
 import { withModelFallback } from './geminiModelFallback';
 import { generationTimeoutSeconds, isNativeMediaRequest, safeGenerationError, isBlockedGenerationResponse } from './generationSupport';
@@ -35,9 +35,7 @@ export const getStudioAiClient = (): GoogleGenAI => {
   ai.models.generateContent = async (params) => {
     const req = params as GeminiRequest;
     if (readAiRouting().imagesViaOpenRouter === true && req.config?.responseModalities?.includes('IMAGE')) {
-      const route = configuredOpenRouterImageRoute();
-      if (!route) throw new AiRouteError('Aktifkan OpenRouter dan isi API key di Pengaturan sebelum membuat gambar.', undefined, true);
-      return executeAiRoutes([{ id: 'OpenRouter (gambar)', run: () => generateOpenRouterImage(route, req) }], false, announce);
+      return generateRoutedOpenRouterImage(req, geminiKey ? () => nativeCall(req, signal => nativeGenerate({ ...params, config: { ...params.config, abortSignal: signal } })) : undefined, fetch, announce);
     }
     const config = readAiRouting();
     const language = 'Jawab dalam bahasa Indonesia yang alami. Pertahankan struktur JSON, nama properti, nama fungsi, dan parameter teknis.';
