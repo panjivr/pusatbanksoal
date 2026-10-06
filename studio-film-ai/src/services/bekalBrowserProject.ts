@@ -101,6 +101,7 @@ export async function importBrowserProject(file: File, progress?: ProjectProgres
             files[asset.relativePath]=new Blob([await bytes(asset.data).arrayBuffer()],{type:asset.mime || mimeFor(asset.relativePath)});
         }
     }
+    files['project.json']=projectJsonBlob(bundle.project);
     const path='browser/'+crypto.randomUUID();progress?.('Menyimpan proyek yang dipulihkan...');
     await mutate(path,row=>{row.project=bundle.project;row.name=bundle.project.name;row.files=files;});return path;
 }

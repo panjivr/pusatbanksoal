@@ -10,6 +10,8 @@ const {chromium}=require('playwright'),assert=require('node:assert/strict');
  const statuses=[];const backup=await api.createBrowserProjectBackup(path,s=>statuses.push(s));
  const restored=await api.importBrowserProject(new File([backup.blob],backup.name),s=>statuses.push(s));
  const loaded=await api.browserProjectApi.loadProject({folderPath:restored});
+ const metadata=JSON.parse(new TextDecoder().decode(await api.browserProjectApi.readProjectFile({folderPath:restored,relativePath:'project.json'})));
+ if(JSON.stringify(metadata)!==JSON.stringify(project))throw new Error('Restored project.json must preserve the project contract.');
  const savedVideo=await fetch(api.browserAssetUrl(restored,'media/large.mp4')).then(r=>r.blob());
  const first=new Uint8Array(await savedVideo.slice(0,1).arrayBuffer())[0],last=new Uint8Array(await savedVideo.slice(-1).arrayBuffer())[0];
  const versions=await api.browserProjectApi.readProjectFile({folderPath:restored,relativePath:'media/frame-v2.png'});
