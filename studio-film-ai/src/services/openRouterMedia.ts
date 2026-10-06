@@ -2,9 +2,9 @@ import { videoRequestKey, readVideoJob, writeVideoJob, validVideoJobId } from '.
 import { audioRequest, readOpenRouterAudioStream, type StudioAudioOptions } from './openRouterAudio.ts';
 import { trackTask } from './taskCenter.ts';
 import type { MediaItem } from '../types';
-import { configuredOpenRouterImageRoute, generateRoutedOpenRouterImage, compatibleOpenRouterImageModels } from './openRouterImages.ts';
+import { configuredOpenRouterImageRoute, generateRoutedOpenRouterImage } from './openRouterImages.ts';
 import { loadStudioCatalog, studioSelectedModel } from './openRouterCatalog.ts';
-import { readAiRouting, AiRouteError } from './aiRouting.ts';
+import { AiRouteError } from './aiRouting.ts';
 type ImageRef = { base64: string; mimeType: string };
 const auth = () => { const route = configuredOpenRouterImageRoute(); if (!route) throw new AiRouteError('Isi API key OpenRouter dan aktifkan di Pengaturan.', undefined, true); return { Authorization: `Bearer ${route.apiKey}`, 'Content-Type': 'application/json', 'HTTP-Referer': 'https://pusatbanksoal.id', 'X-Title': 'Bekal Studio Film AI' }; };
 const item = (type: 'image' | 'video' | 'audio', url: string, model: string): MediaItem => ({ id: `openrouter-${crypto.randomUUID()}`, name: `${model.split('/').pop()}-${type}`, type, url, source:'generated' });
@@ -95,13 +95,7 @@ export { studioSelectedModel };
 
 export const generateStudioImage = async (...args: Parameters<typeof generateStudioImageInner>): Promise<MediaItem> => {
   const [model,,refs = [],ratio = '1:1',resolution = '1K'] = args;
-  const metadata = (await loadStudioCatalog('image')).find(m=>m.id===model);
-  const request = {model,contents:{parts:[{text:args[1]},...refs.map(r=>({inlineData:{data:r.base64,mimeType:r.mimeType}}))]},config:{imageConfig:{aspectRatio:ratio,imageSize:resolution}}};
-  const allowAlternatives = readAiRouting().fallback && readAiRouting().imageFallbackModels;
-  if (!compatibleOpenRouterImageModels(allowAlternatives ? await loadStudioCatalog('image') : metadata ? [metadata] : [],request).length) {
-    const range = metadata?.supported_parameters?.input_references;
-    throw new Error(`Model ${model || '(belum dipilih)'} tidak cocok: ${refs.length} referensi, rasio ${ratio}, resolusi ${resolution}.${range ? ` Batas referensi ${range.min || 0} sampai ${range.max}.` : ''} Pilih model atau pengaturan yang sesuai; referensi tidak dihapus.`);
-  }
+  if (!(await loadStudioCatalog('image')).some(m => m.id === model)) throw new Error('Pilih model gambar dari katalog OpenRouter.');
   const controller = new AbortController();
   const signal = args[5] ? AbortSignal.any([args[5],controller.signal]) : controller.signal;
   return trackTask({label:model,kind:'image',provider:'openrouter',estimatedMs:45000,message:'Memproses melalui OpenRouter...',cancel:()=>controller.abort()},()=>generateStudioImageInner(model,args[1],refs,ratio,resolution,signal));

@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { generateOpenRouterImage, generateRoutedOpenRouterImage, compatibleOpenRouterImageModels, getOpenRouterImageModels } from './openRouterImages.ts';
-import { AiRouteError, type AiRoute } from './aiRouting.ts';
+import { clearOpenRouterModelCache, AiRouteError, type AiRoute } from './aiRouting.ts';
 const route:AiRoute={id:'openrouter',name:'OpenRouter',baseUrl:'https://openrouter.ai/api/v1',model:'text',apiKey:'fake-test-secret',enabled:true,vision:false,tools:false,json:false};
 const model='gemini-3.1-flash-image-preview';
 const png='iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+jZAAAAABJRU5ErkJggg==';
@@ -119,10 +119,10 @@ test('Seedream uses real namespace and normalized resolution, and OpenAI image m
   }));assert.equal(out.bekalModel,actual);
  }
 });
-test('native image reference limits reject excess references without stripping them or making a paid request',async()=>{
+test('explicit image choice sends every reference despite catalogue limits',async()=>{
  configure();let calls=0;
  const request={...req,model:'black-forest-labs/flux-2-klein-9b-base',contents:{parts:[{text:'Karakter'},...Array.from({length:5},()=>({inlineData:{mimeType:'image/png',data:png}}))]}};
- await assert.rejects(generateRoutedOpenRouterImage(request,undefined,nativeImageFetch(async()=>{calls++;return response({});})),(e:any)=>e.terminal&&/referensi/i.test(e.message));assert.equal(calls,0);
+ await assert.rejects(generateRoutedOpenRouterImage(request,undefined,nativeImageFetch(async(u:any,o:any)=>{calls++;assert.equal(JSON.parse(o.body).input_references.length,5);return response({error:{code:422}},422);})),(e:any)=>e.terminal);assert.equal(calls,1);
 });
 test('empty native image results and transport loss never cause another paid generation',async()=>{
  configure();
@@ -138,10 +138,10 @@ test('automatic candidates skip reference-only and vector-only native models wit
  assert.deepEqual(compatibleOpenRouterImageModels(candidates,{model:'auto',contents:'Gambar'}).map(m=>m.id),['native/raster']);
 });
 
-test('optional automatic fallback prefers explicit model then another compatible OpenRouter model',async()=>{
+test('explicit model never changes even when an old fallback preference is enabled',async()=>{
  configure({imageFallbackModels:true});const seen:string[]=[];
- const result=await generateRoutedOpenRouterImage({...req,model:'black-forest-labs/flux-test'},undefined,legacyFetch((async(u:any,o:any)=>{const body=JSON.parse(o.body);seen.push(body.model);return seen.length===1?response({error:{code:429}},429):response({choices:[{message:{images:[{image_url:{url:'data:image/png;base64,'+png}}]}}]});}) as typeof fetch));
- assert.deepEqual(seen,['black-forest-labs/flux-test','google/'+model]);assert.equal(result.bekalModel,'google/'+model);
+ await assert.rejects(generateRoutedOpenRouterImage({...req,model:'black-forest-labs/flux-test'},undefined,legacyFetch((async(u:any,o:any)=>{seen.push(JSON.parse(o.body).model);return response({error:{code:429}},429);}) as typeof fetch)));
+ assert.deepEqual(seen,['black-forest-labs/flux-test']);
 });
 test('native image metadata overrides duplicate general catalog capability',async()=>{
  const out=await getOpenRouterImageModels(route,(async(u:any)=>response({data:String(u).includes('/images/models')?[{id:'test/duplicate',architecture:{input_modalities:['text','image'],output_modalities:['image']},supported_parameters:{input_references:{max:4}}}]:[{id:'test/duplicate',architecture:{input_modalities:['text'],output_modalities:['image']}}]})) as typeof fetch);
@@ -155,4 +155,16 @@ test('plain HTML 413 identifies payload size and never switches the selected mod
   return new Response('<html>Request too large</html>',{status:413});
  }) as typeof fetch)), (error:any)=>error.status===413 && /ukuran referensi/.test(error.message));
  assert.equal(calls,1);
+});
+
+test('explicit chat image model receives references even when metadata says text input only',async()=>{
+ configure({imageFallbackModels:true});clearOpenRouterModelCache();let calls=0;
+ const fetcher=(async(u:any,o:any)=>{
+  if(String(u).endsWith('/images/models'))return response({data:[]});
+  if(String(u).endsWith('/models'))return response({data:[{id:'test/selected',architecture:{input_modalities:['text'],output_modalities:['image']}}]});
+  calls++;const body=JSON.parse(o.body);assert.equal(body.model,'test/selected');assert.equal(body.messages[0].content[1].image_url.url,'data:image/png;base64,'+png);
+  return response({choices:[{message:{images:[{image_url:{url:'data:image/png;base64,'+png}}]}}]});
+ }) as typeof fetch;
+ const result=await generateRoutedOpenRouterImage({...req,model:'test/selected'},undefined,fetcher);
+ assert.equal(calls,1);assert.equal(result.bekalModel,'test/selected');
 });

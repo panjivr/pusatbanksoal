@@ -54,7 +54,7 @@ export const generateOpenRouterImage = async (route: AiRoute, req: GeminiRequest
     const messages = contents.map(content => ({ role: content?.role === 'model' ? 'assistant' : 'user', content: partsOf(content).map(p => {
       if (typeof p?.text === 'string') return { type: 'text', text: p.text };
       if (p?.inlineData?.data && /^image\/(png|jpeg|webp|gif)$/.test(p.inlineData.mimeType)) {
-        if (!model.architecture.input_modalities?.includes('image')) throw new AiRouteError('Model ini tidak menerima referensi gambar. Referensi karakter tetap dipertahankan; pilih model yang mendukungnya.', 422, true);
+        if (!req.model.includes('/') && !model.architecture.input_modalities?.includes('image')) throw new AiRouteError('Model ini tidak menerima referensi gambar. Referensi karakter tetap dipertahankan; pilih model yang mendukungnya.', 422, true);
         return { type: 'image_url', image_url: { url: `data:${p.inlineData.mimeType};base64,${p.inlineData.data}` } };
       }
       throw new AiRouteError('Format masukan gambar belum didukung OpenRouter. Referensi tidak dihapus otomatis.', 422, true);
@@ -67,11 +67,11 @@ export const generateOpenRouterImage = async (route: AiRoute, req: GeminiRequest
       const refs = allParts.filter(part => part.type === 'image_url');
       const parameters = model.supported_parameters || {};
       const refRange = parameters.input_references;
-      if (refRange && (refs.length < (refRange.min || 0) || refs.length > (refRange.max ?? Infinity))) throw new AiRouteError(`Model ${id} menerima ${refRange.min || 0} sampai ${refRange.max} referensi. Semua referensi dipertahankan; sesuaikan jumlahnya.`, 422, true);
+      if (!req.model.includes('/') && refRange && (refs.length < (refRange.min || 0) || refs.length > (refRange.max ?? Infinity))) throw new AiRouteError(`Model ${id} menerima ${refRange.min || 0} sampai ${refRange.max} referensi. Semua referensi dipertahankan; sesuaikan jumlahnya.`, 422, true);
       const ratio = imageConfig?.aspectRatio;
-      if (parameters.aspect_ratio?.values && ratio && !parameters.aspect_ratio.values.includes(ratio)) throw new AiRouteError(`Rasio ${ratio} tidak didukung ${id}. Pilih rasio yang didukung model.`, 422, true);
+      if (!req.model.includes('/') && parameters.aspect_ratio?.values && ratio && !parameters.aspect_ratio.values.includes(ratio)) throw new AiRouteError(`Rasio ${ratio} tidak didukung ${id}. Pilih rasio yang didukung model.`, 422, true);
       const resolution = imageConfig?.imageSize;
-      if (parameters.resolution?.values && resolution && !parameters.resolution.values.includes(resolution)) throw new AiRouteError(`Resolusi ${resolution} tidak didukung ${id}. Pilih resolusi yang didukung model.`, 422, true);
+      if (!req.model.includes('/') && parameters.resolution?.values && resolution && !parameters.resolution.values.includes(resolution)) throw new AiRouteError(`Resolusi ${resolution} tidak didukung ${id}. Pilih resolusi yang didukung model.`, 422, true);
       const formats = parameters.output_format?.values;
       const outputFormat = formats ? ['png', 'jpeg', 'webp'].find(format => formats.includes(format)) : undefined;
       if (formats && !outputFormat) throw new AiRouteError('Model ini menghasilkan format vektor yang belum didukung jalur gambar studio. Pilih model gambar PNG, JPEG, atau WebP.', 422, true);
@@ -164,11 +164,11 @@ export const generateRoutedOpenRouterImage = async (req: GeminiRequest, direct?:
     if (seenKeys.has(route.apiKey.trim())) continue;
     seenKeys.add(route.apiKey.trim());
     let models: any[];
-    try { models = compatibleOpenRouterImageModels(await getOpenRouterImageModels(route, fetcher), req); }
+    try { const catalog = await getOpenRouterImageModels(route, fetcher); models = req.model.includes('/') ? catalog : compatibleOpenRouterImageModels(catalog, req); }
     catch (error) { last = error; if (!config.fallback) throw error; continue; }
     const explicitProviderModel = req.model.includes('/');
     const selectedName = req.model.split('/').pop()?.split(':')[0] || '';
-    if (explicitProviderModel && !config.imageFallbackModels) {
+    if (explicitProviderModel) {
       const exact = models.find(m => m.id === req.model);
       models = exact ? [exact] : models.filter(m => sameOpenRouterImageSelection(req.model, m.id));
       if (!models.length) last = new AiRouteError(`Model ${selectedName} yang dipilih tidak tersedia di OpenRouter untuk masukan ini. Referensi, rasio, atau resolusi harus sesuai kemampuan model. Model tidak diganti ke Gemini. Pilih model lain dari katalog OpenRouter secara manual.`, 422, true);
@@ -185,7 +185,7 @@ export const generateRoutedOpenRouterImage = async (req: GeminiRequest, direct?:
         return result;
       } catch (error) {
         last = error;
-        if (!(error instanceof OpenRouterImageRejected) || !config.fallback) { announce?.(model.id, 'failed'); throw error; }
+        if (explicitProviderModel || !(error instanceof OpenRouterImageRejected) || !config.fallback) { announce?.(model.id, 'failed'); throw error; }
         announce?.(model.id, 'fallback');
         // Account/key-wide rejection: trying another model cannot replenish credit.
         if (error.status === 401 || error.status === 402) break;
