@@ -63,8 +63,10 @@ test('successful HTTP responses with safety rejection remain terminal instead of
 });
 
 test('OpenRouter image credentials enable Google image models but never Imagen, audio or video', () => {
- const keys={openrouter:true,googleProvider:'openrouter'};
+ const keys={openrouter:true,openrouterImages:true,googleProvider:'gemini'};
  for(const id of ['nano','gemini-pro','gemini-flash'])assert.equal(modelHasCredentials(id,keys,'image'),true);
  for(const id of ['imagen','veo','veo-fast'])assert.equal(modelHasCredentials(id,keys,id==='imagen'?'image':'video'),false);
- assert.equal(modelHasCredentials('nano',{gemini:true,googleProvider:'openrouter'},'image'),false);
+ assert.equal(modelHasCredentials('nano',{gemini:true,openrouterImages:true,googleProvider:'gemini'},'image'),false);
+ assert.equal(modelHasCredentials('veo',{replicate:true,openrouterImages:true,googleProvider:'replicate'},'video'),true);
+ assert.equal(modelHasCredentials('veo',{gemini:true,openrouterImages:true,googleProvider:'gemini'},'video'),true);
 });

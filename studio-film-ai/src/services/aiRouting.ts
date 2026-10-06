@@ -4,9 +4,9 @@ export type AiRoute = {
   enabled: boolean; vision: boolean; tools: boolean; json: boolean;
   supportedParameters?: string[];
 };
-export type AiRoutingConfig = { version: 1; preferGateway: boolean; fallback: boolean; mediaFallback: boolean; timeoutSeconds: number; routes: AiRoute[] };
+export type AiRoutingConfig = { version: 1; preferGateway: boolean; fallback: boolean; mediaFallback: boolean; imagesViaOpenRouter?: boolean; timeoutSeconds: number; routes: AiRoute[] };
 export const AI_ROUTING_KEY = 'bekal_ai_routing_v1';
-export const defaultAiRouting = (): AiRoutingConfig => ({ version: 1, preferGateway: true, fallback: true, mediaFallback: true, timeoutSeconds: 45, routes: [
+export const defaultAiRouting = (): AiRoutingConfig => ({ version: 1, preferGateway: true, fallback: true, mediaFallback: true, imagesViaOpenRouter: false, timeoutSeconds: 45, routes: [
   { id: '9router', name: '9Router', baseUrl: '', model: '', apiKey: '', enabled: false, vision: false, tools: false, json: false },
   { id: 'openrouter', name: 'OpenRouter', baseUrl: 'https://openrouter.ai/api/v1', model: '', apiKey: '', enabled: false, vision: false, tools: false, json: false },
   { id: 'openai', name: 'OpenAI', baseUrl: 'https://api.openai.com/v1', model: '', apiKey: '', enabled: false, vision: false, tools: false, json: false },
@@ -16,7 +16,7 @@ export const readAiRouting = (): AiRoutingConfig => {
   try {
     const raw = JSON.parse(localStorage.getItem(AI_ROUTING_KEY) || 'null');
     if (raw?.version !== 1 || !Array.isArray(raw.routes)) return defaultAiRouting();
-    return { version: 1, preferGateway: raw.preferGateway === true, fallback: raw.fallback === true, mediaFallback: raw.mediaFallback !== false,
+    return { version: 1, preferGateway: raw.preferGateway === true, fallback: raw.fallback === true, mediaFallback: raw.mediaFallback !== false, imagesViaOpenRouter: raw.imagesViaOpenRouter === true,
       timeoutSeconds: Math.max(10, Math.min(120, Number(raw.timeoutSeconds) || 45)),
       routes: raw.routes.filter((r: any) => typeof r?.id === 'string' && typeof r.baseUrl === 'string' && typeof r.model === 'string').map((r: any) => ({
         id: r.id, name: String(r.name || r.id), baseUrl: r.baseUrl, model: r.model, apiKey: String(r.apiKey || ''),

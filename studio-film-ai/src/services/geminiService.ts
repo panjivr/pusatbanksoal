@@ -602,7 +602,7 @@ export const generateImageWithNano = async (
     prompt: string,
     config?: { aspectRatio?: string; imageSize?: string }
 ): Promise<MediaItem> => {
-    if (shouldUseReplicateForGoogleModels()) {
+    if (shouldUseReplicateForGoogleModels() && !readAiRouting().imagesViaOpenRouter) {
         return generateImageWithGemini3ProReplicate(
             prompt,
             config?.aspectRatio || '16:9',
@@ -656,7 +656,7 @@ export const generateImageWithNano = async (
 };
 
 export const generateImageWithGemini3Pro = async (prompt: string, aspectRatio: string, imageSize: string): Promise<MediaItem> => {
-    if (shouldUseReplicateForGoogleModels()) {
+    if (shouldUseReplicateForGoogleModels() && !readAiRouting().imagesViaOpenRouter) {
         return generateImageWithGemini3ProReplicate(prompt, aspectRatio, imageSize);
     }
     const ai = getAiClient();
@@ -706,7 +706,7 @@ export const generateImageWithGemini3Pro = async (prompt: string, aspectRatio: s
 };
 
 export const generateImageWithImagen = async (prompt: string, aspectRatio: '1:1' | '16:9' | '9:16' | '4:3' | '3:4'): Promise<MediaItem> => {
-    if (getGoogleModelProvider() === 'openrouter') throw new AiRouteError('Imagen belum tersedia melalui jalur OpenRouter ini. Pilih Nano Banana 2 atau Gemini 3 Pro Image, atau ubah penyedia menjadi Gemini.', 422, true);
+    if (readAiRouting().imagesViaOpenRouter === true) throw new AiRouteError('Imagen belum tersedia melalui jalur OpenRouter ini. Pilih Nano Banana 2 atau Gemini 3 Pro Image, atau ubah penyedia menjadi Gemini.', 422, true);
     if (shouldUseReplicateForGoogleModels()) {
         throw new Error('Imagen is only available via Gemini. Switch Google models to Gemini in settings.');
     }
@@ -3419,7 +3419,7 @@ export const generateImageWithReferences = async (
     model: 'gemini-3.1-flash-image-preview' | 'gemini-3-pro-image-preview' = 'gemini-3.1-flash-image-preview',
     config?: { aspectRatio?: string, imageSize?: string }
 ): Promise<MediaItem> => {
-    if (shouldUseReplicateForGoogleModels()) {
+    if (shouldUseReplicateForGoogleModels() && !readAiRouting().imagesViaOpenRouter) {
         const combinedReferences: { base64: string; mimeType: string }[] = [];
         if (sketchImage) {
             combinedReferences.push(sketchImage);
@@ -4025,7 +4025,7 @@ export const generateMoviePoster = async (bible: StoryBible, references: Referen
             return promptResponse.text.trim();
         })());
 
-    if (shouldUseReplicateForGoogleModels()) {
+    if (shouldUseReplicateForGoogleModels() && !readAiRouting().imagesViaOpenRouter) {
         const posterImage = await generateImageWithGemini3ProReplicate(imagePrompt, "3:4", "2K");
         return {
             ...posterImage,

@@ -454,9 +454,8 @@ const ApiKeyModal: React.FC<ApiKeyModalProps> = ({
                         <select value={googleProvider} onChange={(e) => setGoogleProvider(e.target.value as GoogleModelProvider)}>
                             <option value="gemini">Gemini (AI Studio)</option>
                             <option value="replicate">Replicate</option>
-                            <option value="openrouter">OpenRouter (gambar)</option>
                         </select>
-                        <span className="pk-hint" style={{ textTransform: 'none', letterSpacing: 0, fontWeight: 500 }}>Replicate mendukung Gemini 3 Pro dan Veo. OpenRouter mendukung gambar Nano Banana 2 dan Gemini 3 Pro Image melalui kunci pada bagian Router AI. Imagen, video, dan audio Google tetap membutuhkan layanan yang sesuai.</span>
+                        <span className="pk-hint" style={{ textTransform: 'none', letterSpacing: 0, fontWeight: 500 }}>Replicate makes Gemini 3 Pro + Veo work without a Gemini key.</span>
                     </label>
                 )}
             </div>
