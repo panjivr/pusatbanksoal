@@ -75,3 +75,9 @@ test('parallel calls to the same tool preserve separate response IDs',()=>{
  assert.deepEqual(messages.filter(m=>m.role==='tool').map(m=>m.tool_call_id),['first','second']);
  assert.throws(()=>gatewayMessages({model:'text',contents:[{functionResponse:{name:'unknown',response:{}}}]}),/pasangan panggilan/);
 });
+
+
+test('Google invalid API keys reported as HTTP 400 can fail over without retrying other invalid arguments', () => {
+  assert.equal(canFailoverAi(new AiRouteError('Gemini: API key belum valid. (HTTP 400)', 400)), true);
+  assert.equal(canFailoverAi(new AiRouteError('Gemini: Model menolak format permintaan. (HTTP 400)', 400)), false);
+});

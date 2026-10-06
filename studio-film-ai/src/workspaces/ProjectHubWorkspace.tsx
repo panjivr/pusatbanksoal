@@ -1,3 +1,4 @@
+import { availableGenerationModels } from '../services/generationSupport';
 
 import React, { useState, useRef, useEffect, useMemo, useCallback } from 'react';
 import { MediaItem, StoryBible, ProjectCollaboration, ProjectSyncConfig, ProjectCollaboratorRole, ProjectCollaborativeLock, ReferenceItem, ShotPrompt, ShotContinuityReview, ReviewFeedback, ScriptLength, CinematographyCritique, ScriptQualityReport, ScriptDoctorImprovement, RecentProject, CharacterOutfit, OutfitGarmentPiece, GarmentCategory, ProjectChatAttachment, ProjectMeetingProvider, ProjectStorageProvider, DirectorTreatment, DirectorSceneSelectionScope, DirectorStoryboardSnapshot, ExtraAsset, AngleMetadata, AnglePresetSelection, SceneWallState, SetDesignAsset } from '../types';
@@ -6541,9 +6542,6 @@ const ProjectHubWorkspace: React.FC<ProjectHubWorkspaceProps> = ({
     const handleError = (e: unknown) => {
         const msg = e instanceof Error ? e.message : String(e);
         setError(msg);
-        if (msg.includes('403') || msg.includes('PERMISSION_DENIED') || msg.includes('permission')) {
-            setApiKeyReady(false);
-        }
         setIsLoading(false);
     };
 
@@ -6645,10 +6643,12 @@ const ProjectHubWorkspace: React.FC<ProjectHubWorkspaceProps> = ({
         aspectRatio: AspectRatioOption,
         baseImageUrl?: string,
         modelOverride?: ReferenceImageModel,
-        opts?: { keepBaseAsIdentity?: boolean },
+        opts?: { keepBaseAsIdentity?: boolean; referencePayloads?: { base64: string; mimeType: string }[] },
     ): Promise<MediaItem> => {
         const modelAspectRatio = resolveModelAspectRatio(aspectRatio);
-        const selectedReferenceModel = modelOverride || referenceImageModel;
+        const requestedModel = modelOverride || referenceImageModel;
+        const available = requestedModel === 'auto' ? availableGenerationModels(REFERENCE_MODEL_OPTIONS.map(o => o.id), 'image') : [];
+        const selectedReferenceModel = requestedModel === 'auto' ? pickImageModel({ prompt, hasReferences: Boolean(baseImageUrl) }, available, available[0]).model : requestedModel;
         const selectedIsMultiAngleModel = isReferenceModelMultiAngleMode(selectedReferenceModel);
         // Every model reads prompts differently (Midjourney params vs. Gemini prose vs. Seedream directives…).
         prompt = adaptPromptForModel(selectedReferenceModel, prompt, { kind: 'image', aspectRatio, hasReferences: Boolean(baseImageUrl) });
@@ -6670,7 +6670,7 @@ const ProjectHubWorkspace: React.FC<ProjectHubWorkspaceProps> = ({
         } else if (selectedReferenceModel === 'imagen') {
             image = await generateImageWithImagen(prompt, modelAspectRatio);
         } else if (selectedReferenceModel === 'gemini-pro') {
-            const refs = await buildMoodboardReferences(baseImageUrl);
+            const refs = opts?.referencePayloads ?? await buildMoodboardReferences(baseImageUrl);
             image = refs.length > 0
                 ? await generateImageWithReferences(
                     prompt,
@@ -6680,12 +6680,28 @@ const ProjectHubWorkspace: React.FC<ProjectHubWorkspaceProps> = ({
                     { aspectRatio: modelAspectRatio, imageSize }
                 )
                 : await generateImageWithGemini3Pro(prompt, modelAspectRatio, imageSize);
+        } else if (selectedReferenceModel === 'gpt-image-2-fal-t2i') {
+            image = await generateImageWithFalGptImage2(prompt, { aspectRatio: modelAspectRatio, quality: 'high', outputFormat: 'png' });
+        } else if (selectedReferenceModel === 'seedream-v5-pro-fal' || selectedReferenceModel === 'seedream-v5-pro-edit-fal') {
+            const refs = opts?.referencePayloads ?? await buildMoodboardReferences(baseImageUrl);
+            if (refs.length) {
+                const images = await editImageWithFalSeedreamV5Pro(prompt, refs.slice(0, 10), { aspectRatio: modelAspectRatio, numOutputs: 1, outputFormat: 'png' });
+                if (!images.length) throw new Error('Penyedia belum mengembalikan gambar Seedream.');
+                image = images[0];
+            } else if (selectedReferenceModel === 'seedream-v5-pro-edit-fal') {
+                throw new Error('Seedream Edit membutuhkan gambar referensi. Unggah gambar atau pilih Seedream Pro untuk membuat gambar baru.');
+            } else image = await generateImageWithFalSeedreamV5Pro(prompt, { aspectRatio: modelAspectRatio, resolution: imageSize === '1K' ? '1K' : '2K' });
+        } else if (selectedReferenceModel === 'krea-2-large-fal' || selectedReferenceModel === 'krea-2-turbo-fal') {
+            const refs = opts?.referencePayloads ?? await buildMoodboardReferences(baseImageUrl);
+            image = await generateImageWithFalKrea2(prompt, { variant: selectedReferenceModel === 'krea-2-large-fal' ? 'large' : 'turbo', aspectRatio: modelAspectRatio === '3:4' ? '4:5' : modelAspectRatio, styleReferences: selectedReferenceModel === 'krea-2-large-fal' ? refs : undefined });
+        } else if (selectedReferenceModel === 'ideogram-v4-fal') {
+            image = await generateImageWithFalIdeogramV4(prompt, { aspectRatio: modelAspectRatio });
         } else if (selectedReferenceModel === 'grok-image') {
             image = await generateImageWithGrok(prompt);
         } else if (selectedReferenceModel === 'grok-image-fal') {
             image = await generateImageWithFalGrokImagine(prompt, { aspectRatio: modelAspectRatio });
         } else if (selectedReferenceModel === 'wan-2.7-image-pro') {
-            const refs = await buildMoodboardReferences(baseImageUrl);
+            const refs = opts?.referencePayloads ?? await buildMoodboardReferences(baseImageUrl);
             image = await generateImageWithWan27ImagePro(
                 prompt,
                 modelAspectRatio,
@@ -6693,7 +6709,7 @@ const ProjectHubWorkspace: React.FC<ProjectHubWorkspaceProps> = ({
                 refs.length > 0 ? refs : undefined
             );
         } else if (selectedReferenceModel === 'wan-2.7-pro-fal') {
-            const refs = await buildMoodboardReferences(baseImageUrl);
+            const refs = opts?.referencePayloads ?? await buildMoodboardReferences(baseImageUrl);
             if (refs.length > 0) {
                 const edited = await editImageWithFalWanV27Pro(prompt, refs.slice(0, 4), {
                     aspectRatio: modelAspectRatio,
@@ -6707,7 +6723,7 @@ const ProjectHubWorkspace: React.FC<ProjectHubWorkspaceProps> = ({
                 image = await generateImageWithFalWanV27Pro(prompt, { aspectRatio: modelAspectRatio });
             }
         } else if (selectedReferenceModel === 'nano-banana-2-fal') {
-            const refs = await buildMoodboardReferences(baseImageUrl);
+            const refs = opts?.referencePayloads ?? await buildMoodboardReferences(baseImageUrl);
             if (refs.length > 0) {
                 const edited = await editImageWithFalNanoBanana2(prompt, refs, {
                     aspectRatio: modelAspectRatio,
@@ -6725,7 +6741,7 @@ const ProjectHubWorkspace: React.FC<ProjectHubWorkspaceProps> = ({
                 });
             }
         } else if (selectedReferenceModel === 'firered') {
-            const refs = await buildMoodboardReferences(baseImageUrl);
+            const refs = opts?.referencePayloads ?? await buildMoodboardReferences(baseImageUrl);
             if (refs.length === 0) {
                 throw new Error('FireRed Edit requires a base image or at least one moodboard reference.');
             }
@@ -6733,7 +6749,7 @@ const ProjectHubWorkspace: React.FC<ProjectHubWorkspaceProps> = ({
         } else if (selectedReferenceModel === 'z-image') {
             image = await generateImageWithZImage(prompt, modelAspectRatio, loraOptions);
         } else if (selectedReferenceModel === 'nano') {
-            const refs = await buildMoodboardReferences(baseImageUrl);
+            const refs = opts?.referencePayloads ?? await buildMoodboardReferences(baseImageUrl);
             image = refs.length > 0
                 ? await generateImageWithReferences(
                     prompt,
@@ -6772,7 +6788,7 @@ const ProjectHubWorkspace: React.FC<ProjectHubWorkspaceProps> = ({
             const baseImage = baseImageUrl ? await getBase64FromUrl(baseImageUrl) : await getMoodboardFallback();
             image = await generateImageWithFlux2Turbo(prompt, modelAspectRatio, baseImage, loraOptions);
         } else if (selectedReferenceModel === 'gpt-image-2-fal') {
-            const refs = await buildMoodboardReferences(baseImageUrl);
+            const refs = opts?.referencePayloads ?? await buildMoodboardReferences(baseImageUrl);
             if (refs.length === 0) {
                 throw new Error('GPT Image 2 needs a base image or at least one moodboard reference for concept generation.');
             }
@@ -6791,12 +6807,12 @@ const ProjectHubWorkspace: React.FC<ProjectHubWorkspaceProps> = ({
         } else if (selectedReferenceModel === 'seedream-v5-lite-fal') {
             image = await generateImageWithFalSeedreamV5Lite(prompt, { aspectRatio: modelAspectRatio });
         } else if (selectedReferenceModel === 'seedream') {
-            const refs = await buildMoodboardReferences(baseImageUrl);
+            const refs = opts?.referencePayloads ?? await buildMoodboardReferences(baseImageUrl);
             image = refs.length > 0
                 ? await generateImageWithSeedreamReferences(prompt, refs, modelAspectRatio, seedreamSize)
                 : await generateImageWithSeedream(prompt, modelAspectRatio, seedreamSize);
         } else {
-            image = await generateImageWithNano(prompt, { aspectRatio: modelAspectRatio, imageSize });
+            throw new Error(`Model gambar ${selectedReferenceModel} belum terhubung. Pilih model lain di Pengaturan konsep.`);
         }
         return await applyCinemascopeCrop(image, aspectRatio);
     };
@@ -6870,15 +6886,21 @@ const ProjectHubWorkspace: React.FC<ProjectHubWorkspaceProps> = ({
         const modelAspectRatio = resolveModelAspectRatio(aspectRatio);
         const baseImageUrl = asset.imageUrl || undefined;
 
-        if (marketingImageModel === 'nano-banana-pro') {
+        const available = marketingImageModel === 'auto' ? availableGenerationModels(REFERENCE_MODEL_OPTIONS.map(o => o.id), 'image') : [];
+        const selectedMarketingModel = marketingImageModel === 'auto' ? pickImageModel({ prompt: enrichedPrompt, hasReferences: refs.length > 0 }, available, available[0]).model : marketingImageModel;
+        if (['gpt-image-2-fal-t2i', 'seedream-v5-pro-fal', 'seedream-v5-pro-edit-fal', 'krea-2-large-fal', 'krea-2-turbo-fal', 'ideogram-v4-fal'].includes(selectedMarketingModel)) {
+            return generateReferenceImage(enrichedPrompt, aspectRatio, baseImageUrl, selectedMarketingModel as ReferenceImageModel, { referencePayloads: refs });
+        }
+
+        if (selectedMarketingModel === 'nano-banana-pro') {
             return generateImageWithNanoBananaPro(enrichedPrompt, modelAspectRatio, '1K', refs);
         }
 
-        if (marketingImageModel === 'imagen') {
+        if (selectedMarketingModel === 'imagen') {
             return generateImageWithImagen(enrichedPrompt, modelAspectRatio);
         }
 
-        if (marketingImageModel === 'gemini-pro') {
+        if (selectedMarketingModel === 'gemini-pro') {
             if (isReplicateGoogleProvider()) {
                 return generateImageWithGemini3ProReplicateOnly(enrichedPrompt, modelAspectRatio, imageSize, refs);
             }
@@ -6894,15 +6916,15 @@ const ProjectHubWorkspace: React.FC<ProjectHubWorkspaceProps> = ({
             return generateImageWithGemini3Pro(enrichedPrompt, modelAspectRatio, imageSize);
         }
 
-        if (marketingImageModel === 'grok-image') {
+        if (selectedMarketingModel === 'grok-image') {
             return generateImageWithGrok(enrichedPrompt);
         }
 
-        if (marketingImageModel === 'grok-image-fal') {
+        if (selectedMarketingModel === 'grok-image-fal') {
             return generateImageWithFalGrokImagine(enrichedPrompt, { aspectRatio: modelAspectRatio });
         }
 
-        if (marketingImageModel === 'wan-2.7-image-pro') {
+        if (selectedMarketingModel === 'wan-2.7-image-pro') {
             return generateImageWithWan27ImagePro(
                 enrichedPrompt,
                 modelAspectRatio,
@@ -6911,7 +6933,7 @@ const ProjectHubWorkspace: React.FC<ProjectHubWorkspaceProps> = ({
             );
         }
 
-        if (marketingImageModel === 'wan-2.7-pro-fal') {
+        if (selectedMarketingModel === 'wan-2.7-pro-fal') {
             if (refs.length > 0) {
                 const edited = await editImageWithFalWanV27Pro(enrichedPrompt, refs.slice(0, 4), {
                     aspectRatio: modelAspectRatio,
@@ -6925,7 +6947,7 @@ const ProjectHubWorkspace: React.FC<ProjectHubWorkspaceProps> = ({
             return generateImageWithFalWanV27Pro(enrichedPrompt, { aspectRatio: modelAspectRatio });
         }
 
-        if (marketingImageModel === 'nano-banana-2-fal') {
+        if (selectedMarketingModel === 'nano-banana-2-fal') {
             if (refs.length > 0) {
                 const edited = await editImageWithFalNanoBanana2(enrichedPrompt, refs, {
                     aspectRatio: modelAspectRatio,
@@ -6943,7 +6965,7 @@ const ProjectHubWorkspace: React.FC<ProjectHubWorkspaceProps> = ({
             });
         }
 
-        if (marketingImageModel === 'firered') {
+        if (selectedMarketingModel === 'firered') {
             const fireRedInputs = baseImageUrl
                 ? [await getBase64FromUrl(baseImageUrl), ...refs]
                 : refs;
@@ -6953,11 +6975,11 @@ const ProjectHubWorkspace: React.FC<ProjectHubWorkspaceProps> = ({
             return editImageWithFireRed(enrichedPrompt, fireRedInputs, { aspectRatio: modelAspectRatio });
         }
 
-        if (marketingImageModel === 'z-image') {
+        if (selectedMarketingModel === 'z-image') {
             return generateImageWithZImage(enrichedPrompt, modelAspectRatio);
         }
 
-        if (marketingImageModel === 'nano') {
+        if (selectedMarketingModel === 'nano') {
             if (refs.length > 0) {
                 return generateImageWithReferences(
                     enrichedPrompt,
@@ -6970,16 +6992,16 @@ const ProjectHubWorkspace: React.FC<ProjectHubWorkspaceProps> = ({
             return generateImageWithNano(enrichedPrompt, { aspectRatio: modelAspectRatio, imageSize });
         }
 
-        if (marketingImageModel === 'qwen-2512') {
+        if (selectedMarketingModel === 'qwen-2512') {
             const baseImage = baseImageUrl ? await getBase64FromUrl(baseImageUrl) : undefined;
             return generateImageWithQwenImage(enrichedPrompt, modelAspectRatio, baseImage);
         }
 
-        if (marketingImageModel === 'qwen-max-fal') {
+        if (selectedMarketingModel === 'qwen-max-fal') {
             return generateImageWithFalQwenImageMax(enrichedPrompt, { aspectRatio: modelAspectRatio });
         }
 
-        if (marketingImageModel === 'qwen-multiangle') {
+        if (selectedMarketingModel === 'qwen-multiangle') {
             if (!baseImageUrl) {
                 throw new Error('Qwen Multi-Angle requires a base image. Upload an image first.');
             }
@@ -6988,7 +7010,7 @@ const ProjectHubWorkspace: React.FC<ProjectHubWorkspaceProps> = ({
             return images[0];
         }
 
-        if (marketingImageModel === 'qwen-multiangle-fal') {
+        if (selectedMarketingModel === 'qwen-multiangle-fal') {
             if (!baseImageUrl) {
                 throw new Error('Qwen Image Max Edit (FAL) requires a base image. Upload an image first.');
             }
@@ -6997,7 +7019,7 @@ const ProjectHubWorkspace: React.FC<ProjectHubWorkspaceProps> = ({
             return images[0];
         }
 
-        if (marketingImageModel === 'qwen') {
+        if (selectedMarketingModel === 'qwen') {
             if (!baseImageUrl) {
                 throw new Error('Qwen 2511 requires a base image. Upload an image first.');
             }
@@ -7005,33 +7027,33 @@ const ProjectHubWorkspace: React.FC<ProjectHubWorkspaceProps> = ({
             return editImageWithQwen(enrichedPrompt, baseImage, { aspectRatio: modelAspectRatio });
         }
 
-        if (marketingImageModel === 'z-turbo') {
+        if (selectedMarketingModel === 'z-turbo') {
             return generateImageWithZTurbo(enrichedPrompt, modelAspectRatio);
         }
 
-        if (marketingImageModel === 'flux') {
+        if (selectedMarketingModel === 'flux') {
             return generateImageWithFlux(enrichedPrompt, modelAspectRatio);
         }
 
-        if (marketingImageModel === 'flux-klein') {
+        if (selectedMarketingModel === 'flux-klein') {
             const baseImage = baseImageUrl ? await getBase64FromUrl(baseImageUrl) : undefined;
             return generateImageWithFluxKlein(enrichedPrompt, modelAspectRatio, baseImage);
         }
 
-        if (marketingImageModel === 'flux-2-turbo') {
+        if (selectedMarketingModel === 'flux-2-turbo') {
             const baseImage = baseImageUrl ? await getBase64FromUrl(baseImageUrl) : undefined;
             return generateImageWithFlux2Turbo(enrichedPrompt, modelAspectRatio, baseImage);
         }
 
-        if (marketingImageModel === 'gpt-image-1.5') {
+        if (selectedMarketingModel === 'gpt-image-1.5') {
             return generateImageWithGptImage15(enrichedPrompt, modelAspectRatio);
         }
 
-        if (marketingImageModel === 'seedream-v5-lite-fal') {
+        if (selectedMarketingModel === 'seedream-v5-lite-fal') {
             return generateImageWithFalSeedreamV5Lite(enrichedPrompt, { aspectRatio: modelAspectRatio });
         }
 
-        if (marketingImageModel === 'seedream') {
+        if (selectedMarketingModel === 'seedream') {
             if (refs.length > 0) {
                 return generateImageWithSeedreamReferences(enrichedPrompt, refs, modelAspectRatio, seedreamSize);
             }
@@ -8449,16 +8471,18 @@ const ProjectHubWorkspace: React.FC<ProjectHubWorkspaceProps> = ({
             if (ref.imageUrl) continue;
             try {
                 let currentRef = ref;
-                if (!currentRef.prompt) {
-                    const { prompt, tags } = await generateReferenceDetails(
-                        ref.type,
-                        ref.name,
-                        ref.description,
-                        storyBible.script,
-                        `${stylePrompt}\n${promptStyleGuide(referenceImageModel, 'image')}`
-                    );
-                    currentRef = { ...currentRef, prompt: stylePrompt ? `${stylePrompt}. ${prompt}` : prompt, tags };
-                    setReferences(prev => prev.map(r => r.id === ref.id ? currentRef : r));
+                if (!currentRef.prompt && apiKeyReady) {
+                    try {
+                        const { prompt, tags } = await generateReferenceDetails(
+                            ref.type,
+                            ref.name,
+                            ref.description,
+                            storyBible.script,
+                            `${stylePrompt}\n${promptStyleGuide(referenceImageModel, 'image')}`
+                        );
+                        currentRef = { ...currentRef, prompt: stylePrompt ? `${stylePrompt}. ${prompt}` : prompt, tags };
+                        setReferences(prev => prev.map(r => r.id === ref.id ? currentRef : r));
+                    } catch (error) { console.warn('Prompt tidak tersedia; memakai deskripsi konsep yang sudah disimpan.'); }
                 }
                 const needsBaseImage = isReferenceModelBaseImageOnly(referenceImageModel) && !currentRef.imageUrl;
                 const effectiveModel = needsBaseImage && options?.allowModelFallback
@@ -8501,10 +8525,15 @@ const ProjectHubWorkspace: React.FC<ProjectHubWorkspaceProps> = ({
             }
         }
         setIsLoading(false);
-        return { generatedCount, fallbackCount, error: generatedCount === 0 ? blockedError || 'No concept images were generated.' : undefined };
+        return { generatedCount, fallbackCount, error: blockedError || (generatedCount === 0 ? 'No concept images were generated.' : undefined) };
     };
 
-    const handleGenerateAllConcepts = async () => generateAllConceptsInternal();
+    const handleGenerateAllConcepts = async () => {
+        try {
+            const result = await generateAllConceptsInternal();
+            if (result.error) setError(result.error);
+        } catch (error) { handleError(error); }
+    };
 
     const runGenerateProjectConcepts = useCallback(async (payload?: { limit?: number }) => {
         const scriptText = (storyBible.script || '').trim();
@@ -10647,7 +10676,6 @@ const ProjectHubWorkspace: React.FC<ProjectHubWorkspaceProps> = ({
                 ? `visual triggers: ${shot.visualTriggers.join(', ')}`
                 : '';
             const basePrompt = shot.continuityRefinedPrompt?.trim() || shot.prompt || shot.description || '';
-            const modelToUse = referenceImageModel === 'gemini-pro' ? 'gemini-3-pro-image-preview' : 'gemini-3.1-flash-image-preview';
             const referenceImages = [...contextImages, ...Object.values(refsData)];
             const compositionData = poseData || sketchData;
             const supplementalReferences = poseData && sketchData
@@ -10679,8 +10707,9 @@ const ProjectHubWorkspace: React.FC<ProjectHubWorkspaceProps> = ({
             const originalStoryboardPrompt = buildStoryboardPrompt(shot.prompt || shot.description || '');
 
             const renderStoryboardAttempt = async (rawPrompt: string) => {
+                const available = referenceImageModel === 'auto' ? availableGenerationModels(REFERENCE_MODEL_OPTIONS.map(o => o.id), 'image') : [];
                 const activeReferenceModel = referenceImageModel === 'auto'
-                    ? pickImageModel({ prompt: rawPrompt, hasReferences: gptInputs.length > 0 }, REFERENCE_MODEL_OPTIONS.map((option) => option.id).filter((id) => id !== 'auto'), 'seedream-v5-pro-fal').model
+                    ? pickImageModel({ prompt: rawPrompt, hasReferences: gptInputs.length > 0 }, available, available[0]).model
                     : referenceImageModel;
                 if (referenceImageModel === 'auto') console.info(`Auto model: ${activeReferenceModel}`);
                 const fullPrompt = adaptPromptForModel(activeReferenceModel, rawPrompt, { kind: 'image', aspectRatio: effectiveAspectRatio, hasReferences: supplementalReferences.length > 0 });
@@ -10711,7 +10740,17 @@ const ProjectHubWorkspace: React.FC<ProjectHubWorkspaceProps> = ({
                     : fullPrompt;
 
                 let imageMedia: MediaItem;
-                if (activeReferenceModel === 'midjourney') {
+                if (activeReferenceModel === 'imagen') {
+                    imageMedia = await generateImageWithImagen(fullPrompt, modelAspectRatio);
+                } else if (activeReferenceModel === 'nano' || activeReferenceModel === 'gemini-pro') {
+                    imageMedia = await generateImageWithReferences(fullPrompt, supplementalReferences, compositionData, activeReferenceModel === 'gemini-pro' ? 'gemini-3-pro-image-preview' : 'gemini-3.1-flash-image-preview', { aspectRatio: modelAspectRatio, imageSize });
+                } else if (activeReferenceModel === 'gpt-image-2-fal-t2i') {
+                    imageMedia = await generateImageWithFalGptImage2(fullPrompt, { aspectRatio: modelAspectRatio, quality: 'high', outputFormat: 'png' });
+                } else if (activeReferenceModel === 'flux') {
+                    imageMedia = await generateImageWithFlux(fullPrompt, modelAspectRatio, loraOptions);
+                } else if (activeReferenceModel === 'z-turbo') {
+                    imageMedia = await generateImageWithZTurbo(fullPrompt, modelAspectRatio, loraOptions);
+                } else if (activeReferenceModel === 'midjourney') {
                     // Characters become the omni reference, environments/products image prompts, the moodboard a style ref.
                     const mjRefs: MidjourneyReference[] = [];
                     activeRefs.forEach((ref) => {
@@ -10860,13 +10899,7 @@ const ProjectHubWorkspace: React.FC<ProjectHubWorkspaceProps> = ({
                         );
                     }
                 } else {
-                    imageMedia = await generateImageWithReferences(
-                        fullPrompt,
-                        supplementalReferences,
-                        compositionData,
-                        modelToUse,
-                        { aspectRatio: modelAspectRatio, imageSize: imageSize }
-                    );
+                    throw new Error(`Model gambar ${activeReferenceModel} belum terhubung untuk papan adegan. Pilih model lain.`);
                 }
 
                 return {
@@ -11028,6 +11061,7 @@ const ProjectHubWorkspace: React.FC<ProjectHubWorkspaceProps> = ({
                     pushUiStatus(`Shot ${formatShotLabel(shot)} ran ${attemptResults.length} continuity refinement passes.`);
                 }
             }
+            return true;
         } catch (e) {
             console.error(e);
             setShotPrompts(prev => prev.map(s => s.shot === shotNumber ? { ...s, isGenerating: false } : s));
@@ -11037,8 +11071,9 @@ const ProjectHubWorkspace: React.FC<ProjectHubWorkspaceProps> = ({
             } else if (msg.includes('Qwen 2511') || msg.includes('Qwen Multi-Angle') || msg.includes('Qwen Image Max') || msg.includes('FireRed')) {
                 setError(msg);
             } else {
-                setError(`Failed to generate shot: ${msg}. Try removing complex references or sketching simpler composition.`);
+                setError(`Gambar adegan belum berhasil dibuat: ${msg}`);
             }
+            return false;
         }
     };
 
@@ -11109,8 +11144,7 @@ const ProjectHubWorkspace: React.FC<ProjectHubWorkspaceProps> = ({
                 const shot = pending.shift();
                 if (!shot) return;
                 try {
-                    await handleGenerateShotImage(shot.shot);
-                    generatedCount += 1;
+                    if (await handleGenerateShotImage(shot.shot)) generatedCount += 1;
                 } catch (e) {
                     console.error(`Failed to generate shot ${shot.shot}`, e);
                 }
@@ -11714,6 +11748,7 @@ const ProjectHubWorkspace: React.FC<ProjectHubWorkspaceProps> = ({
                 : [];
 
             const renderVideoAttempt = async (candidateMotionPrompt: string) => {
+                const available = videoModel === 'auto' ? availableGenerationModels(FILMING_VIDEO_MODELS, 'video', id => higgsfieldHostsVideoModel(id)) : [];
                 const activeVideoModel = videoModel === 'auto'
                     ? pickVideoModel({
                         prompt: candidateMotionPrompt,
@@ -11724,7 +11759,7 @@ const ProjectHubWorkspace: React.FC<ProjectHubWorkspaceProps> = ({
                         hasStartFrame: Boolean(referencePayload),
                         referenceCount: seedanceOmniImagePayloads.length,
                         durationSeconds: normalizedDurationSeconds,
-                    }, FILMING_VIDEO_MODELS.filter((id) => id !== 'auto'), 'seedance-2.5-i2v-fal').model
+                    }, available, available[0]).model
                     : videoModel;
                 if (videoModel === 'auto') console.info(`Auto video model for shot ${shot.shot}: ${activeVideoModel}`);
                 if (activeVideoModel === 'grok-imagine-video') {
@@ -12178,6 +12213,7 @@ const ProjectHubWorkspace: React.FC<ProjectHubWorkspaceProps> = ({
                     pushUiStatus(`Shot ${formatShotLabel(shot)} ran ${attemptResults.length} filmed continuity passes.`);
                 }
             }
+            return true;
         } catch (e) {
             console.error(e);
             setShotPrompts(prev => prev.map(s => s.shot === shotNumber ? { ...s, isFilming: false } : s));
@@ -12185,8 +12221,9 @@ const ProjectHubWorkspace: React.FC<ProjectHubWorkspaceProps> = ({
             if (msg.includes('403') || msg.includes('PERMISSION_DENIED')) {
                 handleError(e);
             } else {
-                setError(`Failed to film Shot ${shotNumber}: ${msg}`);
+                setError(`Video adegan ${shotNumber} belum berhasil dibuat: ${msg}`);
             }
+            return false;
         }
     };
 
@@ -12420,8 +12457,8 @@ const ProjectHubWorkspace: React.FC<ProjectHubWorkspaceProps> = ({
         let generatedCount = 0;
         for (const shot of readyShots) {
             try {
-                await handleGenerateShotVideo(shot.shot);
-                generatedCount += 1;
+                if (await handleGenerateShotVideo(shot.shot)) generatedCount += 1;
+                else break;
             } catch (e) {
                 console.error("Batch filming interrupted", e);
                 break;
@@ -12455,8 +12492,8 @@ const ProjectHubWorkspace: React.FC<ProjectHubWorkspaceProps> = ({
         let generatedCount = 0;
         for (const shot of readyShots) {
             try {
-                await handleGenerateShotVideo(shot.shot);
-                generatedCount += 1;
+                if (await handleGenerateShotVideo(shot.shot)) generatedCount += 1;
+                else break;
             } catch (error) {
                 console.error('Continuity re-film queue interrupted', error);
                 break;

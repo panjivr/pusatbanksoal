@@ -3724,8 +3724,7 @@ function App() {
                 alert("Replicate API Error: Please check your Replicate API Token in settings.");
                 setShowSettings(true);
             } else {
-                setApiKeyReady(false);
-                alert("Google API Permission Denied. The key may be invalid, expired, or lack access to the selected model.");
+                alert(errorMessage);
             }
         } else {
             alert(`AI Error: ${errorMessage}`);

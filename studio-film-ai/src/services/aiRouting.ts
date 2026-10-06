@@ -49,7 +49,7 @@ export class AiRouteError extends Error {
   constructor(message: string, status?: number, terminal = false) { super(message); this.status = status; this.terminal = terminal; }
 }
 export const canFailoverAi = (error: unknown) => {
-  if (error instanceof AiRouteError) return !error.terminal && (error.status === undefined || [401, 403, 404, 408, 409, 422, 429].includes(error.status) || error.status >= 500);
+  if (error instanceof AiRouteError) return !error.terminal && (error.status === undefined || (error.status === 400 && error.message.includes('API key belum valid')) || [401, 403, 404, 408, 409, 422, 429].includes(error.status) || error.status >= 500);
   if (error instanceof Error && error.name === 'AbortError') return false;
   const s = error instanceof Error ? error.message : String(error);
   if (/safety|blocked|prohibited|content.?policy|moderation/i.test(s)) return false;
@@ -161,14 +161,14 @@ export const gatewayGenerate = async (route: AiRoute, req: GeminiRequest, timeou
   } finally { clearTimeout(timer); callerSignal?.removeEventListener('abort', abort); }
 };
 export type RoutingAttempt = { id: string; run: () => Promise<any> };
-export const executeAiRoutes = async (attempts: RoutingAttempt[], fallback: boolean, onAttempt?: (id: string, status: 'trying' | 'success' | 'fallback' | 'failed') => void) => {
+export const executeAiRoutes = async (attempts: RoutingAttempt[], fallback: boolean, onAttempt?: (id: string, status: 'trying' | 'success' | 'fallback' | 'failed', error?: unknown) => void) => {
   let last: unknown;
   for (const [index, attempt] of attempts.entries()) {
     onAttempt?.(attempt.id, 'trying');
     try { const result = await attempt.run(); onAttempt?.(attempt.id, 'success'); return result; }
     catch (error) {
       last = error;
-      if (!fallback || !canFailoverAi(error) || index === attempts.length - 1) { onAttempt?.(attempt.id, 'failed'); throw error; }
+      if (!fallback || !canFailoverAi(error) || index === attempts.length - 1) { onAttempt?.(attempt.id, 'failed', error); throw error; }
       onAttempt?.(attempt.id, 'fallback');
     }
   }

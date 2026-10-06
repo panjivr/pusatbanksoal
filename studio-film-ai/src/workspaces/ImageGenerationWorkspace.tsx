@@ -1,3 +1,4 @@
+import { availableGenerationModels } from '../services/generationSupport';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { CostRate, MediaItem, RecentProject, ReferenceItem, ShotPrompt, DirectorTreatment, DirectorShot } from '../types';
 import type { UIMode } from '../config/uiModes';
@@ -2304,8 +2305,9 @@ const ImageGenerationWorkspace: React.FC<ImageGenerationWorkspaceProps> = ({
           ? effectiveAspectRatio
           : '16:9'
       ) as '21:9' | '16:9' | '9:16' | '1:1' | '4:3' | '3:4';
+      const available = modelId === 'auto' ? availableGenerationModels(MODEL_OPTIONS.map(o => o.id), 'image') : [];
       const autoPick = modelId === 'auto'
-        ? pickImageModel({ prompt: finalPrompt, hasReferences: referenceImages.length > 0 }, MODEL_OPTIONS.map((option) => option.id).filter((id) => id !== 'auto' && id !== 'comfyui'), 'seedream-v5-pro-fal')
+        ? pickImageModel({ prompt: finalPrompt, hasReferences: referenceImages.length > 0 }, available, available[0])
         : null;
       const resolvedModelId: ImageModelId = autoPick ? autoPick.model : modelId;
       if (autoPick) setStatus(`Auto picked ${MODEL_OPTIONS.find((option) => option.id === resolvedModelId)?.label || resolvedModelId}: ${autoPick.reason}`);

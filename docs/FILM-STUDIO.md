@@ -22,6 +22,14 @@ Untuk model video yang sama-sama tersedia di fal.ai dan Higgsfield, penyedia cad
 
 Konfigurasi dan API key disimpan di browser ini, terpisah dari cadangan proyek. Indikator pada layar menunjukkan layanan yang sedang dicoba, perpindahan, dan keberhasilan. Permintaan dapat dikirim ke layanan cadangan yang diaktifkan; biaya dan ketentuan mengikuti layanan tersebut.
 
+## Pembuatan karakter dan media
+
+Mode Otomatis tetap memakai ranking kreatif asal, dengan daftar kandidat dibatasi pada penyedia yang kuncinya tersedia. Karakter, konsep, dan papan adegan mengirim permintaan ke model yang dipilih, termasuk GPT Image 2, Seedream Pro/Edit, Krea, Ideogram, Flux, dan Z-Turbo. Kunci yang tersimpan belum membuktikan akses model, saldo, kuota, atau izin CORS; kegagalan satu model tidak menonaktifkan semua fitur AI.
+
+Permintaan media Google mendapat waktu proses minimal 180 detik, terpisah dari batas teks router. Prompt media dan referensi diteruskan tanpa tambahan instruksi bahasa untuk teks. Jika model gambar pratinjau diganti dengan Gemini 2.5, opsi ukuran yang tidak didukung dibuang tanpa mengubah referensi atau rasio. Jawaban kosong tidak disimpan sebagai gambar; permintaan dengan referensi tidak diulang diam-diam tanpa referensi. Proses batch menghitung hasil berhasil, bukan jumlah klik atau permintaan gagal. Unduh hasil Veo mempertahankan parameter URL dan hanya mengirim kunci ke host API Google.
+
+Jika izin ditolak, periksa API key, proyek, akses model, dan penagihan pada penyedia. Jika kuota habis atau jaringan/CORS menolak permintaan, layar menampilkan alasan yang dapat ditindaklanjuti. API router teks dan opsi Analisis gambar bukan API pembuatan gambar.
+
 ## Pengembangan dan deployment
 
 Gunakan Node 24, npm 10+, dan Python 3. Instalasi web melewati hook Electron/FFmpeg yang hanya diperlukan desktop; pemeriksaan integritas npm tetap berjalan.
@@ -45,6 +53,7 @@ Gunakan Playwright dan Chromium yang tersedia; atur `NODE_PATH` jika paket berad
 ```sh
 node scripts/check-film-studio.cjs
 node scripts/check-film-routing.cjs
+node scripts/check-film-generation.cjs
 PBS_SITE_BASE_URL=http://127.0.0.1:8006/ node scripts/check-responsive.cjs
 PBS_SITE_BASE_URL=http://127.0.0.1:8006/ node scripts/check-file-tools.cjs
 PBS_SITE_BASE_URL=http://127.0.0.1:8006/ node scripts/check-markdown-large.cjs
@@ -53,4 +62,4 @@ python3 scripts/check-catalog.py
 python3 scripts/check-site.py
 ```
 
-Tes routing memakai respons API simulasi, tanpa kunci asli atau biaya layanan. Tes editor mencakup impor media, simpan/muat ulang, pemulihan cadangan, ekspor WebM, dan ruang kerja responsif. Tes Node memastikan ID serta logika tab tidak berubah oleh terjemahan. Pengujian ukuran layar bukan klaim pengujian pada setiap perangkat fisik atau validasi seluruh API berbayar.
+Tes routing dan generate memakai respons API simulasi, tanpa kunci asli atau biaya layanan. Tes editor mencakup impor media, simpan/muat ulang, pemulihan cadangan, ekspor WebM, dan ruang kerja responsif. Tes Node memastikan ID serta logika tab tidak berubah oleh terjemahan. Pengujian ukuran layar bukan klaim pengujian pada setiap perangkat fisik atau validasi seluruh API berbayar.

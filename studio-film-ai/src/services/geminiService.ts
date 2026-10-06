@@ -1,3 +1,4 @@
+import { prepareGoogleMediaDownload } from './generationSupport';
 import { AiRouteError, hasGatewayTextRoute, readAiRouting } from './aiRouting';
 import { GoogleGenAI, Modality, Type, GenerateContentResponse, Operation, Chat, FunctionDeclaration, GenerateImagesResponse } from "@google/genai";
 import { getStudioAiClient } from './studioAiClient';
@@ -551,7 +552,8 @@ const generateVideoWithVeoInner = async (
     // Note: For Veo, we might need the key in the fetch URL if strictly using REST,
     // but the SDK usually handles this. If raw fetch is needed:
     const apiKey = localStorage.getItem('gemini_api_key') || process.env.API_KEY;
-    const response = await fetch(`${downloadLink}&key=${apiKey}`);
+    const download = prepareGoogleMediaDownload(downloadLink, apiKey);
+    const response = await fetchWithTimeout(download.url, { headers: download.headers }, 180_000, 'Unduh hasil video');
 
     if (!response.ok) {
         throw new Error("Failed to download the generated video.");
@@ -626,7 +628,7 @@ export const generateImageWithNano = async (
     const candidate = response.candidates?.[0];
     if (candidate?.content?.parts) {
         for (const part of candidate.content.parts) {
-            if (part.inlineData) {
+            if (part.inlineData?.data && part.inlineData.mimeType?.startsWith('image/')) {
                 const base64ImageBytes: string = part.inlineData.data;
                 const imageUrl = `data:${part.inlineData.mimeType};base64,${base64ImageBytes}`;
                 const item: MediaItem = {
@@ -665,6 +667,7 @@ export const generateImageWithGemini3Pro = async (prompt: string, aspectRatio: s
             parts: [{ text: prompt }],
         },
         config: {
+            responseModalities: [Modality.TEXT, Modality.IMAGE],
             imageConfig: {
                 aspectRatio: aspectRatio,
                 imageSize: imageSize
@@ -675,7 +678,7 @@ export const generateImageWithGemini3Pro = async (prompt: string, aspectRatio: s
     const candidate = response.candidates?.[0];
     if (candidate?.content?.parts) {
         for (const part of candidate.content.parts) {
-            if (part.inlineData) {
+            if (part.inlineData?.data && part.inlineData.mimeType?.startsWith('image/')) {
                 const base64ImageBytes: string = part.inlineData.data;
                 const imageUrl = `data:${part.inlineData.mimeType};base64,${base64ImageBytes}`;
                 const item: MediaItem = {
@@ -1259,7 +1262,7 @@ export const editImage = async (prompt: string, image: { base64: string; mimeTyp
     const candidate = response.candidates?.[0];
     if (candidate?.content?.parts) {
         for (const part of candidate.content.parts) {
-            if (part.inlineData) {
+            if (part.inlineData?.data && part.inlineData.mimeType?.startsWith('image/')) {
                 const base64ImageBytes: string = part.inlineData.data;
                 const imageUrl = `data:${part.inlineData.mimeType};base64,${base64ImageBytes}`;
                 return {
@@ -3454,6 +3457,7 @@ export const generateImageWithReferences = async (
     let modelConfig: any = {};
     if (model === GEMINI_3_PRO_IMAGE_MODEL) {
         modelConfig = {
+            responseModalities: [Modality.TEXT, Modality.IMAGE],
             imageConfig: {
                 aspectRatio: config?.aspectRatio || "16:9",
                 imageSize: config?.imageSize || "1K"
@@ -3478,7 +3482,7 @@ export const generateImageWithReferences = async (
     const candidate = response.candidates?.[0];
     if (candidate?.content?.parts) {
         for (const part of candidate.content.parts) {
-            if (part.inlineData) {
+            if (part.inlineData?.data && part.inlineData.mimeType?.startsWith('image/')) {
                 const base64ImageBytes: string = part.inlineData.data;
                 const imageUrl = `data:${part.inlineData.mimeType};base64,${base64ImageBytes}`;
                 const item: MediaItem = {
@@ -3499,6 +3503,10 @@ export const generateImageWithReferences = async (
                 return item;
             }
         }
+    }
+
+    if (referenceImages.length || sketchImage) {
+        throw new AiRouteError('Penyedia belum mengembalikan gambar. Referensi karakter tetap disimpan; permintaan tidak diulang tanpa referensi. Periksa akses model dan kebijakan konten.', undefined, true);
     }
 
     // Fallback logic if the first attempt fails
@@ -4031,6 +4039,7 @@ export const generateMoviePoster = async (bible: StoryBible, references: Referen
         model: 'gemini-3-pro-image-preview',
         contents: { parts: [{ text: imagePrompt }] },
         config: {
+            responseModalities: [Modality.TEXT, Modality.IMAGE],
             imageConfig: {
                 aspectRatio: "3:4", // Closest to 2:3 poster format available in standard ratios
                 imageSize: "2K"
@@ -4041,7 +4050,7 @@ export const generateMoviePoster = async (bible: StoryBible, references: Referen
     const candidate = imageResponse.candidates?.[0];
     if (candidate?.content?.parts) {
         for (const part of candidate.content.parts) {
-            if (part.inlineData) {
+            if (part.inlineData?.data && part.inlineData.mimeType?.startsWith('image/')) {
                 const base64ImageBytes: string = part.inlineData.data;
                 const imageUrl = `data:${part.inlineData.mimeType};base64,${base64ImageBytes}`;
                 return {

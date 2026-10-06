@@ -1,3 +1,4 @@
+import { availableGenerationModels } from '../services/generationSupport';
 import React, { useEffect, useMemo, useState } from 'react';
 import { CostRate, MediaItem, RecentProject, ReferenceItem, ShotPrompt } from '../types';
 import { UploadIcon, SparklesIcon, DownloadIcon, VideoIcon } from '../components/icons';
@@ -1023,13 +1024,14 @@ const VideoGenerationWorkspace: React.FC<VideoGenerationWorkspaceProps> = ({
       const veoStartReference = reference || veoElementReferences[0];
 
       let item: MediaItem;
+      const available = modelId === 'auto' ? availableGenerationModels(MODEL_OPTIONS.map(o => o.id), 'video') : [];
       const autoPick = modelId === 'auto'
         ? pickVideoModel({
           prompt: finalPrompt,
           hasStartFrame: Boolean(reference || seedanceStoryboardReference),
           referenceCount: storyboardReferencePayloads.length,
           durationSeconds: normalizedDurationSeconds,
-        }, MODEL_OPTIONS.map((option) => option.id).filter((id) => id !== 'auto'), 'seedance-25-i2v-fal')
+        }, available, available[0])
         : null;
       const resolvedModelId: VideoModelId = autoPick ? autoPick.model : modelId;
       // Per-model shaping happens last, once the model is known (see PromptPreview under the prompt box).

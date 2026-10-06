@@ -75,7 +75,11 @@ export const withModelFallback = (ai: GoogleGenAI): GoogleGenAI => {
   models.generateContent = async (params: { model: string }) => {
     const requested = params?.model;
     const known = requested ? resolved.get(requested) : undefined;
-    const first = known ? { ...params, model: known } : params;
+    const first: any = known ? { ...params, model: known } : params;
+    if (known?.includes('image') && !/^gemini-3/.test(known) && first.config?.imageConfig?.imageSize) {
+      const { imageSize, ...imageConfig } = first.config.imageConfig;
+      first.config = { ...first.config, imageConfig };
+    }
     try {
       return await original(first);
     } catch (error) {
@@ -85,7 +89,13 @@ export const withModelFallback = (ai: GoogleGenAI): GoogleGenAI => {
       if (!fallback || fallback === (known || requested)) throw error;
       console.warn(`[gemini] ${requested} is not available for this key; using ${fallback} instead.`);
       resolved.set(requested, fallback);
-      return original({ ...params, model: fallback });
+      const next: any = { ...params, model: fallback };
+      // Gemini 2.5 image models reject the 3.x-only imageSize option.
+      if (fallback.includes('image') && !/^gemini-3/.test(fallback) && next.config?.imageConfig?.imageSize) {
+        const { imageSize, ...imageConfig } = next.config.imageConfig;
+        next.config = { ...next.config, imageConfig };
+      }
+      return original(next);
     }
   };
   marked.__modelFallback = true;
