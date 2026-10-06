@@ -82,3 +82,12 @@ test('caller abort after an explicit rejection prevents all further submissions'
  await assert.rejects(generateRoutedOpenRouterImage({...req,config:{...req.config,abortSignal:controller.signal}},async()=>{direct++;},(async()=>{calls++;controller.abort();return response({error:{code:429}},429);}) as typeof fetch),(e:any)=>e.name==='AbortError');
  assert.equal(calls,1);assert.equal(direct,0);
 });
+test('explicit Flux selection overrides a global Gemini setting and never falls across model families',async()=>{
+ configure({openRouterImageModel:'google/'+model});let calls=0,direct=0;
+ const out=await generateRoutedOpenRouterImage({...req,model:'black-forest-labs/flux-test'},async()=>{direct++;return 'native-flux';},(async(u:any,o:any)=>{calls++;assert.equal(JSON.parse(o.body).model,'black-forest-labs/flux-test');return response({error:{code:429}},429);}) as typeof fetch);
+ assert.equal(out,'native-flux');assert.equal(calls,1);assert.equal(direct,1);
+});
+test('unavailable explicitly selected Flux Klein does not submit a Gemini image request',async()=>{
+ configure({openRouterImageModel:'google/'+model});let calls=0;
+ await assert.rejects(generateRoutedOpenRouterImage({...req,model:'black-forest-labs/flux-2-klein-9b-base'},undefined,(async()=>{calls++;return response({});}) as typeof fetch),(e:any)=>e instanceof AiRouteError&&/tidak diganti ke Gemini/.test(e.message));assert.equal(calls,0);
+});

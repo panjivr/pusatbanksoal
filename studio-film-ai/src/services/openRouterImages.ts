@@ -88,9 +88,19 @@ export const generateRoutedOpenRouterImage = async (req: GeminiRequest, direct?:
     let models: any[];
     try { models = compatibleOpenRouterImageModels(await getOpenRouterModels(route, fetcher), req); }
     catch (error) { last = error; if (!config.fallback) throw error; continue; }
-    const preferred = config.openRouterImageModel && config.openRouterImageModel !== 'auto' ? config.openRouterImageModel : openRouterImageModelId(req.model);
+    const explicitProviderModel = req.model.includes('/') && !req.model.startsWith('google/');
+    const selectedName = req.model.split('/').pop()?.split(':')[0] || '';
+    if (explicitProviderModel) {
+      const sameSelection = (id: string) => {
+        const name = id.split('/').pop() || '';
+        return selectedName.startsWith('flux-2-klein') ? name.startsWith('flux-2-klein') : name === selectedName;
+      };
+      models = models.filter(m => sameSelection(m.id));
+      if (!models.length) last = new AiRouteError(`Model ${selectedName} yang dipilih tidak tersedia di OpenRouter untuk masukan ini. Model tidak diganti ke Gemini. Gunakan API penyedia model ini atau pilih model lain secara manual.`, 422, true);
+    }
+    const preferred = explicitProviderModel ? req.model : config.openRouterImageModel && config.openRouterImageModel !== 'auto' ? config.openRouterImageModel : openRouterImageModelId(req.model);
     models.sort((a, b) => Number(b.id === preferred) - Number(a.id === preferred) || a.id.localeCompare(b.id));
-    if (!config.fallback) models = models.filter(m => m.id === preferred).slice(0, 1);
+    if (!config.fallback) models = (explicitProviderModel ? models : models.filter(m => m.id === preferred)).slice(0, 1);
     for (const model of models) {
       if (req.config?.abortSignal?.aborted) throw new DOMException('Permintaan dibatalkan.', 'AbortError');
       announce?.(model.id, 'trying');
