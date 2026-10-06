@@ -1,6 +1,7 @@
 import { AiRouteError, isOpenRouter, readAiRouting, getOpenRouterModels, type AiRoute, type GeminiRequest } from './aiRouting.ts';
 
 const imageCatalogCache = new Map<typeof fetch, { expires: number; promise: Promise<any[]> }>();
+export const clearOpenRouterImageCache = () => imageCatalogCache.clear();
 /** Image-only models have a separate official catalogue and endpoint. Chat metadata alone is incomplete. */
 export const getOpenRouterImageModels = async (route: AiRoute, fetcher: typeof fetch = fetch): Promise<any[]> => {
   let entry = imageCatalogCache.get(fetcher);
@@ -136,7 +137,7 @@ export const compatibleOpenRouterImageModels = (models: any[], req: GeminiReques
     return !(config?.aspectRatio && parameters.aspect_ratio?.values && !parameters.aspect_ratio.values.includes(config.aspectRatio)) && !(config?.imageSize && parameters.resolution?.values && !parameters.resolution.values.includes(config.imageSize));
   });
 };
-/** Exhaust compatible OpenRouter models before invoking a configured native image provider. */
+/** Route only through compatible OpenRouter models; never invoke a direct provider. */
 export const generateRoutedOpenRouterImage = async (req: GeminiRequest, direct?: () => Promise<any>, fetcher: typeof fetch = fetch, announce?: (model: string, status: string) => void, directLabel = 'Gemini (API langsung)'): Promise<any> => {
   const config = readAiRouting();
   const routes = config.routes.filter(r => r.enabled && isOpenRouter(r) && r.apiKey.trim());
@@ -148,11 +149,12 @@ export const generateRoutedOpenRouterImage = async (req: GeminiRequest, direct?:
     let models: any[];
     try { models = compatibleOpenRouterImageModels(await getOpenRouterImageModels(route, fetcher), req); }
     catch (error) { last = error; if (!config.fallback) throw error; continue; }
-    const explicitProviderModel = req.model.includes('/') && !req.model.startsWith('google/');
+    const explicitProviderModel = req.model.includes('/');
     const selectedName = req.model.split('/').pop()?.split(':')[0] || '';
     if (explicitProviderModel) {
-      models = models.filter(m => sameOpenRouterImageSelection(req.model, m.id));
-      if (!models.length) last = new AiRouteError(`Model ${selectedName} yang dipilih tidak tersedia di OpenRouter untuk masukan ini. Referensi, rasio, atau resolusi harus sesuai kemampuan model. Model tidak diganti ke Gemini. Gunakan API penyedia model ini atau pilih model lain secara manual.`, 422, true);
+      const exact = models.find(m => m.id === req.model);
+      models = exact ? [exact] : models.filter(m => sameOpenRouterImageSelection(req.model, m.id));
+      if (!models.length) last = new AiRouteError(`Model ${selectedName} yang dipilih tidak tersedia di OpenRouter untuk masukan ini. Referensi, rasio, atau resolusi harus sesuai kemampuan model. Model tidak diganti ke Gemini. Pilih model lain dari katalog OpenRouter secara manual.`, 422, true);
     }
     const preferred = explicitProviderModel ? req.model : config.openRouterImageModel && config.openRouterImageModel !== 'auto' ? config.openRouterImageModel : openRouterImageModelId(req.model);
     models.sort((a, b) => Number(b.id === preferred) - Number(a.id === preferred) || a.id.localeCompare(b.id));
@@ -172,13 +174,6 @@ export const generateRoutedOpenRouterImage = async (req: GeminiRequest, direct?:
         if (error.status === 401 || error.status === 402) break;
       }
     }
-  }
-  if (config.fallback && direct) {
-    if (req.config?.abortSignal?.aborted) throw new DOMException('Permintaan dibatalkan.', 'AbortError');
-    announce?.(directLabel, 'trying');
-    const result = await direct();
-    announce?.(directLabel, 'success');
-    return result;
   }
   announce?.('OpenRouter (gambar)', 'failed');
   throw last;

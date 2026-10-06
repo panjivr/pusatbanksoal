@@ -1,3 +1,4 @@
+import { assertStudioAiProvider } from './aiRouting';
 import { readAiRouting, AiRouteError } from './aiRouting';
 import { generateRoutedOpenRouterImage } from './openRouterImages';
 
@@ -482,6 +483,7 @@ const runReplicateViaByok = async (model: string, input: any): Promise<any> => {
 };
 
 const runReplicateInner = async (model: string, input: any): Promise<any> => {
+    assertStudioAiProvider('Replicate');
     const token = getReplicateKeyOptional();
     if (!token && shouldUseByokProxy('replicate')) {
         return runReplicateViaByok(model, input);

@@ -1,3 +1,5 @@
+import OpenRouterModelPicker from '../components/OpenRouterModelPicker';
+import { generateStudioVideo } from '../services/openRouterMedia';
 import React, { useEffect, useMemo, useState } from 'react';
 import { MediaItem, RecentProject, ReferenceItem, ShotPrompt } from '../types';
 import { UploadIcon, SparklesIcon, DownloadIcon } from '../components/icons';
@@ -67,8 +69,8 @@ const UpscaleWorkspace: React.FC<UpscaleWorkspaceProps> = ({
   const [colorEngine, setColorEngine] = useState<'ltx' | 'runway-ruby'>('ltx');
   const [rubyOutputFormat, setRubyOutputFormat] = useState<RunwayRubyOutputFormat>('hdr10');
   const [rubyProresProfile, setRubyProresProfile] = useState<RunwayRubyProresProfile>('422 HQ');
-  const [modelId, setModelId] = useState<UpscaleModelId>('crystal');
-  const [scaleValue, setScaleValue] = useState<number>(4);
+  const [modelId, setModelId] = useState<UpscaleModelId>('black-forest-labs/flux-video-upscale' as any);
+  const [scaleValue, setScaleValue] = useState<number>(2);
   const [resolutionPreset, setResolutionPreset] = useState<string>('auto');
   const [customResolution, setCustomResolution] = useState<string>('');
   const [inputFile, setInputFile] = useState<File | null>(null);
@@ -91,7 +93,7 @@ const UpscaleWorkspace: React.FC<UpscaleWorkspaceProps> = ({
     () => MODEL_OPTIONS.find((option) => option.id === modelId) || MODEL_OPTIONS[0],
     [modelId]
   );
-  const inputKind: UpscaleKind = mode === 'color-science' ? 'video' : activeModel.kind;
+  const inputKind: UpscaleKind = 'video';
   const isVideoInput = inputKind === 'video';
   const effectiveResolution = useMemo(() => {
     if (resolutionPreset === 'custom') return customResolution.trim();
@@ -170,42 +172,13 @@ const UpscaleWorkspace: React.FC<UpscaleWorkspaceProps> = ({
   };
 
   const handleRun = async () => {
+    if (mode === 'color-science') { setStatus('Peningkatan HDR/ACES belum tersedia melalui OpenRouter. Impor dan pengolahan lokal tetap tersedia.'); return; }
+    if (!modelId.includes('/')) { setStatus('Pilih model peningkatan resolusi video dari katalog OpenRouter.'); return; }
+
     if (apiKeyReady === false) {
       setStatus('Connect your API keys to upscale.');
       return;
     }
-    if (mode === 'color-science') {
-      const ltxInput = await resolveLtxVideoInput();
-      if (!ltxInput) {
-        setStatus('Upload or select an SDR video for Color Science Upscale.');
-        return;
-      }
-      setIsRunning(true);
-      setStatus(colorEngine === 'runway-ruby' ? 'Submitting to Runway Ruby...' : 'Submitting LTX ACES HDR job...');
-
-      try {
-        const item = colorEngine === 'runway-ruby'
-          ? await convertVideoToHdrWithRunwayRuby({
-            videoUri: ltxInput.videoUri,
-            sourceName: ltxInput.sourceName,
-            outputFormat: rubyOutputFormat,
-            proresProfile: rubyProresProfile,
-            onStatus: (message) => setStatus(message),
-          })
-          : await trackTask({ label: 'LTX Color Science Upscale', kind: 'video', provider: 'ltx', estimatedMs: 240_000, message: 'Rendering ACES HDR…' }, () => upscaleVideoToAcesHdrWithLtx(ltxInput));
-        onAddGeneratedMedia(item);
-        setGenerated((prev) => [item, ...prev].slice(0, 12));
-        setStatus(colorEngine === 'runway-ruby'
-          ? 'Runway Ruby HDR conversion completed. The file is in your Library.'
-          : 'Color Science Upscale completed. EXR frame archive is ready.');
-      } catch (error) {
-        setStatus(error instanceof Error ? error.message : 'Color Science Upscale failed.');
-      } finally {
-        setIsRunning(false);
-      }
-      return;
-    }
-
     const payload = await resolveInputPayload();
     if (!payload) {
       setStatus('Upload or select an asset to upscale.');
@@ -220,32 +193,11 @@ const UpscaleWorkspace: React.FC<UpscaleWorkspaceProps> = ({
         scale: Number.isFinite(scaleValue) ? Math.max(1, Number(scaleValue)) : 4,
         resolution: effectiveResolution || undefined,
       };
-      switch (modelId) {
-        case 'real-esrgan':
-          item = await upscaleImage(payload, upscaleOptions);
-          break;
-        case 'crystal':
-          item = await upscaleImageWithCrystal(payload, upscaleOptions);
-          break;
-        case 'clarity':
-          item = await upscaleImageWithClarity(payload, upscaleOptions);
-          break;
-        case 'topaz':
-          item = await upscaleImageWithTopaz(payload, upscaleOptions);
-          break;
-        case 'crystal-video':
-          item = await upscaleVideoWithCrystal(payload, upscaleOptions);
-          break;
-        case 'topaz-video':
-          item = await upscaleVideoWithTopaz(payload, upscaleOptions);
-          break;
-        default:
-          throw new Error('Unsupported upscale model.');
-      }
+      item = await generateStudioVideo(modelId, 'Preserve source video details while upscaling.', { sourceVideo:payload,upscaleFactor:Number(scaleValue)||2,onProgress:setStatus });
 
       const itemWithMeta = {
         ...item,
-        generatedBy: `${activeModel.label}${upscaleOptions.scale ? ` • ${upscaleOptions.scale}x` : ''}${upscaleOptions.resolution ? ` • ${upscaleOptions.resolution}` : ''}`,
+        generatedBy: `${modelId}${upscaleOptions.scale ? ` • ${upscaleOptions.scale}x` : ''}${upscaleOptions.resolution ? ` • ${upscaleOptions.resolution}` : ''}`,
       };
       onAddGeneratedMedia(itemWithMeta);
       setGenerated((prev) => [itemWithMeta, ...prev].slice(0, 12));
@@ -291,29 +243,7 @@ const UpscaleWorkspace: React.FC<UpscaleWorkspaceProps> = ({
               <>
                 <div>
                   <label className="text-xs uppercase tracking-[0.2em] text-gray-400">Model</label>
-                  <select
-                    value={modelId}
-                    onChange={(event) => {
-                      const next = event.target.value as UpscaleModelId;
-                      setModelId(next);
-                      const nextKind = MODEL_OPTIONS.find((option) => option.id === next)?.kind || 'image';
-                      if (nextKind === 'video' && resolutionPreset === 'auto') {
-                        setResolutionPreset('1080p');
-                      }
-                    }}
-                    className="app-select mt-2"
-                  >
-                    <optgroup label="Image Upscalers">
-                      {MODEL_OPTIONS.filter(o => o.kind === 'image').map((option) => (
-                        <option key={option.id} value={option.id}>{option.label}</option>
-                      ))}
-                    </optgroup>
-                    <optgroup label="Video Upscalers">
-                      {MODEL_OPTIONS.filter(o => o.kind === 'video').map((option) => (
-                        <option key={option.id} value={option.id}>{option.label}</option>
-                      ))}
-                    </optgroup>
-                  </select>
+                  <OpenRouterModelPicker kind="video" operation="upscale" value={modelId} onChange={id => setModelId(id as any)} />
                 </div>
 
                 <div className="grid gap-4 md:grid-cols-2">
@@ -322,8 +252,8 @@ const UpscaleWorkspace: React.FC<UpscaleWorkspaceProps> = ({
                     <div className="mt-2 flex items-center gap-3">
                       <input
                         type="range"
-                        min={1}
-                        max={8}
+                        min={1.5}
+                        max={3}
                         step={0.5}
                         value={scaleValue}
                         onChange={(event) => setScaleValue(Number(event.target.value))}
@@ -331,11 +261,11 @@ const UpscaleWorkspace: React.FC<UpscaleWorkspaceProps> = ({
                       />
                       <input
                         type="number"
-                        min={1}
-                        max={8}
+                        min={1.5}
+                        max={3}
                         step={0.5}
                         value={scaleValue}
-                        onChange={(event) => setScaleValue(Number(event.target.value) || 4)}
+                        onChange={(event) => setScaleValue(Number(event.target.value) || 2)}
                         className="app-input w-20"
                       />
                     </div>
@@ -366,97 +296,7 @@ const UpscaleWorkspace: React.FC<UpscaleWorkspaceProps> = ({
                 </div>
               </>
             ) : (
-              <div className="space-y-3">
-              <div>
-                <label className="text-xs uppercase tracking-[0.2em] text-gray-400">Engine</label>
-                <div className="inline-flex w-full rounded-lg border border-gray-700 bg-gray-950/70 p-1 text-sm mt-2">
-                  <button
-                    type="button"
-                    onClick={() => setColorEngine('ltx')}
-                    className={`flex-1 rounded-md px-3 py-2 font-medium transition-colors ${colorEngine === 'ltx' ? 'bg-indigo-600 text-white' : 'text-gray-400 hover:text-gray-200'}`}
-                  >
-                    LTX ACES HDR
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setColorEngine('runway-ruby')}
-                    className={`flex-1 rounded-md px-3 py-2 font-medium transition-colors ${colorEngine === 'runway-ruby' ? 'bg-indigo-600 text-white' : 'text-gray-400 hover:text-gray-200'}`}
-                  >
-                    Runway Ruby
-                  </button>
-                </div>
-              </div>
-              {colorEngine === 'runway-ruby' ? (
-                <div className="rounded-lg border border-rose-700/50 bg-rose-950/20 p-4 space-y-3">
-                  <div className="flex items-center justify-between gap-3">
-                    <div>
-                      <div className="text-xs uppercase tracking-[0.2em] text-rose-300">Runway Ruby</div>
-                      <div className="text-sm font-semibold text-white">SDR to true HDR colour science</div>
-                    </div>
-                    {!hasRunwayApiKey() && (
-                      <span className="text-[10px] text-amber-300">Add your Runway API key in Settings.</span>
-                    )}
-                  </div>
-                  <div>
-                    <label className="text-xs uppercase tracking-[0.2em] text-gray-400">Output</label>
-                    <select
-                      value={rubyOutputFormat}
-                      onChange={(event) => setRubyOutputFormat(event.target.value as RunwayRubyOutputFormat)}
-                      className="app-select mt-2"
-                    >
-                      {RUNWAY_RUBY_OUTPUT_FORMATS.map((format) => (
-                        <option key={format.id} value={format.id}>{format.label}</option>
-                      ))}
-                    </select>
-                    <p className="mt-1 text-[11px] text-gray-500">
-                      {RUNWAY_RUBY_OUTPUT_FORMATS.find((format) => format.id === rubyOutputFormat)?.hint}
-                    </p>
-                  </div>
-                  {rubyOutputFormat === 'hdr_prores' && (
-                    <div>
-                      <label className="text-xs uppercase tracking-[0.2em] text-gray-400">ProRes profile</label>
-                      <select
-                        value={rubyProresProfile}
-                        onChange={(event) => setRubyProresProfile(event.target.value as RunwayRubyProresProfile)}
-                        className="app-select mt-2"
-                      >
-                        <option value="422">ProRes 422</option>
-                        <option value="422 HQ">ProRes 422 HQ</option>
-                        <option value="4444">ProRes 4444</option>
-                      </select>
-                    </div>
-                  )}
-                  <p className="text-[11px] text-gray-500">
-                    Keeps source pixels and audio, expands brightness and colour to BT.2020. Inputs up to 30s and 4096px per side.
-                  </p>
-                </div>
-              ) : (
-              <div className="rounded-lg border border-cyan-700/50 bg-cyan-950/20 p-4 space-y-3">
-                <div className="flex items-center justify-between gap-3">
-                  <div>
-                    <div className="text-xs uppercase tracking-[0.2em] text-cyan-300">LTX ACES HDR</div>
-                    <div className="text-sm font-semibold text-white">EXR frame archive output</div>
-                  </div>
-                  <span className="text-[10px] uppercase tracking-[0.18em] text-cyan-200 border border-cyan-700 rounded px-2 py-1">Beta</span>
-                </div>
-                <div className="grid gap-2 sm:grid-cols-3 text-[11px] text-gray-300">
-                  <div className="rounded border border-gray-700/70 bg-black/20 p-2">
-                    <div className="text-gray-500 uppercase tracking-[0.14em]">Pipeline</div>
-                    <div className="mt-1 text-white">SDR to ACES HDR</div>
-                  </div>
-                  <div className="rounded border border-gray-700/70 bg-black/20 p-2">
-                    <div className="text-gray-500 uppercase tracking-[0.14em]">Format</div>
-                    <div className="mt-1 text-white">ZIP of EXR frames</div>
-                  </div>
-                  <div className="rounded border border-gray-700/70 bg-black/20 p-2">
-                    <div className="text-gray-500 uppercase tracking-[0.14em]">Max Input</div>
-                    <div className="mt-1 text-white">~7s at 1080p</div>
-                  </div>
-                </div>
-                <p className="text-xs text-gray-400">Output preserves the input resolution. 1440p inputs are limited to about 4 seconds, 4K inputs to about 2 seconds.</p>
-              </div>
-              )}
-              </div>
+              <p className="text-sm text-gray-400">HDR/ACES belum tersedia dalam katalog OpenRouter. Gunakan penyesuaian warna lokal atau impor video yang sudah diproses.</p>
             )}
 
             <div className="grid gap-4 md:grid-cols-2">

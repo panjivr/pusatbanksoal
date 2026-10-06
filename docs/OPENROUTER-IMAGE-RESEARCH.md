@@ -34,3 +34,13 @@ Pilihan model studio yang eksplisit tetap mendahului pilihan global. Nama Flux K
 ## Batas verifikasi
 
 Katalog dan endpoint model benar-benar diakses melalui API publik tanpa key. Preflight browser `OPTIONS /api/v1/images` dan `/api/v1/images/models` juga benar-benar diuji: HTTP 204, `Access-Control-Allow-Origin: *`, serta dukungan header Authorization/Content-Type/HTTP-Referer/X-Title. Test fixture merekam sebagian metadata asli tersebut. Pengiriman dan rendering hasil pada tes browser memakai respons simulasi dengan kontrak API resmi. Itu tidak membuktikan izin, saldo, atau hasil generasi menggunakan key pengguna. Timeout, koneksi terputus setelah pengiriman, pembatalan, hasil kosong dan penolakan konten tidak memicu pengiriman berbayar ulang.
+
+## Katalog dan biaya lintas media (6 Oktober 2026)
+
+Permintaan terbaru mengharuskan seluruh generate Studio memakai OpenRouter. Katalog video resmi `/api/v1/videos/models` mengembalikan 29 model, termasuk video generation dan video upscale. SDK resmi menyediakan `videoGeneration.generate`, `getGeneration`, `getVideoContent`, serta endpoint TTS/STT tersendiri. Model chat dengan keluaran audio juga ditemukan pada katalog `/models`; endpoint `/audio/models`, `/speech/models`, dan `/transcription/models` tidak tersedia, sehingga tidak digunakan sebagai sumber pilihan.
+
+Implementasi Studio memakai katalog chat untuk teks/audio, dua katalog gambar, dan katalog video. Harga gambar native diperoleh dari endpoint metadata tiap model. Contoh terverifikasi: Seedream 4.5 $0.04/output image; Flux 2 Klein 4B $0.014/output megapixel; GPT Image 2 output image $0.00003/token, input text $0.000005/token, input image $0.000008/token. Angka token tidak boleh ditampilkan sebagai tarif per gambar. Video menggunakan SKU durasi/resolusi/referensi; Flux Video Upscale mempunyai tarif megapixel-second, bukan harga tetap per video.
+
+Sampel metadata publik disimpan di `src/services/fixtures/openrouter-image-prices.json` dan `openrouter-video-catalog.json`. UI mengambil metadata langsung; fixture hanya dipakai untuk pengujian. Tarif lagu/klip Lyria berasal dari deskripsi publik ($0.08/lagu atau $0.04/klip), meskipun kolom tarif token bernilai nol.
+
+Fallback ke API penyedia langsung dinonaktifkan pada alur generate baru. Model eksplisit dipertahankan. Retry shot merupakan tindakan pengguna dan berpotensi ditagih kembali. Pengujian respons simulasi tidak digambarkan sebagai inferensi berbayar yang sudah berhasil.

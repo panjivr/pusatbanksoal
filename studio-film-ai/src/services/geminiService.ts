@@ -1,3 +1,4 @@
+import { generateStudioAudio, generateStudioVideo, studioSelectedModel } from './openRouterMedia';
 import { prepareGoogleMediaDownload } from './generationSupport';
 import { AiRouteError, hasGatewayTextRoute, readAiRouting } from './aiRouting';
 import { GoogleGenAI, Modality, Type, GenerateContentResponse, Operation, Chat, FunctionDeclaration, GenerateImagesResponse } from "@google/genai";
@@ -595,8 +596,7 @@ export const generateVideoWithVeo = (
     referenceImage?: { base64: string; mimeType: string; },
     model: string = 'veo-3.1-fast-generate-preview'
 ): Promise<MediaItem> =>
-    trackTask({ label: model.includes('fast') ? 'Veo 3.1 Fast' : 'Veo 3.1', kind: 'video', provider: 'gemini', estimatedMs: 150_000, message: 'Generating…' }, (task) =>
-        generateVideoWithVeoInner(prompt, (message) => { task.update({ message }); onProgress(message); }, aspectRatio, referenceImage, model));
+    generateStudioVideo(studioSelectedModel('video'), prompt, { ratio:aspectRatio, start:referenceImage, onProgress });
 
 export const generateImageWithNano = async (
     prompt: string,
@@ -1436,7 +1436,8 @@ export const transcribeAudio = async (audio: { base64: string, mimeType: string 
 
 export const transcribeVideo = async (video: File | string): Promise<string> => {
     const ai = getAiClient();
-    const { fileUri, mimeType } = await prepareVideoFileDataForGemini(video);
+    const mimeType = typeof video === 'string' ? 'video/mp4' : video.type || 'video/mp4';
+    const fileUri = typeof video === 'string' ? video : `data:${mimeType};base64,${await fileToBase64(video)}`;
 
     const response: GenerateContentResponse = await withTimeout(withRetry(() => ai.models.generateContent({
         model: GEMINI_TEXT_MODEL_FLASH,
@@ -3733,97 +3734,9 @@ export const generateSoundEffect = async (description: string, duration: number)
 };
 
 export const generateSpeechWithTTS = async (prompt: string, multiSpeaker?: { speaker: string, voice: string }[]): Promise<MediaItem> => {
-    const ai = getAiClient();
-    const speechConfig: any = { responseModalities: [Modality.AUDIO] };
-    if (multiSpeaker && multiSpeaker.length > 0) {
-        speechConfig.speechConfig = {
-            multiSpeakerVoiceConfig: {
-                speakerVoiceConfigs: multiSpeaker.map(s => ({
-                    speaker: s.speaker,
-                    voiceConfig: { prebuiltVoiceConfig: { voiceName: s.voice } }
-                }))
-            }
-        };
-    } else {
-        speechConfig.speechConfig = {
-            voiceConfig: {
-                prebuiltVoiceConfig: { voiceName: 'Kore' },
-            },
-        };
-    }
+    return generateStudioAudio(studioSelectedModel('audio'), multiSpeaker?.length ? `${prompt}\nPembicara: ${multiSpeaker.map(s => s.speaker).join(', ')}` : prompt);
 
-    const response: GenerateContentResponse = await withRetry(() => ai.models.generateContent({
-        model: "gemini-2.5-flash-preview-tts",
-        contents: [{ parts: [{ text: prompt }] }],
-        config: speechConfig,
-    }));
 
-    const base64Audio = response.candidates?.[0]?.content?.parts?.[0]?.inlineData?.data;
-    if (!base64Audio) {
-        throw new Error("Speech generation failed to produce audio data.");
-    }
-
-    const pcmData = decode(base64Audio);
-    // Helper `createWavBlob` assumed to be available locally or re-implemented
-    const createWavBlob = (pcmData: Uint8Array, sampleRate: number, numChannels: number, bitsPerSample: number): Blob => {
-        const dataSize = pcmData.length;
-        const buffer = new ArrayBuffer(44 + dataSize);
-        const view = new DataView(buffer);
-
-        const writeString = (offset: number, str: string) => {
-            for (let i = 0; i < str.length; i++) {
-                view.setUint8(offset + i, str.charCodeAt(i));
-            }
-        };
-
-        const byteRate = sampleRate * numChannels * (bitsPerSample / 8);
-        const blockAlign = numChannels * (bitsPerSample / 8);
-
-        writeString(0, 'RIFF');
-        view.setUint32(4, 36 + dataSize, true);
-        writeString(8, 'WAVE');
-        writeString(12, 'fmt ');
-        view.setUint32(16, 16, true);
-        view.setUint16(20, 1, true);
-        view.setUint16(22, numChannels, true);
-        view.setUint32(24, sampleRate, true);
-        view.setUint32(28, byteRate, true);
-        view.setUint16(32, blockAlign, true);
-        view.setUint16(34, bitsPerSample, true);
-        writeString(36, 'data');
-        view.setUint32(40, dataSize, true);
-        new Uint8Array(buffer, 44).set(pcmData);
-
-        return new Blob([buffer], { type: 'audio/wav' });
-    };
-
-    const audioBlob = createWavBlob(pcmData, 24000, 1, 16);
-    const audioUrl = URL.createObjectURL(audioBlob);
-
-    let duration: number | undefined;
-    try {
-        duration = await getVideoDuration(audioUrl);
-    } catch (e) {
-        duration = 5;
-    }
-
-    recordUsage({
-        provider: 'gemini',
-        model: 'gemini-2.5-flash-preview-tts',
-        kind: 'audio',
-        units: Math.max(0.01, (duration || 0) / 60),
-        unitLabel: 'minute',
-        note: 'Gemini TTS',
-    });
-
-    return {
-        id: `tts-${Date.now()}`,
-        name: `tts_audio_${prompt.slice(0, 15)}.wav`,
-        type: 'audio',
-        url: audioUrl,
-        source: 'generated',
-        duration,
-    };
 };
 
 export const suggestColorGrade = async (

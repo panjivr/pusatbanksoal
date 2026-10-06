@@ -1,3 +1,5 @@
+import OpenRouterModelPicker from '../components/OpenRouterModelPicker';
+import { generateStudioVideo, studioSelectedModel } from '../services/openRouterMedia';
 import React, { useEffect, useMemo, useState } from 'react';
 import { AvatarProfile, MediaItem } from '../types';
 import {
@@ -54,7 +56,8 @@ const AvatarWorkspace: React.FC<AvatarWorkspaceProps> = ({ avatars, onUpdateAvat
   const [newAvatarFile, setNewAvatarFile] = useState<File | null>(null);
   const [newAvatarPreviewUrl, setNewAvatarPreviewUrl] = useState<string | null>(null);
 
-  const [modelMode, setModelMode] = useState<ModelMode>('omni-human');
+  const [routerModel, setRouterModel] = useState(studioSelectedModel('video'));
+  const [modelMode, setModelMode] = useState<ModelMode>('wan-i2v');
   const [prompt, setPrompt] = useState('');
   const [negativePrompt, setNegativePrompt] = useState('');
   const [voiceText, setVoiceText] = useState('');
@@ -264,63 +267,7 @@ const AvatarWorkspace: React.FC<AvatarWorkspaceProps> = ({ avatars, onUpdateAvat
       };
       let item: MediaItem | null = null;
 
-      if (modelMode === 'omni-human') {
-        const audioPayload = await resolveAudioPayload();
-        if (!audioPayload) {
-          alert('Please provide audio or voiceover text.');
-          return;
-        }
-        setStatus('Generating OmniHuman video...');
-        item = await generateVideoWithOmniHuman(avatarPayload, audioPayload);
-      } else if (modelMode === 'wan-replace') {
-        const videoPayload = await fileToPayload(videoFile);
-        setStatus('Running Wan Animate Replace...');
-        item = await generateVideoWithWanAnimateReplace(videoPayload, avatarPayload, {
-          resolution: wanResolution,
-          fps: wanFps,
-          refertNum: wanRefertNum,
-          mergeAudio: wanMergeAudio,
-          goFast: wanGoFast,
-        });
-      } else if (modelMode === 'wan-i2v') {
-        setStatus('Animating with Wan 2.2...');
-        item = await generateVideoWithWanI2V(prompt, avatarPayload, {
-          resolution: wanResolution === '480' ? '480p' : '720p',
-          fps: wanFps,
-          numFrames: wanFrames,
-          interpolate: wanInterpolate,
-        });
-      } else if (modelMode === 'kling-26') {
-        const startImagePayload = startImageFile ? await fileToPayload(startImageFile) : undefined;
-        setStatus('Generating Kling 2.6 video...');
-        item = await generateVideoWithKling26(prompt, {
-          startImage: startImagePayload,
-          aspectRatio: klingAspect,
-          duration: klingDuration,
-          generateAudio: klingAudio,
-          negativePrompt: negativePrompt || '',
-        });
-      } else if (modelMode === 'kling-motion') {
-        const videoPayload = await fileToPayload(videoFile);
-        setStatus('Driving motion with Kling...');
-        item = await generateVideoWithKlingMotionControl(prompt, avatarPayload, videoPayload, {
-          mode: klingMode,
-          keepOriginalSound: klingKeepSound,
-          characterOrientation: klingOrientation,
-        });
-      } else if (modelMode === 'aurora-fal') {
-        const audioPayload = await resolveAudioPayload();
-        if (!audioPayload) {
-          alert('Please provide audio or voiceover text.');
-          return;
-        }
-        setStatus('Generating Aurora avatar video...');
-        item = await generateVideoWithFalCreatifyAurora(avatarPayload, audioPayload, {
-          prompt: prompt.trim() || undefined,
-          resolution: auroraResolution,
-        });
-      }
-
+      item = await generateStudioVideo(routerModel, prompt || 'Animasi karakter dengan gerakan alami.', { ratio:'16:9',resolution:'720p',seconds:klingDuration,start:avatarPayload,onProgress:setStatus });
       if (item) {
         onAddGeneratedMedia(item);
         setStatus('Video added to Media Bin.');
@@ -435,18 +382,7 @@ const AvatarWorkspace: React.FC<AvatarWorkspaceProps> = ({ avatars, onUpdateAvat
               </div>
               <div>
                 <label className="text-xs text-gray-400 uppercase tracking-wide">Model</label>
-                <select
-                  value={modelMode}
-                  onChange={(e) => setModelMode(e.target.value as ModelMode)}
-                  className="mt-1 w-full bg-gray-900 border border-gray-700 rounded-lg p-2 text-sm focus:ring-2 focus:ring-indigo-500"
-                >
-                  <option value="omni-human">OmniHuman (avatar + audio)</option>
-                  <option value="aurora-fal">Creatify Aurora (avatar + audio)</option>
-                  <option value="wan-replace">Wan Animate Replace (video + avatar)</option>
-                  <option value="wan-i2v">Wan 2.2 Animate (image to video)</option>
-                  <option value="kling-26">Kling 2.6 (text or image)</option>
-                  <option value="kling-motion">Kling Motion Control</option>
-                </select>
+                <OpenRouterModelPicker kind="video" value={routerModel} onChange={setRouterModel} seconds={klingDuration} ratio="16:9" resolution="720p" />
               </div>
             </div>
 
@@ -516,15 +452,7 @@ const AvatarWorkspace: React.FC<AvatarWorkspaceProps> = ({ avatars, onUpdateAvat
                       <div className="mt-2 grid md:grid-cols-2 gap-2">
                         <div>
                           <label className="text-[10px] uppercase tracking-wider text-gray-500">Voice Model</label>
-                          <select
-                            value={voiceModelId}
-                            onChange={(e) => setVoiceModelId(e.target.value)}
-                            className="mt-1 w-full bg-gray-900 border border-gray-700 rounded-lg p-2 text-xs focus:ring-2 focus:ring-indigo-500"
-                          >
-                            {VOICE_MODEL_OPTIONS.map((option) => (
-                              <option key={option.id} value={option.id}>{option.label}</option>
-                            ))}
-                          </select>
+                          <OpenRouterModelPicker kind="audio" value={studioSelectedModel('audio')} onChange={id => setVoiceModelId(id)} />
                         </div>
                         <div>
                           <label className="text-[10px] uppercase tracking-wider text-gray-500">Output Format</label>

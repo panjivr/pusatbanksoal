@@ -45,15 +45,15 @@ test('explicit Flux selection uses the catalogue model without a Google prefix',
  const out=await generateRoutedOpenRouterImage(req,undefined,legacyFetch((async(u:any,o:any)=>{assert.equal(JSON.parse(o.body).model,'black-forest-labs/flux-test');return response({choices:[{message:{images:[{image_url:{url:'data:image/png;base64,'+png}}]}}]});}) as typeof fetch));
  assert.equal(out.bekalModel,'black-forest-labs/flux-test');
 });
-test('only after compatible models are exhausted does the direct provider run',async()=>{
+test('exhausted OpenRouter models never invoke a direct provider',async()=>{
  configure(); const seen:string[]=[];
- const out=await generateRoutedOpenRouterImage(req,async()=>{seen.push('direct');return 'native';},legacyFetch((async(u:any,o:any)=>{seen.push(JSON.parse(o.body).model);return response({error:{code:404}},404);}) as typeof fetch));
- assert.equal(out,'native');assert.deepEqual(seen,['google/'+model,'black-forest-labs/flux-test','direct']);
+ await assert.rejects(generateRoutedOpenRouterImage(req,async()=>{seen.push('direct');return 'native';},legacyFetch((async(u:any,o:any)=>{seen.push(JSON.parse(o.body).model);return response({error:{code:404}},404);}) as typeof fetch)));
+ assert.deepEqual(seen,['google/'+model,'black-forest-labs/flux-test']);
 });
-test('account credit rejection skips other models on that key and tries the direct provider',async()=>{
+test('account credit rejection stops without direct-provider billing',async()=>{
  configure();let calls=0,direct=0;
- await generateRoutedOpenRouterImage(req,async()=>{direct++;return 'native';},legacyFetch((async()=>{calls++;return response({error:{code:402}},402);}) as typeof fetch));
- assert.equal(calls,1);assert.equal(direct,1);
+ await assert.rejects(generateRoutedOpenRouterImage(req,async()=>{direct++;return 'native';},legacyFetch((async()=>{calls++;return response({error:{code:402}},402);}) as typeof fetch)));
+ assert.equal(calls,1);assert.equal(direct,0);
 });
 test('uncertain acceptance, empty results, policy, and cancellation never generate on another provider',async()=>{
  configure();
@@ -85,8 +85,8 @@ test('caller abort after an explicit rejection prevents all further submissions'
 });
 test('explicit Flux selection overrides a global Gemini setting and never falls across model families',async()=>{
  configure({openRouterImageModel:'google/'+model});let calls=0,direct=0;
- const out=await generateRoutedOpenRouterImage({...req,model:'black-forest-labs/flux-test'},async()=>{direct++;return 'native-flux';},legacyFetch((async(u:any,o:any)=>{calls++;assert.equal(JSON.parse(o.body).model,'black-forest-labs/flux-test');return response({error:{code:429}},429);}) as typeof fetch));
- assert.equal(out,'native-flux');assert.equal(calls,1);assert.equal(direct,1);
+ await assert.rejects(generateRoutedOpenRouterImage({...req,model:'black-forest-labs/flux-test'},async()=>{direct++;return 'native-flux';},legacyFetch((async(u:any,o:any)=>{calls++;assert.equal(JSON.parse(o.body).model,'black-forest-labs/flux-test');return response({error:{code:429}},429);}) as typeof fetch)));
+ assert.equal(calls,1);assert.equal(direct,0);
 });
 test('unavailable explicitly selected Flux Klein does not submit a Gemini image request',async()=>{
  configure({openRouterImageModel:'google/'+model});let calls=0;

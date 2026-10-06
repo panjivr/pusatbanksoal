@@ -79,6 +79,7 @@ const WorldGenerationWorkspace: React.FC<WorldGenerationWorkspaceProps> = ({
   const [hasKey, setHasKey] = useState(() => hasWorldLabsApiKey());
   const [viewerUrl, setViewerUrl] = useState<string | null>(null);
   const [viewerTitle, setViewerTitle] = useState<string>('Splat Viewer');
+  const openRouterWorldGenerationAvailable = false;
   const worldModelOptions = useMemo(() => getWorldModelOptionsForProvider('worldlabs'), []);
 
   const emitChange = useCallback((next: WorldGenerationState) => {
@@ -112,6 +113,8 @@ const WorldGenerationWorkspace: React.FC<WorldGenerationWorkspaceProps> = ({
   const selectedWorld = worldState.history.find((entry) => entry.id === selectedId) || null;
 
   const handleGenerate = async () => {
+    if (!openRouterWorldGenerationAvailable) { setStatus('Pembuatan dunia 3D belum tersedia di katalog OpenRouter. Kamu tetap bisa membuka dan memakai aset 3D yang sudah ada.'); return; }
+
     const keyAvailable = hasWorldLabsApiKey();
     setHasKey(keyAvailable);
     if (!keyAvailable) {
@@ -288,7 +291,7 @@ const WorldGenerationWorkspace: React.FC<WorldGenerationWorkspaceProps> = ({
 
         {!hasKey && (
           <div className="app-panel p-3 text-sm text-amber-200 border border-amber-400/40 bg-amber-400/10">
-            Add your World Labs API key in Settings to generate worlds.
+            Pembuatan dunia 3D menunggu dukungan model OpenRouter.
           </div>
         )}
 
@@ -317,17 +320,7 @@ const WorldGenerationWorkspace: React.FC<WorldGenerationWorkspaceProps> = ({
               </div>
               <div>
                 <label className="text-xs uppercase tracking-[0.2em] text-gray-400">World Model</label>
-                <select
-                  className="app-select mt-2"
-                  value={model}
-                  onChange={(event) => setModel(event.target.value as MarbleModel)}
-                >
-                  {worldModelOptions.map((option) => (
-                    <option key={option.id} value={option.id}>
-                      {option.label}
-                    </option>
-                  ))}
-                </select>
+                <p className="text-sm text-gray-400">Belum ada model dunia 3D di katalog OpenRouter. Impor aset dan penampil 3D tetap tersedia.</p>
               </div>
             </div>
 

@@ -1,3 +1,5 @@
+import OpenRouterModelPicker from '../components/OpenRouterModelPicker';
+import { generateStudioAudio, studioSelectedModel } from '../services/openRouterMedia';
 import React, { useMemo, useState } from 'react';
 import { MediaItem, RecentProject, ReferenceItem, ShotPrompt, TimelineClip, TimelineTrack } from '../types';
 import AudioMasteringPanel, { type AudioMasteringSourceOption } from '../components/AudioMasteringPanel';
@@ -42,7 +44,7 @@ const GENERATE_TOOLS: Array<{ id: GenerateTool; label: string }> = [
   { id: 'voice', label: 'Voice' },
   { id: 'music', label: 'Music' },
   { id: 'sfx', label: 'SFX' },
-  { id: 'stems', label: 'Stems' },
+
 ];
 
 const toDb = (gain: number) => (gain <= 0.001 ? '-∞' : `${(20 * Math.log10(gain)).toFixed(1)}`);
@@ -157,6 +159,7 @@ const SoundWorkspace: React.FC<SoundWorkspaceProps> = (props) => {
   const [browserTab, setBrowserTab] = useState<BrowserTab>('generate');
   const [generateTool, setGenerateTool] = useState<GenerateTool>('voice');
 
+  const [openRouterAudioModel, setOpenRouterAudioModel] = useState(studioSelectedModel('audio'));
   const [voiceProvider, setVoiceProvider] = useState<VoiceProvider>('elevenlabs');
   const [voiceText, setVoiceText] = useState('');
   const [voiceId, setVoiceId] = useState('JBFqnCBsd6RMkjVDRZzb');
@@ -280,17 +283,12 @@ const SoundWorkspace: React.FC<SoundWorkspaceProps> = (props) => {
 
   const handleGenerateVoice = async () => {
     if (!voiceText.trim()) { setStatus('Add voiceover text first.'); return; }
-    if (voiceProvider === 'minimax' && apiKeyReady === false) { setStatus('Connect your API keys to generate with Replicate.'); return; }
+
     setIsRunning(true);
     setStatus('Generating voice…');
     try {
-      if (voiceProvider === 'minimax') {
-        const item = await generateSpeechWithMinimax(voiceText, { voice: minimaxVoice || undefined, speed: minimaxSpeed });
-        handleAddGenerated(item, 'Minimax Speech 02 HD');
-      } else {
-        const item = await generateSpeechWithElevenLabs(voiceText, { voiceId, modelId: voiceModelId, outputFormat: voiceOutputFormat });
-        handleAddGenerated(item, 'ElevenLabs Voiceover');
-      }
+      const item = await generateStudioAudio(openRouterAudioModel, `Bacakan dalam bahasa Indonesia: ${voiceText}`);
+      handleAddGenerated(item, openRouterAudioModel);
       setStatus(placeOnTimeline ? 'Voice placed at the playhead.' : 'Voice added to the project.');
     } catch (error) {
       setStatus(error instanceof Error ? error.message : 'Voice generation failed.');
@@ -303,15 +301,11 @@ const SoundWorkspace: React.FC<SoundWorkspaceProps> = (props) => {
     const prompt = kind === 'music' ? musicPrompt : sfxPrompt;
     const duration = kind === 'music' ? musicDuration : sfxDuration;
     if (!prompt.trim()) { setStatus(`Add a ${kind} prompt first.`); return; }
-    if (kind === 'music' && musicProvider === 'sonauto-v3' && !hasSonautoApiKey()) { setStatus('Add a Sonauto API key in Settings to generate with Sonauto.'); return; }
-    if ((kind !== 'music' || musicProvider === 'lyria2') && apiKeyReady === false) { setStatus('Connect your API keys to generate audio.'); return; }
     setIsRunning(true);
     setStatus(kind === 'music' && musicProvider === 'sonauto-v3' ? 'Generating music with Sonauto…' : `Generating ${kind}…`);
     try {
-      const item = kind === 'music' && musicProvider === 'sonauto-v3'
-        ? await generateMusicWithSonauto(prompt, { instrumental: sonautoInstrumental, onStatus: (message) => setStatus(message) })
-        : await generateMusicWithLyria2(prompt, { duration });
-      handleAddGenerated(item, kind === 'music' ? (musicProvider === 'sonauto-v3' ? 'Sonauto v3 Music' : 'Lyria 2 Music') : 'Lyria 2 SFX');
+      const item = await generateStudioAudio(openRouterAudioModel, `${kind === 'music' ? 'Buat musik' : 'Buat efek suara'} berdurasi ${duration} detik: ${prompt}`);
+      handleAddGenerated(item, openRouterAudioModel);
       setStatus(`${kind === 'music' ? 'Music' : 'SFX'} ${placeOnTimeline ? 'placed at the playhead.' : 'added to the project.'}`);
     } catch (error) {
       setStatus(error instanceof Error ? error.message : `${kind} generation failed.`);
@@ -367,35 +361,15 @@ const SoundWorkspace: React.FC<SoundWorkspaceProps> = (props) => {
 
       {generateTool === 'voice' && (
         <div className="fl-form">
-          <select value={voiceProvider} onChange={(event) => setVoiceProvider(event.target.value as VoiceProvider)} className="app-select">
-            <option value="elevenlabs">ElevenLabs</option>
-            <option value="minimax">Minimax Speech 02 HD</option>
-          </select>
+          <OpenRouterModelPicker kind="audio" value={openRouterAudioModel} onChange={setOpenRouterAudioModel} />
           <textarea value={voiceText} onChange={(event) => setVoiceText(event.target.value)} placeholder="What should the voice say?" rows={5} className="app-textarea" />
-          {voiceProvider === 'elevenlabs' ? (
-            <details className="fl-form__advanced">
-              <summary>Voice settings</summary>
-              <label>Voice ID<input value={voiceId} onChange={(event) => setVoiceId(event.target.value)} className="app-input" /></label>
-              <label>Model<input value={voiceModelId} onChange={(event) => setVoiceModelId(event.target.value)} className="app-input" /></label>
-              <label>Output<input value={voiceOutputFormat} onChange={(event) => setVoiceOutputFormat(event.target.value)} className="app-input" /></label>
-            </details>
-          ) : (
-            <details className="fl-form__advanced">
-              <summary>Voice settings</summary>
-              <label>Voice (optional)<input value={minimaxVoice} onChange={(event) => setMinimaxVoice(event.target.value)} className="app-input" /></label>
-              <label>Speed · {minimaxSpeed.toFixed(2)}×<input type="range" min={0.5} max={1.5} step={0.05} value={minimaxSpeed} onChange={(event) => setMinimaxSpeed(Number(event.target.value))} /></label>
-            </details>
-          )}
           <button className="app-button app-primary w-full" onClick={handleGenerateVoice} disabled={isRunning}>{isRunning ? 'Generating…' : 'Generate voice'}</button>
         </div>
       )}
 
       {generateTool === 'music' && (
         <div className="fl-form">
-          <select value={musicProvider} onChange={(event) => setMusicProvider(event.target.value as MusicProvider)} className="app-select">
-            <option value="lyria2">Google Lyria 2 · short cue</option>
-            <option value="sonauto-v3">Sonauto v3 · full song</option>
-          </select>
+          <OpenRouterModelPicker kind="audio" value={openRouterAudioModel} onChange={setOpenRouterAudioModel} />
           <textarea value={musicPrompt} onChange={(event) => setMusicPrompt(event.target.value)} placeholder="Style, tempo, mood, instruments…" rows={4} className="app-textarea" />
           {musicProvider === 'lyria2' ? (
             <label className="fl-form__inline">Duration<input type="number" min={4} max={120} value={musicDuration} onChange={(event) => setMusicDuration(Number(event.target.value) || 20)} className="app-input" /><span>s</span></label>
@@ -408,6 +382,7 @@ const SoundWorkspace: React.FC<SoundWorkspaceProps> = (props) => {
 
       {generateTool === 'sfx' && (
         <div className="fl-form">
+          <OpenRouterModelPicker kind="audio" value={openRouterAudioModel} onChange={setOpenRouterAudioModel} />
           <textarea value={sfxPrompt} onChange={(event) => setSfxPrompt(event.target.value)} placeholder="Whoosh, impact, rain on a tin roof…" rows={4} className="app-textarea" />
           <label className="fl-form__inline">Duration<input type="number" min={2} max={60} value={sfxDuration} onChange={(event) => setSfxDuration(Number(event.target.value) || 6)} className="app-input" /><span>s</span></label>
           <button className="app-button app-primary w-full" onClick={() => handleGenerateMusic('sfx')} disabled={isRunning}>{isRunning ? 'Generating…' : 'Generate SFX'}</button>

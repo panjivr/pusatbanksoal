@@ -1,0 +1,40 @@
+import React, { useEffect, useState } from 'react';
+import { loadStudioCatalog, reloadStudioCatalog, priceStudioModel, estimateStudioCost, priceBasis, usd, type CatalogKind, type EstimateOptions } from '../services/openRouterCatalog';
+export default function OpenRouterModelPicker({ kind, value, onChange, count = 1, seconds = 8, resolution = '1K', ratio = '1:1', references = 0, operation = 'generate', onSettingsChange }: { kind: CatalogKind; operation?: 'generate' | 'upscale'; value: string; onChange: (id: string) => void; onSettingsChange?: (settings: { ratio?: string; resolution?: string; seconds?: number }) => void } & EstimateOptions) {
+  const [inputTokens,setInputTokens] = useState(1000), [outputTokens,setOutputTokens] = useState(1000);
+  const [models, setModels] = useState<any[]>([]), [error, setError] = useState(''), [loading, setLoading] = useState(true), [sort, setSort] = useState('name'), [query, setQuery] = useState(''), [revision, setRevision] = useState(0);
+  useEffect(() => { let alive = true; setLoading(true); setError(''); loadStudioCatalog(kind).then(async items => {
+    if (!alive) return; setModels(items);
+    // Bounded concurrency: price endpoints are public and cached across every picker.
+    let cursor = 0; const priced = [...items];
+    await Promise.all(Array.from({ length: Math.min(4, items.length) }, async () => { while (cursor < items.length && alive) { const index = cursor++; priced[index] = await priceStudioModel(items[index], kind); if (alive) setModels([...priced]); } }));
+  }).catch(e => { if (alive) setError(e.message); }).finally(() => { if (alive) setLoading(false); }); return () => { alive = false; }; }, [kind, revision]);
+  const kindLabel = {image:'gambar',video:'video',text:'teks',audio:'audio'}[kind];
+  const options = { count, seconds, resolution, ratio, references, inputTokens, outputTokens };
+  const chosen = models.find(m => m.id === value), estimate = chosen && estimateStudioCost(chosen, kind, options);
+  const list = models.filter(m => (kind !== 'video' || (operation === 'upscale' ? Boolean(m.upscale_factor) : !m.upscale_factor)) && (kind !== 'image' || ((!references || m.architecture?.input_modalities?.includes('image')) && (!m.imageApi || (references >= (m.supported_parameters?.input_references?.min || 0) && references <= (m.supported_parameters?.input_references?.max ?? Infinity))))) && (!query || `${m.name} ${m.id}`.toLowerCase().includes(query.toLowerCase()))).sort((a,b) => {
+    if (sort === 'name') return (a.name || a.id).localeCompare(b.name || b.id);
+    const priceA = estimateStudioCost(a, kind, { ...options, count: 1 }), priceB = estimateStudioCost(b, kind, { ...options, count: 1 });
+    const x = sort === 'asc' ? priceA?.low : priceA?.high, y = sort === 'asc' ? priceB?.low : priceB?.high;
+    if (x == null) return y == null ? a.id.localeCompare(b.id) : 1; if (y == null) return -1; return sort === 'asc' ? x - y : y - x;
+  });
+  return <div className="openrouter-picker" style={{ width:'100%', minWidth:0, maxWidth:560 }}>
+    <div style={{ display:'flex', gap:6, flexWrap:'wrap' }}>
+      <input className="app-input" aria-label={`Cari model ${kindLabel} OpenRouter`} placeholder="Cari model OpenRouter" value={query} onChange={e => setQuery(e.target.value)} style={{ flex:'1 1 130px', minWidth:0 }} />
+      <select className="app-select" aria-label="Urutkan harga model" value={sort} onChange={e => setSort(e.target.value)}><option value="name">Nama model</option><option value="asc">Harga terendah</option><option value="desc">Harga tertinggi</option></select>
+    </div>
+    <select className="app-select" aria-label={`Model ${kindLabel} OpenRouter`} value={chosen ? value : ''} onChange={e => { const id = e.target.value, model = models.find(m => m.id === id); localStorage.setItem(`bekal-openrouter-${kind}${operation === 'upscale' ? '-upscale' : ''}-model`, id); onChange(id); if (model && onSettingsChange) { const settings: {ratio?:string;resolution?:string;seconds?:number} = {}; const ratios = kind === 'video' ? model.supported_aspect_ratios : model.supported_parameters?.aspect_ratio?.values; const sizes = kind === 'video' ? model.supported_resolutions : model.supported_parameters?.resolution?.values; if (ratios?.length && !ratios.includes(ratio)) settings.ratio = ratios.find((r:string) => r !== 'auto') || ratios[0]; if (sizes?.length && !sizes.includes(resolution)) settings.resolution = sizes[0]; if (kind === 'video' && model.supported_durations?.length && !model.supported_durations.includes(seconds)) settings.seconds = model.supported_durations[0]; onSettingsChange(settings); } }} style={{ width:'100%', marginTop:6 }}>
+      <option value="" disabled>{loading ? 'Memuat katalog dan tarif...' : 'Pilih model OpenRouter'}</option>
+      {list.map(m => { const cost = estimateStudioCost(m, kind, { ...options, count:1 }); return <option key={m.id} value={m.id}>{m.name || m.id}{cost ? ` · ${usd(cost.low)}${cost.high > cost.low ? `–${usd(cost.high)}` : ''}/hasil` : ` · ${priceBasis(m)}`}</option>; })}
+    </select>
+    {chosen && onSettingsChange && <div style={{ display:'flex',gap:6,flexWrap:'wrap',marginTop:6 }}>
+      {(kind === 'video' ? chosen.supported_resolutions : chosen.supported_parameters?.resolution?.values)?.length > 0 && <label>Resolusi<select className="app-select" aria-label="Resolusi OpenRouter" value={resolution} onChange={e => onSettingsChange({resolution:e.target.value})}><option value={resolution} disabled>{resolution}</option>{(kind === 'video' ? chosen.supported_resolutions : chosen.supported_parameters.resolution.values).map((r:string) => <option key={r}>{r}</option>)}</select></label>}
+      {(kind === 'video' ? chosen.supported_aspect_ratios : chosen.supported_parameters?.aspect_ratio?.values)?.length > 0 && <label>Rasio<select className="app-select" aria-label="Rasio OpenRouter" value={ratio} onChange={e => onSettingsChange({ratio:e.target.value})}>{(kind === 'video' ? chosen.supported_aspect_ratios : chosen.supported_parameters.aspect_ratio.values).map((r:string) => <option key={r}>{r}</option>)}</select></label>}
+      {kind === 'video' && chosen.supported_durations?.length > 0 && <label>Durasi<select className="app-select" aria-label="Durasi OpenRouter" value={seconds} onChange={e => onSettingsChange({seconds:Number(e.target.value)})}><option value={seconds} disabled>{seconds} detik</option>{chosen.supported_durations.map((d:number) => <option key={d} value={d}>{d} detik</option>)}</select></label>}
+    </div>}
+    {chosen && (kind === 'text' || kind === 'audio' || chosen.pricing?.image_output || chosen.priceEndpoints?.some((e:any) => e.pricing?.some((p:any) => p.unit === 'token'))) && <details><summary>Asumsi token untuk estimasi</summary><label>Token masukan<input className="app-input" type="number" min="1" value={inputTokens} onChange={e=>setInputTokens(Math.max(1,Number(e.target.value)||1))} /></label><label>Token keluaran<input className="app-input" type="number" min="1" value={outputTokens} onChange={e=>setOutputTokens(Math.max(1,Number(e.target.value)||1))} /></label><small>Jumlah token sebenarnya dapat berbeda. Untuk gambar, token keluaran mengikuti ukuran dan kualitas hasil.</small></details>}
+    <p role="status" style={{ fontSize:12, margin:'6px 0', overflowWrap:'anywhere' }}>{error || (chosen ? estimate ? `Estimasi ${count} ${kind === 'image' ? 'gambar' : kind === 'video' ? 'video' : 'permintaan'}: ${usd(estimate.low)}${estimate.high > estimate.low ? ` sampai ${usd(estimate.high)}` : ''}. ${estimate.basis}.` : `Estimasi total belum tersedia. ${priceBasis(chosen)}.` : 'Pilih model yang tersedia di katalog sebelum generate.')}</p>
+    <small style={{ display:'block', fontSize:11 }}>Tarif USD dari OpenRouter. Biaya akhir mengikuti model, penyedia, referensi, dan penggunaan. Belum termasuk analisis tambahan, perbaikan otomatis, atau render ulang.</small>
+    <button type="button" onClick={() => { reloadStudioCatalog(); setRevision(v => v+1); }} style={{ fontSize:11 }}>Muat ulang katalog</button>
+  </div>;
+}

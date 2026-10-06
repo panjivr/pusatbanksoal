@@ -1435,6 +1435,7 @@ export type CreativeDNAShotOverride = Partial<CreativeDNAProfile> & {
 };
 
 export type ShotPrompt = {
+    imageGenerationError?: string;
   shot: number;
   sceneNumber?: number;
   sceneShotNumber?: number;

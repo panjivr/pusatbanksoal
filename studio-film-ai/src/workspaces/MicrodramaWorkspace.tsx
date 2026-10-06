@@ -1,3 +1,4 @@
+import OpenRouterModelPicker from '../components/OpenRouterModelPicker';
 import React, { useState, useEffect } from 'react';
 import { Workspace, StoryBible, ShotPrompt, ReferenceItem, MediaItem } from '../types';
 
@@ -329,9 +330,9 @@ KAKAK
         const focal = FOCAL_LENGTH_PRESETS.find(f => f.value === focalLength) || FOCAL_LENGTH_PRESETS[0];
 
         let formula = '';
-        if (selectedEngine === 'kling') {
+        if (selectedEngine.includes('kling')) {
             formula = `Cinematic ${focal.value === '48mm' ? 'Portrait close-up' : 'Medium wide'} 9:16 vertical shot: ${characterName} ${shotDescription}. Pouring rain, golden street lamp light, extreme raw emotion with a tear rolling down her cheek. Subgenre: ${sub.name}. Style: ${sub.style}. Lighting: ${sub.lighting}. Color Palette: ${sub.palette}. Smooth camera motion, expressive facial performance, film quality vertical cinematography.`;
-        } else if (selectedEngine === 'veo') {
+        } else if (selectedEngine.includes('veo')) {
             formula = `High-quality cinematic vertical 9:16 footage: ${shotDescription} featuring ${characterName}. Shot Type: ${focal.value === '48mm' ? 'Close portrait' : 'Wide landscape framing cropped to 9:16'} with deep emotional intimacy. ${sub.name} aesthetic, Lighting Style: ${sub.lighting}, Palette: ${sub.palette}. Professional phone-cinematography camera movement, realistic dynamic hair movement, atmospheric cinematic production values.`;
         } else {
             formula = `Professional cinematic vertical 9:16 video: ${shotDescription}. Character: ${characterName}. Tight ${focal.value} lens framing, deep emotional tension, ${sub.name} subgenre. Ultra-realistic human facial motion, lighting: ${sub.lighting}, palette: ${sub.palette}. Smooth professional camera work, natural skin texture, deep romance movie emotional authenticity.`;
@@ -556,17 +557,7 @@ KAKAK
                                 </div>
                                 <div className="space-y-1">
                                     <label className="block text-xs font-medium micro-muted">Target Video Model Engine</label>
-                                    <div className="grid grid-cols-3 gap-1">
-                                        {['kling', 'veo', 'seadance'].map((eng) => (
-                                            <button
-                                                key={eng}
-                                                onClick={() => setSelectedEngine(eng as any)}
-                                                className={`py-2 text-xs font-bold rounded border transition ${selectedEngine === eng ? 'micro-primary micro-border micro-text' : 'micro-base micro-border micro-muted hover:micro-border'}`}
-                                            >
-                                                {eng === 'kling' ? 'Kling (ekspresi)' : eng === 'veo' ? 'Veo (kamera)' : 'Seedance (adegan dekat)'}
-                                            </button>
-                                        ))}
-                                    </div>
+                                    <OpenRouterModelPicker kind="video" value={selectedEngine} onChange={id => setSelectedEngine(id as any)} />
                                 </div>
                             </div>
 

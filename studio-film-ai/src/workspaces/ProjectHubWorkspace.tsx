@@ -1,3 +1,6 @@
+import { supportsStudioWorldModels } from '../services/openRouterCatalog';
+import OpenRouterModelPicker from '../components/OpenRouterModelPicker';
+import { generateStudioImage, generateStudioVideo, studioSelectedModel } from '../services/openRouterMedia';
 import { availableGenerationModels } from '../services/generationSupport';
 
 import React, { useState, useRef, useEffect, useMemo, useCallback } from 'react';
@@ -883,13 +886,13 @@ const readProjectHubUiPrefs = (scope: string): ProjectHubUiPrefs => {
         if (typeof scoped.conceptBrandingSubtab === 'string' && isConceptBrandingSubtab(scoped.conceptBrandingSubtab)) {
             safe.conceptBrandingSubtab = scoped.conceptBrandingSubtab;
         }
-        if (typeof scoped.referenceImageModel === 'string' && isReferenceImageModel(scoped.referenceImageModel)) {
+        if (typeof scoped.referenceImageModel === 'string' && (isReferenceImageModel(scoped.referenceImageModel) || /^[a-zA-Z0-9_.-]+\/[a-zA-Z0-9_.:-]+$/.test(scoped.referenceImageModel))) {
             safe.referenceImageModel = scoped.referenceImageModel;
         }
-        if (typeof scoped.marketingImageModel === 'string' && isMarketingImageModel(scoped.marketingImageModel)) {
+        if (typeof scoped.marketingImageModel === 'string' && (isMarketingImageModel(scoped.marketingImageModel) || /^[a-zA-Z0-9_.-]+\/[a-zA-Z0-9_.:-]+$/.test(scoped.marketingImageModel))) {
             safe.marketingImageModel = scoped.marketingImageModel;
         }
-        if (typeof scoped.videoModel === 'string' && isFilmingVideoModel(scoped.videoModel)) {
+        if (typeof scoped.videoModel === 'string' && (isFilmingVideoModel(scoped.videoModel) || /^[a-zA-Z0-9_.-]+\/[a-zA-Z0-9_.:-]+$/.test(scoped.videoModel))) {
             safe.videoModel = scoped.videoModel;
         }
         if (typeof scoped.directorSceneTargetMode === 'string' && isDirectorSceneTargetMode(scoped.directorSceneTargetMode)) {
@@ -3292,20 +3295,7 @@ const ShotInpaintModal: React.FC<{
                 const [, fallbackBase64 = ''] = dataUrl.split(',');
                 return { mimeType: 'image/png', base64: fallbackBase64 };
             };
-            const item = inpaintModel === 'nano-banana-pro'
-                ? await inpaintWithNanoBanana(prompt, maskedDataUrl, resolution as '1K' | '2K' | '4K')
-                : inpaintModel === 'nano-banana-2-fal'
-                    ? await editImageWithFalNanoBanana2(prompt, toInlineImage(maskedDataUrl), {
-                        resolution: resolution as '1K' | '2K' | '4K',
-                    }).then((images) => {
-                        if (!images.length) throw new Error('FAL Nano Banana 2 Edit returned no images.');
-                        return images[0];
-                    })
-                    : inpaintModel === 'flux-2-pro'
-                        ? await inpaintWithFlux2Pro(prompt, maskedDataUrl, resolution as 'match_input_image' | '0.5 MP' | '1 MP' | '2 MP' | '4 MP')
-                        : inpaintModel === 'grok-imagine-edit-fal'
-                            ? await editImageWithFalGrokImagine(prompt, toInlineImage(maskedDataUrl))
-                            : await inpaintWithZTurboInpaint(prompt, maskedDataUrl);
+            const item = await generateStudioImage(inpaintModel, `${prompt}\nEdit only the transparent masked area. Preserve everything else.`, [toInlineImage(maskedDataUrl)], '1:1', resolution);
             onApply(item.url, shot.shot);
             loadImageToCanvas(item.url);
             setStatus('Inpaint applied to shot.');
@@ -3379,17 +3369,7 @@ const ShotInpaintModal: React.FC<{
                         <div className="grid grid-cols-2 gap-2">
                             <div>
                                 <label className="text-[10px] uppercase tracking-wide text-gray-500">Model</label>
-                                <select
-                                    value={inpaintModel}
-                                    onChange={(e) => setInpaintModel(e.target.value as 'nano-banana-pro' | 'nano-banana-2-fal' | 'flux-2-pro' | 'z-turbo-inpaint' | 'grok-imagine-edit-fal')}
-                                    className="w-full bg-gray-800 text-white text-xs p-2 rounded border border-gray-700 focus:border-indigo-500"
-                                >
-                                    <option value="nano-banana-pro">Nano Banana Pro</option>
-                                    <option value="nano-banana-2-fal">Nano Banana 2 Edit (FAL)</option>
-                                    <option value="flux-2-pro">Flux 2 Pro</option>
-                                    <option value="z-turbo-inpaint">Z-Turbo Inpaint</option>
-                                    <option value="grok-imagine-edit-fal">Grok Imagine Edit (FAL)</option>
-                                </select>
+                                <OpenRouterModelPicker kind="image" value={inpaintModel} onChange={id => setInpaintModel(id as any)} references={1} resolution={resolution} />
                             </div>
                             <div>
                                 <label className="text-[10px] uppercase tracking-wide text-gray-500">Resolution</label>
@@ -3525,14 +3505,7 @@ const RelightModal: React.FC<{
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                                 <div>
                                     <label className="text-[10px] uppercase tracking-wide text-gray-500">Model</label>
-                                    <select
-                                        value={model}
-                                        onChange={(event) => onModelChange(event.target.value as RelightModel)}
-                                        className="w-full bg-gray-900 text-white text-xs p-2 rounded border border-gray-700 focus:border-indigo-500"
-                                    >
-                                        <option value="gemini">Gemini 3 Pro</option>
-                                        <option value="replicate">Replicate (Qwen Edit)</option>
-                                    </select>
+                                    <OpenRouterModelPicker kind="image" value={model} onChange={id => onModelChange(id as any)} references={1} />
                                 </div>
                                 <div>
                                     <label className="text-[10px] uppercase tracking-wide text-gray-500">Preset</label>
@@ -3953,14 +3926,15 @@ const ProjectHubWorkspace: React.FC<ProjectHubWorkspaceProps> = ({
     const [scriptLength, setScriptLength] = useState<ScriptLength>(storyBible.projectType || 'trailer');
     const [scriptWritingMode, setScriptWritingMode] = useState<'fast' | 'slow'>('fast');
 
-    const [referenceImageModel, setReferenceImageModel] = useState<ReferenceImageModel>(() => storedUiPrefs.referenceImageModel || 'imagen');
+    const [referenceImageModel, setReferenceImageModel] = useState<ReferenceImageModel>(() => storedUiPrefs.referenceImageModel || studioSelectedModel('image') as ReferenceImageModel || 'imagen');
     const [environmentWorldModel, setEnvironmentWorldModel] = useState<MarbleModel>(DEFAULT_WORLD_MODEL_ID);
     const environmentWorldModelOptions = useMemo(() => getWorldModelOptionsForProvider('worldlabs'), []);
     const [isReferenceModelDropdownOpen, setIsReferenceModelDropdownOpen] = useState(false);
     const [isStoryboardModelDropdownOpen, setIsStoryboardModelDropdownOpen] = useState(false);
     const [isFilmingModelDropdownOpen, setIsFilmingModelDropdownOpen] = useState(false);
-    const [marketingImageModel, setMarketingImageModel] = useState<MarketingImageModel>(() => storedUiPrefs.marketingImageModel || 'nano-banana-pro');
-    const [videoModel, setVideoModel] = useState<FilmingVideoModel>(() => storedUiPrefs.videoModel || 'veo-3.1-fast-generate-preview');
+    const [marketingImageModel, setMarketingImageModel] = useState<MarketingImageModel>(() => storedUiPrefs.marketingImageModel || studioSelectedModel('image') as MarketingImageModel || 'nano-banana-pro');
+    const [videoModel, setVideoModel] = useState<FilmingVideoModel>(() => storedUiPrefs.videoModel || studioSelectedModel('video') as FilmingVideoModel || 'veo-3.1-fast-generate-preview');
+    const [routerVideoResolution, setRouterVideoResolution] = useState('720p');
     const [videoDurationSeconds, setVideoDurationSeconds] = useState<number>(5);
     const [ltxAspectRatio, setLtxAspectRatio] = useState<'16:9' | '9:16'>('16:9');
     const [ltxResolution, setLtxResolution] = useState<'1080p' | '2k' | '4k'>('1080p');
@@ -6561,7 +6535,7 @@ const ProjectHubWorkspace: React.FC<ProjectHubWorkspaceProps> = ({
 
     const getShotVoiceMatches = (shot: ShotPrompt) => {
         if (!shot.characters?.length) return [];
-        const normalized = shot.characters.map(name => name.toLowerCase());
+        const normalized = (shot.characters || []).map(name => name.toLowerCase());
         return references.filter(ref => ref.type === 'character' && normalized.some(name => name.includes(ref.name.toLowerCase()) || ref.name.toLowerCase().includes(name)));
     };
 
@@ -6647,6 +6621,11 @@ const ProjectHubWorkspace: React.FC<ProjectHubWorkspaceProps> = ({
     ): Promise<MediaItem> => {
         const modelAspectRatio = resolveModelAspectRatio(aspectRatio);
         const requestedModel = modelOverride || referenceImageModel;
+        if (requestedModel.includes('/')) {
+            if (referenceLoraUrl.trim()) throw new Error('LoRA belum didukung jalur OpenRouter. Referensi tidak dihapus otomatis.');
+            return generateStudioImage(requestedModel, prompt, opts?.referencePayloads || await buildMoodboardReferences(baseImageUrl), modelAspectRatio, imageSize);
+        }
+        if (!requestedModel.includes('/')) throw new Error('Pilih model gambar dari katalog OpenRouter sebelum generate.');
         const available = requestedModel === 'auto' ? availableGenerationModels(REFERENCE_MODEL_OPTIONS.map(o => o.id), 'image') : [];
         const selectedReferenceModel = requestedModel === 'auto' ? pickImageModel({ prompt, hasReferences: Boolean(baseImageUrl) }, available, available[0]).model : requestedModel;
         const selectedIsMultiAngleModel = isReferenceModelMultiAngleMode(selectedReferenceModel);
@@ -6886,6 +6865,8 @@ const ProjectHubWorkspace: React.FC<ProjectHubWorkspaceProps> = ({
         const modelAspectRatio = resolveModelAspectRatio(aspectRatio);
         const baseImageUrl = asset.imageUrl || undefined;
 
+        if (marketingImageModel.includes('/')) return generateStudioImage(marketingImageModel, enrichedPrompt, refs, modelAspectRatio, imageSize);
+        if (!marketingImageModel.includes('/')) throw new Error('Pilih model pemasaran dari katalog OpenRouter sebelum generate.');
         const available = marketingImageModel === 'auto' ? availableGenerationModels(REFERENCE_MODEL_OPTIONS.map(o => o.id), 'image') : [];
         const selectedMarketingModel = marketingImageModel === 'auto' ? pickImageModel({ prompt: enrichedPrompt, hasReferences: refs.length > 0 }, available, available[0]).model : marketingImageModel;
         if (['gpt-image-2-fal-t2i', 'seedream-v5-pro-fal', 'seedream-v5-pro-edit-fal', 'krea-2-large-fal', 'krea-2-turbo-fal', 'ideogram-v4-fal'].includes(selectedMarketingModel)) {
@@ -7274,10 +7255,8 @@ const ProjectHubWorkspace: React.FC<ProjectHubWorkspaceProps> = ({
         try {
             const baseImage = await getBase64FromUrl(activeRelight.imageUrl);
             const relightPrompt = buildRelightPrompt(buildRelightSettings());
-            const modelLabel = relightModel === 'gemini' ? 'Gemini 3 Pro' : 'Replicate (Qwen Edit)';
-            const item = relightModel === 'gemini'
-                ? await relightImageWithGemini3Pro(relightPrompt, baseImage, referenceAspectRatio, imageSize)
-                : await relightImageWithReplicate(relightPrompt, baseImage, { aspectRatio: referenceAspectRatio });
+            const modelLabel = relightModel;
+            const item = await generateStudioImage(relightModel, relightPrompt, [baseImage], referenceAspectRatio, imageSize);
             if (activeRelight.target.kind === 'reference') {
                 const targetId = (activeRelight.target as { id: string }).id;
                 setReferences(prev => prev.map(ref => ref.id === targetId
@@ -8771,6 +8750,8 @@ const ProjectHubWorkspace: React.FC<ProjectHubWorkspaceProps> = ({
     };
 
     const handleGenerateEnvironmentWorld = async (referenceId: string) => {
+        if (!supportsStudioWorldModels()) { setError('Pembuatan dunia 3D belum tersedia melalui OpenRouter. Gunakan aset 3D yang sudah ada.'); return; }
+
         const reference = references.find(ref => ref.id === referenceId);
         if (!reference || reference.type !== 'environment') return;
         if (!hasWorldLabsApiKey()) {
@@ -10463,7 +10444,7 @@ const ProjectHubWorkspace: React.FC<ProjectHubWorkspaceProps> = ({
         const shot = shotPrompts.find(s => s.shot === shotNumber);
         if (!shot) return;
 
-        setShotPrompts(prev => prev.map(s => s.shot === shotNumber ? { ...s, isGenerating: true, isEditing: false } : s));
+        setShotPrompts(prev => prev.map(s => s.shot === shotNumber ? { ...s, isGenerating: true, isEditing: false, imageGenerationError: undefined } : s));
 
         try {
             const previousShot = [...shotPrompts]
@@ -10707,6 +10688,7 @@ const ProjectHubWorkspace: React.FC<ProjectHubWorkspaceProps> = ({
             const originalStoryboardPrompt = buildStoryboardPrompt(shot.prompt || shot.description || '');
 
             const renderStoryboardAttempt = async (rawPrompt: string) => {
+                if (!referenceImageModel.includes('/')) throw new Error('Pilih model gambar dari katalog OpenRouter sebelum generate.');
                 const available = referenceImageModel === 'auto' ? availableGenerationModels(REFERENCE_MODEL_OPTIONS.map(o => o.id), 'image') : [];
                 const activeReferenceModel = referenceImageModel === 'auto'
                     ? pickImageModel({ prompt: rawPrompt, hasReferences: gptInputs.length > 0 }, available, available[0]).model
@@ -10740,7 +10722,10 @@ const ProjectHubWorkspace: React.FC<ProjectHubWorkspaceProps> = ({
                     : fullPrompt;
 
                 let imageMedia: MediaItem;
-                if (activeReferenceModel === 'imagen') {
+                if (activeReferenceModel.includes('/')) {
+                    if (referenceLoraUrl.trim()) throw new Error('LoRA belum didukung jalur OpenRouter.');
+                    imageMedia = await generateStudioImage(activeReferenceModel, fullPrompt, compositionData ? [compositionData, ...supplementalReferences] : supplementalReferences, modelAspectRatio, imageSize);
+                } else if (activeReferenceModel === 'imagen') {
                     imageMedia = await generateImageWithImagen(fullPrompt, modelAspectRatio);
                 } else if (activeReferenceModel === 'nano' || activeReferenceModel === 'gemini-pro') {
                     imageMedia = await generateImageWithReferences(fullPrompt, supplementalReferences, compositionData, activeReferenceModel === 'gemini-pro' ? 'gemini-3-pro-image-preview' : 'gemini-3.1-flash-image-preview', { aspectRatio: modelAspectRatio, imageSize });
@@ -11064,7 +11049,7 @@ const ProjectHubWorkspace: React.FC<ProjectHubWorkspaceProps> = ({
             return true;
         } catch (e) {
             console.error(e);
-            setShotPrompts(prev => prev.map(s => s.shot === shotNumber ? { ...s, isGenerating: false } : s));
+            setShotPrompts(prev => prev.map(s => s.shot === shotNumber ? { ...s, isGenerating: false, imageGenerationError: e instanceof Error ? e.message : String(e) } : s));
             const msg = e instanceof Error ? e.message : String(e);
             if (msg.includes('403') || msg.includes('PERMISSION_DENIED')) {
                 handleError(e);
@@ -11107,7 +11092,7 @@ const ProjectHubWorkspace: React.FC<ProjectHubWorkspaceProps> = ({
                 preservationHint
             ].filter(Boolean).join('. ');
 
-            const images = await editImageWithFalQwenMultiAngle(anglePrompt, baseImage, { numOutputs: 1 });
+            const images = [await generateStudioImage(referenceImageModel, anglePrompt, [baseImage], resolveModelAspectRatio(effectiveAspectRatio), imageSize)];
             const updated = await applyCinemascopeCrop(images[0], effectiveAspectRatio);
             setShotPrompts(prev => prev.map(s => s.shot === shotNumber ? {
                 ...s,
@@ -11618,7 +11603,7 @@ const ProjectHubWorkspace: React.FC<ProjectHubWorkspaceProps> = ({
             const klingBindings = isKlingFalVideoModel
                 ? await buildKlingBindingsForShot(shot)
                 : { referenceImages: undefined, elements: undefined };
-            const normalizedDurationSeconds = resolveVideoDurationSeconds(videoModel, Number(videoDurationSeconds) || 5);
+            const normalizedDurationSeconds = videoModel.includes('/') ? Number(videoDurationSeconds) || 5 : resolveVideoDurationSeconds(videoModel, Number(videoDurationSeconds) || 5);
             const klingNegative = klingNegativePrompt.trim();
             const normalizedKlingCfg = Number.isFinite(klingCfgScale) ? klingCfgScale : 0.5;
             const veoElementsHint = videoModel.startsWith('veo-') ? buildVeoElementsHintForShot(shot) : '';
@@ -11748,6 +11733,7 @@ const ProjectHubWorkspace: React.FC<ProjectHubWorkspaceProps> = ({
                 : [];
 
             const renderVideoAttempt = async (candidateMotionPrompt: string) => {
+                if (!videoModel.includes('/')) throw new Error('Pilih model video dari katalog OpenRouter sebelum generate.');
                 const available = videoModel === 'auto' ? availableGenerationModels(FILMING_VIDEO_MODELS, 'video', id => higgsfieldHostsVideoModel(id)) : [];
                 const activeVideoModel = videoModel === 'auto'
                     ? pickVideoModel({
@@ -11762,6 +11748,7 @@ const ProjectHubWorkspace: React.FC<ProjectHubWorkspaceProps> = ({
                     }, available, available[0]).model
                     : videoModel;
                 if (videoModel === 'auto') console.info(`Auto video model for shot ${shot.shot}: ${activeVideoModel}`);
+                if (activeVideoModel.includes('/')) return generateStudioVideo(activeVideoModel, candidateMotionPrompt, { ratio: referenceAspectRatio, resolution: routerVideoResolution, seconds: normalizedDurationSeconds, start: referencePayload, end: endFramePayload, onProgress: pushUiStatus });
                 if (activeVideoModel === 'grok-imagine-video') {
                     const publicImageUrl = referenceImageUrl && /^https?:\/\//.test(referenceImageUrl) ? referenceImageUrl : undefined;
                     return generateVideoWithGrok({
@@ -12687,7 +12674,7 @@ const ProjectHubWorkspace: React.FC<ProjectHubWorkspaceProps> = ({
             const personaLabel = (directorPersonas.find((persona) => persona.id === getShotPersonaId(shot)) || directorPersonaMeta)?.label || 'Default';
             const imageSrc = await resolveStoryboardExportImage(shot.imageUrl || shot.sketchUrl);
             const tags = [
-                ...shot.characters.map((name) => ({ label: name, type: 'character' })),
+                ...(shot.characters || []).map((name) => ({ label: name, type: 'character' })),
                 ...(shot.environment ? [{ label: shot.environment, type: 'environment' as const }] : []),
                 ...((shot.products || []).map((name) => ({ label: name, type: 'product' }))),
             ];
@@ -15168,61 +15155,7 @@ const ProjectHubWorkspace: React.FC<ProjectHubWorkspaceProps> = ({
                                         {styleRefsButton}
                                         <div className="flex items-center gap-2 bg-gray-800 p-1 rounded-lg border border-gray-700">
                                             <span className="text-xs font-bold text-gray-400 px-2">Model:</span>
-                                            <div className="relative z-10 w-full min-w-[220px]">
-                                                <div
-                                                    className="app-input cursor-pointer flex items-center justify-between bg-gray-900 border-gray-700 hover:border-indigo-500/50 py-1.5 px-2 rounded"
-                                                    onClick={() => setIsReferenceModelDropdownOpen(!isReferenceModelDropdownOpen)}
-                                                >
-                                                    <div className="flex items-center gap-2">
-                                                        {REFERENCE_MODEL_OPTIONS.find(o => o.id === referenceImageModel)?.icon ? (
-                                                            <img src={REFERENCE_MODEL_OPTIONS.find(o => o.id === referenceImageModel)?.icon} className="w-4 h-4 rounded object-contain bg-black/40" alt="" />
-                                                        ) : (
-                                                            <div className="w-4 h-4 rounded bg-gray-800 flex items-center justify-center border border-gray-700">
-                                                                <span className="text-[9px] uppercase font-bold text-gray-400">{REFERENCE_MODEL_OPTIONS.find(o => o.id === referenceImageModel)?.provider[0]}</span>
-                                                            </div>
-                                                        )}
-                                                        <span className="text-gray-200 text-xs font-bold">{REFERENCE_MODEL_OPTIONS.find(o => o.id === referenceImageModel)?.label}</span>
-                                                    </div>
-                                                    <span className="text-gray-500 text-[10px] text-opacity-70 ml-2">▼</span>
-                                                </div>
-                                                {isReferenceModelDropdownOpen && (
-                                                    <div className="absolute top-full left-0 mt-1 w-[300px] max-h-[300px] overflow-y-auto bg-gray-900 border border-indigo-500/30 rounded shadow-2xl shadow-indigo-900/10">
-                                                        {REFERENCE_MODEL_OPTIONS.map((option) => (
-                                                            <div
-                                                                key={option.id}
-                                                                className={`p-2 cursor-pointer hover:bg-indigo-900/40 border-b border-gray-800/80 last:border-0 flex items-start gap-2 transition-colors ${referenceImageModel === option.id ? 'bg-indigo-950/40' : ''}`}
-                                                                onClick={() => {
-                                                                    if (option.id === 'seedream' && imageSize === '1K') setImageSize('2K');
-                                                                    setReferenceImageModel(option.id);
-                                                                    setIsReferenceModelDropdownOpen(false);
-                                                                }}
-                                                            >
-                                                                {option.icon ? (
-                                                                    <img src={option.icon} className="w-8 h-8 rounded mt-0.5 object-cover bg-black/40 shadow-sm border border-gray-800" alt="" />
-                                                                ) : (
-                                                                    <div className="w-8 h-8 rounded mt-0.5 bg-gray-800 flex items-center justify-center flex-shrink-0 shadow-sm border border-gray-700">
-                                                                        <span className="text-xs text-gray-400 font-bold uppercase">{option.provider[0]}</span>
-                                                                    </div>
-                                                                )}
-                                                                <div className="flex flex-col flex-1">
-                                                                    <div className="flex items-center justify-between gap-2">
-                                                                        <span className={`text-[11px] font-bold ${referenceImageModel === option.id ? 'text-indigo-300' : 'text-gray-200'}`}>{option.label}</span>
-                                                                        <div className="flex items-center gap-1">
-                                                                            {option.badge && (
-                                                                                <span className={`text-[8px] font-bold px-1.5 py-0.5 rounded-full ${option.badge.includes('Recommended') ? 'bg-amber-500/20 text-amber-300 border border-amber-500/30' : option.badge.includes('Cheapest') ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30' : 'bg-sky-500/20 text-sky-300 border border-sky-500/30'}`}>{option.badge}</span>
-                                                                            )}
-                                                                            <span className="text-[8px] uppercase tracking-wider text-gray-400 px-1 py-0.5 bg-gray-950/80 rounded border border-gray-800">{option.provider}</span>
-                                                                        </div>
-                                                                    </div>
-                                                                    {option.goodFor && (
-                                                                        <span className="text-[10px] text-indigo-200/60 mt-0.5 leading-snug break-words pr-1">{option.goodFor}</span>
-                                                                    )}
-                                                                </div>
-                                                            </div>
-                                                        ))}
-                                                    </div>
-                                                )}
-                                            </div>
+                                            <OpenRouterModelPicker kind="image" value={referenceImageModel} onChange={id => setReferenceImageModel(id as any)} count={Math.max(1, references.filter(r => !r.imageUrl && !r.isGenerating).length)} ratio={referenceAspectRatio} resolution={imageSize} onSettingsChange={v => { if(v.resolution) setImageSize(v.resolution as any); if(v.ratio) setReferenceAspectRatio(v.ratio as any); }} />
                                             {(referenceImageModel === 'gemini-pro' || referenceImageModel === 'nano' || referenceImageModel === 'nano-banana-2-fal' || referenceImageModel === 'wan-2.7-image-pro' || referenceImageModel === 'seedream') && (
                                                 <select
                                                     value={imageSize}
@@ -16221,15 +16154,7 @@ const ProjectHubWorkspace: React.FC<ProjectHubWorkspaceProps> = ({
                                             <div className="flex flex-wrap items-center justify-end gap-2">
                                                 <div className="flex items-center gap-2 rounded-lg border border-gray-700 bg-gray-800 p-1">
                                                     <span className="px-2 text-xs font-bold text-gray-400">World:</span>
-                                                    <select
-                                                        value={environmentWorldModel}
-                                                        onChange={(e) => setEnvironmentWorldModel(e.target.value as MarbleModel)}
-                                                        className="bg-gray-700 text-white text-xs font-bold py-1 px-2 rounded focus:outline-none"
-                                                    >
-                                                        {environmentWorldModelOptions.map((option) => (
-                                                            <option key={option.id} value={option.id}>{option.label}</option>
-                                                        ))}
-                                                    </select>
+                                                    <span className="text-xs text-gray-400">Model dunia 3D belum tersedia di OpenRouter</span>
                                                 </div>
                                                 {conceptEnvironmentSubtab === 'angles' && (
                                                     <button
@@ -16747,61 +16672,7 @@ const ProjectHubWorkspace: React.FC<ProjectHubWorkspaceProps> = ({
                                             )}
                                             <div className="h-4 w-px bg-gray-600 flex-shrink-0"></div>
                                             <span className="text-xs font-bold text-gray-400 px-2 flex-shrink-0">Model:</span>
-                                            <div className="relative z-10 w-full min-w-[220px]">
-                                                <div
-                                                    className="app-input cursor-pointer flex items-center justify-between bg-gray-900 border-gray-700 hover:border-indigo-500/50 py-1.5 px-2 rounded"
-                                                    onClick={() => setIsStoryboardModelDropdownOpen(!isStoryboardModelDropdownOpen)}
-                                                >
-                                                    <div className="flex items-center gap-2">
-                                                        {REFERENCE_MODEL_OPTIONS.find(o => o.id === referenceImageModel)?.icon ? (
-                                                            <img src={REFERENCE_MODEL_OPTIONS.find(o => o.id === referenceImageModel)?.icon} className="w-4 h-4 rounded object-contain bg-black/40" alt="" />
-                                                        ) : (
-                                                            <div className="w-4 h-4 rounded bg-gray-800 flex items-center justify-center border border-gray-700">
-                                                                <span className="text-[9px] uppercase font-bold text-gray-400">{REFERENCE_MODEL_OPTIONS.find(o => o.id === referenceImageModel)?.provider[0]}</span>
-                                                            </div>
-                                                        )}
-                                                        <span className="text-gray-200 text-xs font-bold">{REFERENCE_MODEL_OPTIONS.find(o => o.id === referenceImageModel)?.label}</span>
-                                                    </div>
-                                                    <span className="text-gray-500 text-[10px] text-opacity-70 ml-2">▼</span>
-                                                </div>
-                                                {isStoryboardModelDropdownOpen && (
-                                                    <div className="absolute top-full left-0 mt-1 w-[320px] max-h-[340px] overflow-y-auto bg-gray-900 border border-indigo-500/30 rounded-lg shadow-2xl shadow-indigo-900/10">
-                                                        {REFERENCE_MODEL_OPTIONS.map((option) => (
-                                                            <div
-                                                                key={option.id}
-                                                                className={`p-2.5 cursor-pointer hover:bg-indigo-900/40 border-b border-gray-800/80 last:border-0 flex items-start gap-2.5 transition-colors ${referenceImageModel === option.id ? 'bg-indigo-950/40' : ''}`}
-                                                                onClick={() => {
-                                                                    if (option.id === 'seedream' && imageSize === '1K') setImageSize('2K');
-                                                                    setReferenceImageModel(option.id);
-                                                                    setIsStoryboardModelDropdownOpen(false);
-                                                                }}
-                                                            >
-                                                                {option.icon ? (
-                                                                    <img src={option.icon} className="w-8 h-8 rounded mt-0.5 object-cover bg-black/40 shadow-sm border border-gray-800 flex-shrink-0" alt="" />
-                                                                ) : (
-                                                                    <div className="w-8 h-8 rounded mt-0.5 bg-gray-800 flex items-center justify-center flex-shrink-0 shadow-sm border border-gray-700">
-                                                                        <span className="text-xs text-gray-400 font-bold uppercase">{option.provider[0]}</span>
-                                                                    </div>
-                                                                )}
-                                                                <div className="flex flex-col flex-1 min-w-0">
-                                                                    <div className="flex items-center justify-between gap-2">
-                                                                        <span className={`text-[11px] font-bold truncate ${referenceImageModel === option.id ? 'text-indigo-300' : 'text-gray-200'}`}>{option.label}</span>
-                                                                        <div className="flex items-center gap-1 flex-shrink-0">
-                                                                            {option.badge && (
-                                                                                <span className={`text-[8px] font-bold px-1.5 py-0.5 rounded-full whitespace-nowrap ${option.badge.includes('Recommended') ? 'bg-amber-500/20 text-amber-300 border border-amber-500/30' : option.badge.includes('Cheapest') ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30' : 'bg-sky-500/20 text-sky-300 border border-sky-500/30'}`}>{option.badge}</span>
-                                                                            )}
-                                                                            <span className="text-[8px] uppercase tracking-wider text-gray-400 px-1 py-0.5 bg-gray-950/80 rounded border border-gray-800">{option.provider}</span>
-                                                                        </div>
-                                                                    </div>
-                                                                    {option.goodFor && (
-                                                                        <span className="text-[10px] text-indigo-200/60 mt-0.5 leading-snug break-words pr-1">{option.goodFor}</span>
-                                                                    )}
-                                                                </div>
-                                                            </div>
-                                                        ))}
-                                                    </div>
-                                                )}
-                                            </div>
+                                            <OpenRouterModelPicker kind="image" value={referenceImageModel} onChange={id => setReferenceImageModel(id as any)} count={Math.max(1, storyboardVisibleShots.filter(s => !s.imageUrl && !s.isGenerating).length)} ratio={referenceAspectRatio} resolution={imageSize} onSettingsChange={v => { if(v.resolution) setImageSize(v.resolution as any); if(v.ratio) setReferenceAspectRatio(v.ratio as any); }} />
                                         </div>
                                     </div>
                                     {renderSceneStrip('storyboard')}
@@ -16994,7 +16865,7 @@ const ProjectHubWorkspace: React.FC<ProjectHubWorkspaceProps> = ({
                                         <div className="shot-page">
                                             <div className={`shot-page__grid ${isPortraitAspect(referenceAspectRatio) ? "shot-page__grid--portrait" : ""}`}>
                                                 {storyboardVisibleShots.map((shot) => (
-                                                    <ShotTile key={shot.shot} shot={shot} label={formatShotLabel(shot)} active={focusedStoryboardShot?.shot === shot.shot} mode="storyboard" aspect={aspectRatioToCss(resolveShotEffectiveAspectRatio(shot))} onSelect={() => setStoryboardFocusShot(shot.shot)} />
+                                                    <div key={shot.shot} style={{ minWidth:0 }}><ShotTile shot={shot} label={formatShotLabel(shot)} active={focusedStoryboardShot?.shot === shot.shot} mode="storyboard" aspect={aspectRatioToCss(resolveShotEffectiveAspectRatio(shot))} onSelect={() => setStoryboardFocusShot(shot.shot)} />{shot.imageGenerationError && !shot.isGenerating && <button type="button" className="app-button app-primary w-full" onClick={() => handleGenerateShotImage(shot.shot)}>Generate ulang shot {formatShotLabel(shot)}</button>}</div>
                                                 ))}
                                             </div>
                                             <aside className="shot-page__inspector">
@@ -17313,10 +17184,10 @@ const ProjectHubWorkspace: React.FC<ProjectHubWorkspaceProps> = ({
                                                                                 disabled={!shot.imageUrl || shot.isAngleGenerating}
                                                                                 className="mt-2 w-full bg-indigo-600 hover:bg-indigo-500 disabled:bg-gray-700 text-white font-bold py-2 rounded-lg text-xs"
                                                                             >
-                                                                                {shot.isAngleGenerating ? 'Adjusting Angle...' : 'Regenerate with Angle (FAL)'}
+                                                                                {shot.isAngleGenerating ? 'Adjusting Angle...' : 'Generate ulang sudut (OpenRouter)'}
                                                                             </button>
                                                                             <div className="text-[10px] text-gray-500 mt-2">
-                                                                                Requires a FAL API key and a base frame.
+                                                                                Memerlukan API key OpenRouter dan gambar dasar.
                                                                             </div>
                                                                         </div>
                                                                     )}
@@ -17324,7 +17195,8 @@ const ProjectHubWorkspace: React.FC<ProjectHubWorkspaceProps> = ({
                                                             )}
                                                         </div>
 
-                                                        <div className="p-4 flex-grow flex flex-col">
+                                                        {shot.imageGenerationError && !shot.isGenerating && <div className="p-3" role="status"><p className="text-xs text-red-300">{shot.imageGenerationError}</p><button type="button" className="app-button app-primary" onClick={() => handleGenerateShotImage(shot.shot)}>Generate ulang shot {formatShotLabel(shot)}</button></div>}
+<div className="p-4 flex-grow flex flex-col">
                                                             <div className="flex justify-between items-start mb-2">
                                                                 <h4 className="font-bold text-white text-sm line-clamp-1">Action Description</h4>
                                                                 <button
@@ -17450,10 +17322,10 @@ const ProjectHubWorkspace: React.FC<ProjectHubWorkspaceProps> = ({
                                                                             disabled={!shot.imageUrl || shot.isAngleGenerating}
                                                                             className="w-full bg-indigo-600 hover:bg-indigo-500 disabled:bg-gray-700 text-white font-bold py-2 rounded-lg text-xs"
                                                                         >
-                                                                            {shot.isAngleGenerating ? 'Adjusting Angle...' : 'Regenerate with Angle (FAL)'}
+                                                                            {shot.isAngleGenerating ? 'Adjusting Angle...' : 'Generate ulang sudut (OpenRouter)'}
                                                                         </button>
                                                                         <div className="text-[10px] text-gray-500">
-                                                                            Requires a FAL API key and a base frame.
+                                                                            Memerlukan API key OpenRouter dan gambar dasar.
                                                                         </div>
                                                                     </div>
                                                                     <div className="pt-2 border-t border-gray-700/60">
@@ -17956,7 +17828,7 @@ const ProjectHubWorkspace: React.FC<ProjectHubWorkspaceProps> = ({
                                                             )}
 
                                                             <div className="mt-3 pt-2 flex flex-wrap gap-1">
-                                                                {shot.characters.map((char, i) => (
+                                                                {(shot.characters || []).map((char, i) => (
                                                                     <span key={i} className="text-[10px] px-1.5 py-0.5 bg-purple-500/10 text-purple-300 rounded border border-purple-500/20">{char}</span>
                                                                 ))}
                                                                 {shot.environment && (
@@ -18112,60 +17984,7 @@ const ProjectHubWorkspace: React.FC<ProjectHubWorkspaceProps> = ({
                                     <div className="phase-bar__tools">
                                         <div className="flex items-center gap-2 bg-gray-800 p-1 rounded-lg border border-gray-700">
                                             <span className="text-xs font-bold text-gray-400 px-2">Video Model:</span>
-                                            <div className="relative z-10 w-full min-w-[260px]">
-                                                <div
-                                                    className="app-input cursor-pointer flex items-center justify-between bg-gray-900 border-gray-700 hover:border-indigo-500/50 py-1.5 px-2 rounded"
-                                                    onClick={() => setIsFilmingModelDropdownOpen(!isFilmingModelDropdownOpen)}
-                                                >
-                                                    <div className="flex items-center gap-2">
-                                                        {FILMING_VIDEO_MODEL_OPTIONS.find(o => o.id === videoModel)?.icon ? (
-                                                            <img src={FILMING_VIDEO_MODEL_OPTIONS.find(o => o.id === videoModel)?.icon} className="w-4 h-4 rounded object-contain bg-black/40" alt="" />
-                                                        ) : (
-                                                            <div className="w-4 h-4 rounded bg-gray-800 flex items-center justify-center border border-gray-700">
-                                                                <span className="text-[9px] uppercase font-bold text-gray-400">{FILMING_VIDEO_MODEL_OPTIONS.find(o => o.id === videoModel)?.provider[0]}</span>
-                                                            </div>
-                                                        )}
-                                                        <span className="text-gray-200 text-xs font-bold">{FILMING_VIDEO_MODEL_OPTIONS.find(o => o.id === videoModel)?.label}</span>
-                                                    </div>
-                                                    <span className="text-gray-500 text-[10px] text-opacity-70 ml-2">▼</span>
-                                                </div>
-                                                {isFilmingModelDropdownOpen && (
-                                                    <div className="absolute top-full left-0 mt-1 w-[340px] max-h-[340px] overflow-y-auto bg-gray-900 border border-indigo-500/30 rounded shadow-2xl shadow-indigo-900/10">
-                                                        {FILMING_VIDEO_MODEL_OPTIONS.map((option) => (
-                                                            <div
-                                                                key={option.id}
-                                                                className={`p-2 cursor-pointer hover:bg-indigo-900/40 border-b border-gray-800/80 last:border-0 flex items-start gap-2 transition-colors ${videoModel === option.id ? 'bg-indigo-950/40' : ''}`}
-                                                                onClick={() => {
-                                                                    setVideoModel(option.id);
-                                                                    setIsFilmingModelDropdownOpen(false);
-                                                                }}
-                                                            >
-                                                                {option.icon ? (
-                                                                    <img src={option.icon} className="w-8 h-8 rounded mt-0.5 object-cover bg-black/40 shadow-sm border border-gray-800" alt="" />
-                                                                ) : (
-                                                                    <div className="w-8 h-8 rounded mt-0.5 bg-gray-800 flex items-center justify-center flex-shrink-0 shadow-sm border border-gray-700">
-                                                                        <span className="text-xs text-gray-400 font-bold uppercase">{option.provider[0]}</span>
-                                                                    </div>
-                                                                )}
-                                                                <div className="flex flex-col flex-1">
-                                                                    <div className="flex items-center justify-between gap-2">
-                                                                        <span className={`text-[11px] font-bold ${videoModel === option.id ? 'text-indigo-300' : 'text-gray-200'}`}>{option.label}</span>
-                                                                        <div className="flex items-center gap-1">
-                                                                            {option.badge && (
-                                                                                <span className={`text-[8px] font-bold px-1.5 py-0.5 rounded-full ${option.badge.includes('Recommended') ? 'bg-amber-500/20 text-amber-300 border border-amber-500/30' : option.badge.includes('Cheapest') ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30' : 'bg-sky-500/20 text-sky-300 border border-sky-500/30'}`}>{option.badge}</span>
-                                                                            )}
-                                                                            <span className="text-[8px] uppercase tracking-wider text-gray-400 px-1 py-0.5 bg-gray-950/80 rounded border border-gray-800">{option.provider}</span>
-                                                                        </div>
-                                                                    </div>
-                                                                    {option.goodFor && (
-                                                                        <span className="text-[10px] text-indigo-200/60 mt-0.5 leading-snug break-words pr-1">{option.goodFor}</span>
-                                                                    )}
-                                                                </div>
-                                                            </div>
-                                                        ))}
-                                                    </div>
-                                                )}
-                                            </div>
+                                            <OpenRouterModelPicker kind="video" value={videoModel} onChange={id => setVideoModel(id as any)} count={Math.max(1, storyboardVisibleShots.filter(s => !s.videoUrl && !s.isFilming).length)} ratio={referenceAspectRatio} resolution={routerVideoResolution} references={storyboardVisibleShots.some(s => s.imageUrl || s.startFrameUrl) ? 1 : 0} seconds={videoDurationSeconds} onSettingsChange={v => { if(v.resolution) setRouterVideoResolution(v.resolution); if(v.ratio) setReferenceAspectRatio(v.ratio as any); if(v.seconds) setVideoDurationSeconds(v.seconds); }} />
                                             {videoModel === 'kling-v2.6-motion-control' && (
                                                 <span className="text-[10px] text-amber-300 font-semibold px-2">Motion ref required</span>
                                             )}
@@ -19168,42 +18987,7 @@ const ProjectHubWorkspace: React.FC<ProjectHubWorkspaceProps> = ({
                                             </div>
                                         )}
                                     </div>
-                                    <div className="mt-3 flex flex-wrap gap-1.5 max-h-[80px] overflow-y-auto scrollbar-none">
-                                        {(
-                                            [
-                                                'nano-banana-pro',
-                                                'imagen',
-                                                'gemini-pro',
-                                                'grok-image',
-                                                'grok-image-fal',
-                                                'nano-banana-2-fal',
-                                                'z-image',
-                                                'qwen-2512',
-                                                'qwen-max-fal',
-                                                'qwen-multiangle',
-                                                'qwen-multiangle-fal',
-                                                'qwen',
-                                                'nano',
-                                                'z-turbo',
-                                                'flux',
-                                                'flux-klein',
-                                                'flux-2-turbo',
-                                                'gpt-image-1.5',
-                                                'seedream-v5-lite-fal',
-                                                'seedream',
-                                            ] as MarketingImageModel[]
-                                        ).map((model) => (
-                                            <button
-                                                key={model}
-                                                onClick={() => setMarketingImageModel(model)}
-                                                className={`px-2.5 py-0.5 rounded-full border text-[10px] font-semibold transition-colors ${marketingImageModel === model
-                                                    ? 'bg-indigo-600 border-indigo-500 text-white shadow-[0_0_0_1px_rgba(99,102,241,0.4)]'
-                                                    : 'border-gray-800 text-gray-400 hover:text-white hover:border-gray-600'}`}
-                                            >
-                                                {MARKETING_MODEL_LABELS[model]}
-                                            </button>
-                                        ))}
-                                    </div>
+                                    <OpenRouterModelPicker kind="image" value={marketingImageModel} onChange={id => setMarketingImageModel(id as any)} resolution={imageSize} ratio={referenceAspectRatio} />
                                     {(!apiKeyReady && !isReplicateGoogleProvider() && (marketingImageModel === 'gemini-pro' || marketingImageModel === 'imagen' || marketingImageModel === 'nano')) && (
                                         <div className="mt-2 text-[11px] text-amber-400">
                                             Gemini API key required for Google-hosted models.

@@ -1,3 +1,4 @@
+import { assertStudioAiProvider } from './aiRouting';
 import { MediaSubmissionRejected } from './mediaFailover';
 import { MediaItem } from '../types';
 import { getVideoDuration } from '../utils/helpers';
@@ -216,6 +217,7 @@ const falEstimateMs = (model: string) => {
 };
 
 const runFalInner = async (model: string, input: Record<string, any>) => {
+    assertStudioAiProvider('fal.ai');
     const token = getFalKeyOptional();
     const url = `https://fal.run/${model}`;
     if (!token && shouldUseByokProxy('fal')) {
@@ -284,6 +286,7 @@ const runFalQueueInner = async (
     onStatus?: (status: string, checks: number) => void,
     control?: { onQueued?: (cancelUrl: string | null) => void; isCancelled?: () => boolean },
 ) => {
+    assertStudioAiProvider('fal.ai');
     const token = getFalKeyOptional();
     const url = `https://queue.fal.run/${model}`;
     const start = token

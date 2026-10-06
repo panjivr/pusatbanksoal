@@ -237,6 +237,7 @@ const ApiKeyModal: React.FC<ApiKeyModalProps> = ({
     };
 
     const handleSaveKey = () => {
+        if (!window.dispatchEvent(new Event('bekal-ai-save-settings', {cancelable:true}))) return;
         setError('');
         setCloudError('');
 
@@ -528,45 +529,10 @@ const ApiKeyModal: React.FC<ApiKeyModalProps> = ({
                                     </p>
                                 </div>
                                 <div className="settings__providers">
-                                    <div className={`settings-provider ${mjStatus.connected ? 'settings-provider--on' : ''}`}>
-                                        <div className="settings-provider__head">
-                                            <div className="settings-provider__name">
-                                                <span className={`settings-provider__dot ${mjStatus.connected ? 'settings-provider__dot--on' : ''}`} aria-hidden="true" />
-                                                <strong>Midjourney · Jeff</strong>
-                                                <span className={`pk-chip ${mjStatus.connected ? 'pk-chip--ok' : ''}`}>{!mjStatus.available ? 'desktop app only' : mjStatus.connected ? 'signed in' : 'not signed in'}</span>
-                                                {mjStatus.busy && <span className="pk-chip pk-chip--accent">{mjStatus.running ? `${mjStatus.running} rendering` : 'working'}{mjStatus.waiting ? ` · ${mjStatus.waiting} waiting` : ''}</span>}
-                                            </div>
-                                            <span className="pk-actions">
-                                                {mjStatus.available && mjStatus.connected && (
-                                                    <button type="button" className="edit-text-btn" onClick={async () => setMjWindowOpen((await toggleMidjourneyWindow(!mjWindowOpen)).visible)}>{mjWindowOpen ? 'Hide window' : 'Show window'}</button>
-                                                )}
-                                                {mjStatus.available && (mjStatus.connected ? (
-                                                    <button type="button" className="edit-text-btn edit-text-btn--outline" onClick={handleMidjourneyDisconnect} disabled={mjBusy !== null}>{mjBusy === 'disconnect' ? 'Signing out…' : 'Sign out'}</button>
-                                                ) : (
-                                                    <button type="button" className="edit-text-btn edit-text-btn--primary" onClick={handleMidjourneyConnect} disabled={mjBusy !== null}>{mjBusy === 'connect' ? 'Waiting for sign-in…' : 'Sign in'}</button>
-                                                ))}
-                                            </span>
-                                        </div>
-                                        <p className="pk-hint">
-                                            No API key — Jeff is a background browser that uses your own Midjourney account. Sign in once (Google or Discord) in the window that opens; after that Concept and Storyboard can pick “Midjourney · Jeff” as the image model and everything runs unattended. Automation is against Midjourney’s terms; use at your own risk.
-                                        </p>
-                                        {mjStatus.error && <p className="pk-hint" style={{ color: 'var(--app-danger)' }}>{mjStatus.error}</p>}
-                                        {mjStatus.available && (
-                                            <div className="pk-field settings-provider__extra">
-                                                <span>Parallel jobs</span>
-                                                <div className="pk-seg" style={{ gridTemplateColumns: 'repeat(6, 1fr)' }}>
-                                                    {[1, 2, 3, 4, 5, 6].map((count) => (
-                                                        <button key={count} type="button" aria-pressed={mjConcurrency === count} onClick={() => setMjConcurrency(setMidjourneyConcurrency(count))}>{count}</button>
-                                                    ))}
-                                                </div>
-                                                <span className="pk-hint" style={{ textTransform: 'none', letterSpacing: 0, fontWeight: 500 }}>How many jobs Jeff keeps rendering at once. Basic and Standard plans allow 3 fast jobs, Pro 12; more than your plan allows just queues at Midjourney.</span>
-                                            </div>
-                                        )}
-                                    </div>
-                                    <AiRoutingSettings />
-                                    {visibleProviders.map(renderProvider)}
+                                                                        <AiRoutingSettings />
+
                                 </div>
-                                {hiddenCount > 0 && (
+                                {false && hiddenCount > 0 && (
                                     <button type="button" className="edit-text-btn edit-text-btn--outline self-start" onClick={() => setShowAllProviders(true)}>Show {hiddenCount} more provider{hiddenCount === 1 ? '' : 's'}</button>
                                 )}
                                 {showAllProviders && hiddenCount === 0 && providers.some((row) => !row.essential && !row.value.trim()) && (

@@ -1,66 +1,35 @@
-import { generateRoutedOpenRouterImage } from './openRouterImages';
 import { GoogleGenAI } from '@google/genai';
-import { withModelFallback } from './geminiModelFallback';
-import { generationTimeoutSeconds, isNativeMediaRequest, safeGenerationError, isBlockedGenerationResponse } from './generationSupport';
+import { generateRoutedOpenRouterImage } from './openRouterImages';
+import { generateStudioAudio, studioSelectedModel } from './openRouterMedia';
 import { AiRouteError, canFailoverAi, executeAiRoutes, gatewayCanHandle, gatewayGenerate, isOpenRouter, resolveOpenRouterRoute, hasTextAiConfigured, readAiRouting, type GeminiRequest, type RoutingAttempt } from './aiRouting';
-
-/** Text gateways and native media APIs have separate capabilities and time budgets. */
+/** SDK-shaped client preserves the editor's structured prompts and tools; every generation uses OpenRouter. */
 export const getStudioAiClient = (): GoogleGenAI => {
-  const geminiKey = process.env.API_KEY || localStorage.getItem('gemini_api_key')?.trim();
-  if (!geminiKey && !hasTextAiConfigured()) throw new AiRouteError('Tambahkan API Gemini atau layanan AI yang sesuai di Pengaturan.', undefined, true);
-  const ai = withModelFallback(new GoogleGenAI({ apiKey: geminiKey || 'bekal-not-configured' }));
-  const announce = (provider: string, status: string, error?: unknown) => window.dispatchEvent(new CustomEvent('bekal-ai-route-status', { detail: { provider, status, message: error instanceof AiRouteError ? error.message : undefined } }));
-  const nativeCall = async <T>(req: { model: string; config?: any }, invoke: (signal: AbortSignal) => Promise<T>): Promise<T> => {
-    const controller = new AbortController();
-    const signal = req.config?.abortSignal as AbortSignal | undefined;
-    if (signal?.aborted) throw new DOMException('Permintaan dibatalkan.', 'AbortError');
-    const cancel = () => controller.abort(signal?.reason);
-    signal?.addEventListener('abort', cancel, { once: true });
-    const seconds = generationTimeoutSeconds(req, readAiRouting().timeoutSeconds);
-    const timer = setTimeout(() => controller.abort(), seconds * 1000);
-    try {
-      const result = await invoke(controller.signal);
-      if (isBlockedGenerationResponse(result)) throw new AiRouteError('Gemini: Permintaan ditolak oleh kebijakan konten penyedia. Sesuaikan prompt.', undefined, true);
-      return result;
-    }
-    catch (error) {
-      if (signal?.aborted) throw new DOMException('Permintaan dibatalkan.', 'AbortError');
-      if (controller.signal.aborted) throw new AiRouteError(`Gemini melewati batas waktu ${seconds} detik. Proses dihentikan di browser; periksa penyedia sebelum mengirim ulang.`);
-      if (error instanceof AiRouteError) throw error;
-      const safe = safeGenerationError(error);
-      throw new AiRouteError(safe.message, safe.status, safe.blocked);
-    } finally { clearTimeout(timer); signal?.removeEventListener('abort', cancel); }
-  };
-  const nativeGenerate = ai.models.generateContent.bind(ai.models);
-  ai.models.generateContent = async (params) => {
-    const req = params as GeminiRequest;
-    if (readAiRouting().imagesViaOpenRouter === true && req.config?.responseModalities?.includes('IMAGE')) {
-      return generateRoutedOpenRouterImage(req, geminiKey ? () => nativeCall(req, signal => nativeGenerate({ ...params, config: { ...params.config, abortSignal: signal } })) : undefined, fetch, announce);
-    }
-    const config = readAiRouting();
+  if (!hasTextAiConfigured()) throw new AiRouteError('Isi dan aktifkan API key OpenRouter di Pengaturan.', undefined, true);
+  const ai = new GoogleGenAI({ apiKey:'openrouter-adapter' });
+  const announce = (provider: string, status: string, error?: unknown) => window.dispatchEvent(new CustomEvent('bekal-ai-route-status', { detail:{ provider,status,message:error instanceof AiRouteError ? error.message : undefined } }));
+  ai.models.generateContent = async params => {
+    const req = params as GeminiRequest, config = readAiRouting();
+    if (req.config?.responseModalities?.includes('IMAGE')) return generateRoutedOpenRouterImage(req, undefined, fetch, announce);
+    if (req.config?.responseModalities?.includes('AUDIO')) throw new AiRouteError('Gunakan alur audio OpenRouter untuk mendapatkan berkas audio sesuai format asli model.', undefined, true);
     const language = 'Jawab dalam bahasa Indonesia yang alami. Pertahankan struktur JSON, nama properti, nama fungsi, dan parameter teknis.';
-    const originalSystem = req.config?.systemInstruction;
-    // Image/audio prompts and references must be passed unchanged to the media model.
-    const localized = isNativeMediaRequest(req) ? params : { ...params, config: { ...params.config, systemInstruction: originalSystem ? (typeof originalSystem === 'string' ? `${originalSystem}\n${language}` : { parts: [...(Array.isArray(originalSystem) ? originalSystem : typeof originalSystem === 'object' && 'parts' in originalSystem ? originalSystem.parts || [] : [{ text: String(originalSystem) }]), { text: language }] }) : language } };
-    const gateways: RoutingAttempt[] = config.routes.filter(r => r.enabled && r.baseUrl && r.model && gatewayCanHandle(isOpenRouter(r) ? { ...r, tools: true, json: true, vision: true } : r, req)).map(r => ({ id: r.name, run: async () => {
+    const system = req.config?.systemInstruction;
+    const localized = { ...req, config:{ ...req.config, systemInstruction: typeof system === 'string' ? `${system}\n${language}` : system ? { parts:[...(Array.isArray(system) ? system : system.parts || []),{text:language}] } : language } };
+    const attempts: RoutingAttempt[] = config.routes.filter(r => isOpenRouter(r) && r.enabled && r.apiKey.trim() && r.model).map(r => ({ id:r.name, run:async () => {
       const resolved = await resolveOpenRouterRoute(r);
-      if (!gatewayCanHandle(resolved, req)) throw new AiRouteError('Model OpenRouter ini belum mendukung kemampuan yang diminta. Pilih model dengan dukungan alat atau analisis gambar yang sesuai.', 422);
-      return gatewayGenerate(resolved, req, config.timeoutSeconds);
+      if (!gatewayCanHandle(resolved,req)) throw new AiRouteError('Model OpenRouter ini belum mendukung format permintaan. Pilih model teks dengan dukungan JSON, alat, atau analisis gambar yang sesuai.',422);
+      return gatewayGenerate(resolved, localized, config.timeoutSeconds);
     } }));
-    const google: RoutingAttempt[] = geminiKey ? [{ id: 'Gemini', run: () => nativeCall(req, signal => nativeGenerate({ ...localized, config: { ...localized.config, abortSignal: signal } } as typeof params)) }] : [];
-    const attempts = config.preferGateway ? [...gateways, ...google] : [...google, ...gateways];
-    if (!attempts.length) throw new AiRouteError(isNativeMediaRequest(req) ? 'Pembuatan gambar dan audio membutuhkan API penyedia media. Router teks atau analisis gambar tidak menghasilkan gambar. Isi API Gemini, atau pilih model fal.ai/Replicate yang kuncinya tersedia.' : 'Belum ada layanan aktif yang mendukung format permintaan ini. Periksa dukungan JSON, analisis gambar, dan alat di Pengaturan AI.', undefined, true);
-    return executeAiRoutes(attempts, config.fallback, announce);
+    if (!attempts.length) throw new AiRouteError('Pilih model teks OpenRouter di Pengaturan, lalu simpan.',undefined,true);
+    return executeAiRoutes(attempts,config.fallback,announce);
   };
-  // Imagen and video submissions bypass generateContent, so protect these paths too.
-  for (const method of ['generateImages', 'generateVideos'] as const) {
-    const native = ai.models[method].bind(ai.models) as (params: any) => Promise<any>;
-    (ai.models as any)[method] = async (params: any) => {
-      if (!geminiKey) throw new AiRouteError('Model media Google ini membutuhkan API Gemini. Router teks tidak membuat gambar/video. Isi API Gemini atau pilih penyedia media lain.', undefined, true);
-      return executeAiRoutes([{ id: 'Gemini', run: () => nativeCall(params, signal => native({ ...params, config: { ...params.config, abortSignal: signal } })) }], false, announce);
-    };
-  }
-  if (!geminiKey) ai.files.upload = async () => { throw new AiRouteError('Unggah media Google membutuhkan API Gemini. Router teks tidak menerima file Google.', undefined, true); };
+  ai.models.generateImages = async params => {
+    const req = params as any;
+    const result = await generateRoutedOpenRouterImage({ model:studioSelectedModel('image') || configImageModel(),contents:req.prompt,config:{responseModalities:['IMAGE'],imageConfig:{aspectRatio:req.config?.aspectRatio || '1:1',imageSize:'1K'}} });
+    return {generatedImages:result.candidates[0].content.parts.filter((p:any) => p.inlineData).map((p:any) => ({ image:{imageBytes:p.inlineData.data,mimeType:p.inlineData.mimeType} }))} as any;
+  };
+  ai.models.generateVideos = async () => { throw new AiRouteError('Pilih model dan parameter dari katalog video OpenRouter pada panel Video AI.',undefined,true); };
+  ai.files.upload = async () => { throw new AiRouteError('Unggah langsung ke Google dinonaktifkan. Gunakan masukan berkas lokal pada alur OpenRouter.',undefined,true); };
   return ai;
 };
+const configImageModel = () => readAiRouting().openRouterImageModel || '';
 export { hasTextAiConfigured, canFailoverAi };

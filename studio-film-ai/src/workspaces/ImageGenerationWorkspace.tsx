@@ -1,3 +1,5 @@
+import OpenRouterModelPicker from '../components/OpenRouterModelPicker';
+import { generateStudioImage, generateStudioVideo, studioSelectedModel } from '../services/openRouterMedia';
 import { readAiRouting } from '../services/aiRouting';
 import { configuredOpenRouterImageRoute } from '../services/openRouterImages';
 import { availableGenerationModels } from '../services/generationSupport';
@@ -590,7 +592,7 @@ const readImageWorkspaceUiPrefs = (scope: string): ImageWorkspaceUiPrefs => {
     const all = JSON.parse(raw) as Record<string, ImageWorkspaceUiPrefs>;
     const scoped = all?.[scope];
     if (!scoped || typeof scoped !== 'object') return {};
-    if (typeof scoped.modelId === 'string' && isImageModelId(scoped.modelId)) {
+    if (typeof scoped.modelId === 'string' && (isImageModelId(scoped.modelId) || /^[a-zA-Z0-9_.-]+\/[a-zA-Z0-9_.:-]+$/.test(scoped.modelId))) {
       return { modelId: scoped.modelId };
     }
     return {};
@@ -798,7 +800,7 @@ const ImageGenerationWorkspace: React.FC<ImageGenerationWorkspaceProps> = ({
     if ((ASPECT_RATIOS as readonly string[]).includes(target)) setAspectRatio(target as (typeof ASPECT_RATIOS)[number]);
   }, [productionFormatId]);
   const [imageSize, setImageSize] = useState<(typeof IMAGE_SIZES)[number]>('2K');
-  const [modelId, setModelId] = useState<ImageModelId>(() => storedUiPrefs.modelId || 'gemini-pro');
+  const [modelId, setModelId] = useState<ImageModelId>(() => storedUiPrefs.modelId || studioSelectedModel('image') as ImageModelId || 'gemini-pro');
   const [smartRouterGoal, setSmartRouterGoal] = useState('');
   const [appliedSmartRoute, setAppliedSmartRoute] = useState<SmartModelRoute<ImageModelId> | null>(null);
   const [cameraPresetId, setCameraPresetId] = useState('auto');
@@ -993,7 +995,7 @@ const ImageGenerationWorkspace: React.FC<ImageGenerationWorkspaceProps> = ({
     || modelId === 'nano-banana-2-fal-edit'
     || modelId === 'comfyui';
   const readyForGeneration = modelId === 'comfyui' ? true : apiKeyReady !== false;
-  const referenceLimit = MODEL_REFERENCE_LIMITS[modelId] || 0;
+  const referenceLimit = modelId.includes('/') ? Number.MAX_SAFE_INTEGER : MODEL_REFERENCE_LIMITS[modelId] || 0;
   const supportsReferences = referenceLimit > 0;
   const supportsLora = LORA_SUPPORTED_MODELS.has(modelId);
   const hasMoodboard = moodboard.length > 0;
@@ -2150,10 +2152,8 @@ const ImageGenerationWorkspace: React.FC<ImageGenerationWorkspaceProps> = ({
     try {
       const relightPrompt = buildRelightPrompt(buildRelightSettings());
       const baseImage = await getBase64FromUrl(relightSourceUrl);
-      const modelLabel = relightModel === 'gemini' ? 'Gemini 3 Pro' : 'Replicate Relight';
-      const item = relightModel === 'gemini'
-        ? await relightImageWithGemini3Pro(relightPrompt, baseImage, effectiveAspectRatio, imageSize)
-        : await relightImageWithReplicate(relightPrompt, baseImage, { aspectRatio: effectiveAspectRatio });
+      const modelLabel = relightModel;
+      const item = await generateStudioImage(relightModel, relightPrompt, [baseImage], effectiveAspectRatio, imageSize);
       const itemWithMeta = { ...item, generatedBy: `Relight (${modelLabel})`, prompt: relightPrompt };
       onAddGeneratedMedia(itemWithMeta);
       setGenerated((prev) => [itemWithMeta, ...prev].slice(0, 12));
@@ -2236,6 +2236,9 @@ const ImageGenerationWorkspace: React.FC<ImageGenerationWorkspaceProps> = ({
   };
 
   const handleGenerate = async () => {
+    if (!modelId.includes('/')) { setStatus('Pilih model dari katalog OpenRouter sebelum generate.'); return; }
+    if (loraUrl?.trim()) { setStatus('LoRA belum didukung OpenRouter. Bobot tidak dihapus otomatis.'); return; }
+
     if (!finalPrompt.trim()) {
       setStatus('Add a prompt before generating.');
       return;
@@ -2698,7 +2701,7 @@ const ImageGenerationWorkspace: React.FC<ImageGenerationWorkspaceProps> = ({
           break;
         }
         default:
-          throw new Error('Unsupported model selection.');
+          item = await generateStudioImage(resolvedModelId, shapedPrompt, referenceImages, effectiveAspectRatio, imageSize);
       }
       const modelLabel = MODEL_OPTIONS.find((option) => option.id === modelId)?.label;
       const itemWithMeta = { ...item, generatedBy: modelLabel, prompt: shapedPrompt };
@@ -3124,55 +3127,7 @@ const ImageGenerationWorkspace: React.FC<ImageGenerationWorkspaceProps> = ({
                             </div>
                           )}
                         </div>
-                        <div ref={modelDropdownRef} className="relative z-10 w-full">
-                        <label className="text-xs uppercase tracking-[0.12em] text-gray-500">Creative Engine</label>
-                        <div
-                          className="app-input mt-1 cursor-pointer flex items-center justify-between hover:border-indigo-500/50"
-                          onClick={() => setIsModelDropdownOpen(!isModelDropdownOpen)}
-                        >
-                          <div className="flex items-center gap-3">
-                            {MODEL_OPTIONS.find(o => o.id === modelId)?.icon ? (
-                              <img src={MODEL_OPTIONS.find(o => o.id === modelId)?.icon} className="w-5 h-5 rounded object-contain bg-black/40" alt="" />
-                            ) : (
-                              <div className="w-5 h-5 rounded bg-gray-800 flex items-center justify-center border border-gray-700">
-                                <span className="text-[10px] uppercase font-bold text-gray-400">{MODEL_OPTIONS.find(o => o.id === modelId)?.provider[0]}</span>
-                              </div>
-                            )}
-                            <span className="text-gray-200 text-sm font-medium">{MODEL_OPTIONS.find(o => o.id === modelId)?.label}</span>
-                          </div>
-                          <span className="text-gray-500 text-xs text-opacity-70">▼</span>
-                        </div>
-                        {isModelDropdownOpen && (
-                          <div className="absolute top-full left-0 right-0 mt-2 max-h-[400px] overflow-y-auto app-menu border border-indigo-500/20 rounded-2xl shadow-2xl">
-                            {MODEL_OPTIONS.map((option) => (
-                              <div
-                                key={option.id}
-                                className={`p-3 cursor-pointer hover:bg-indigo-500/8 border-b border-white/5 last:border-0 flex items-start gap-3 transition-colors ${modelId === option.id ? 'bg-indigo-500/10' : ''}`}
-                                onClick={() => { setModelId(option.id); setAppliedSmartRoute(null); setIsModelDropdownOpen(false); }}
-                              >
-                                {option.icon ? (
-                                  <img src={option.icon} className="w-10 h-10 rounded-lg mt-0.5 object-cover bg-black/40 shadow-sm border border-gray-800" alt="" />
-                                ) : (
-                                  <div className="w-10 h-10 rounded-lg mt-0.5 bg-gray-800 flex items-center justify-center flex-shrink-0 shadow-sm border border-gray-700">
-                                    <span className="text-xs text-gray-400 font-bold uppercase">{option.provider[0]}</span>
-                                  </div>
-                                )}
-                                <div className="flex flex-col flex-1">
-                                  <div className="flex items-center justify-between gap-2">
-                                    <span className={`text-sm font-medium ${modelId === option.id ? 'text-indigo-200' : 'text-gray-200'}`}>{option.label}</span>
-                                    {isProMode && (
-                                      <span className="text-[9px] uppercase tracking-wider text-gray-400 px-1.5 py-0.5 bg-black/20 rounded-full border border-white/10">{option.provider}</span>
-                                    )}
-                                  </div>
-                                  {option.goodFor && (
-                                    <span className="text-xs text-gray-400 mt-1 leading-snug break-words pr-2">{option.goodFor}</span>
-                                  )}
-                                </div>
-                              </div>
-                            ))}
-                          </div>
-                        )}
-                        </div>
+                        <OpenRouterModelPicker kind="image" value={modelId} onChange={id => setModelId(id as any)} ratio={effectiveAspectRatio} resolution={imageSize} references={activeReferences.length} onSettingsChange={v => { if(v.resolution) setImageSize(v.resolution as any); if(v.ratio) setAspectRatio(v.ratio as any); }} />
                         <div className="grid gap-4 md:grid-cols-2">
                           <div>
                         <label className="text-xs uppercase tracking-[0.12em] text-gray-500">Format</label>
@@ -4510,14 +4465,7 @@ const ImageGenerationWorkspace: React.FC<ImageGenerationWorkspaceProps> = ({
                     <div className="grid gap-4 md:grid-cols-2">
                       <div>
                         <label className="text-xs uppercase tracking-[0.2em] text-gray-400">Relight Model</label>
-                        <select
-                          value={relightModel}
-                          onChange={(event) => setRelightModel(event.target.value as 'gemini' | 'replicate')}
-                          className="app-select mt-1"
-                        >
-                          <option value="gemini">Gemini 3 Pro</option>
-                          <option value="replicate">Replicate (Qwen Edit)</option>
-                        </select>
+                        <OpenRouterModelPicker kind="image" value={relightModel} onChange={id => setRelightModel(id as any)} references={1} resolution={imageSize} ratio={effectiveAspectRatio} />
                       </div>
                     </div>
 

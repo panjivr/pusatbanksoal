@@ -1,3 +1,5 @@
+import OpenRouterModelPicker from '../components/OpenRouterModelPicker';
+import { generateStudioVideo } from '../services/openRouterMedia';
 import { availableGenerationModels } from '../services/generationSupport';
 import React, { useEffect, useMemo, useState } from 'react';
 import { CostRate, MediaItem, RecentProject, ReferenceItem, ShotPrompt } from '../types';
@@ -481,6 +483,7 @@ const VideoGenerationWorkspace: React.FC<VideoGenerationWorkspaceProps> = ({
   const [modelId, setModelId] = useState<VideoModelId>(() => storedUiPrefs.modelId || 'veo-fast');
   const [prompt, setPrompt] = useState('');
   const [smartPromptStructure, setSmartPromptStructure] = useState(true);
+  const [routerVideoResolution, setRouterVideoResolution] = useState('720p');
   const [aspectRatio, setAspectRatio] = useState<AspectRatioOption>('16:9');
   useEffect(() => {
     if (!productionFormatId) return;
@@ -558,7 +561,7 @@ const VideoGenerationWorkspace: React.FC<VideoGenerationWorkspaceProps> = ({
   const hasStoryboardReferences = storyboardReferenceAssets.length > 0;
   const hasRequiredImageReference = hasStartFrame || (supportsStoryboardRefs && hasStoryboardReferences);
   const hasSeedanceOmniReference = hasStartFrame || hasMotionReference || hasStoryboardReferences;
-  const normalizedDurationSeconds = durationConfig.supported
+  const normalizedDurationSeconds = modelId.includes('/') ? videoDurationSeconds : durationConfig.supported
     ? closestDurationOption(durationConfig.options, Number(videoDurationSeconds) || durationConfig.fallback, durationConfig.fallback)
     : durationConfig.fallback;
   const estimatedDurationSeconds = useMemo(() => {
@@ -846,6 +849,8 @@ const VideoGenerationWorkspace: React.FC<VideoGenerationWorkspaceProps> = ({
   }, [seedImage, onConsumeSeed]);
 
   const handleGenerate = async () => {
+    if (!modelId.includes('/')) { setStatus('Pilih model video dari katalog OpenRouter sebelum generate.'); return; }
+
     const parseKlingMultiPrompt = (value: string): Array<{ prompt: string; duration?: number }> => {
       const lines = (value || '')
         .split('\n')
@@ -1332,7 +1337,7 @@ const VideoGenerationWorkspace: React.FC<VideoGenerationWorkspaceProps> = ({
           });
           break;
         default:
-          throw new Error('Unsupported model selection.');
+          item = await generateStudioVideo(resolvedModelId, shapedPrompt, { ratio: aspectRatio, resolution: routerVideoResolution, seconds: normalizedDurationSeconds, start: reference, end: endFrameReference, onProgress: setStatus });
       }
 
       const itemWithMeta = { ...item, generatedBy: modelOption?.label };
@@ -1448,51 +1453,7 @@ const VideoGenerationWorkspace: React.FC<VideoGenerationWorkspaceProps> = ({
                 </div>
               <div>
                 <label className="text-xs uppercase tracking-[0.12em] text-gray-500">Video Engine</label>
-                <select
-                  value={modelId}
-                  onChange={(event) => setModelId(event.target.value as VideoModelId)}
-                  className="app-select mt-2"
-                >
-                  <option value="auto">✨ Auto (best for the shot)</option>
-                  <optgroup label="Google">
-                    <option value="veo-fast">Veo 3.1 Fast</option>
-                    <option value="veo">Veo 3.1 (HQ)</option>
-                  </optgroup>
-                  <optgroup label="xAI / Grok">
-                    <option value="grok-video">Grok Imagine Video</option>
-                    <option value="grok-imagine-i2v-fal">Grok Imagine I2V (FAL)</option>
-                  </optgroup>
-                  <optgroup label="FAL / Alibaba">
-                    <option value="happy-horse-t2v-fal">Happy Horse 1.0 T2V</option>
-                    <option value="happy-horse-i2v-fal">Happy Horse 1.0 I2V</option>
-                    <option value="wan-v27-t2v-fal">WAN 2.7 T2V</option>
-                    <option value="wan-v27-i2v-fal">WAN 2.7 I2V</option>
-                  </optgroup>
-                  <optgroup label="Kling">
-                    <option value="kling-26">Kling 2.6</option>
-                    <option value="kling-25">Kling 2.5 Turbo</option>
-                    <option value="kling-o3-pro-fal">Kling O3 Pro (FAL)</option>
-                    <option value="kling-v3-pro-i2v-fal">Kling v3 Pro I2V (FAL)</option>
-                    <option value="kling-v3-pro-t2v-fal">Kling v3 Pro T2V (FAL)</option>
-                    <option value="kling-motion">Kling 2.6 Motion Control</option>
-                  </optgroup>
-                  <optgroup label="Other">
-                    <option value="seedance">Seedance 1.5 Pro</option>
-                    <option value="seedance-2-fal">Seedance 2.0 I2V (FAL)</option>
-                    <option value="seedance-2-omni-fal">Seedance 2.0 Omni (FAL)</option>
-                    <option value="seedance-25-t2v-fal">Seedance 2.5 T2V (FAL)</option>
-                    <option value="seedance-25-i2v-fal">Seedance 2.5 I2V (FAL)</option>
-                    <option value="seedance-25-ref-fal">Seedance 2.5 Omni (FAL)</option>
-                    <option value="wan-i2v">Wan 2.2 I2V Fast</option>
-                    <option value="pixverse-c1-ref-fal">PixVerse C1 Reference (FAL)</option>
-                    <option value="aurora-fal">Creatify Aurora (Avatar)</option>
-                    <option value="ltx">LTX 2 Fast</option>
-                    <option value="ltx-23-fast">LTX 2.3 Fast</option>
-                    <option value="ltx-23-pro">LTX 2.3 Pro</option>
-                    <option value="ltx-audio">LTX Audio-to-Video</option>
-                    <option value="p-video">P-Video</option>
-                  </optgroup>
-                </select>
+                <OpenRouterModelPicker kind="video" value={modelId} onChange={id => setModelId(id as any)} seconds={normalizedDurationSeconds} ratio={aspectRatio} resolution={routerVideoResolution} references={referenceFile || referenceUrl ? 1 : 0} onSettingsChange={v => { if(v.resolution) setRouterVideoResolution(v.resolution); if(v.ratio) setAspectRatio(v.ratio as any); if(v.seconds) setVideoDurationSeconds(v.seconds); }} />
               </div>
               <div className="video-model-summary">
                 <div className="flex flex-wrap items-center justify-between gap-2">

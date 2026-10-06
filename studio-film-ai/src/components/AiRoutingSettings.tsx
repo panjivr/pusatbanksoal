@@ -1,94 +1,26 @@
-import { getOpenRouterImageModels } from '../services/openRouterImages';
-import React, { useState } from 'react';
-import { AiRouteError, defaultAiRouting, gatewayGenerate, isOpenRouter, resolveOpenRouterRoute, normalizeAiBaseUrl, readAiRouting, saveAiRouting, type AiRoute } from '../services/aiRouting';
-
-const AiRoutingSettings: React.FC = () => {
-  const [config, setConfig] = useState(readAiRouting);
-  const [imageModels, setImageModels] = useState<any[]>([]);
-  const loadImageModels = async () => {
-    const route = config.routes.find(r => r.enabled && isOpenRouter(r));
-    if (!route) { setMessage('Aktifkan OpenRouter terlebih dahulu.'); return; }
-    setBusy('image-catalog');
-    try { const models = (await getOpenRouterImageModels(route)).filter(m => m.architecture?.output_modalities?.includes('image')); setImageModels(models); setMessage(`${models.length} model gambar tersedia. Model dengan referensi yang tidak kompatibel akan dilewati otomatis.`); }
-    catch (e) { setMessage(e instanceof Error ? e.message : 'Katalog belum dapat dimuat.'); }
-    finally { setBusy(null); }
-  };
-  const [message, setMessage] = useState('');
-  const [busy, setBusy] = useState<string | null>(null);
-  const update = (id: string, patch: Partial<AiRoute>) => { setConfig(c => ({ ...c, routes: c.routes.map(r => r.id === id ? { ...r, ...patch } : r) })); setMessage('Ada perubahan yang belum disimpan.'); };
-  const move = (index: number, direction: number) => setConfig(c => { const routes = [...c.routes]; [routes[index], routes[index + direction]] = [routes[index + direction], routes[index]]; return { ...c, routes }; });
-  const save = () => { try { saveAiRouting(config); setConfig(readAiRouting()); setMessage('Konfigurasi tersimpan. Urutan di bawah menjadi urutan layanan cadangan.'); } catch (e) { setMessage(e instanceof Error ? e.message : 'Konfigurasi belum tersimpan.'); } };
-  const test = async (route: AiRoute) => {
-    if (!route.baseUrl.trim() || !route.model.trim()) { setMessage('Isi alamat API dan model/kombo sebelum menguji.'); return; }
-    setBusy(route.id); setMessage(`Menguji ${route.name}...`);
-    try {
-      normalizeAiBaseUrl(route.baseUrl);
-      const resolved = await resolveOpenRouterRoute(route);
-      await gatewayGenerate(resolved, { model: 'text', contents: 'Jawab hanya: Siap.' }, Math.min(config.timeoutSeconds, 20));
-      if (isOpenRouter(route)) {
-        if (resolved.tools) {
-          const probe = await gatewayGenerate(resolved, { model: 'text', contents: 'Panggil fungsi cek_koneksi dengan nilai siap true. Jangan menjalankan fungsi lain.', config: {
-            tools: [{ functionDeclarations: [{ name: 'cek_koneksi', parameters: { type: 'object', properties: { siap: { type: 'boolean' } }, required: ['siap'] } }] }],
-            toolConfig: { functionCallingConfig: { mode: 'ANY' } },
-          } }, Math.min(config.timeoutSeconds, 20));
-          if (probe.functionCalls?.[0]?.name !== 'cek_koneksi' || probe.functionCalls[0].args.siap !== true) throw new AiRouteError('Model menjawab teks, tetapi uji panggilan alat belum berhasil. Coba model lain.', 422);
-        }
-        const jsonProbe = await gatewayGenerate(resolved, { model: 'text', contents: 'Keluarkan JSON dengan siap bernilai true.', config: { responseMimeType: 'application/json', responseSchema: { type: 'OBJECT', properties: { siap: { type: 'BOOLEAN' } }, required: ['siap'] } } }, Math.min(config.timeoutSeconds, 20));
-        if (JSON.parse(jsonProbe.text).siap !== true) throw new AiRouteError('Uji JSON belum memberikan hasil yang diminta. Coba model lain.', 422);
-        update(route.id, { tools: resolved.tools, json: resolved.json, vision: resolved.vision });
-        setMessage(`${route.name} berhasil diuji untuk teks dan JSON${resolved.tools ? ', serta panggilan alat editor' : '. Model ini tidak mendukung panggilan alat editor'}. Simpan konfigurasi untuk menggunakannya.`);
-      } else setMessage(`${route.name} berhasil menjawab. Simpan konfigurasi untuk menggunakannya.`);
-    } catch (e) { setMessage(e instanceof AiRouteError || e instanceof Error ? e.message : 'Koneksi belum berhasil.'); }
-    finally { setBusy(null); }
-  };
-  return <section className="ai-routing-settings" aria-labelledby="ai-routing-title">
-    <h3 id="ai-routing-title">Router AI dan layanan cadangan</h3>
-    <p className="pk-hint">Hubungkan 9Router melalui API yang kompatibel dengan OpenAI. Masukkan nama model atau kombo dari dashboard 9Router. Kombo dapat mengatur pergantian model dan akun di 9Router.</p>
-    <p className="pk-hint">9Router berjalan sebagai layanan terpisah milikmu. Gunakan alamat HTTPS yang dapat diakses browser dan mengizinkan CORS dari pusatbanksoal.id. Alamat localhost merujuk ke perangkat yang sedang membuka web ini.</p>
-    <label className="ai-route-check"><input type="checkbox" checked={config.preferGateway} onChange={e => setConfig(c => ({ ...c, preferGateway: e.target.checked }))} /> Utamakan router, gunakan Gemini sebagai cadangan</label>
-    <label className="ai-route-check"><input type="checkbox" checked={config.fallback} onChange={e => setConfig(c => ({ ...c, fallback: e.target.checked }))} /> Pindah otomatis saat kunci tidak valid, kuota habis, koneksi gagal, atau layanan sibuk</label>
-    <label className="ai-route-check"><input type="checkbox" checked={config.imagesViaOpenRouter === true} onChange={e => setConfig(c => ({ ...c, imagesViaOpenRouter: e.target.checked }))} /> Utamakan OpenRouter untuk gambar, termasuk Flux dan model lain di katalog</label>
-    <p className="pk-hint">Satu kunci memakai model gambar yang tersedia di OpenRouter. Jika kamu memilih Flux atau model penyedia lain secara langsung di studio, pilihan itu mengalahkan model utama di sini dan tidak diganti ke Gemini. Mode otomatis mengutamakan model yang dipilih di studio, lalu mencoba model lain yang menerima masukan yang sama. Referensi karakter tidak dihapus. Video dan audio mengikuti penyedia masing-masing.</p>
-    {config.imagesViaOpenRouter && <>
-      <label className="pk-field"><span>Model gambar utama OpenRouter</span><select aria-label="Model gambar utama OpenRouter" className="app-input" value={config.openRouterImageModel || 'auto'} onChange={e => setConfig(c => ({ ...c, openRouterImageModel: e.target.value }))}>
-        <option value="auto">Otomatis dari katalog</option>
-        {config.openRouterImageModel && config.openRouterImageModel !== 'auto' && !imageModels.some(m => m.id === config.openRouterImageModel) && <option value={config.openRouterImageModel}>{config.openRouterImageModel}</option>}
-        {imageModels.map(m => <option key={m.id} value={m.id}>{m.name || m.id} ({m.id})</option>)}
-      </select></label>
-      <button type="button" className="app-button app-secondary" disabled={Boolean(busy)} onClick={() => void loadImageModels()}>{busy === 'image-catalog' ? 'Memuat katalog...' : 'Muat model gambar OpenRouter'}</button>
-      <p className="pk-hint">Jika cadangan otomatis aktif, OpenRouter mencoba penyedia lain dan studio mencoba model kompatibel berikutnya saat permintaan ditolak. Setelah pilihan OpenRouter habis, API Gemini yang sudah diisi menjadi cadangan. Saldo habis berlaku untuk satu kunci, sehingga kunci itu tidak dicoba berulang. Batas waktu, pembatalan, hasil kosong, dan penolakan konten menghentikan proses. Biaya dan karakter visual mengikuti model yang berhasil; OpenRouter menentukan dukungan rasio dan resolusi.</p>
-    </>}
-    <label className="ai-route-check"><input type="checkbox" checked={config.mediaFallback} onChange={e => setConfig(c => ({ ...c, mediaFallback: e.target.checked }))} /> Gunakan penyedia cadangan untuk model video yang sama jika pengiriman awal ditolak</label>
-    <p className="pk-hint">Cadangan video berlaku untuk model katalog yang tersedia di fal.ai dan Higgsfield, jika kedua kunci sudah diisi. Pekerjaan yang sudah diterima, sedang diproses, dibatalkan, atau ditolak kebijakan konten tidak dikirim ulang.</p>
-    <label className="pk-field"><span>Batas waktu tiap layanan (detik)</span><input className="app-input" type="number" min="10" max="120" value={config.timeoutSeconds} onChange={e => setConfig(c => ({ ...c, timeoutSeconds: Math.max(10, Math.min(120, Number(e.target.value) || 45)) }))} /></label>
-    <p className="pk-hint">Perpindahan otomatis mengirim permintaan ke layanan berikutnya yang kamu aktifkan. Biaya mengikuti penyedia. Permintaan yang ditolak kebijakan konten tidak diteruskan. Untuk membuat gambar lewat OpenRouter, aktifkan pilihan gambar di bawah. Video, audio, dan siaran langsung memakai API penyedia media. Opsi Analisis gambar hanya untuk membaca gambar, bukan membuat gambar. Batas waktu media Google minimal 180 detik; batas di atas berlaku untuk teks.</p>
-    {config.routes.map((route, index) => <fieldset className="ai-route-card" key={route.id}>
-      <legend>{index + 1}. {route.name}</legend>
-      <div className="ai-route-actions">
-        <label className="ai-route-check"><input type="checkbox" checked={route.enabled} onChange={e => update(route.id, { enabled: e.target.checked })} /> Aktifkan</label>
-        <button type="button" className="app-button app-secondary" aria-label={`Naikkan prioritas ${route.name}`} disabled={index === 0 || Boolean(busy)} onClick={() => move(index, -1)}>Naik</button>
-        <button type="button" className="app-button app-secondary" aria-label={`Turunkan prioritas ${route.name}`} disabled={index === config.routes.length - 1 || Boolean(busy)} onClick={() => move(index, 1)}>Turun</button>
-        {route.id.startsWith('custom-') && <button type="button" className="app-button app-secondary" onClick={() => setConfig(c => ({ ...c, routes: c.routes.filter(r => r.id !== route.id) }))}>Hapus</button>}
-      </div>
-      <div className="ai-route-fields">
-        <label className="pk-field"><span>Nama layanan</span><input className="app-input" value={route.name} onChange={e => update(route.id, { name: e.target.value })} /></label>
-        <label className="pk-field"><span>Alamat API</span><input className="app-input" type="url" placeholder="https://router.domainmu.id/v1" value={route.baseUrl} onChange={e => update(route.id, { baseUrl: e.target.value })} /></label>
-        <label className="pk-field"><span>Model atau nama kombo</span><input className="app-input" placeholder="Nama persis dari dashboard penyedia" value={route.model} onChange={e => update(route.id, { model: e.target.value })} /></label>
-        <label className="pk-field"><span>API key (jika diwajibkan layanan)</span><input className="app-input" type="password" autoComplete="off" spellCheck={false} value={route.apiKey} onChange={e => update(route.id, { apiKey: e.target.value })} /></label>
-      </div>
-      {isOpenRouter(route) ? <p className="pk-hint">Untuk OpenRouter, isi ID model lengkap, misalnya google/gemini-2.5-flash. Kemampuan model diperiksa otomatis saat digunakan. Uji koneksi juga memeriksa JSON dan panggilan alat jika didukung. <a href="https://openrouter.ai/models" target="_blank" rel="noreferrer">Lihat katalog model</a></p>
-      : <p className="pk-hint">Aktifkan kemampuan berikut hanya jika model/kombo mendukungnya. Model teks biasa tidak menerima gambar atau panggilan alat.</p>}
-      <div className="ai-route-actions">
-        {([['vision', 'Analisis gambar'], ['tools', 'Panggilan alat'], ['json', 'Keluaran JSON']] as const).map(([key, label]) => <label key={key} className="ai-route-check"><input type="checkbox" checked={route[key]} disabled={isOpenRouter(route)} onChange={e => update(route.id, { [key]: e.target.checked })} /> {label}</label>)}
-        <button type="button" className="app-button app-secondary" disabled={Boolean(busy)} onClick={() => void test(route)}>{busy === route.id ? 'Menguji...' : 'Uji koneksi'}</button>
-      </div>
-    </fieldset>)}
-    <div className="ai-route-actions">
-      <button type="button" className="app-button app-secondary" onClick={() => setConfig(c => ({ ...c, routes: [...c.routes, { ...defaultAiRouting().routes[3], id: `custom-${crypto.randomUUID()}`, name: 'Layanan tambahan' }] }))}>Tambah layanan cadangan</button>
-      <button type="button" className="app-button app-primary" onClick={save}>Simpan router AI</button>
-    </div>
-    <p className="pk-hint" role="status" aria-live="polite">{message}</p>
-    <p className="pk-hint">Kunci disimpan hanya di browser ini dan dikirim langsung ke alamat API masing-masing. Kunci tidak dimasukkan ke cadangan proyek. <a href="https://github.com/decolua/9router" target="_blank" rel="noreferrer">Panduan 9Router</a></p>
+import React, { useState, useEffect } from 'react';
+import { readAiRouting, saveAiRouting, isOpenRouter, type AiRoute } from '../services/aiRouting';
+import OpenRouterModelPicker from './OpenRouterModelPicker';
+import { studioSelectedModel } from '../services/openRouterCatalog';
+export default function AiRoutingSettings() {
+  const [config,setConfig] = useState(readAiRouting), [status,setStatus] = useState('');
+  const route = config.routes.find(isOpenRouter) || { id:'openrouter',name:'OpenRouter',baseUrl:'https://openrouter.ai/api/v1',model:'',apiKey:'',enabled:true,vision:true,tools:true,json:true };
+  const update = (changes: Partial<AiRoute>) => setConfig(c => ({ ...c, imagesViaOpenRouter:true, preferGateway:true, routes:c.routes.some(isOpenRouter) ? c.routes.map(r => isOpenRouter(r) ? {...r,...changes} : r) : [...c.routes,{...route,...changes}] }));
+  useEffect(() => { const handle = (event: Event) => { try { saveAiRouting({...config,imagesViaOpenRouter:true,preferGateway:true,mediaFallback:false}); } catch(e) { event.preventDefault(); setStatus(e instanceof Error ? e.message : 'Pengaturan belum tersimpan.'); } }; window.addEventListener('bekal-ai-save-settings',handle); return () => window.removeEventListener('bekal-ai-save-settings',handle); },[config]);
+  const save = () => { try { saveAiRouting({...config,imagesViaOpenRouter:true,preferGateway:true,mediaFallback:false}); setStatus('Pengaturan OpenRouter tersimpan.'); } catch(e) { setStatus(e instanceof Error ? e.message : 'Pengaturan belum tersimpan.'); } };
+  return <section className="ai-routing-settings">
+    <h3>OpenRouter untuk seluruh generate AI</h3>
+    <p className="pk-hint">Pilihan model diambil dari katalog resmi. Kunci disimpan di perangkat ini. Gambar, video, audio, dan teks memakai API OpenRouter; layanan langsung tidak menjadi cadangan.</p>
+    <label className="ai-route-check"><input type="checkbox" checked={route.enabled} onChange={e => update({enabled:e.target.checked})} /> Aktifkan OpenRouter</label>
+    <label className="pk-field"><span>API key OpenRouter</span><input type="password" className="app-input" autoComplete="off" value={route.apiKey} onChange={e => update({apiKey:e.target.value})} /></label>
+    <h4>Model teks, naskah, dan asisten</h4>
+    <OpenRouterModelPicker kind="text" value={route.model} onChange={id => update({model:id})} />
+    <h4>Model gambar utama</h4>
+    <OpenRouterModelPicker kind="image" value={config.openRouterImageModel || studioSelectedModel('image')} onChange={id => setConfig(c => ({...c,openRouterImageModel:id}))} />
+    <h4>Model audio utama</h4>
+    <OpenRouterModelPicker kind="audio" value={studioSelectedModel('audio')} onChange={() => setStatus('Model audio dipilih.')} />
+    <label className="ai-route-check"><input type="checkbox" checked={config.fallback} onChange={e => setConfig(c => ({...c,fallback:e.target.checked}))} /> Coba model OpenRouter kompatibel lain setelah penolakan awal pada mode otomatis</label>
+    <p className="pk-hint">Model yang dipilih langsung pada shot tetap diutamakan. Saldo habis, hasil kosong, dan koneksi terputus tidak memicu pengiriman ulang ke API lain. Generate ulang dilakukan lewat tombol shot.</p>
+    <button type="button" className="app-button app-primary" onClick={save}>Simpan router AI</button><p role="status">{status}</p>
   </section>;
-};
-export default AiRoutingSettings;
+}

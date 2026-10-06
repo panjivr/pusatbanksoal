@@ -3,10 +3,11 @@ export type AiRoute = {
   id: string; name: string; baseUrl: string; model: string; apiKey: string;
   enabled: boolean; vision: boolean; tools: boolean; json: boolean;
   supportedParameters?: string[];
+  inputModalities?: string[];
 };
 export type AiRoutingConfig = { version: 1; preferGateway: boolean; fallback: boolean; mediaFallback: boolean; imagesViaOpenRouter?: boolean; openRouterImageModel?: string; timeoutSeconds: number; routes: AiRoute[] };
 export const AI_ROUTING_KEY = 'bekal_ai_routing_v1';
-export const defaultAiRouting = (): AiRoutingConfig => ({ version: 1, preferGateway: true, fallback: true, mediaFallback: true, imagesViaOpenRouter: false, timeoutSeconds: 45, routes: [
+export const defaultAiRouting = (): AiRoutingConfig => ({ version: 1, preferGateway: true, fallback: true, mediaFallback: true, imagesViaOpenRouter: true, timeoutSeconds: 45, routes: [
   { id: '9router', name: '9Router', baseUrl: '', model: '', apiKey: '', enabled: false, vision: false, tools: false, json: false },
   { id: 'openrouter', name: 'OpenRouter', baseUrl: 'https://openrouter.ai/api/v1', model: '', apiKey: '', enabled: false, vision: false, tools: false, json: false },
   { id: 'openai', name: 'OpenAI', baseUrl: 'https://api.openai.com/v1', model: '', apiKey: '', enabled: false, vision: false, tools: false, json: false },
@@ -16,7 +17,7 @@ export const readAiRouting = (): AiRoutingConfig => {
   try {
     const raw = JSON.parse(localStorage.getItem(AI_ROUTING_KEY) || 'null');
     if (raw?.version !== 1 || !Array.isArray(raw.routes)) return defaultAiRouting();
-    return { version: 1, preferGateway: raw.preferGateway === true, fallback: raw.fallback === true, mediaFallback: raw.mediaFallback !== false, imagesViaOpenRouter: raw.imagesViaOpenRouter === true, openRouterImageModel: typeof raw.openRouterImageModel === 'string' ? raw.openRouterImageModel.trim() : 'auto',
+    return { version: 1, preferGateway: raw.preferGateway === true, fallback: raw.fallback === true, mediaFallback: raw.mediaFallback !== false, imagesViaOpenRouter: true, openRouterImageModel: typeof raw.openRouterImageModel === 'string' ? raw.openRouterImageModel.trim() : 'auto',
       timeoutSeconds: Math.max(10, Math.min(120, Number(raw.timeoutSeconds) || 45)),
       routes: raw.routes.filter((r: any) => typeof r?.id === 'string' && typeof r.baseUrl === 'string' && typeof r.model === 'string').map((r: any) => ({
         id: r.id, name: String(r.name || r.id), baseUrl: r.baseUrl, model: r.model, apiKey: String(r.apiKey || ''),
@@ -35,20 +36,18 @@ export const normalizeAiBaseUrl = (value: string): string => {
 };
 export const saveAiRouting = (config: AiRoutingConfig) => {
   const routes = config.routes.map(r => ({ ...r, apiKey: r.apiKey.trim(), model: r.model.trim(), baseUrl: r.baseUrl.trim() ? normalizeAiBaseUrl(r.baseUrl) : '' }));
-  if (routes.some(r => r.enabled && (!r.baseUrl || !r.model))) throw new Error('Lengkapi alamat API dan nama model/kombo untuk setiap layanan aktif.');
+  if (routes.some(r => r.enabled && (!r.baseUrl || (!isOpenRouter(r) && !r.model)))) throw new Error('Lengkapi alamat API dan nama model/kombo untuk setiap layanan aktif.');
   localStorage.setItem(AI_ROUTING_KEY, JSON.stringify({ ...config, routes }));
   window.dispatchEvent(new Event('bekal-ai-config-changed'));
 };
 export const hasGatewayTextRoute = () => readAiRouting().routes.some(r => r.enabled && r.baseUrl && r.model);
-export const hasTextAiConfigured = () => {
-  try { return hasGatewayTextRoute() || Boolean(localStorage.getItem('gemini_api_key')?.trim() || (localStorage.getItem('google_model_provider_v1') === 'replicate' && localStorage.getItem('replicate_api_key')?.trim())); }
-  catch { return false; }
-};
+export const hasTextAiConfigured = () => { try { return readAiRouting().routes.some(r => r.enabled && isOpenRouter(r) && r.apiKey.trim()); } catch { return false; } };
 
 export const isOpenRouter = (route: AiRoute): boolean => {
   try { return normalizeAiBaseUrl(route.baseUrl) === 'https://openrouter.ai/api/v1'; } catch { return false; }
 };
 const openRouterCatalog = new Map<string, { expires: number; promise: Promise<any[]> }>();
+export const clearOpenRouterModelCache = () => openRouterCatalog.clear();
 /** Public model metadata, never credentials. Failed lookups are not cached. */
 export const getOpenRouterModels = async (route: AiRoute, fetcher: typeof fetch = fetch): Promise<any[]> => {
   const base = normalizeAiBaseUrl(route.baseUrl);
@@ -80,7 +79,7 @@ export const resolveOpenRouterRoute = async (route: AiRoute, fetcher: typeof fet
   const parameters = Array.isArray(model.supported_parameters) ? model.supported_parameters : [];
   return { ...route, baseUrl: base, model: model.id, tools: parameters.includes('tools'), vision: model.architecture?.input_modalities?.includes('image') === true,
     // Models without native JSON mode use explicit instructions plus local schema validation.
-    json: true, supportedParameters: parameters };
+    json: true, supportedParameters: parameters, inputModalities: model.architecture?.input_modalities || [] };
 };
 // Keep opaque reasoning with its exact provider/model/call; never forward it to a fallback provider.
 const openRouterReasoning = new Map<string, { calls: string; details: any[] }>();
@@ -108,8 +107,9 @@ export const gatewayCanHandle = (r: AiRoute, req: GeminiRequest): boolean => {
   if (config.responseMimeType === 'application/json' && !r.json) return false;
   const parts = partsOf(req.contents);
   if (parts.some(p => p?.functionCall || p?.functionResponse) && !r.tools) return false;
-  if (parts.some(p => p?.fileData || (p?.inlineData && !String(p.inlineData.mimeType).startsWith('image/')))) return false;
-  if (parts.some(p => p?.inlineData) && !r.vision) return false;
+  if (parts.some(p => p?.fileData && (!String(p.fileData.mimeType).startsWith('video/') || !r.inputModalities?.includes('video')))) return false;
+  if (parts.some(p => p?.inlineData && !String(p.inlineData.mimeType).startsWith('image/') && !r.inputModalities?.includes(String(p.inlineData.mimeType).split('/')[0]))) return false;
+  if (parts.some(p => p?.inlineData?.mimeType?.startsWith('image/')) && !r.vision) return false;
   return true;
 };
 export const jsonSchema = (value: any): any => {
@@ -149,7 +149,14 @@ export const gatewayMessages = (req: GeminiRequest, route?: AiRoute): any[] => {
     const calls: any[] = [];
     for (const p of parts) {
       if (typeof p?.text === 'string') textParts.push({ type: 'text', text: p.text });
-      if (p?.inlineData) textParts.push({ type: 'image_url', image_url: { url: `data:${p.inlineData.mimeType};base64,${p.inlineData.data}` } });
+      if (p?.inlineData) {
+        const {mimeType,data} = p.inlineData;
+        if (mimeType.startsWith('image/')) textParts.push({type:'image_url',image_url:{url:`data:${mimeType};base64,${data}`}});
+        else if (mimeType.startsWith('audio/')) { const subtype = mimeType.split('/')[1]?.split(';')[0], format = subtype === 'mpeg' ? 'mp3' : subtype === 'x-wav' ? 'wav' : subtype; textParts.push({type:'input_audio',input_audio:{data,format}}); }
+        else if (mimeType.startsWith('video/')) textParts.push({type:'video_url',video_url:{url:`data:${mimeType};base64,${data}`}});
+        else throw new AiRouteError('Format berkas belum didukung model OpenRouter ini.',422,true);
+      }
+      if (p?.fileData) { const url = p.fileData.fileUri; if (typeof url !== 'string' || (!url.startsWith('data:video/') && !url.startsWith('https://'))) throw new AiRouteError('Alamat video harus HTTPS atau berkas video lokal.',422,true); textParts.push({type:'video_url',video_url:{url}}); }
       if (p?.functionCall) calls.push({ id: p.functionCall.id || `bekal_${messages.length}_${calls.length}`, type: 'function', function: { name: p.functionCall.name, arguments: JSON.stringify(p.functionCall.args || {}) } });
       if (p?.functionResponse) {
         const id = p.functionResponse.id || [...messages].reverse().flatMap(m => m.tool_calls || []).find(c => c.function.name === p.functionResponse.name && !answeredCalls.has(c.id))?.id;
@@ -256,3 +263,6 @@ export const executeAiRoutes = async (attempts: RoutingAttempt[], fallback: bool
   }
   throw last || new AiRouteError('Belum ada layanan yang mendukung permintaan ini. Lengkapi API di Pengaturan.');
 };
+
+/** Legacy transports remain for imported projects, but cannot submit new Studio jobs. */
+export const assertStudioAiProvider = (provider: string): void => { if (provider !== 'openrouter') throw new AiRouteError(`Generate melalui ${provider} dinonaktifkan. Pilih model dari katalog OpenRouter; kemampuan yang belum tersedia tidak dialihkan ke API lain.`, undefined, true); };
