@@ -7743,3 +7743,13 @@ body[data-theme="light"] .bekal-brand-dark {display:none;}
 .edit-toolbar__group { flex-wrap: wrap; max-width: 100%; }
 .edit-toolbar button { flex-shrink: 0; }
 .edit-toolbar .edit-select { min-width: 0; max-width: 100%; }
+
+/* Bound shot content to its grid track, including long scene names and intrinsic media sizes. */
+.shot-page, .shot-page__grid, .shot-page__inspector { min-width: 0; max-width: 100%; }
+.shot-page__grid > *, .shot-tile, .shot-tile__text { min-width: 0; width: 100%; max-width: 100%; }
+.shot-tile { overflow: hidden; }
+.shot-tile__text strong, .shot-tile__text small { max-width: 100%; overflow-wrap: anywhere; }
+.shot-page__grid { grid-template-columns: repeat(auto-fill, minmax(min(100%, 10.5rem), 1fr)); }
+.shot-page__grid--portrait { grid-template-columns: repeat(auto-fill, minmax(min(100%, 7.5rem), 1fr)); }
+.shot-page__inspector { overflow-x: hidden; }
+.shot-page__grid > * > .app-button { white-space: normal; overflow-wrap: anywhere; height: auto; margin-top: .4rem; }

@@ -119,10 +119,10 @@ test('Seedream uses real namespace and normalized resolution, and OpenAI image m
   }));assert.equal(out.bekalModel,actual);
  }
 });
-test('explicit image choice sends every reference despite catalogue limits',async()=>{
+test('explicit image choice sends references at the catalogue limit without model substitution',async()=>{
  configure();let calls=0;
- const request={...req,model:'black-forest-labs/flux-2-klein-9b-base',contents:{parts:[{text:'Karakter'},...Array.from({length:5},()=>({inlineData:{mimeType:'image/png',data:png}}))]}};
- await assert.rejects(generateRoutedOpenRouterImage(request,undefined,nativeImageFetch(async(u:any,o:any)=>{calls++;assert.equal(JSON.parse(o.body).input_references.length,5);return response({error:{code:422}},422);})),(e:any)=>e.terminal);assert.equal(calls,1);
+ const request={...req,model:'black-forest-labs/flux-2-klein-9b-base',contents:{parts:[{text:'Karakter'},...Array.from({length:4},()=>({inlineData:{mimeType:'image/png',data:png}}))]}};
+ await assert.rejects(generateRoutedOpenRouterImage(request,undefined,nativeImageFetch(async(u:any,o:any)=>{calls++;assert.equal(JSON.parse(o.body).input_references.length,4);return response({error:{code:422}},422);})),(e:any)=>e.terminal);assert.equal(calls,1);
 });
 test('empty native image results and transport loss never cause another paid generation',async()=>{
  configure();
@@ -167,4 +167,10 @@ test('explicit chat image model receives references even when metadata says text
  }) as typeof fetch;
  const result=await generateRoutedOpenRouterImage({...req,model:'test/selected'},undefined,fetcher);
  assert.equal(calls,1);assert.equal(result.bekalModel,'test/selected');
+});
+
+test('400 exposes provider validation details without leaking credentials or switching models',async()=>{
+ configure({imageFallbackModels:true});clearOpenRouterModelCache();let calls=0;
+ await assert.rejects(generateRoutedOpenRouterImage({...req,model:'black-forest-labs/flux-test'},undefined,legacyFetch((async(u:any)=>{if(String(u).endsWith('/models'))return response(catalog);calls++;return response({error:{message:'Invalid reference parameter fake-test-secret sk-or-private-value'}},400);}) as typeof fetch)),(e:any)=>/Invalid reference parameter/.test(e.message)&&!e.message.includes('fake-test-secret')&&!e.message.includes('sk-or-private-value'));
+ assert.equal(calls,1);
 });

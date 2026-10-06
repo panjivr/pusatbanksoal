@@ -1,4 +1,4 @@
-import { prepareImagePayload } from './imagePayload.ts';
+import { prepareImagePayload, packImageReferences } from './imagePayload.ts';
 import { AiRouteError, isOpenRouter, readAiRouting, getOpenRouterModels, type AiRoute, type GeminiRequest } from './aiRouting.ts';
 
 const imageCatalogCache = new Map<typeof fetch, { expires: number; promise: Promise<any[]> }>();
@@ -64,18 +64,23 @@ export const generateOpenRouterImage = async (route: AiRoute, req: GeminiRequest
       ...(imageConfig ? { image_config: { ...(imageConfig.aspectRatio ? { aspect_ratio: imageConfig.aspectRatio } : {}), ...(imageConfig.imageSize ? { image_size: imageConfig.imageSize } : {}) } } : {}) };
     if (model.imageApi) {
       const allParts = messages.flatMap(message => message.content);
-      const refs = allParts.filter(part => part.type === 'image_url');
+      let refs = allParts.filter(part => part.type === 'image_url');
       const parameters = model.supported_parameters || {};
       const refRange = parameters.input_references;
       if (!req.model.includes('/') && refRange && (refs.length < (refRange.min || 0) || refs.length > (refRange.max ?? Infinity))) throw new AiRouteError(`Model ${id} menerima ${refRange.min || 0} sampai ${refRange.max} referensi. Semua referensi dipertahankan; sesuaikan jumlahnya.`, 422, true);
-      const ratio = imageConfig?.aspectRatio;
+      if (refRange?.max > 0 && refs.length > refRange.max) refs = await packImageReferences(refs, refRange.max, controller.signal);
+      let ratio = imageConfig?.aspectRatio;
+      if (ratio && parameters.aspect_ratio?.values?.length && !parameters.aspect_ratio.values.includes(ratio)) {
+        const numeric = (r: string) => {const [w,h] = r.split(':').map(Number);return w/h;};
+        ratio = [...parameters.aspect_ratio.values].filter((r: string)=>Number.isFinite(numeric(r))).sort((a: string,b: string)=>Math.abs(Math.log(numeric(a)/numeric(ratio!)))-Math.abs(Math.log(numeric(b)/numeric(ratio!))))[0] || parameters.aspect_ratio.values[0];
+      }
       if (!req.model.includes('/') && parameters.aspect_ratio?.values && ratio && !parameters.aspect_ratio.values.includes(ratio)) throw new AiRouteError(`Rasio ${ratio} tidak didukung ${id}. Pilih rasio yang didukung model.`, 422, true);
-      const resolution = imageConfig?.imageSize;
+      const resolution = parameters.resolution?.values?.length && !parameters.resolution.values.includes(imageConfig?.imageSize) ? parameters.resolution.values[0] : imageConfig?.imageSize;
       if (!req.model.includes('/') && parameters.resolution?.values && resolution && !parameters.resolution.values.includes(resolution)) throw new AiRouteError(`Resolusi ${resolution} tidak didukung ${id}. Pilih resolusi yang didukung model.`, 422, true);
       const formats = parameters.output_format?.values;
       const outputFormat = formats ? ['png', 'jpeg', 'webp'].find(format => formats.includes(format)) : undefined;
       if (formats && !outputFormat) throw new AiRouteError('Model ini menghasilkan format vektor yang belum didukung jalur gambar studio. Pilih model gambar PNG, JPEG, atau WebP.', 422, true);
-      body = { model: id, prompt: allParts.filter(part => part.type === 'text').map((part: any) => part.text).join('\n'), n: 1, stream: false, provider: { allow_fallbacks: true },
+      body = { model: id, prompt: allParts.filter(part => part.type === 'text').map((part: any) => part.text).join('\n') + (refs.length < allParts.filter(part=>part.type==='image_url').length ? '\nReferensi disusun dalam panel bernomor. Gunakan seluruh panel sebagai referensi visual; hasil akhir satu gambar adegan, bukan kolase.' : ''), n: 1, stream: false, provider: { allow_fallbacks: true },
         ...(refs.length ? { input_references: refs } : {}), ...(ratio && parameters.aspect_ratio ? { aspect_ratio: ratio } : {}),
         ...(resolution && parameters.resolution ? { resolution } : {}), ...(outputFormat ? { output_format: outputFormat } : {}) };
     }
@@ -101,7 +106,8 @@ export const generateOpenRouterImage = async (route: AiRoute, req: GeminiRequest
     if (!response.ok || data.error) {
       const status = response.ok ? Number(data.error?.code) || 502 : response.status;
       const raw = JSON.stringify(data.error || {});
-      const detail = /safety|content.?policy|moderation|blocked/i.test(raw) ? 'Permintaan ditolak oleh kebijakan konten penyedia.' : status === 401 ? 'API key belum valid.' : status === 402 ? 'Saldo atau batas kredit tidak cukup.' : status === 429 ? 'Kuota atau batas permintaan tercapai.' : status === 403 ? 'Kunci belum mendapat akses ke model gambar.' : `Permintaan gambar gagal (HTTP ${status}).`;
+      const providerMessage = typeof data.error?.message === 'string' ? data.error.message.split(route.apiKey.trim()).join('[disamarkan]').replace(/(?:sk-[\w-]+|Bearer\s+\S+|data:[^\s]+|https?:\/\/\S+)/gi, '[disamarkan]').slice(0,300) : '';
+      const detail = /safety|content.?policy|moderation|blocked/i.test(raw) ? 'Permintaan ditolak oleh kebijakan konten penyedia.' : status === 401 ? 'API key belum valid.' : status === 402 ? 'Saldo atau batas kredit tidak cukup.' : status === 429 ? 'Kuota atau batas permintaan tercapai.' : status === 403 ? 'Kunci belum mendapat akses ke model gambar.' : `Permintaan gambar gagal (HTTP ${status}).${providerMessage ? ` ${providerMessage}` : ''}`;
       // Only explicit rejection with no result is eligible for another submission.
       if (!data.choices?.length && !data.data?.length && !/safety|content.?policy|moderation|blocked/i.test(raw) && [400, 401, 402, 403, 404, 422, 429, 500, 502, 503, 504].includes(status)) throw new OpenRouterImageRejected(`OpenRouter: ${detail}`, status);
       throw new AiRouteError(`OpenRouter: ${detail} Periksa Activity sebelum mencoba lagi.`, status, true);
