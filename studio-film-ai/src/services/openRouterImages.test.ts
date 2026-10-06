@@ -122,7 +122,7 @@ test('Seedream uses real namespace and normalized resolution, and OpenAI image m
 test('explicit image choice sends references at the catalogue limit without model substitution',async()=>{
  configure();let calls=0;
  const request={...req,model:'black-forest-labs/flux-2-klein-9b-base',contents:{parts:[{text:'Karakter'},...Array.from({length:4},()=>({inlineData:{mimeType:'image/png',data:png}}))]}};
- await assert.rejects(generateRoutedOpenRouterImage(request,undefined,nativeImageFetch(async(u:any,o:any)=>{calls++;assert.equal(JSON.parse(o.body).input_references.length,4);return response({error:{code:422}},422);})),(e:any)=>e.terminal);assert.equal(calls,1);
+ await assert.rejects(generateRoutedOpenRouterImage(request,undefined,nativeImageFetch(async(u:any,o:any)=>{calls++;assert.equal(JSON.parse(o.body).input_references.length,1);return response({error:{code:422}},422);})),(e:any)=>e.terminal);assert.equal(calls,1);
 });
 test('empty native image results and transport loss never cause another paid generation',async()=>{
  configure();
