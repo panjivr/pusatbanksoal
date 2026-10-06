@@ -7,7 +7,7 @@ test('flat per-image price multiplies by count and retains endpoint price ranges
 });
 test('megapixel prices are explicit assumptions, not flat per-image prices',()=>{
  const m={priceEndpoints:[{pricing:[{billable:'output_image',unit:'megapixel',cost_usd:.014}]}]};
- assert.match(estimateStudioCost(m,'image',{count:8})!.basis,/asumsi 1 megapiksel/);assert.equal(estimateStudioCost(m,'image',{count:8})!.low,.112);
+ assert.equal(estimateStudioCost(m,'image',{count:8}),null);assert.equal(estimateStudioCost(m,'image',{count:8,outputMegapixels:1})!.low,.112);
  assert.equal(estimateStudioCost({...m,supported_parameters:{resolution:{values:['2K']}}},'image',{count:1,resolution:'2K',ratio:'1:1'})!.low,.014*2048*2048/1e6);
 });
 test('unknown image-token totals are never advertised as free',()=>{
@@ -26,3 +26,5 @@ test('audio flat prices come from published descriptions; zero token fields do n
 });
 
 test('explicit image-token assumptions produce a batch estimate without treating token rate as image rate',()=>{const model={priceEndpoints:[{pricing:[{billable:'input_text',unit:'token',cost_usd:.000005},{billable:'output_image',unit:'token',cost_usd:.00003}]}]};const cost=estimateStudioCost(model,'image',{count:8,inputTokens:1000,outputTokens:1000});assert.ok(Math.abs(cost!.low-.28)<1e-9);assert.match(cost!.basis,/asumsi/);});
+
+test('Flux Flex includes input and output MP and refuses a misleading total when dimensions are unknown',()=>{const m={priceEndpoints:[{pricing:[{billable:'input_image',unit:'megapixel',cost_usd:.06},{billable:'output_image',unit:'megapixel',cost_usd:.06}]}]};assert.equal(estimateStudioCost(m,'image',{references:8}),null);assert.equal(estimateStudioCost(m,'image',{outputMegapixels:1}),null);const c=estimateStudioCost(m,'image',{referenceMegapixels:7.333333333333333,outputMegapixels:1,count:8});assert.ok(Math.abs(c!.low-4)<1e-9);assert.match(priceBasis(m),/masukan.*keluaran/);});

@@ -57,3 +57,23 @@ export async function packImageReferences(refs: any[], max: number, signal?: Abo
   }
   return packed;
 }
+
+/** Deduplicate identical inputs and bound their aggregate pixel area (file size alone does not control MP billing). */
+export async function limitReferencePixels(body: any, maxMP: number, signal?: AbortSignal): Promise<any> {
+  const copy = structuredClone(body);
+  const lists: any[][] = copy.input_references ? [copy.input_references] : (copy.messages || []).map((m:any)=>m.content);
+  for(const list of lists){const seen=new Set<string>();for(let i=0;i<list.length;i++){const url=list[i].type==='image_url' ? list[i].image_url?.url : undefined;if(!url)continue;if(seen.has(url)){list.splice(i--,1);}else seen.add(url);}}
+  const refs=lists.flat().filter(p=>p.type==='image_url');
+  if(typeof document === 'undefined' || !refs.length)return copy;
+  if(typeof createImageBitmap !== 'function')throw new Error('Browser ini belum mendukung penyiapan referensi dengan batas megapiksel. Gunakan browser terbaru.');
+  const sizes: {width:number;height:number}[]=[];
+  for(const ref of refs){const bitmap=await createImageBitmap(await(await fetch(ref.image_url.url,{signal})).blob());try{sizes.push({width:bitmap.width,height:bitmap.height});}finally{bitmap.close();}}
+  const total=sizes.reduce((sum,s)=>sum+s.width*s.height,0), scale=Math.min(1,Math.sqrt(maxMP*1e6/total));
+  if(scale===1)return copy;
+  for(let i=0;i<refs.length;i++){
+    if(signal?.aborted)throw new DOMException('Dibatalkan','AbortError');
+    const bitmap=await createImageBitmap(await(await fetch(refs[i].image_url.url,{signal})).blob());
+    try{const canvas=document.createElement('canvas');canvas.width=Math.max(1,Math.floor(sizes[i].width*scale));canvas.height=Math.max(1,Math.floor(sizes[i].height*scale));const ctx=canvas.getContext('2d');if(!ctx)throw new Error('Referensi belum dapat disiapkan');ctx.drawImage(bitmap,0,0,canvas.width,canvas.height);refs[i].image_url.url=canvas.toDataURL('image/webp',.92);canvas.width=canvas.height=1;}finally{bitmap.close();}
+  }
+  return copy;
+}

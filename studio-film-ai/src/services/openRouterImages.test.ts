@@ -104,7 +104,7 @@ test('official Flux image catalogue resolves dotted Flux Klein ID and uses POST 
  configure({openRouterImageModel:'google/'+model});let calls=0;
  const fetcher=nativeImageFetch(async(url,options)=>{
   calls++;assert.equal(url,'https://openrouter.ai/api/v1/images');assert.equal(options.headers.Authorization,'Bearer fake-test-secret');
-  const body=JSON.parse(options.body);assert.equal(body.model,'black-forest-labs/flux.2-klein-4b');assert.equal(body.prompt,'Karakter');assert.equal(body.aspect_ratio,'9:16');assert.equal(body.output_format,'png');assert.equal(body.n,1);assert.equal(body.messages,undefined);assert.equal(body.modalities,undefined);assert.equal(body.resolution,undefined);assert.deepEqual(body.input_references,[{type:'image_url',image_url:{url:'data:image/png;base64,'+png}}]);
+  const body=JSON.parse(options.body);assert.equal(body.model,'black-forest-labs/flux.2-klein-4b');assert.ok(body.prompt.startsWith('Karakter'));assert.match(body.prompt,/one coherent full-frame scene/);assert.equal(body.aspect_ratio,'9:16');assert.equal(body.output_format,'png');assert.equal(body.n,1);assert.equal(body.messages,undefined);assert.equal(body.modalities,undefined);assert.equal(body.resolution,undefined);assert.deepEqual(body.input_references,[{type:'image_url',image_url:{url:'data:image/png;base64,'+png}}]);
   return response({created:1,data:[{b64_json:png,media_type:'image/png'}]});
  });
  const out=await generateRoutedOpenRouterImage({...req,model:'black-forest-labs/flux-2-klein-9b-base'},undefined,fetcher);

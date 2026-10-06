@@ -1,4 +1,4 @@
-import { prepareImagePayload, packImageReferences } from './imagePayload.ts';
+import { prepareImagePayload, packImageReferences, limitReferencePixels } from './imagePayload.ts';
 import { AiRouteError, isOpenRouter, readAiRouting, getOpenRouterModels, type AiRoute, type GeminiRequest } from './aiRouting.ts';
 
 const imageCatalogCache = new Map<typeof fetch, { expires: number; promise: Promise<any[]> }>();
@@ -68,7 +68,7 @@ export const generateOpenRouterImage = async (route: AiRoute, req: GeminiRequest
       const parameters = model.supported_parameters || {};
       const refRange = parameters.input_references;
       if (!req.model.includes('/') && refRange && (refs.length < (refRange.min || 0) || refs.length > (refRange.max ?? Infinity))) throw new AiRouteError(`Model ${id} menerima ${refRange.min || 0} sampai ${refRange.max} referensi. Semua referensi dipertahankan; sesuaikan jumlahnya.`, 422, true);
-      if (refRange?.max > 0 && refs.length > refRange.max) refs = await packImageReferences(refs, refRange.max, controller.signal);
+      if (readAiRouting().packImageReferences && refRange?.max > 0 && refs.length > refRange.max) refs = await packImageReferences(refs, refRange.max, controller.signal);
       let ratio = imageConfig?.aspectRatio;
       if (ratio && parameters.aspect_ratio?.values?.length && !parameters.aspect_ratio.values.includes(ratio)) {
         const numeric = (r: string) => {const [w,h] = r.split(':').map(Number);return w/h;};
@@ -80,10 +80,11 @@ export const generateOpenRouterImage = async (route: AiRoute, req: GeminiRequest
       const formats = parameters.output_format?.values;
       const outputFormat = formats ? ['png', 'jpeg', 'webp'].find(format => formats.includes(format)) : undefined;
       if (formats && !outputFormat) throw new AiRouteError('Model ini menghasilkan format vektor yang belum didukung jalur gambar studio. Pilih model gambar PNG, JPEG, atau WebP.', 422, true);
-      body = { model: id, prompt: allParts.filter(part => part.type === 'text').map((part: any) => part.text).join('\n') + (refs.length < allParts.filter(part=>part.type==='image_url').length ? '\nReferensi disusun dalam panel bernomor. Gunakan seluruh panel sebagai referensi visual; hasil akhir satu gambar adegan, bukan kolase.' : ''), n: 1, stream: false, provider: { allow_fallbacks: true },
+      body = { model: id, prompt: allParts.filter(part => part.type === 'text').map((part: any) => part.text).join('\n') + '\nCreate one coherent full-frame scene. Reference images guide identity and style only; do not reproduce reference panels, labels, captions, borders or contact-sheet layouts.' + (refs.length < allParts.filter(part=>part.type==='image_url').length ? '\nReferensi disusun dalam panel bernomor. Gunakan seluruh panel sebagai referensi visual; hasil akhir satu gambar adegan, bukan kolase.' : ''), n: 1, stream: false, provider: { allow_fallbacks: true },
         ...(refs.length ? { input_references: refs } : {}), ...(ratio && parameters.aspect_ratio ? { aspect_ratio: ratio } : {}),
         ...(resolution && parameters.resolution ? { resolution } : {}), ...(outputFormat ? { output_format: outputFormat } : {}) };
     }
+    body = await limitReferencePixels(body, readAiRouting().referenceMegapixelLimit || 2, controller.signal);
     let payload: string;
     try { payload = await prepareImagePayload(body, undefined, controller.signal); }
     catch (error) { if (controller.signal.aborted) throw error; throw new AiRouteError(error instanceof Error ? error.message : 'Referensi belum dapat disiapkan untuk OpenRouter.', undefined, true); }

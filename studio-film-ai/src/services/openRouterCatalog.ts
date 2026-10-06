@@ -1,7 +1,7 @@
 import { configuredOpenRouterImageRoute, getOpenRouterImageModels, clearOpenRouterImageCache } from './openRouterImages.ts';
 import { getOpenRouterModels, clearOpenRouterModelCache } from './aiRouting.ts';
 export type CatalogKind = 'image' | 'video' | 'text' | 'audio';
-export type EstimateOptions = { count?: number; seconds?: number; resolution?: string; ratio?: string; references?: number; inputTokens?: number; outputTokens?: number };
+export type EstimateOptions = { count?: number; seconds?: number; resolution?: string; ratio?: string; references?: number; inputTokens?: number; outputTokens?: number; referenceMegapixels?: number; outputMegapixels?: number };
 const cache = new Map<string, Promise<any>>();
 export const reloadStudioCatalog = () => { cache.clear(); clearOpenRouterImageCache(); clearOpenRouterModelCache(); };
 export const supportsStudioWorldModels = (): boolean => false;
@@ -49,14 +49,14 @@ export const estimateStudioCost = (model: any, kind: CatalogKind, options: Estim
         if (p.billable === 'output_image' && ['image','request'].includes(p.unit)) { total += rate; known = true; basis = 'per gambar'; }
         else if (p.billable === 'output_image' && p.unit === 'megapixel') {
           // Models without a resolution knob use provider default, whose dimensions aren't declared.
-          if (!model.supported_parameters?.resolution) { total += rate; known = true; basis = 'asumsi 1 megapiksel per gambar; dimensi akhir ditentukan penyedia'; continue; }
+          if (!model.supported_parameters?.resolution) { if (options.outputMegapixels == null || !Number.isFinite(options.outputMegapixels) || options.outputMegapixels <= 0) { unsupported = true; break; } total += rate * options.outputMegapixels; known = true; basis = `${basis ? basis + '; ' : ''}asumsi keluaran ${options.outputMegapixels} MP; dimensi akhir ditentukan penyedia`; continue; }
           if (!options.resolution) { unsupported = true; break; }
           const side = ({ '1K': 1024, '1.5K': 1536, '2K': 2048, '4K': 4096 } as Record<string, number>)[options.resolution];
           const [w,h] = (options.ratio || '1:1').split(':').map(Number);
           if (!side || !w || !h) { unsupported = true; break; }
           const mp = side * side * Math.min(w,h) / Math.max(w,h) / 1e6;
           total += rate * mp; known = true; basis = `${options.resolution}, rasio ${options.ratio || '1:1'} (perkiraan megapiksel)`;
-        } else if (p.billable === 'input_image' && p.unit === 'image') total += rate * (options.references || 0);
+        } else if (p.billable === 'input_image' && p.unit === 'megapixel') { if (options.referenceMegapixels == null || !Number.isFinite(options.referenceMegapixels) || options.referenceMegapixels < 0) { unsupported = true; break; } total += rate * options.referenceMegapixels; basis += `${basis ? '; ' : ''}masukan ${options.referenceMegapixels} MP`; } else if (p.billable === 'input_image' && p.unit === 'image') total += rate * (options.references || 0);
         else if (p.unit === 'token' && options.inputTokens != null && options.outputTokens != null) {
           const tokens = p.billable === 'output_image' ? options.outputTokens : p.billable === 'input_image' ? options.inputTokens * (options.references || 0) : p.billable === 'input_text' ? options.inputTokens : null;
           if (tokens == null) { unsupported = true; break; } total += rate * tokens; known = true; basis = `asumsi ${options.inputTokens} token teks masukan, ${options.outputTokens} token gambar keluaran, ${options.inputTokens} token per referensi`;
@@ -67,6 +67,7 @@ export const estimateStudioCost = (model: any, kind: CatalogKind, options: Estim
       if (known && !unsupported) totals.push(total * count);
     }
     if (totals.length) return { low: Math.min(...totals), high: Math.max(...totals), basis };
+    return null; // Authoritative endpoint pricing cannot be replaced by incomplete token fields.
   }
   const pricing = model.pricing || {};
   if (kind === 'image' && pricing.image_output != null && options.inputTokens != null && options.outputTokens != null) {
@@ -86,6 +87,8 @@ export const estimateStudioCost = (model: any, kind: CatalogKind, options: Estim
 };
 export const priceBasis = (model: any) => {
   const p = model.priceEndpoints?.[0]?.pricing?.find((p: any) => p.billable === 'output_image');
+  const input = model.priceEndpoints?.[0]?.pricing?.find((p: any) => p.billable === 'input_image' && p.unit === 'megapixel');
+  if (p && input) return `${usd(Number(input.cost_usd))}/MP masukan + ${usd(Number(p.cost_usd))}/MP keluaran`;
   if (p) return `${usd(Number(p.cost_usd))}/${p.unit === 'megapixel' ? 'megapiksel' : p.unit}`;
   if (model.pricing?.audio_output) return `${usd(Number(model.pricing.audio_output) * 1e6)}/1 juta token audio keluaran`;
   if (model.pricing?.image_output) return `${usd(Number(model.pricing.image_output) * 1e6)}/1 juta token gambar keluaran`;

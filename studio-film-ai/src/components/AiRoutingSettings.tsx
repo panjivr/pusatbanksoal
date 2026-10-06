@@ -13,6 +13,10 @@ export default function AiRoutingSettings() {
     <p className="pk-hint">Pilihan model diambil dari katalog resmi. Kunci disimpan di perangkat ini. Gambar, video, audio, dan teks memakai API OpenRouter; layanan langsung tidak menjadi cadangan.</p>
     <label className="ai-route-check"><input type="checkbox" checked={route.enabled} onChange={e => update({enabled:e.target.checked})} /> Aktifkan OpenRouter</label>
     <label className="pk-field"><span>API key OpenRouter</span><input type="password" className="app-input" autoComplete="off" value={route.apiKey} onChange={e => update({apiKey:e.target.value})} /></label>
+    <h4>Biaya dan kualitas gambar</h4>
+    <label className="pk-field"><span>Batas total megapiksel referensi yang dikirim</span><input className="app-input" type="number" min="0.25" max="32" step="0.25" value={config.referenceMegapixelLimit || 2} onChange={e=>setConfig(c=>({...c,referenceMegapixelLimit:Number(e.target.value)}))} /></label><p>Default 2 MP untuk seluruh referensi per permintaan. Salinan pengiriman diperkecil jika perlu; file asli tetap utuh. Batas ini mengurangi piksel masukan, bukan membatasi seluruh tagihan atau resolusi hasil.</p>
+    <label className="ai-route-check"><input type="checkbox" checked={config.packImageReferences === true} onChange={e=>setConfig(c=>({...c,packImageReferences:e.target.checked}))} /> Gabungkan referensi berlebih menjadi panel (dapat memicu hasil kolase)</label>
+    <label className="ai-route-check"><input type="checkbox" checked={config.allowPaidImageAutomation === true} onChange={e=>setConfig(c=>({...c,allowPaidImageAutomation:e.target.checked}))} /> Izinkan analisis AI tambahan dan hingga 3 render otomatis per shot</label><p>Default mati: generate shot tidak memanggil AI untuk menilai konteks atau merender ulang otomatis. Analisis manual tetap tersedia. Mengaktifkan opsi ini menambah transaksi dan biaya di luar satu hasil.</p>
     <h4>Model teks, naskah, dan asisten</h4>
     <OpenRouterModelPicker kind="text" value={route.model} onChange={id => update({model:id})} />
     <h4>Model gambar utama</h4>

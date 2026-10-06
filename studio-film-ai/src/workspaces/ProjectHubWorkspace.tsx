@@ -1,3 +1,4 @@
+import { readAiRouting } from '../services/aiRouting';
 import { editMaskedImage } from '../services/maskedImageEdit';
 import { loadStudioCatalog, supportsStudioWorldModels } from '../services/openRouterCatalog';
 import OpenRouterModelPicker from '../components/OpenRouterModelPicker';
@@ -10403,7 +10404,7 @@ const ProjectHubWorkspace: React.FC<ProjectHubWorkspaceProps> = ({
             let usePreviousShotContext = shot.usePreviousShotContext;
             let previousShotReason = shot.previousShotContextReason;
 
-            if (previousShot?.imageUrl && usePreviousShotContext === undefined) {
+            if (readAiRouting().allowPaidImageAutomation && previousShot?.imageUrl && usePreviousShotContext === undefined) {
                 try {
                     const decision = await shouldUsePreviousShotContext({
                         script: storyBible.script,
@@ -10431,7 +10432,7 @@ const ProjectHubWorkspace: React.FC<ProjectHubWorkspaceProps> = ({
             }
 
             let geminiContextReferences: NonNullable<ShotPrompt['contextReferences']> = [];
-            if (useGeminiContextMemory && isGeminiEmbedding2Configured()) {
+            if (readAiRouting().allowPaidImageAutomation && useGeminiContextMemory && isGeminiEmbedding2Configured()) {
                 try {
                     const contextResult = await handleSuggestGeminiContextForShot(shotNumber);
                     geminiContextReferences = contextResult.suggestions || [];
@@ -10619,7 +10620,7 @@ const ProjectHubWorkspace: React.FC<ProjectHubWorkspaceProps> = ({
                 : undefined;
             const currentWardrobeLabels = getOutfitLabelsForShot({ ...alignedShot, outfitSelections });
             const previousWardrobeLabels = previousShot ? getOutfitLabelsForShot(previousShot) : [];
-            const shouldAutoRefineStoryboardContinuity = useStoryboardContinuityAutoRefine
+            const shouldAutoRefineStoryboardContinuity = readAiRouting().allowPaidImageAutomation && useStoryboardContinuityAutoRefine
                 && useGeminiContextMemory
                 && isGeminiEmbedding2Configured();
 
@@ -11527,8 +11528,8 @@ const ProjectHubWorkspace: React.FC<ProjectHubWorkspaceProps> = ({
         setShotPrompts(prev => prev.map(s => s.shot === shotNumber ? { ...s, isFilming: true } : s));
 
         try {
-            const shouldReviewFilmingContinuity = useGeminiContextMemory && isGeminiEmbedding2Configured();
-            const shouldAutoRefineFilmingContinuity = shouldReviewFilmingContinuity && useFilmingContinuityAutoRefine;
+            const shouldReviewFilmingContinuity = readAiRouting().allowPaidImageAutomation && useGeminiContextMemory && isGeminiEmbedding2Configured();
+            const shouldAutoRefineFilmingContinuity = readAiRouting().allowPaidImageAutomation && shouldReviewFilmingContinuity && useFilmingContinuityAutoRefine;
             const previousShot = previousShotMap.get(shotNumber) || null;
 
             let motionPrompt = shot.filmingContinuityRefinedPrompt?.trim() || shot.motionPrompt?.trim();
